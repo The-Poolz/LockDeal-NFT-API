@@ -1,31 +1,28 @@
-﻿using Newtonsoft.Json;
-using System.Numerics;
+﻿using System.Numerics;
 
-namespace MetaDataAPI
+namespace MetaDataAPI;
+
+public class BasePoolInfo
 {
-    public class BasePoolInfo
+    public Provider Provider { get; }
+    public BigInteger PoolId { get; }
+    public string Owner { get; }
+    public string Token { get; }
+    public Dictionary<string, BigInteger> Params { get; }
+
+    public BasePoolInfo(Provider provider, BigInteger poolId, string owner, string token, IReadOnlyCollection<BigInteger> parameters)
     {
-        public Provider Provider { get; set; }
-        public BigInteger PoolId { get; set; }
-        public string Owner { get; set; }
-        public string Token { get; set; }
-        [JsonIgnore]
-        public List<BigInteger> Params { get; set; }
-        [JsonIgnore]
-        public List<string> Keys => Provider.ParamsName;
-        public Dictionary<string, BigInteger> ParamsDict
+        Provider = provider;
+        PoolId = poolId;
+        Owner = owner;
+        Token = token;
+
+        if (Provider.ParamsName.Count != parameters.Count)
         {
-            get
-            {
-                if (Keys.Count != Params.Count)
-                {
-                    throw new InvalidOperationException("Mismatch between keys and params counts");
-                }
-
-                return Keys.Zip(Params, (k, v) => new { Key = k, Value = v })
-                           .ToDictionary(x => x.Key, x => x.Value);
-            }
+            throw new InvalidOperationException("Mismatch between keys and params counts");
         }
-    }
 
+        Params = Provider.ParamsName.Zip(parameters, (k, v) => new { Key = k, Value = v })
+            .ToDictionary(x => x.Key, x => x.Value);
+    }
 }

@@ -1,32 +1,32 @@
-using Amazon.Lambda.APIGatewayEvents;
-using Amazon.Lambda.Core;
-using EthSmartContractIO.ContractIO;
-using EthSmartContractIO.Models;
-using Nethereum.Hex.HexTypes;
-using Nethereum.Util;
-using Newtonsoft.Json.Linq;
 using System.Net;
+using Nethereum.Util;
 using System.Numerics;
+using Amazon.Lambda.Core;
+using Newtonsoft.Json.Linq;
+using Nethereum.Hex.HexTypes;
+using EthSmartContractIO.Models;
+using MetaDataAPI.Models.Response;
+using EthSmartContractIO.ContractIO;
+using Amazon.Lambda.APIGatewayEvents;
 
-// Assembly attribute to enable the Lambda function's JSON input to be converted into a .NET class
-[assembly: LambdaSerializer(typeof(Amazon.Lambda.Serialization.SystemTextJson.DefaultLambdaJsonSerializer))]
+[assembly: LambdaSerializer(typeof(Amazon.Lambda.Serialization.Json.JsonSerializer))]
 
 namespace MetaDataAPI;
 
 public class Function
 {
-    public APIGatewayProxyResponse FunctionHandler(APIGatewayProxyRequest request, ILambdaContext context)
+    public APIGatewayProxyResponse FunctionHandler(APIGatewayProxyRequest request)
     {
         var id = int.Parse(request.QueryStringParameters["id"]);
 
-        var metada = GetMetadata(id);
-        var result = ContractDataParser.ParseContractData(metada);
-        var metadata = new Erc721Metadata(result);
+        var metadata = GetMetadata(id);
+        var result = ContractDataParser.ParseContractData(metadata);
+        var responseBody = new Erc721Metadata(result);
 
         return new APIGatewayProxyResponse
         {
             StatusCode = (int)HttpStatusCode.OK,
-            Body = JObject.FromObject(metadata).ToString(),
+            Body = JObject.FromObject(responseBody).ToString(),
             Headers = new Dictionary<string, string> { { "Content-Type", "application/json" } }
         };
     }

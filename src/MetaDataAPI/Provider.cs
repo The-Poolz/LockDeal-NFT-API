@@ -1,5 +1,5 @@
-﻿using MetaDataAPI.Providers;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
+using MetaDataAPI.Providers;
 
 namespace MetaDataAPI;
 
@@ -7,7 +7,7 @@ public class Provider
 {
     public Provider(string rawAddress)
     {
-        Address = "0x" + rawAddress.Substring(24);
+        Address = "0x" + rawAddress[24..];
         Name = ProviderNames[Address].ToString();
     }
     public string Address { get; set; }
