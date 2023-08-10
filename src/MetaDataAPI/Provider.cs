@@ -1,6 +1,4 @@
-﻿using Newtonsoft.Json;
-using MetaDataAPI.Providers;
-using MetaDataAPI.Models.Types;
+﻿using MetaDataAPI.Models.Types;
 
 namespace MetaDataAPI;
 
