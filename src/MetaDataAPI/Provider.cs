@@ -1,5 +1,5 @@
-﻿using MetaDataAPI.Providers;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
+using MetaDataAPI.Providers;
 
 namespace MetaDataAPI;
 
@@ -7,14 +7,14 @@ public class Provider
 {
     public Provider(string rawAddress)
     {
-        Address = "0x" + rawAddress.Substring(24);
+        Address = "0x" + rawAddress[24..];
         Name = ProviderNames[Address].ToString();
     }
     public string Address { get; set; }
     public string Name { get; set; }
     [JsonIgnore]
     public List<string> ParamsName => GetProvider().ParamsName;
-    internal IProvider GetProvider()
+    public IProvider GetProvider()
     {
         return Name switch
         {
@@ -27,8 +27,8 @@ public class Provider
             _ => throw new Exception("Unknown provider")
         };
     }       
-    internal enum ProviderName { Deal, Lock, Timed, Refund, Bundle, Collateral}
-    internal Dictionary<string, ProviderName> ProviderNames => new()
+    public enum ProviderName { Deal, Lock, Timed, Refund, Bundle, Collateral}
+    public static Dictionary<string, ProviderName> ProviderNames => new()
     {
         { "0x2028C98AC1702E2bb934A3E88734ccaE42d44338".ToLower() , ProviderName.Deal },
         { "0xD5dF3f41Cc1Df2cc42F3b683dD71eCc38913e0d6".ToLower() , ProviderName.Lock },
