@@ -16,6 +16,10 @@ namespace MetaDataAPI;
 
 public class Function
 {
+    /// <summary>
+    /// Signature of 'getData(uint256)' method.
+    /// </summary>
+    private const string MethodSignature = "0x0178fe3f";
     private readonly EnvManager envManager = new();
     private readonly string rpcUrl;
 
@@ -42,13 +46,12 @@ public class Function
 
     private string GetMetadata(int id)
     {
-        var function = Sha3Keccack.Current.CalculateHash("getData(uint256)")[..8];
         var param = new HexBigInteger(new BigInteger(id)).HexValue[2..].PadLeft(64, '0');
 
         var readRequest = new RpcRequest(
             rpcUrl: rpcUrl,
             to: "0x57e0433551460e85dfC5a5DdafF4DB199D0F960A",
-            data: "0x" + function + param
+            data: MethodSignature + param
         );
 
         return new ContractIO().ExecuteAction(readRequest);
