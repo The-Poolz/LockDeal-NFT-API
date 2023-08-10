@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json;
 using MetaDataAPI.Providers;
+using MetaDataAPI.Models.Types;
 
 namespace MetaDataAPI;
 
@@ -26,8 +27,8 @@ public class Provider
             nameof(ProviderName.Collateral) => new Collateral(),
             _ => throw new Exception("Unknown provider")
         };
-    }       
-    public enum ProviderName { Deal, Lock, Timed, Refund, Bundle, Collateral}
+    }
+
     public static Dictionary<string, ProviderName> ProviderNames => new()
     {
         { "0x2028C98AC1702E2bb934A3E88734ccaE42d44338".ToLower() , ProviderName.Deal },

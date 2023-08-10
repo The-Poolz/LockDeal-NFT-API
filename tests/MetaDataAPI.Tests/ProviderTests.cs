@@ -1,6 +1,7 @@
 ﻿using Xunit;
 using FluentAssertions;
 using MetaDataAPI.Providers;
+using MetaDataAPI.Models.Types;
 
 namespace MetaDataAPI.Tests;
 
@@ -13,7 +14,7 @@ public class ProviderTests
 
         var provider = new Provider(rawAddress);
 
-        provider.Name.Should().Be(nameof(Provider.ProviderName.Deal));
+        provider.Name.Should().Be(nameof(ProviderName.Deal));
     }
 
     [Fact]
