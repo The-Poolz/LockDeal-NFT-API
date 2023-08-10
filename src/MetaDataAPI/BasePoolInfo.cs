@@ -17,12 +17,12 @@ public class BasePoolInfo
         Owner = owner;
         Token = token;
 
-        if (Provider.ParamsName.Count != parameters.Count)
+        if (Provider.ParamsNames.Count != parameters.Count)
         {
             throw new InvalidOperationException("Mismatch between keys and params counts");
         }
 
-        Params = Provider.ParamsName.Zip(parameters, (k, v) => new { Key = k, Value = v })
+        Params = Provider.ParamsNames.Zip(parameters, (k, v) => new { Key = k, Value = v })
             .ToDictionary(x => x.Key, x => x.Value);
     }
 }
