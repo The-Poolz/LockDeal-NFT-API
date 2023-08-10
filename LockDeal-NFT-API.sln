@@ -9,6 +9,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ImageAPI", "src\ImageAPI\Im
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MetaDataAPI", "src\MetaDataAPI\MetaDataAPI.csproj", "{1087D093-685B-47A1-AE4C-510BEF8EB8FE}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{320AB552-0F05-4008-AD2B-F604D05FBD3C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MetaDataAPI.Tests", "tests\MetaDataAPI.Tests\MetaDataAPI.Tests.csproj", "{7C02E0DC-B43E-406F-B709-B09E010D2497}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -23,6 +27,10 @@ Global
 		{1087D093-685B-47A1-AE4C-510BEF8EB8FE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1087D093-685B-47A1-AE4C-510BEF8EB8FE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1087D093-685B-47A1-AE4C-510BEF8EB8FE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7C02E0DC-B43E-406F-B709-B09E010D2497}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7C02E0DC-B43E-406F-B709-B09E010D2497}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7C02E0DC-B43E-406F-B709-B09E010D2497}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7C02E0DC-B43E-406F-B709-B09E010D2497}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -30,6 +38,7 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{813C6EB9-873A-4DC4-9D8B-E3830F0DF2E6} = {FBF3AF2F-F3A8-407C-A68E-C129D08B59F2}
 		{1087D093-685B-47A1-AE4C-510BEF8EB8FE} = {FBF3AF2F-F3A8-407C-A68E-C129D08B59F2}
+		{7C02E0DC-B43E-406F-B709-B09E010D2497} = {320AB552-0F05-4008-AD2B-F604D05FBD3C}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {1ABE94B3-AC28-41A1-9950-4C78E34BA1F1}
