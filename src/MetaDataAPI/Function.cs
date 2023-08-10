@@ -37,7 +37,7 @@ public class Function
         var param = new HexBigInteger(new BigInteger(id)).HexValue[2..].PadLeft(64, '0');
 
         var readRequest = new RpcRequest(
-            rpcUrl: "https://data-seed-prebsc-1-s1.bnbchain.org:8545",
+            rpcUrl: "https://endpoints.omniatech.io/v1/bsc/testnet/public",
             to: "0x57e0433551460e85dfC5a5DdafF4DB199D0F960A",
             data: "0x" + function + param
         );
