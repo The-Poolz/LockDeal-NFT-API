@@ -14,6 +14,8 @@ public class FunctionTests
     [Fact]
     public void FunctionHandler_ShouldReturnCorrectResponse()
     {
+        const string rpcUrl = "https://endpoints.omniatech.io/v1/bsc/testnet/public";
+        Environment.SetEnvironmentVariable("RPC_URL", rpcUrl);
         const string metadata = "0x0000000000000000000000002028c98ac1702e2bb934a3e88734ccae42d44338000000000000000000000000000000000000000000000000000000000000000000000000000000000000000057e0433551460e85dfc5a5ddaff4db199d0f960a00000000000000000000000066134461c865f824d294d8ca0d9080cc1acd05f600000000000000000000000000000000000000000000000000000000000000a000000000000000000000000000000000000000000000000000000000000000010000000000000000000000000000000000000000000000000000000000000000";
         var rpcResponse = new JObject
         {
@@ -21,7 +23,7 @@ public class FunctionTests
         };
         var httpTest = new HttpTest();
         httpTest
-            .ForCallsTo("https://endpoints.omniatech.io/v1/bsc/testnet/public")
+            .ForCallsTo(rpcUrl)
             .RespondWithJson(rpcResponse);
 
         var request = new APIGatewayProxyRequest

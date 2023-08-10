@@ -2,6 +2,7 @@ using System.Net;
 using Nethereum.Util;
 using System.Numerics;
 using Amazon.Lambda.Core;
+using EnvironmentManager;
 using Newtonsoft.Json.Linq;
 using Nethereum.Hex.HexTypes;
 using EthSmartContractIO.Models;
@@ -15,6 +16,14 @@ namespace MetaDataAPI;
 
 public class Function
 {
+    private readonly EnvManager envManager = new();
+    private readonly string rpcUrl;
+
+    public Function()
+    {
+        rpcUrl = envManager.GetEnvironmentValue<string>("RPC_URL", true);
+    }
+
     public APIGatewayProxyResponse FunctionHandler(APIGatewayProxyRequest request)
     {
         var id = int.Parse(request.QueryStringParameters["id"]);
@@ -31,13 +40,13 @@ public class Function
         };
     }
 
-    public static string GetMetadata(int id)
+    private string GetMetadata(int id)
     {
         var function = Sha3Keccack.Current.CalculateHash("getData(uint256)")[..8];
         var param = new HexBigInteger(new BigInteger(id)).HexValue[2..].PadLeft(64, '0');
 
         var readRequest = new RpcRequest(
-            rpcUrl: "https://endpoints.omniatech.io/v1/bsc/testnet/public",
+            rpcUrl: rpcUrl,
             to: "0x57e0433551460e85dfC5a5DdafF4DB199D0F960A",
             data: "0x" + function + param
         );
