@@ -39,4 +39,15 @@ public class ProviderTests
 
         result.GetType().Should().Be(expectedType);
     }
+
+    [Fact]
+    public void ParamsName_Should_Return_Expected_Params()
+    {
+        const string rawAddress = "0000000000000000000000002028c98ac1702e2bb934a3e88734ccae42d44338";
+        var provider = new Provider(rawAddress);
+
+        var result = provider.ParamsName;
+
+        result.Should().BeEquivalentTo(new List<string> { "LeftAmount" });
+    }
 }
