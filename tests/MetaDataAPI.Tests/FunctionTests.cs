@@ -4,12 +4,13 @@ using System.Numerics;
 using FluentAssertions;
 using Flurl.Http.Testing;
 using Newtonsoft.Json.Linq;
+using MetaDataAPI.Tests.Helpers;
 using MetaDataAPI.Models.Response;
 using Amazon.Lambda.APIGatewayEvents;
 
 namespace MetaDataAPI.Tests;
 
-public class FunctionTests
+public class FunctionTests : SetEnvironments
 {
     [Fact]
     public void FunctionHandler_ShouldReturnCorrectResponse()

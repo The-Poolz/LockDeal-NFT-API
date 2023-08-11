@@ -1,9 +1,10 @@
 ﻿using Xunit;
 using FluentAssertions;
+using MetaDataAPI.Tests.Helpers;
 
 namespace MetaDataAPI.Tests;
 
-public class ProviderTests
+public class ProviderTests : SetEnvironments
 {
     [Fact]
     public void ParamsNames_Should_Throw_KeyNotFoundException_For_Unknown_Provider()
