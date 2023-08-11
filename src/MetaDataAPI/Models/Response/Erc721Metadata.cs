@@ -13,7 +13,7 @@ public class Erc721Metadata
 
         foreach (var param in poolInfo.Params)
         {
-            Attributes.Add(new Attribute(param.Key, param.Value.ToString()));
+            Attributes.Add(new Attribute(param.Key, param.Value.Key, param.Value.Value));
         }
     }
 
