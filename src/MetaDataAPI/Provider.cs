@@ -11,33 +11,56 @@ public class Provider
         address = "0x" + rawAddress[24..];
     }
 
-    public IReadOnlyCollection<string> ParamsNames => ProvidersParameters[address];
+    public IReadOnlyDictionary<string, string> ParamsNames => ProvidersParameters[address];
 
-    public static Dictionary<string, IReadOnlyCollection<string>> ProvidersParameters => new()
+    public static Dictionary<string, IReadOnlyDictionary<string, string>> ProvidersParameters => new()
     {
         {
             ProvidersAddresses[ProviderName.Deal],
-            new[] { "LeftAmount" }
+            new Dictionary<string, string>
+            {
+                { "LeftAmount", "number" }
+            }
         },
         {
             ProvidersAddresses[ProviderName.Lock],
-            new[] { "LeftAmount", "StartTime" }
+            new Dictionary<string, string>
+            {
+                { "LeftAmount", "number" },
+                { "StartTime", "date" }
+            }
         },
         {
             ProvidersAddresses[ProviderName.Timed],
-            new[] { "LeftAmount", "StartTime", "FinishTime", "StartAmount" }
+            new Dictionary<string, string>
+            {
+                { "LeftAmount", "number" },
+                { "StartTime", "date" },
+                { "FinishTime", "date" },
+                { "StartAmount", "number" }
+            }
         },
         {
             ProvidersAddresses[ProviderName.Refund],
-            new[] { "CollateralId", "RateToWei" }
+            new Dictionary<string, string>
+            {
+                { "CollateralId", "number" },
+                { "RateToWei", "number" }
+            }
         },
         {
             ProvidersAddresses[ProviderName.Bundle],
-            new[] { "LastSubPoolId" }
+            new Dictionary<string, string>
+            {
+                { "LastSubPoolId", "number" }
+            }
         },
         {
             ProvidersAddresses[ProviderName.Collateral],
-            new[] { "FinishTime" }
+            new Dictionary<string, string>
+            {
+                { "FinishTime", "date" }
+            }
         }
     };
 
