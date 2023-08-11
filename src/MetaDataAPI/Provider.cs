@@ -59,6 +59,7 @@ public class Provider
             ProvidersAddresses[ProviderName.Collateral],
             new Dictionary<string, string>
             {
+                { "LeftAmount", "number" },
                 { "FinishTime", "date" }
             }
         }

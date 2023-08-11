@@ -56,6 +56,7 @@ public class ProviderTests : SetEnvironments
         }};
         yield return new object[] { "000000000000000000000000db65ce03690e7044ac12f5e2ab640e7a355e9407", new Dictionary<string, string>
         {
+            { "LeftAmount", "number" },
             { "FinishTime", "date" }
         }};
     }
