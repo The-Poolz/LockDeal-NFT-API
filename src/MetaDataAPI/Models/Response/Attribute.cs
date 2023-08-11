@@ -11,9 +11,9 @@ public class Attribute
     public string TraitType { get; set; }
 
     [JsonProperty("value")]
-    public string Value { get; set; }
+    public object Value { get; set; }
 
-    public Attribute(string traitType, string value, string? displayType = null)
+    public Attribute(string traitType, object value, string? displayType = null)
     {
         TraitType = traitType;
         Value = value;
