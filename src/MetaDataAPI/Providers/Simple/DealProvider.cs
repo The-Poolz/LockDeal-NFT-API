@@ -1,7 +1,7 @@
 ﻿using MetaDataAPI.Models.Types;
 using MetaDataAPI.Models.Response;
 
-namespace MetaDataAPI.Providers;
+namespace MetaDataAPI.Providers.Simple;
 
 public class DealProvider : IProvider
 {
