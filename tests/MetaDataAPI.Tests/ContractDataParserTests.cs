@@ -26,6 +26,9 @@ public class ContractDataParserTests : SetEnvironments
         result.PoolId.Should().Be(new BigInteger(0));
         result.Owner.Should().Be("0x57e0433551460e85dfc5a5ddaff4db199d0f960a");
         result.Token.Should().Be("0x66134461c865f824d294d8ca0d9080cc1acd05f6");
-        result.Params.Should().BeEquivalentTo(new Dictionary<string, BigInteger> { { "LeftAmount", 0 } });
+        result.Attributes.Should().BeEquivalentTo(new List<Models.Response.Attribute>()
+        {
+            new("LeftAmount", new BigInteger(0), "number")
+        });
     }
 }
