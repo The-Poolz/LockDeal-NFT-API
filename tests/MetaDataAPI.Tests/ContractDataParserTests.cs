@@ -1,10 +1,11 @@
 ﻿using Xunit;
 using System.Numerics;
 using FluentAssertions;
+using MetaDataAPI.Tests.Helpers;
 
 namespace MetaDataAPI.Tests;
 
-public class ContractDataParserTests
+public class ContractDataParserTests : SetEnvironments
 {
     [Fact]
     public void ParseContractData_Should_Throw_Exception_For_Null_Or_Empty_Data()

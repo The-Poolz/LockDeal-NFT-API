@@ -1,10 +1,11 @@
 ﻿using Xunit;
 using System.Numerics;
 using FluentAssertions;
+using MetaDataAPI.Tests.Helpers;
 
 namespace MetaDataAPI.Tests;
 
-public class BasePoolInfoTests
+public class BasePoolInfoTests : SetEnvironments
 {
     [Fact]
     public void Constructor_ShouldThrowInvalidOperationException_WhenParamsCountsMismatch()
