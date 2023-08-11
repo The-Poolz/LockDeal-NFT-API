@@ -22,5 +22,5 @@ public class Erc721Metadata
     public string Image { get; set; }
 
     [JsonProperty("attributes")]
-    public List<Attribute> Attributes { get; set; }
+    public List<Erc721Attribute> Attributes { get; set; }
 }
