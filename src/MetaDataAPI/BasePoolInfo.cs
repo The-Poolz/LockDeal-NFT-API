@@ -8,7 +8,7 @@ public class BasePoolInfo
     public BigInteger PoolId { get; }
     public string Owner { get; }
     public string Token { get; }
-    public IEnumerable<Models.Response.Attribute> Params { get; }
+    public IEnumerable<Models.Response.Attribute> Attributes { get; }
 
     public BasePoolInfo(Provider provider, BigInteger poolId, string owner, string token, IReadOnlyCollection<BigInteger> parameters)
     {
@@ -22,7 +22,7 @@ public class BasePoolInfo
             throw new InvalidOperationException("Mismatch between keys and params counts");
         }
 
-        Params = Provider.ParamsNames.Zip(parameters, (pair, value) =>
+        Attributes = Provider.ParamsNames.Zip(parameters, (pair, value) =>
             new Models.Response.Attribute(pair.Key, value, pair.Value));
     }
 }
