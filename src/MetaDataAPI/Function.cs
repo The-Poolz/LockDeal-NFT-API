@@ -21,11 +21,13 @@ public class Function
     /// </summary>
     private const string MethodSignature = "0x0178fe3f";
     private readonly EnvManager envManager = new();
+    private readonly string lockDealNftAddress;
     private readonly string rpcUrl;
 
     public Function()
     {
         rpcUrl = envManager.GetEnvironmentValue<string>("RPC_URL", true);
+        lockDealNftAddress = envManager.GetEnvironmentValue<string>("LOCK_DEAL_NFT_ADDRESS", true);
     }
 
     public APIGatewayProxyResponse FunctionHandler(APIGatewayProxyRequest request)
@@ -50,7 +52,7 @@ public class Function
 
         var readRequest = new RpcRequest(
             rpcUrl: rpcUrl,
-            to: "0x57e0433551460e85dfC5a5DdafF4DB199D0F960A",
+            to: lockDealNftAddress,
             data: MethodSignature + param
         );
 
