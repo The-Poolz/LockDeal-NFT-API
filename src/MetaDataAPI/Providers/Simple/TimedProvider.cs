@@ -7,12 +7,6 @@ namespace MetaDataAPI.Providers.Simple;
 public class TimedProvider : IProvider
 {
     public ProviderName Name => ProviderName.Timed;
-    public BigInteger PoolId { get; }
-
-    public TimedProvider(BigInteger poolId)
-    {
-        PoolId = poolId;
-    }
 
     public IEnumerable<Erc721Attribute> GetAttributes(params object[] values)
     {

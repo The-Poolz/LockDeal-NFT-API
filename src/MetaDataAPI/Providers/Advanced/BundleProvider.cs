@@ -4,7 +4,7 @@ using MetaDataAPI.Models.Response;
 
 namespace MetaDataAPI.Providers.Advanced;
 
-public class BundleProvider : IProvider
+public class BundleProvider : IAdvancedProvider
 {
     public ProviderName Name => ProviderName.Bundle;
     public BigInteger PoolId { get; }
