@@ -21,8 +21,9 @@ public class MetadataParser
     public BigInteger GetPoolId() => BigInteger.Parse(chunks[1], NumberStyles.AllowHexSpecifier);
     public string GetOwnerAddress() => "0x" + chunks[2][24..];
     public string GetTokenAddress() => "0x" + chunks[3][24..];
-    public IEnumerable<BigInteger> GetProviderParameters() => chunks.Skip(6)
-        .Select(chunk => BigInteger.Parse(chunk, NumberStyles.AllowHexSpecifier));
+    public IReadOnlyCollection<BigInteger> GetProviderParameters() => chunks.Skip(6)
+        .Select(chunk => BigInteger.Parse(chunk, NumberStyles.AllowHexSpecifier))
+        .ToArray();
 
     private static string RemoveHexPrefix(string hex) =>
         hex.StartsWith("0x") ? hex[2..] : hex;

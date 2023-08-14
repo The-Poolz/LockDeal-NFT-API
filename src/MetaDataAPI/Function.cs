@@ -23,7 +23,7 @@ public class Function
             poolId: parser.GetPoolId(),
             owner: parser.GetOwnerAddress(),
             token: parser.GetTokenAddress(),
-            parameters: parser.GetProviderParameters().ToArray()
+            parameters: parser.GetProviderParameters()
         );
 
         var responseBody = new Erc721Metadata(basePoolInfo);

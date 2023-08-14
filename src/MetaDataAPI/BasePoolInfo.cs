@@ -11,14 +11,14 @@ public class BasePoolInfo
     public string Token { get; }
     public IEnumerable<Erc721Attribute> Attributes { get; }
 
-    public BasePoolInfo(Provider provider, BigInteger poolId, string owner, string token, BigInteger[] parameters)
+    public BasePoolInfo(Provider provider, BigInteger poolId, string owner, string token, IReadOnlyCollection<BigInteger> parameters)
     {
         Provider = provider;
         PoolId = poolId;
         Owner = owner;
         Token = token;
 
-        if (Provider.ParamsNames.Count != parameters.Count())
+        if (Provider.ParamsNames.Count != parameters.Count)
         {
             throw new InvalidOperationException("Mismatch between keys and params counts");
         }
