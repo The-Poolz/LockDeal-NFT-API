@@ -1,5 +1,4 @@
-﻿using System.Numerics;
-using MetaDataAPI.Models.Types;
+﻿using MetaDataAPI.Models.Types;
 using MetaDataAPI.Providers.Simple;
 using MetaDataAPI.Providers.Advanced;
 
@@ -7,18 +6,18 @@ namespace MetaDataAPI.Providers;
 
 public static class ProviderFactory
 {
-    public static IProvider Create(string address, BigInteger poolId) =>
-        Create(ProvidersAddresses[address], poolId);
+    public static IProvider Create(string address) =>
+        Create(ProvidersAddresses[address]);
 
-    public static IProvider Create(ProviderName name, BigInteger poolId) =>
-        Providers(poolId)[name];
+    public static IProvider Create(ProviderName name) =>
+        Providers[name];
 
-    public static Dictionary<ProviderName, IProvider> Providers(BigInteger poolId) => new()
+    public static Dictionary<ProviderName, IProvider> Providers => new()
     {
         { ProviderName.Deal, new DealProvider() },
         { ProviderName.Lock, new LockProvider() },
         { ProviderName.Timed, new TimedProvider() },
-        { ProviderName.Bundle, new BundleProvider(poolId) },
+        { ProviderName.Bundle, new BundleProvider() },
         //{ ProviderName.Refund, new RefundProvider() },
         //{ ProviderName.Collateral, new CollateralProvider() }
     };

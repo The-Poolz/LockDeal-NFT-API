@@ -13,7 +13,7 @@ public class BundleProvider : IProvider
         var metadata = RpcCaller.GetMetadata(values[0]);
         var parser = new MetadataParser(metadata);
 
-        var provider = ProviderFactory.Create(parser.GetProviderAddress(), values[0]);
+        var provider = ProviderFactory.Create(parser.GetProviderAddress());
         var attributes = provider.GetAttributes(parser.GetProviderParameters().ToArray());
 
         return attributes;
