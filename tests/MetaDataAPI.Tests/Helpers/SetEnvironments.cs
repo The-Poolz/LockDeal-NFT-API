@@ -10,5 +10,7 @@ public class SetEnvironments
         Environment.SetEnvironmentVariable("REFUND_CONTRACT_ADDRESS", "0x5eBa5A16A42241D4E1d427C9EC1E4C0AeC67e2A2".ToLower());
         Environment.SetEnvironmentVariable("BUNDLE_CONTRACT_ADDRESS", "0xF1Ce27BD46F1f94Ce8Dc4DE4C52d3D845EfC29F0".ToLower());
         Environment.SetEnvironmentVariable("COLLATERAL_CONTRACT_ADDRESS", "0xDB65cE03690e7044Ac12F5e2Ab640E7A355E9407".ToLower());
+        Environment.SetEnvironmentVariable("LOCK_DEAL_NFT_ADDRESS", "0x57e0433551460e85dfC5a5DdafF4DB199D0F960A".ToLower());
+        Environment.SetEnvironmentVariable("RPC_URL", HttpMock.RpcUrl);
     }
 }

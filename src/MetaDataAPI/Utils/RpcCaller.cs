@@ -7,10 +7,12 @@ namespace MetaDataAPI.Utils;
 
 public static class RpcCaller
 {
+    private static readonly ContractIO contractIO = new();
+
     /// <summary>
     /// Signature of 'getData(uint256)' method.
     /// </summary>
-    private const string MethodSignature = "0x0178fe3f";
+    public const string MethodSignature = "0x0178fe3f";
 
     public static string GetMetadata(BigInteger poolId)
     {
@@ -22,6 +24,6 @@ public static class RpcCaller
             data: MethodSignature + param
         );
 
-        return new ContractIO().ExecuteAction(readRequest);
+        return contractIO.ExecuteAction(readRequest);
     }
 }

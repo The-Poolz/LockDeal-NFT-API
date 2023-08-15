@@ -1,13 +1,10 @@
 ﻿using System.Numerics;
-using MetaDataAPI.Models.Types;
 using MetaDataAPI.Models.Response;
 
 namespace MetaDataAPI.Providers.Simple;
 
 public class TimedProvider : IProvider
 {
-    public ProviderName Name => ProviderName.Timed;
-
     public IEnumerable<Erc721Attribute> GetAttributes(params BigInteger[] values)
     {
         return new Erc721Attribute[]

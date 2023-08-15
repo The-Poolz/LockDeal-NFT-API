@@ -17,7 +17,7 @@ public class MetadataParser
         chunks = SplitHex(RemoveHexPrefix(rawMetadata));
     }
 
-    public string GetProviderAddress() => chunks[0];
+    public string GetProviderAddress() => "0x" + chunks[0][24..];
     public BigInteger GetPoolId() => BigInteger.Parse(chunks[1], NumberStyles.AllowHexSpecifier);
     public string GetOwnerAddress() => "0x" + chunks[2][24..];
     public string GetTokenAddress() => "0x" + chunks[3][24..];
