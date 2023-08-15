@@ -68,9 +68,9 @@ public class ProviderFactoryTests : SetEnvironments
             .Should().BeEquivalentTo(new Erc721Attribute[]
             {
                 new("LastSubPoolId", new BigInteger(2), "number"),
-                new("LeftAmount", new BigInteger(0), "number", new BigInteger(100)),
-                new("StartTime", new BigInteger(1692090665), "date"),
-                new("FinishTime", new BigInteger(1692090665), "date"),
+                new("LeftAmount", new BigInteger(898), "number", new BigInteger(950)),
+                new("StartTime", new BigInteger(1690286212), "date"),
+                new("FinishTime", new BigInteger(1690385286), "date"),
             });
     }
 }

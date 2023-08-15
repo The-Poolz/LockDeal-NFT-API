@@ -6,12 +6,14 @@ namespace MetaDataAPI.Providers.Advanced;
 
 public class BundleProvider : IAdvancedProvider
 {
+    public byte ParametersCount => 1;
     public BigInteger PoolId { get; }
 
     public BundleProvider(BigInteger poolId)
     {
         PoolId = poolId;
     }
+
 
     public IEnumerable<Erc721Attribute> GetAttributes(params BigInteger[] values)
     {

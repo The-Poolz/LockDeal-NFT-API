@@ -5,6 +5,8 @@ namespace MetaDataAPI.Providers.Simple;
 
 public class TimedProvider : IProvider
 {
+    public byte ParametersCount => 4;
+
     public IEnumerable<Erc721Attribute> GetAttributes(params BigInteger[] values)
     {
         return new Erc721Attribute[]

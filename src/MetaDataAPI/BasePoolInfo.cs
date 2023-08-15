@@ -17,13 +17,11 @@ public class BasePoolInfo
         Owner = owner;
         Token = token;
 
-        var attributes = provider.GetAttributes().ToArray();
-
-        if (attributes.Length != parameters.Count)
+        if (provider.ParametersCount != parameters.Count)
         {
             throw new InvalidOperationException("Mismatch between keys and params counts");
         }
 
-        Attributes = attributes;
+        Attributes = provider.GetAttributes(parameters.ToArray()).ToArray();
     }
 }
