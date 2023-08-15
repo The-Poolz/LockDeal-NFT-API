@@ -1,7 +1,9 @@
 using System.Net;
+using System.Numerics;
 using MetaDataAPI.Utils;
 using Amazon.Lambda.Core;
 using Newtonsoft.Json.Linq;
+using MetaDataAPI.Providers;
 using MetaDataAPI.Models.Response;
 using Amazon.Lambda.APIGatewayEvents;
 
@@ -13,17 +15,17 @@ public class Function
 {
     public APIGatewayProxyResponse FunctionHandler(APIGatewayProxyRequest request)
     {
-        var id = int.Parse(request.QueryStringParameters["id"]);
+        var poolId = BigInteger.Parse(request.QueryStringParameters["id"]);
 
-        var metadata = RpcCaller.GetMetadata(id);
+        var metadata = RpcCaller.GetMetadata(poolId);
         var parser = new MetadataParser(metadata);
 
         var basePoolInfo = new BasePoolInfo(
-            provider: new Provider(parser.GetProviderAddress()),
+            provider: ProviderFactory.Create(parser.GetProviderAddress(), poolId), 
             poolId: parser.GetPoolId(),
             owner: parser.GetOwnerAddress(),
             token: parser.GetTokenAddress(),
-            parameters: parser.GetProviderParameters()
+            parameters: parser.GetProviderParameters().ToArray()
         );
 
         var responseBody = new Erc721Metadata(basePoolInfo);

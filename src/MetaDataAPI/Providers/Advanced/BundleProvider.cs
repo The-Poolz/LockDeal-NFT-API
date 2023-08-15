@@ -1,4 +1,5 @@
 ﻿using System.Numerics;
+using MetaDataAPI.Utils;
 using MetaDataAPI.Models.Types;
 using MetaDataAPI.Models.Response;
 
@@ -14,8 +15,25 @@ public class BundleProvider : IAdvancedProvider
         PoolId = poolId;
     }
 
-    public IEnumerable<Erc721Attribute> GetAttributes(params object[] values)
+    public IEnumerable<Erc721Attribute> GetAttributes(params BigInteger[] values)
     {
-        return new Erc721Attribute[0];
+        var bundleAttributes = new List<Erc721Attribute>
+        {
+            new("LastSubPoolId", values[0], "number")
+        };
+
+        var lastSubPoolId = (int)values[0];
+
+        for (var poolId = PoolId; poolId < lastSubPoolId; poolId++)
+        {
+            var metadata = RpcCaller.GetMetadata(poolId);
+            var parser = new MetadataParser(metadata);
+
+            var provider = ProviderFactory.Create(parser.GetProviderAddress(), poolId);
+            var attributes = provider.GetAttributes(parser.GetProviderParameters().ToArray());
+            bundleAttributes.AddRange(attributes);
+        }
+
+        return bundleAttributes;
     }
 }
