@@ -10,20 +10,12 @@ public class BundleProvider : IProvider
 
     public IEnumerable<Erc721Attribute> GetAttributes(params BigInteger[] values)
     {
-        var bundleAttributes = new List<Erc721Attribute>
-        {
-            new("LastSubPoolId", values[0], "number")
-        };
-
-        var lastSubPoolId = values[0];
-
-        var metadata = RpcCaller.GetMetadata(lastSubPoolId);
+        var metadata = RpcCaller.GetMetadata(values[0]);
         var parser = new MetadataParser(metadata);
 
-        var provider = ProviderFactory.Create(parser.GetProviderAddress(), lastSubPoolId);
+        var provider = ProviderFactory.Create(parser.GetProviderAddress(), values[0]);
         var attributes = provider.GetAttributes(parser.GetProviderParameters().ToArray());
-        bundleAttributes.AddRange(attributes);
 
-        return bundleAttributes;
+        return attributes;
     }
 }
