@@ -7,7 +7,7 @@ public class MetadataParser
 {
     private readonly string[] chunks;
 
-    public MetadataParser(string rawMetadata)
+    public MetadataParser(string? rawMetadata)
     {
         if (string.IsNullOrEmpty(rawMetadata))
         {
