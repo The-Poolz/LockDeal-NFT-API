@@ -19,7 +19,7 @@ public class BundleProviderTests : SetEnvironments
 
         var provider = new BundleProvider();
 
-        provider.Should().BeOfType<BundleProvider>();
+        provider.ParametersCount.Should().Be(1);
         provider.GetAttributes(new BigInteger(2))
             .Should().BeEquivalentTo(new Erc721Attribute[]
             {
