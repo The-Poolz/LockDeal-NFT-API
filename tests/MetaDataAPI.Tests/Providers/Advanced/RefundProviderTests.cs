@@ -26,9 +26,6 @@ public class RefundProviderTests : SetEnvironments
                 new("RateToWei", new BigInteger(100), "number"),
                 new("LeftAmount", new BigInteger(898), "number", new BigInteger(950)),
                 new("StartTime", new BigInteger(1690286212), "date"),
-                new("FinishTime", new BigInteger(1690385286), "date"),
-                new("LeftAmount", new BigInteger(898), "number", new BigInteger(950)),
-                new("StartTime", new BigInteger(1690286212), "date"),
                 new("FinishTime", new BigInteger(1690385286), "date")
             });
     }
