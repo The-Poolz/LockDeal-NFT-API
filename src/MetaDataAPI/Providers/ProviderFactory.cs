@@ -18,7 +18,7 @@ public static class ProviderFactory
         { ProviderName.Deal, new DealProvider() },
         { ProviderName.Lock, new LockProvider() },
         { ProviderName.Timed, new TimedProvider() },
-        { ProviderName.Bundle, new BundleProvider() },
+        { ProviderName.Bundle, new BundleProvider(poolId) },
         { ProviderName.Refund, new RefundProvider(poolId) },
         //{ ProviderName.Collateral, new CollateralProvider() }
     };

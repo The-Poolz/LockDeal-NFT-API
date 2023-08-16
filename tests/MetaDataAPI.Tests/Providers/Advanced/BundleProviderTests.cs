@@ -15,17 +15,16 @@ public class BundleProviderTests : SetEnvironments
     {
         using var httpTest = new HttpTest();
         httpTest.ForCallsTo(HttpMock.RpcUrl)
-            .RespondWith(HttpMock.TimedResponse);
+            .RespondWith(HttpMock.DealResponse);
 
-        var provider = new BundleProvider();
+        var provider = new BundleProvider(new BigInteger(0));
 
         provider.ParametersCount.Should().Be(1);
         provider.GetAttributes(new BigInteger(2))
             .Should().BeEquivalentTo(new Erc721Attribute[]
             {
-                new("LeftAmount", new BigInteger(898), "number", new BigInteger(950)),
-                new("StartTime", new BigInteger(1690286212), "date"),
-                new("FinishTime", new BigInteger(1690385286), "date"),
+                new("LeftAmount", new BigInteger(0), "number"),
+                new("LeftAmount", new BigInteger(0), "number")
             });
     }
 }
