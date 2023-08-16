@@ -12,7 +12,7 @@ public class Erc721Attribute
     public string? DisplayType { get; }
 
     [JsonProperty("trait_type")]
-    public string TraitType { get; private set;  }
+    public string TraitType { get; private set; }
 
     [JsonProperty("value")]
     public object Value { get; }
