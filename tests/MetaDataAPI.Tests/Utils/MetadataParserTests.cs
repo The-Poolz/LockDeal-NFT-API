@@ -26,4 +26,14 @@ public class MetadataParserTests
 
         parser.GetProviderAddress().Should().Be("0x" + new string('0', 40));
     }
+
+    [Fact]
+    public void RemoveHexPrefix_ShouldReturnCorrectString_WhenHexNotStartsWith0x()
+    {
+        var hex = new string('0', 64);
+
+        var parser = new MetadataParser(hex);
+
+        parser.GetProviderAddress().Should().Be("0x" + new string('0', 40));
+    }
 }
