@@ -12,10 +12,12 @@ namespace MetaDataAPI.Tests.Providers;
 
 public class ProviderFactoryTests : SetEnvironments
 {
+    private readonly BigInteger poolId = new(0);
+
     [Fact]
     public void Create_ShouldCreateDealProvider_WhenAddressIsProvided()
     {
-        var provider = ProviderFactory.Create(Environments.DealAddress);
+        var provider = ProviderFactory.Create(Environments.DealAddress, poolId);
 
         provider.Should().BeOfType<DealProvider>();
         provider.GetAttributes(new BigInteger(0))
@@ -28,7 +30,7 @@ public class ProviderFactoryTests : SetEnvironments
     [Fact]
     public void Create_ShouldCreateLockProvider_WhenAddressIsProvided()
     {
-        var provider = ProviderFactory.Create(Environments.LockAddress);
+        var provider = ProviderFactory.Create(Environments.LockAddress, poolId);
 
         provider.Should().BeOfType<LockProvider>();
         provider.GetAttributes(new BigInteger(0), new BigInteger(1692090665))
@@ -42,7 +44,7 @@ public class ProviderFactoryTests : SetEnvironments
     [Fact]
     public void Create_ShouldCreateTimedProvider_WhenAddressIsProvided()
     {
-        var provider = ProviderFactory.Create(Environments.TimedAddress);
+        var provider = ProviderFactory.Create(Environments.TimedAddress, poolId);
 
         provider.Should().BeOfType<TimedProvider>();
         provider.GetAttributes(new BigInteger(0), new BigInteger(1692090665), new BigInteger(1692090665), new BigInteger(100))
@@ -61,7 +63,7 @@ public class ProviderFactoryTests : SetEnvironments
         httpTest.ForCallsTo(HttpMock.RpcUrl)
             .RespondWith(HttpMock.TimedResponse);
 
-        var provider = ProviderFactory.Create(Environments.BundleAddress);
+        var provider = ProviderFactory.Create(Environments.BundleAddress, poolId);
 
         provider.Should().BeOfType<BundleProvider>();
         provider.GetAttributes(new BigInteger(2))

@@ -21,7 +21,7 @@ public class Function
         var parser = new MetadataParser(metadata);
 
         var basePoolInfo = new BasePoolInfo(
-            provider: ProviderFactory.Create(parser.GetProviderAddress()), 
+            provider: ProviderFactory.Create(parser.GetProviderAddress(), poolId), 
             poolId: parser.GetPoolId(),
             owner: parser.GetOwnerAddress(),
             token: parser.GetTokenAddress(),
