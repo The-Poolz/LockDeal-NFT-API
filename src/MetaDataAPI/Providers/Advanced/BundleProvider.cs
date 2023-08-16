@@ -1,5 +1,4 @@
 ﻿using System.Numerics;
-using MetaDataAPI.Utils;
 using MetaDataAPI.Models.Response;
 
 namespace MetaDataAPI.Providers.Advanced;
@@ -18,13 +17,9 @@ public class BundleProvider : IProvider
     {
         var attributes = new List<Erc721Attribute>();
 
-        for (var id = poolId; id < values[0]; id++)
+        for (var id = poolId + 1; id <= values[0]; id++)
         {
-            var metadata = RpcCaller.GetMetadata(values[0]);
-            var parser = new MetadataParser(metadata);
-
-            var provider = ProviderFactory.Create(parser.GetProviderAddress(), poolId);
-            attributes.AddRange(provider.GetAttributes(parser.GetProviderParameters().ToArray()));
+            attributes.AddRange(AttributesService.GetProviderAttributes(id));
         }
 
         return attributes;
