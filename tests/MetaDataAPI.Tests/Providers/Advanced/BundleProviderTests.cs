@@ -23,8 +23,8 @@ public class BundleProviderTests : SetEnvironments
         provider.GetAttributes(new BigInteger(2))
             .Should().BeEquivalentTo(new Erc721Attribute[]
             {
-                new("LeftAmount", new BigInteger(0), "number"),
-                new("LeftAmount", new BigInteger(0), "number")
+                new("LeftAmount_1", new BigInteger(0), "number"),
+                new("LeftAmount_2", new BigInteger(0), "number")
             });
     }
 }
