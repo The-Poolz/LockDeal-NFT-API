@@ -12,7 +12,7 @@ public class Erc721Attribute
     public string? DisplayType { get; }
 
     [JsonProperty("trait_type")]
-    public string TraitType { get; }
+    public string TraitType { get; private set;  }
 
     [JsonProperty("value")]
     public object Value { get; }
@@ -23,5 +23,11 @@ public class Erc721Attribute
         Value = value;
         DisplayType = displayType;
         MaxValue = maxValue;
+    }
+
+    public Erc721Attribute IncludeUnderscoreForTraitType(BigInteger poolId)
+    {
+        TraitType += "_" + poolId;
+        return this;
     }
 }

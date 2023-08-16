@@ -19,7 +19,8 @@ public class BundleProvider : IProvider
 
         for (var id = poolId + 1; id <= values[0]; id++)
         {
-            attributes.AddRange(AttributesService.GetProviderAttributes(id));
+            var providerAttributes = AttributesService.GetProviderAttributes(id);
+            attributes.AddRange(providerAttributes.Select(attribute => attribute.IncludeUnderscoreForTraitType(id)));
         }
 
         return attributes;
