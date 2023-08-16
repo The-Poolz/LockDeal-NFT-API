@@ -1,28 +1,27 @@
 ﻿using System.Numerics;
+using MetaDataAPI.Providers;
+using MetaDataAPI.Models.Response;
 
 namespace MetaDataAPI;
 
 public class BasePoolInfo
 {
-    public Provider Provider { get; }
     public BigInteger PoolId { get; }
     public string Owner { get; }
     public string Token { get; }
-    public IEnumerable<Models.Response.Attribute> Attributes { get; }
+    public IEnumerable<Erc721Attribute> Attributes { get; }
 
-    public BasePoolInfo(Provider provider, BigInteger poolId, string owner, string token, IReadOnlyCollection<BigInteger> parameters)
+    public BasePoolInfo(IProvider provider, BigInteger poolId, string owner, string token, IReadOnlyCollection<BigInteger> parameters)
     {
-        Provider = provider;
         PoolId = poolId;
         Owner = owner;
         Token = token;
 
-        if (Provider.ParamsNames.Count != parameters.Count)
+        if (provider.ParametersCount != parameters.Count)
         {
             throw new InvalidOperationException("Mismatch between keys and params counts");
         }
 
-        Attributes = Provider.ParamsNames.Zip(parameters, (pair, value) =>
-            new Models.Response.Attribute(pair.Key, value, pair.Value));
+        Attributes = provider.GetAttributes(parameters.ToArray()).ToArray();
     }
 }
