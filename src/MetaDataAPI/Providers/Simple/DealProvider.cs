@@ -1,12 +1,13 @@
-﻿using MetaDataAPI.Models.Types;
+﻿using System.Numerics;
 using MetaDataAPI.Models.Response;
 
 namespace MetaDataAPI.Providers.Simple;
 
 public class DealProvider : IProvider
 {
-    public ProviderName Name => ProviderName.Deal;
-    public IEnumerable<Erc721Attribute> GetAttributes(params object[] values)
+    public byte ParametersCount => 1;
+
+    public IEnumerable<Erc721Attribute> GetAttributes(params BigInteger[] values)
     {
         return new Erc721Attribute[]
         {

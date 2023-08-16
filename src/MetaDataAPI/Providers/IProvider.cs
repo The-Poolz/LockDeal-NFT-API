@@ -1,11 +1,10 @@
-﻿using MetaDataAPI.Models.Types;
+﻿using System.Numerics;
 using MetaDataAPI.Models.Response;
 
 namespace MetaDataAPI.Providers;
 
 public interface IProvider
 {
-    public ProviderName Name { get; }
-    public string ProviderAddress => Provider.ProvidersAddresses[Name];
-    public IEnumerable<Erc721Attribute> GetAttributes(params object[] values);
+    public byte ParametersCount { get; }
+    public IEnumerable<Erc721Attribute> GetAttributes(params BigInteger[] values);
 }
