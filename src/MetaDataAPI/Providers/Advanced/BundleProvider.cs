@@ -15,6 +15,13 @@ public class BundleProvider : IProvider
 
     public IEnumerable<Erc721Attribute> GetAttributes(params BigInteger[] values)
     {
-        return AttributesService.GetProviderAttributes(values[0]);
+        var attributes = new List<Erc721Attribute>();
+
+        for (var id = poolId + 1; id <= values[0]; id++)
+        {
+            attributes.AddRange(AttributesService.GetProviderAttributes(id));
+        }
+
+        return attributes;
     }
 }
