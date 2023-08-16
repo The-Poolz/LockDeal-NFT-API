@@ -1,6 +1,6 @@
 ﻿using System.Numerics;
-using MetaDataAPI.Models.Response;
 using MetaDataAPI.Utils;
+using MetaDataAPI.Models.Response;
 
 namespace MetaDataAPI.Providers.Advanced;
 
@@ -22,8 +22,7 @@ public class RefundProvider : IProvider
             new("MainCoin", GetMainCoin()),
             new("Token", GetToken())
         };
-        attributes.AddRange(AttributesService.GetProviderAttributes(poolId));
-        attributes.AddRange(AttributesService.GetProviderAttributes(values[0]));
+        attributes.AddRange(AttributesService.GetProviderAttributes(poolId + 1));
 
         return attributes;
     }
