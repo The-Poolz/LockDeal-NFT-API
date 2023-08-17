@@ -1,4 +1,5 @@
 ﻿using System.Numerics;
+using MetaDataAPI.Utils;
 using MetaDataAPI.Models.Response;
 
 namespace MetaDataAPI.Providers.Advanced;
@@ -17,7 +18,7 @@ public class CollateralProvider : IProvider
     {
         var attributes = new List<Erc721Attribute>
         {
-            new("LeftAmount", values[0], "number"),
+            new("LeftAmount", ConvertWei.WeiToEth(values[0]), "number"),
             new("FinishTime", values[1], "date"),
             AttributesService.GetMainCoinAttribute(poolId),
             AttributesService.GetTokenAttribute(poolId),

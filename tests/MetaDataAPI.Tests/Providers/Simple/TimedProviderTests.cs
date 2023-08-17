@@ -19,7 +19,7 @@ public class TimedProviderTests
         result.Should().HaveCount(3);
         result.Should().BeEquivalentTo(new Erc721Attribute[]
         {
-            new("LeftAmount", values[0], "number", values[3]),
+            new("LeftAmount", 0.000000000000000042m, "number", 0.0000000000000001m),
             new("StartTime", values[1], "date"),
             new("FinishTime", values[2], "date")
         });

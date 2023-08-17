@@ -6,7 +6,7 @@ namespace MetaDataAPI.Models.Response;
 public class Erc721Attribute
 {
     [JsonProperty("max_value", NullValueHandling = NullValueHandling.Ignore)]
-    public BigInteger? MaxValue { get; }
+    public object? MaxValue { get; }
 
     [JsonProperty("display_type", NullValueHandling = NullValueHandling.Ignore)]
     public string? DisplayType { get; }
@@ -17,7 +17,7 @@ public class Erc721Attribute
     [JsonProperty("value")]
     public object Value { get; }
 
-    public Erc721Attribute(string traitType, object value, string? displayType = null, BigInteger? maxValue = null)
+    public Erc721Attribute(string traitType, object value, string? displayType = null, object? maxValue = null)
     {
         TraitType = traitType;
         Value = value;
