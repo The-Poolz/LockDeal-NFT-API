@@ -20,7 +20,7 @@ public static class ProviderFactory
         { ProviderName.Timed, new TimedProvider() },
         { ProviderName.Bundle, new BundleProvider(poolId) },
         { ProviderName.Refund, new RefundProvider(poolId) },
-        //{ ProviderName.Collateral, new CollateralProvider() }
+        { ProviderName.Collateral, new CollateralProvider(poolId) }
     };
 
     public static Dictionary<string, ProviderName> ProvidersAddresses => new()
