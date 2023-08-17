@@ -23,7 +23,7 @@ public static class RpcCaller
         return contractIO.ExecuteAction(readRequest);
     }
 
-    public static string GetDecimals(string token)
+    public static byte GetDecimals(string token)
     {
         var readRequest = new RpcRequest(
             rpcUrl: Environments.RpcUrl,
@@ -31,6 +31,6 @@ public static class RpcCaller
             data: MethodSignatures.Decimals
         );
 
-        return contractIO.ExecuteAction(readRequest);
+        return Convert.ToByte(contractIO.ExecuteAction(readRequest), 16);
     }
 }
