@@ -25,12 +25,10 @@ public static class RpcCaller
 
     public static string GetDecimals(string token)
     {
-        var param = string.Empty.PadLeft(64, '0');
-
         var readRequest = new RpcRequest(
             rpcUrl: Environments.RpcUrl,
             to: token,
-            data: MethodSignatures.Decimals + param
+            data: MethodSignatures.Decimals
         );
 
         return contractIO.ExecuteAction(readRequest);
