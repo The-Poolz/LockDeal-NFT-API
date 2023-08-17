@@ -8,20 +8,20 @@ namespace MetaDataAPI.Providers;
 
 public static class ProviderFactory
 {
-    public static IProvider Create(string address, BigInteger poolId) =>
-        Create(ProvidersAddresses[address], poolId);
+    public static IProvider Create(string address, BigInteger poolId, string token) =>
+        Create(ProvidersAddresses[address], poolId, token);
 
-    public static IProvider Create(ProviderName name, BigInteger poolId) =>
-        Providers(poolId)[name];
+    public static IProvider Create(ProviderName name, BigInteger poolId, string token) =>
+        Providers(poolId, token)[name];
 
-    public static Dictionary<ProviderName, IProvider> Providers(BigInteger poolId) => new()
+    public static Dictionary<ProviderName, IProvider> Providers(BigInteger poolId, string token) => new()
     {
-        { ProviderName.Deal, new DealProvider() },
-        { ProviderName.Lock, new LockProvider() },
-        { ProviderName.Timed, new TimedProvider() },
+        { ProviderName.Deal, new DealProvider(token) },
+        { ProviderName.Lock, new LockProvider(token) },
+        { ProviderName.Timed, new TimedProvider(token) },
         { ProviderName.Bundle, new BundleProvider(poolId) },
         { ProviderName.Refund, new RefundProvider(poolId) },
-        { ProviderName.Collateral, new CollateralProvider(poolId) }
+        { ProviderName.Collateral, new CollateralProvider(poolId, token) }
     };
 
     public static Dictionary<string, ProviderName> ProvidersAddresses => new()
