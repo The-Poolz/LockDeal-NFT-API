@@ -1,5 +1,7 @@
 ﻿using System.Numerics;
 using Newtonsoft.Json;
+using MetaDataAPI.Models.Types;
+using MetaDataAPI.Models.Types.Extensions;
 
 namespace MetaDataAPI.Models.Response;
 
@@ -17,11 +19,16 @@ public class Erc721Attribute
     [JsonProperty("value")]
     public object Value { get; }
 
-    public Erc721Attribute(string traitType, object value, string? displayType = null, BigInteger? maxValue = null)
+    public Erc721Attribute(
+        string traitType,
+        object value,
+        DisplayType displayType = Types.DisplayType.None,
+        BigInteger? maxValue = null
+    )
     {
         TraitType = traitType;
         Value = value;
-        DisplayType = displayType;
+        DisplayType = displayType == Types.DisplayType.None ? null : displayType.ToLowerString();
         MaxValue = maxValue;
     }
 
