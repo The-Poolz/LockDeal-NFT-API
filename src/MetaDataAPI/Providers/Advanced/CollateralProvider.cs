@@ -19,8 +19,8 @@ public class CollateralProvider : IProvider
         {
             new("LeftAmount", values[0], "number"),
             new("FinishTime", values[1], "date"),
-            new("MainCoin", AttributesService.GetMainCoinAttribute(poolId)),
-            new("Token", AttributesService.GetTokenAttribute(poolId)),
+            AttributesService.GetMainCoinAttribute(poolId),
+            AttributesService.GetTokenAttribute(poolId),
         };
 
         for (var id = poolId + 1; id <= poolId + 3; id++)
