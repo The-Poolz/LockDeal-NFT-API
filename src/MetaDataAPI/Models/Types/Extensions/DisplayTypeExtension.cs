@@ -1,6 +1,6 @@
-﻿namespace MetaDataAPI.Models.Types;
+﻿namespace MetaDataAPI.Models.Types.Extensions;
 
-public static class DisplayTypeExtensions
+public static class DisplayTypeExtension
 {
     public static string ToLowerString(this DisplayType displayType) =>
         displayType.ToString().ToLower();
