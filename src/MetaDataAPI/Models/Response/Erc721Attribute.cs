@@ -1,5 +1,7 @@
 ﻿using System.Numerics;
 using Newtonsoft.Json;
+using MetaDataAPI.Models.Types;
+using MetaDataAPI.Models.Types.Extensions;
 
 namespace MetaDataAPI.Models.Response;
 
@@ -17,12 +19,19 @@ public class Erc721Attribute
     [JsonProperty("value")]
     public object Value { get; }
 
-    public Erc721Attribute(string traitType, object value, string? displayType = null, BigInteger? maxValue = null)
+    public Erc721Attribute(
+        string traitType,
+        object value,
+        DisplayType displayType = Types.DisplayType.String,
+        BigInteger? maxValue = null
+    )
     {
         TraitType = traitType;
         Value = value;
-        DisplayType = displayType;
         MaxValue = maxValue;
+
+        // For string values don't need to set DisplayType, because of this here ternary expression.
+        DisplayType = displayType == Types.DisplayType.String ? null : displayType.ToLowerString();
     }
 
     public Erc721Attribute IncludeUnderscoreForTraitType(BigInteger poolId)

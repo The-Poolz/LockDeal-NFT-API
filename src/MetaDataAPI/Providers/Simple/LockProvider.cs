@@ -1,4 +1,5 @@
 ﻿using System.Numerics;
+using MetaDataAPI.Models.Types;
 using MetaDataAPI.Models.Response;
 
 namespace MetaDataAPI.Providers.Simple;
@@ -11,8 +12,8 @@ public class LockProvider : IProvider
     {
         return new Erc721Attribute[]
         {
-            new("LeftAmount", values[0], "number"),
-            new("StartTime", values[1], "date")
+            new("LeftAmount", values[0], DisplayType.Number),
+            new("StartTime", values[1], DisplayType.Date)
         };
     }
 }
