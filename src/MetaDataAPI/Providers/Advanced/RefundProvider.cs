@@ -1,5 +1,4 @@
 ﻿using System.Numerics;
-using MetaDataAPI.Utils;
 using MetaDataAPI.Models.Response;
 
 namespace MetaDataAPI.Providers.Advanced;
@@ -19,23 +18,11 @@ public class RefundProvider : IProvider
         var attributes = new List<Erc721Attribute>
         {
             new("RateToWei", values[1], "number"),
-            new("MainCoin", GetMainCoin()),
-            new("Token", GetToken())
+            AttributesService.GetMainCoinAttribute(poolId),
+            AttributesService.GetTokenAttribute(poolId)
         };
         attributes.AddRange(AttributesService.GetProviderAttributes(poolId + 1));
 
         return attributes;
-    }
-
-    private string GetMainCoin()
-    {
-        var metadata = RpcCaller.GetMetadata(poolId + 1);
-        return new MetadataParser(metadata).GetTokenAddress();
-    }
-
-    private string GetToken()
-    {
-        var metadata = RpcCaller.GetMetadata(poolId + 2);
-        return new MetadataParser(metadata).GetTokenAddress();
     }
 }
