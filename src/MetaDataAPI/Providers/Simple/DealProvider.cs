@@ -7,17 +7,16 @@ namespace MetaDataAPI.Providers.Simple;
 
 public class DealProvider : IProvider
 {
-    private readonly string token;
+    private readonly byte decimals;
     public byte ParametersCount => 1;
 
-    public DealProvider(string token)
+    public DealProvider(byte decimals)
     {
-        this.token = token;
+        this.decimals = decimals;
     }
 
     public IEnumerable<Erc721Attribute> GetAttributes(params BigInteger[] values)
     {
-        var decimals = RpcCaller.GetDecimals(token);
         var converter = new ConvertWei(decimals);
         return new Erc721Attribute[]
         {

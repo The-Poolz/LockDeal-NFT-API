@@ -11,7 +11,7 @@ public static class AttributesService
         var metadata = RpcCaller.GetMetadata(poolId);
         var parser = new MetadataParser(metadata);
 
-        var provider = ProviderFactory.Create(parser.GetProviderAddress(), poolId);
+        var provider = ProviderFactory.Create(parser.GetProviderAddress(), poolId, parser.GetTokenAddress());
         return provider.GetAttributes(parser.GetProviderParameters().ToArray());
     }
 

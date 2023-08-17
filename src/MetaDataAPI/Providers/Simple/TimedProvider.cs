@@ -7,17 +7,16 @@ namespace MetaDataAPI.Providers.Simple;
 
 public class TimedProvider : IProvider
 {
-    private readonly string token;
+    private readonly byte decimals;
     public byte ParametersCount => 4;
 
-    public TimedProvider(string token)
+    public TimedProvider(byte decimals)
     {
-        this.token = token;
+        this.decimals = decimals;
     }
 
     public IEnumerable<Erc721Attribute> GetAttributes(params BigInteger[] values)
     {
-        var decimals = RpcCaller.GetDecimals(token);
         var converter = new ConvertWei(decimals);
         return new Erc721Attribute[]
         {

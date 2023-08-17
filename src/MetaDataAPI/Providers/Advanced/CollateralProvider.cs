@@ -7,19 +7,18 @@ namespace MetaDataAPI.Providers.Advanced;
 
 public class CollateralProvider : IProvider
 {
-    private readonly string token;
+    private readonly byte decimals;
     private readonly BigInteger poolId;
     public byte ParametersCount => 2;
 
-    public CollateralProvider(BigInteger poolId, string token)
+    public CollateralProvider(BigInteger poolId, byte decimals)
     {
         this.poolId = poolId;
-        this.token = token;
+        this.decimals = decimals;
     }
 
     public IEnumerable<Erc721Attribute> GetAttributes(params BigInteger[] values)
     {
-        var decimals = RpcCaller.GetDecimals(token);
         var converter = new ConvertWei(decimals);
         var attributes = new List<Erc721Attribute>
         {
