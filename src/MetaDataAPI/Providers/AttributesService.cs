@@ -14,4 +14,14 @@ public static class AttributesService
         var provider = ProviderFactory.Create(parser.GetProviderAddress(), poolId);
         return provider.GetAttributes(parser.GetProviderParameters().ToArray());
     }
+
+    public static Erc721Attribute GetMainCoinAttribute(BigInteger collateralId) =>
+        new("MainCoin", GetAddress(collateralId + 1));
+
+    public static Erc721Attribute GetTokenAttribute(BigInteger collateralId) =>
+        new("Token", GetAddress(collateralId + 2));
+
+    private static string GetAddress(BigInteger poolId) =>
+        new MetadataParser(RpcCaller.GetMetadata(poolId))
+            .GetTokenAddress();
 }
