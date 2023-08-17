@@ -6,6 +6,7 @@ using MetaDataAPI.Storage;
 using MetaDataAPI.Providers;
 using MetaDataAPI.Tests.Helpers;
 using MetaDataAPI.Models.Response;
+using MetaDataAPI.Models.Types;
 using MetaDataAPI.Providers.Simple;
 using MetaDataAPI.Providers.Advanced;
 
@@ -24,7 +25,7 @@ public class ProviderFactoryTests : SetEnvironments
         provider.GetAttributes(new BigInteger(0))
             .Should().BeEquivalentTo(new Erc721Attribute[]
             {
-                new("LeftAmount", new BigInteger(0), "number")
+                new("LeftAmount", 0m, DisplayType.Number)
             });
     }
 
@@ -37,8 +38,8 @@ public class ProviderFactoryTests : SetEnvironments
         provider.GetAttributes(new BigInteger(0), new BigInteger(1692090665))
             .Should().BeEquivalentTo(new Erc721Attribute[]
             {
-                new("LeftAmount", new BigInteger(0), "number"),
-                new("StartTime", new BigInteger(1692090665), "date")
+                new("LeftAmount", 0m, DisplayType.Number),
+                new("StartTime", new BigInteger(1692090665), DisplayType.Date)
             });
     }
 
@@ -51,9 +52,9 @@ public class ProviderFactoryTests : SetEnvironments
         provider.GetAttributes(new BigInteger(0), new BigInteger(1692090665), new BigInteger(1692090665), new BigInteger(100))
             .Should().BeEquivalentTo(new Erc721Attribute[]
             {
-                new("LeftAmount", new BigInteger(0), "number", new BigInteger(100)),
-                new("StartTime", new BigInteger(1692090665), "date"),
-                new("FinishTime", new BigInteger(1692090665), "date"),
+                new("LeftAmount", 0m, DisplayType.Number, 0.0000000000000001M),
+                new("StartTime", new BigInteger(1692090665), DisplayType.Date),
+                new("FinishTime", new BigInteger(1692090665), DisplayType.Date),
             });
     }
 
@@ -70,8 +71,8 @@ public class ProviderFactoryTests : SetEnvironments
         provider.GetAttributes(new BigInteger(2))
             .Should().BeEquivalentTo(new Erc721Attribute[]
             {
-                new("LeftAmount_1", new BigInteger(0), "number"),
-                new("LeftAmount_2", new BigInteger(0), "number")
+                new("LeftAmount_1", 0m, DisplayType.Number),
+                new("LeftAmount_2", 0m, DisplayType.Number)
             });
     }
 }
