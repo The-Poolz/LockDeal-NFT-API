@@ -2,7 +2,7 @@
 
 public enum DisplayType
 {
-    None,
+    String,
     Number,
     Date
 }
