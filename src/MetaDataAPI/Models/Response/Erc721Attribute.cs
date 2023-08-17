@@ -28,8 +28,10 @@ public class Erc721Attribute
     {
         TraitType = traitType;
         Value = value;
-        DisplayType = displayType == Types.DisplayType.String ? null : displayType.ToLowerString();
         MaxValue = maxValue;
+
+        // For string values don't need to set DisplayType, because of this here ternary expression.
+        DisplayType = displayType == Types.DisplayType.String ? null : displayType.ToLowerString();
     }
 
     public Erc721Attribute IncludeUnderscoreForTraitType(BigInteger poolId)
