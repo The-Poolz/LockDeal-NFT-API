@@ -22,13 +22,13 @@ public class Erc721Attribute
     public Erc721Attribute(
         string traitType,
         object value,
-        DisplayType displayType = Types.DisplayType.None,
+        DisplayType displayType = Types.DisplayType.String,
         BigInteger? maxValue = null
     )
     {
         TraitType = traitType;
         Value = value;
-        DisplayType = displayType == Types.DisplayType.None ? null : displayType.ToLowerString();
+        DisplayType = displayType == Types.DisplayType.String ? null : displayType.ToLowerString();
         MaxValue = maxValue;
     }
 
