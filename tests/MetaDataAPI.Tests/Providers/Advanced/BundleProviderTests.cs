@@ -2,6 +2,7 @@
 using System.Numerics;
 using FluentAssertions;
 using Flurl.Http.Testing;
+using MetaDataAPI.Models.Types;
 using MetaDataAPI.Tests.Helpers;
 using MetaDataAPI.Models.Response;
 using MetaDataAPI.Providers.Advanced;
@@ -23,8 +24,8 @@ public class BundleProviderTests : SetEnvironments
         provider.GetAttributes(new BigInteger(2))
             .Should().BeEquivalentTo(new Erc721Attribute[]
             {
-                new("LeftAmount_1", new BigInteger(0), "number"),
-                new("LeftAmount_2", new BigInteger(0), "number")
+                new("LeftAmount_1", new BigInteger(0), DisplayType.Number),
+                new("LeftAmount_2", new BigInteger(0), DisplayType.Number)
             });
     }
 }

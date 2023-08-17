@@ -1,6 +1,6 @@
 ﻿using System.Numerics;
-using MetaDataAPI.Models.Response;
 using MetaDataAPI.Models.Types;
+using MetaDataAPI.Models.Response;
 
 namespace MetaDataAPI.Providers.Simple;
 

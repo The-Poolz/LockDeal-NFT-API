@@ -3,6 +3,7 @@ using System.Numerics;
 using FluentAssertions;
 using Flurl.Http.Testing;
 using MetaDataAPI.Providers;
+using MetaDataAPI.Models.Types;
 using MetaDataAPI.Tests.Helpers;
 using MetaDataAPI.Models.Response;
 using MetaDataAPI.Providers.Simple;
@@ -23,7 +24,7 @@ public class ProviderFactoryTests : SetEnvironments
         provider.GetAttributes(new BigInteger(0))
             .Should().BeEquivalentTo(new Erc721Attribute[]
             {
-                new("LeftAmount", new BigInteger(0), "number")
+                new("LeftAmount", new BigInteger(0), DisplayType.Number)
             });
     }
 
@@ -36,8 +37,8 @@ public class ProviderFactoryTests : SetEnvironments
         provider.GetAttributes(new BigInteger(0), new BigInteger(1692090665))
             .Should().BeEquivalentTo(new Erc721Attribute[]
             {
-                new("LeftAmount", new BigInteger(0), "number"),
-                new("StartTime", new BigInteger(1692090665), "date")
+                new("LeftAmount", new BigInteger(0), DisplayType.Number),
+                new("StartTime", new BigInteger(1692090665), DisplayType.Date)
             });
     }
 
@@ -50,9 +51,9 @@ public class ProviderFactoryTests : SetEnvironments
         provider.GetAttributes(new BigInteger(0), new BigInteger(1692090665), new BigInteger(1692090665), new BigInteger(100))
             .Should().BeEquivalentTo(new Erc721Attribute[]
             {
-                new("LeftAmount", new BigInteger(0), "number", new BigInteger(100)),
-                new("StartTime", new BigInteger(1692090665), "date"),
-                new("FinishTime", new BigInteger(1692090665), "date"),
+                new("LeftAmount", new BigInteger(0), DisplayType.Number, new BigInteger(100)),
+                new("StartTime", new BigInteger(1692090665), DisplayType.Date),
+                new("FinishTime", new BigInteger(1692090665), DisplayType.Date),
             });
     }
 
@@ -69,8 +70,8 @@ public class ProviderFactoryTests : SetEnvironments
         provider.GetAttributes(new BigInteger(2))
             .Should().BeEquivalentTo(new Erc721Attribute[]
             {
-                new("LeftAmount_1", new BigInteger(0), "number"),
-                new("LeftAmount_2", new BigInteger(0), "number")
+                new("LeftAmount_1", new BigInteger(0), DisplayType.Number),
+                new("LeftAmount_2", new BigInteger(0), DisplayType.Number)
             });
     }
 }
