@@ -1,4 +1,4 @@
-﻿using Xunit;
+using Xunit;
 using System.Numerics;
 using FluentAssertions;
 using Flurl.Http.Testing;
@@ -24,8 +24,8 @@ public class BundleProviderTests : SetEnvironments
         provider.GetAttributes(new BigInteger(2))
             .Should().BeEquivalentTo(new Erc721Attribute[]
             {
-                new("LeftAmount_1", new BigInteger(0), DisplayType.Number),
-                new("LeftAmount_2", new BigInteger(0), DisplayType.Number)
+                new("LeftAmount_1", 0m, DisplayType.Number),
+                new("LeftAmount_2", 0m, DisplayType.Number)
             });
     }
 }

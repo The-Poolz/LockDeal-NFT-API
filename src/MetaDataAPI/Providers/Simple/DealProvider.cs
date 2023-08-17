@@ -1,4 +1,5 @@
-﻿using System.Numerics;
+using System.Numerics;
+using MetaDataAPI.Utils;
 using MetaDataAPI.Models.Types;
 using MetaDataAPI.Models.Response;
 
@@ -12,7 +13,7 @@ public class DealProvider : IProvider
     {
         return new Erc721Attribute[]
         {
-            new("LeftAmount", values[0], DisplayType.Number)
+            new("LeftAmount", ConvertWei.WeiToEth(values[0]), DisplayType.Number)
         };
     }
 }

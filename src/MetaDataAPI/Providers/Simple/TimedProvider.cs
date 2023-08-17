@@ -1,4 +1,5 @@
-﻿using System.Numerics;
+using System.Numerics;
+using MetaDataAPI.Utils;
 using MetaDataAPI.Models.Types;
 using MetaDataAPI.Models.Response;
 
@@ -12,7 +13,7 @@ public class TimedProvider : IProvider
     {
         return new Erc721Attribute[]
         {
-            new("LeftAmount", values[0], DisplayType.Number, values[3]),
+            new("LeftAmount", ConvertWei.WeiToEth(values[0]), DisplayType.Number, ConvertWei.WeiToEth(values[3])),
             new("StartTime", values[1], DisplayType.Date),
             new("FinishTime", values[2], DisplayType.Date),
         };

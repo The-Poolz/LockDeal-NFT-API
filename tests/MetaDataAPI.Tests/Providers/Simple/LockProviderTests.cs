@@ -20,7 +20,7 @@ public class LockProviderTests
         result.Should().HaveCount(2);
         result.Should().BeEquivalentTo(new Erc721Attribute[]
         {
-            new("LeftAmount", values[0], DisplayType.Number),
+            new("LeftAmount", 0.000000000000000042m, DisplayType.Number),
             new("StartTime", values[1], DisplayType.Date)
         });
     }

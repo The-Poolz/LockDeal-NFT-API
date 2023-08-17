@@ -20,7 +20,7 @@ public class DealProviderTests
         result.Should().HaveCount(1);
         result.Should().BeEquivalentTo(new Erc721Attribute[]
         {
-            new("LeftAmount", values[0], DisplayType.Number)
+            new("LeftAmount", 0.000000000000000042m, DisplayType.Number)
         });
     }
 }

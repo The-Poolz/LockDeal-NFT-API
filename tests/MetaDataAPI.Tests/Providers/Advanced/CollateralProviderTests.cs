@@ -24,13 +24,13 @@ public class CollateralProviderTests : SetEnvironments
         provider.GetAttributes(new BigInteger(100), new BigInteger(1690286212))
             .Should().BeEquivalentTo(new Erc721Attribute[]
             {
-                new("LeftAmount", new BigInteger(100), DisplayType.Number),
+                new("LeftAmount", 0.0000000000000001m, DisplayType.Number),
                 new("FinishTime", new BigInteger(1690286212), DisplayType.Date),
                 new("MainCoin", "0x66134461c865f824d294d8ca0d9080cc1acd05f6"),
                 new("Token", "0x66134461c865f824d294d8ca0d9080cc1acd05f6"),
-                new("LeftAmount_1", new BigInteger(0), DisplayType.Number),
-                new("LeftAmount_2", new BigInteger(0), DisplayType.Number),
-                new("LeftAmount_3", new BigInteger(0), DisplayType.Number),
+                new("LeftAmount_1", 0m, DisplayType.Number),
+                new("LeftAmount_2", 0m, DisplayType.Number),
+                new("LeftAmount_3", 0m, DisplayType.Number),
             });
     }
 }

@@ -27,7 +27,7 @@ public class RefundProviderTests : SetEnvironments
                 new("RateToWei", new BigInteger(100), DisplayType.Number),
                 new("MainCoin", "0x66134461c865f824d294d8ca0d9080cc1acd05f6"),
                 new("Token", "0x66134461c865f824d294d8ca0d9080cc1acd05f6"),
-                new("LeftAmount", new BigInteger(898), DisplayType.Number, new BigInteger(950)),
+                new("LeftAmount", 0.000000000000000898m, DisplayType.Number, 0.000000000000000950m),
                 new("StartTime", new BigInteger(1690286212), DisplayType.Date),
                 new("FinishTime", new BigInteger(1690385286), DisplayType.Date),
             });

@@ -1,4 +1,4 @@
-﻿using System.Numerics;
+using System.Numerics;
 using Newtonsoft.Json;
 using MetaDataAPI.Models.Types;
 using MetaDataAPI.Models.Types.Extensions;
@@ -8,7 +8,7 @@ namespace MetaDataAPI.Models.Response;
 public class Erc721Attribute
 {
     [JsonProperty("max_value", NullValueHandling = NullValueHandling.Ignore)]
-    public BigInteger? MaxValue { get; }
+    public object? MaxValue { get; }
 
     [JsonProperty("display_type", NullValueHandling = NullValueHandling.Ignore)]
     public string? DisplayType { get; }
@@ -23,7 +23,7 @@ public class Erc721Attribute
         string traitType,
         object value,
         DisplayType displayType = Types.DisplayType.String,
-        BigInteger? maxValue = null
+        object? maxValue = null
     )
     {
         TraitType = traitType;
