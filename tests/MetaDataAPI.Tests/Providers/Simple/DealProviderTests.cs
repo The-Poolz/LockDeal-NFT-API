@@ -1,6 +1,7 @@
 ﻿using Xunit;
 using System.Numerics;
 using FluentAssertions;
+using MetaDataAPI.Models.Types;
 using MetaDataAPI.Models.Response;
 using MetaDataAPI.Providers.Simple;
 
@@ -19,7 +20,7 @@ public class DealProviderTests
         result.Should().HaveCount(1);
         result.Should().BeEquivalentTo(new Erc721Attribute[]
         {
-            new("LeftAmount", 0.000000000000000042m, "number")
+            new("LeftAmount", 0.000000000000000042m, DisplayType.Number)
         });
     }
 }

@@ -1,6 +1,7 @@
 ﻿using Xunit;
 using System.Numerics;
 using FluentAssertions;
+using MetaDataAPI.Models.Types;
 using MetaDataAPI.Models.Response;
 using MetaDataAPI.Providers.Simple;
 
@@ -19,8 +20,8 @@ public class LockProviderTests
         result.Should().HaveCount(2);
         result.Should().BeEquivalentTo(new Erc721Attribute[]
         {
-            new("LeftAmount", 0.000000000000000042m, "number"),
-            new("StartTime", values[1], "date")
+            new("LeftAmount", 0.000000000000000042m, DisplayType.Number),
+            new("StartTime", values[1], DisplayType.Date)
         });
     }
 }

@@ -1,6 +1,7 @@
 ﻿using Xunit;
 using System.Numerics;
 using FluentAssertions;
+using MetaDataAPI.Models.Types;
 using MetaDataAPI.Models.Response;
 using MetaDataAPI.Providers.Simple;
 
@@ -19,9 +20,9 @@ public class TimedProviderTests
         result.Should().HaveCount(3);
         result.Should().BeEquivalentTo(new Erc721Attribute[]
         {
-            new("LeftAmount", 0.000000000000000042m, "number", 0.0000000000000001m),
-            new("StartTime", values[1], "date"),
-            new("FinishTime", values[2], "date")
+            new("LeftAmount", 0.000000000000000042m, DisplayType.Number, 0.0000000000000001m),
+            new("StartTime", values[1], DisplayType.Date),
+            new("FinishTime", values[2], DisplayType.Date)
         });
     }
 }

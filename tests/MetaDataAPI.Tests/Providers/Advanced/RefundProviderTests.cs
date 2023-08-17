@@ -2,6 +2,7 @@
 using System.Numerics;
 using FluentAssertions;
 using Flurl.Http.Testing;
+using MetaDataAPI.Models.Types;
 using MetaDataAPI.Tests.Helpers;
 using MetaDataAPI.Models.Response;
 using MetaDataAPI.Providers.Advanced;
@@ -23,12 +24,12 @@ public class RefundProviderTests : SetEnvironments
         provider.GetAttributes(new BigInteger(1), new BigInteger(100))
             .Should().BeEquivalentTo(new Erc721Attribute[]
             {
-                new("RateToWei", new BigInteger(100), "number"),
+                new("RateToWei", new BigInteger(100), DisplayType.Number),
                 new("MainCoin", "0x66134461c865f824d294d8ca0d9080cc1acd05f6"),
                 new("Token", "0x66134461c865f824d294d8ca0d9080cc1acd05f6"),
-                new("LeftAmount", 0.000000000000000898m, "number", 0.000000000000000950m),
-                new("StartTime", new BigInteger(1690286212), "date"),
-                new("FinishTime", new BigInteger(1690385286), "date"),
+                new("LeftAmount", 0.000000000000000898m, DisplayType.Number, 0.000000000000000950m),
+                new("StartTime", new BigInteger(1690286212), DisplayType.Date),
+                new("FinishTime", new BigInteger(1690385286), DisplayType.Date),
             });
     }
 }
