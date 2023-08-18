@@ -20,7 +20,7 @@ public class ProviderFactoryTests : SetEnvironments
         httpTest.ForCallsTo(HttpMock.RpcUrl)
             .RespondWith(HttpMock.DealResponse);
 
-        var provider = ProviderFactory.Create(Environments.BundleAddress, new BigInteger(0), HttpMock.TokenAddress);
+        var provider = ProviderFactory.Create(Environments.BundleAddress, new BigInteger(0), 18);
 
         provider.Should().BeOfType<BundleProvider>();
         provider.GetAttributes(new BigInteger(2))

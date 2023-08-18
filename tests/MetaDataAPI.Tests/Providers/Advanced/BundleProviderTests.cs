@@ -18,7 +18,7 @@ public class BundleProviderTests : SetEnvironments
         httpTest.ForCallsTo(HttpMock.RpcUrl)
             .RespondWith(HttpMock.DealResponse);
 
-        var provider = new BundleProvider(new BigInteger(0));
+        var provider = new BundleProvider(new BigInteger(0), 18);
 
         provider.ParametersCount.Should().Be(1);
         provider.GetAttributes(new BigInteger(2))
