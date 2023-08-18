@@ -6,12 +6,12 @@ namespace MetaDataAPI.Providers;
 
 public static class AttributesService
 {
-    public static IEnumerable<Erc721Attribute> GetProviderAttributes(BigInteger poolId)
+    public static IEnumerable<Erc721Attribute> GetProviderAttributes(BigInteger poolId, byte decimals)
     {
         var metadata = RpcCaller.GetMetadata(poolId);
         var parser = new MetadataParser(metadata);
 
-        var provider = ProviderFactory.Create(parser.GetProviderAddress(), poolId);
+        var provider = ProviderFactory.Create(parser.GetProviderAddress(), poolId, decimals);
         return provider.GetAttributes(parser.GetProviderParameters().ToArray());
     }
 

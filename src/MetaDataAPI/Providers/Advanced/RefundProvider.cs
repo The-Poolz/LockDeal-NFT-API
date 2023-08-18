@@ -6,12 +6,14 @@ namespace MetaDataAPI.Providers.Advanced;
 
 public class RefundProvider : IProvider
 {
+    private readonly byte decimals;
     private readonly BigInteger poolId;
     public byte ParametersCount => 2;
 
-    public RefundProvider(BigInteger poolId)
+    public RefundProvider(BigInteger poolId, byte decimals)
     {
         this.poolId = poolId;
+        this.decimals = decimals;
     }
 
     public IEnumerable<Erc721Attribute> GetAttributes(params BigInteger[] values)
@@ -22,7 +24,7 @@ public class RefundProvider : IProvider
             AttributesService.GetMainCoinAttribute(poolId),
             AttributesService.GetTokenAttribute(poolId)
         };
-        attributes.AddRange(AttributesService.GetProviderAttributes(poolId + 1));
+        attributes.AddRange(AttributesService.GetProviderAttributes(poolId + 1, decimals));
 
         return attributes;
     }

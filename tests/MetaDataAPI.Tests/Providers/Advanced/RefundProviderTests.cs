@@ -14,11 +14,12 @@ public class RefundProviderTests : SetEnvironments
     [Fact]
     public void GetAttributes_ShouldReturnCorrectAttributes()
     {
+        var poolId = new BigInteger(0);
         using var httpTest = new HttpTest();
         httpTest.ForCallsTo(HttpMock.RpcUrl)
             .RespondWith(HttpMock.TimedResponse);
 
-        var provider = new RefundProvider(new BigInteger(0));
+        var provider = new RefundProvider(poolId, 18);
 
         provider.ParametersCount.Should().Be(2);
         provider.GetAttributes(new BigInteger(1), new BigInteger(100))

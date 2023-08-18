@@ -2,8 +2,15 @@
 
 namespace MetaDataAPI.Utils;
 
-public static class ConvertWei
+public class ConvertWei
 {
-    public static decimal WeiToEth(BigInteger value) =>
-        (decimal)value / (decimal)Math.Pow(10, 18);
+    private readonly byte decimals;
+
+    public ConvertWei(byte decimals)
+    {
+        this.decimals = decimals;
+    }
+
+    public decimal WeiToEth(BigInteger value) =>
+        (decimal)value / (decimal)Math.Pow(10, decimals);
 }

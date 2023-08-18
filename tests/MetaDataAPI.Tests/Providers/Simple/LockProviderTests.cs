@@ -12,7 +12,7 @@ public class LockProviderTests
     [Fact]
     public void GetAttributes_ShouldReturnCorrectAttributes()
     {
-        var provider = new LockProvider();
+        var provider = new LockProvider(18);
         var values = new BigInteger[] { 42, 1692106619 };
         var result = provider.GetAttributes(values).ToArray();
 

@@ -1,6 +1,6 @@
 ﻿using EnvironmentManager;
 
-namespace MetaDataAPI;
+namespace MetaDataAPI.Storage;
 
 public static class Environments
 {
