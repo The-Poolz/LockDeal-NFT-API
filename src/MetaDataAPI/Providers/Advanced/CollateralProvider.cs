@@ -30,7 +30,7 @@ public class CollateralProvider : IProvider
 
         for (var id = poolId + 1; id <= poolId + 3; id++)
         {
-            var providerAttributes = AttributesService.GetProviderAttributes(id);
+            var providerAttributes = AttributesService.GetProviderAttributes(id, decimals);
             attributes.AddRange(providerAttributes.Select(attribute => attribute.IncludeUnderscoreForTraitType(id)));
         }
 

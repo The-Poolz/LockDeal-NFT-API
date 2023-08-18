@@ -20,8 +20,10 @@ public class Function
         var metadata = RpcCaller.GetMetadata(poolId);
         var parser = new MetadataParser(metadata);
 
+        var deciamls = RpcCaller.GetDecimals(parser.GetTokenAddress());
+
         var basePoolInfo = new BasePoolInfo(
-            provider: ProviderFactory.Create(parser.GetProviderAddress(), poolId, parser.GetTokenAddress()), 
+            provider: ProviderFactory.Create(parser.GetProviderAddress(), poolId, deciamls), 
             poolId: parser.GetPoolId(),
             owner: parser.GetOwnerAddress(),
             token: parser.GetTokenAddress(),
