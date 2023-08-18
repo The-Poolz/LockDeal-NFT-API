@@ -6,6 +6,8 @@ using MetaDataAPI.Models.Types;
 using MetaDataAPI.Tests.Helpers;
 using MetaDataAPI.Models.Response;
 using MetaDataAPI.Providers.Advanced;
+using MetaDataAPI.Storage;
+using Nethereum.Hex.HexTypes;
 
 namespace MetaDataAPI.Tests.Providers.Advanced;
 
@@ -14,11 +16,16 @@ public class RefundProviderTests : SetEnvironments
     [Fact]
     public void GetAttributes_ShouldReturnCorrectAttributes()
     {
+        var poolId = new BigInteger(0);
         using var httpTest = new HttpTest();
         httpTest.ForCallsTo(HttpMock.RpcUrl)
+            .WithRequestBody(HttpMock.DecimalsRequest)
+            .RespondWith(HttpMock.DecimalsResponse);
+        httpTest.ForCallsTo(HttpMock.RpcUrl)
+            .WithRequestBody($"{{\"jsonrpc\":\"2.0\",\"method\":\"eth_call\",\"params\":[{{\"to\":\"0x57e0433551460e85dfc5a5ddaff4db199d0f960a\",\"data\":\"{MethodSignatures.GetData + new HexBigInteger(poolId).HexValue[2..].PadLeft(64, '0')}\"}},\"latest\"],\"id\":0}}")
             .RespondWith(HttpMock.TimedResponse);
 
-        var provider = new RefundProvider(new BigInteger(0));
+        var provider = new RefundProvider(poolId);
 
         provider.ParametersCount.Should().Be(2);
         provider.GetAttributes(new BigInteger(1), new BigInteger(100))

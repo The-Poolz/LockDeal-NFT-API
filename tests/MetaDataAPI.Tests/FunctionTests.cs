@@ -32,7 +32,7 @@ public class FunctionTests : SetEnvironments
         response.Headers.Should().Contain(new KeyValuePair<string, string>("Content-Type", "application/json"));
         response.Body.Should().BeEquivalentTo(JObject.FromObject(
             new Erc721Metadata(new BasePoolInfo(
-                provider: new DealProvider(),
+                provider: new DealProvider(18),
                 poolId: new BigInteger(0),
                 owner: "0x57e0433551460e85dfc5a5ddaff4db199d0f960a",
                 token: "0x66134461c865f824d294d8ca0d9080cc1acd05f6",

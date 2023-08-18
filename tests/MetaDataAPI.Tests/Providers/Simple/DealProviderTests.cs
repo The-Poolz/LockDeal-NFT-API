@@ -12,7 +12,7 @@ public class DealProviderTests
     [Fact]
     public void GetAttributes_ShouldReturnCorrectAttributes()
     {
-        var provider = new DealProvider();
+        var provider = new DealProvider(18);
         var values = new BigInteger[] { 42 };
         var result = provider.GetAttributes(values).ToArray();
 

@@ -1,4 +1,7 @@
-﻿using Newtonsoft.Json.Linq;
+﻿using System.Numerics;
+using MetaDataAPI.Storage;
+using Newtonsoft.Json.Linq;
+using Nethereum.Hex.HexTypes;
 
 namespace MetaDataAPI.Tests.Helpers;
 
@@ -10,11 +13,15 @@ internal static class HttpMock
     internal static string DealMetadata => "0x0000000000000000000000002028c98ac1702e2bb934a3e88734ccae42d44338000000000000000000000000000000000000000000000000000000000000000000000000000000000000000057e0433551460e85dfc5a5ddaff4db199d0f960a00000000000000000000000066134461c865f824d294d8ca0d9080cc1acd05f600000000000000000000000000000000000000000000000000000000000000a000000000000000000000000000000000000000000000000000000000000000010000000000000000000000000000000000000000000000000000000000000000";
     internal static string TimedMetadata => "0x0000000000000000000000005c0cb6dd68102f51dc112c3cec1c7090d27853bc00000000000000000000000000000000000000000000000000000000000000020000000000000000000000006063fba0fbd645d648c129854cce45a70dd8969100000000000000000000000066134461c865f824d294d8ca0d9080cc1acd05f600000000000000000000000000000000000000000000000000000000000000a0000000000000000000000000000000000000000000000000000000000000000400000000000000000000000000000000000000000000000000000000000003820000000000000000000000000000000000000000000000000000000064bfb8840000000000000000000000000000000000000000000000000000000064c13b8600000000000000000000000000000000000000000000000000000000000003b6";
 
+    internal static string DecimalsRequest => "{\"jsonrpc\":\"2.0\",\"method\":\"eth_call\",\"params\":[{\"to\":\"0x66134461C865F824D294D8cA0D9080CC1ACd05f6\",\"data\":\"0x313ce567\"},\"latest\"],\"id\":0}";
+    internal static string TimedRequest(BigInteger poolId) => $"{{\"jsonrpc\":\"2.0\",\"method\":\"eth_call\",\"params\":[{{\"to\":\"0x57e0433551460e85dfc5a5ddaff4db199d0f960a\",\"data\":\"{MethodSignatures.GetData + new HexBigInteger(poolId).HexValue[2..].PadLeft(64, '0')}\"}},\"latest\"],\"id\":0}}";
+
+    internal static string DecimalsResponse => CreateRpcResponse("0x12");
     internal static string DealResponse => CreateRpcResponse(DealMetadata);
     internal static string TimedResponse => CreateRpcResponse(TimedMetadata);
 
-    private static string CreateRpcResponse(string metadata) => new JObject
+    private static string CreateRpcResponse(string result) => new JObject
     {
-        { "result", metadata }
+        { "result", result }
     }.ToString();
 }

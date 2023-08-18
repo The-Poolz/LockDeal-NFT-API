@@ -18,7 +18,7 @@ public class CollateralProviderTests : SetEnvironments
         httpTest.ForCallsTo(HttpMock.RpcUrl)
             .RespondWith(HttpMock.DealResponse);
 
-        var provider = new CollateralProvider(new BigInteger(0));
+        var provider = new CollateralProvider(new BigInteger(0), 18);
 
         provider.ParametersCount.Should().Be(2);
         provider.GetAttributes(new BigInteger(100), new BigInteger(1690286212))
