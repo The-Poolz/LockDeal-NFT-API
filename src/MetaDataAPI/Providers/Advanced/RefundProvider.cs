@@ -30,4 +30,9 @@ public class RefundProvider : IProvider
 
         return attributes;
     }
+
+    public string GetDescription(string token)
+    {
+        throw new NotImplementedException();
+    }
 }

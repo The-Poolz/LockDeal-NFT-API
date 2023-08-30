@@ -4,61 +4,62 @@ using MetaDataAPI.Providers;
 using System.Numerics;
 using Xunit;
 
-namespace MetaDataAPI.Tests.Models.Response;
-
-public class Erc721MetadataTests
+namespace MetaDataAPI.Tests.Models.Response
 {
-    private const string owner = "0x57e0433551460e85dfc5a5ddaff4db199d0f960a";
-    private const string token = "0x66134461c865f824d294d8ca0d9080cc1acd05f6";
-
-    [Fact]
-    public void GetDescription_ReceiveDealDescription()
+    public class Erc721MetadataTests
     {
-        // Arrange
-        var poolId = new BigInteger(0);
-        var provider = ProviderFactory.Create(ProviderName.Deal, poolId, 18);
-        var parameters = new BigInteger[] { new(1000000000000000000) };
-        var poolInfo = new BasePoolInfo(provider, poolId, owner, token, parameters);
-        var erc721Metadata = new Erc721Metadata(poolInfo);
+        private const string owner = "0x57e0433551460e85dfc5a5ddaff4db199d0f960a";
+        private const string token = "0x66134461c865f824d294d8ca0d9080cc1acd05f6";
+        private BasePoolInfo GetBasePoolInfo(ProviderName providerName, BigInteger[] parameters)
+        {
+            var poolId = new BigInteger(0);
+            var provider = ProviderFactory.Create(providerName, poolId, 18);
+            return new BasePoolInfo(provider, poolId, owner, token, parameters);
+        }
 
-        // Act 
-        var result = erc721Metadata.GetDescription(poolInfo);
+        [Fact]
+        public void GetDescription_ReceiveDealDescription()
+        {
+            // Arrange
+            var parameters = new BigInteger[] { new(1000000000000000000) };
+            var poolInfo = GetBasePoolInfo(ProviderName.Deal, parameters);
+            var erc721Metadata = new Erc721Metadata(poolInfo);
 
-        // Assert
-        Assert.Equal(Erc721Metadata.DealDescription(1, token), result);
-    }
+            // Act 
+            var result = erc721Metadata.Description;
 
-    [Fact]
-    public void GetDescription_ReceiveLockDescription()
-    {
-        // Arrange
-        var poolId = new BigInteger(0);
-        var provider = ProviderFactory.Create(ProviderName.Lock, poolId, 18);
-        var parameters = new BigInteger[] { new(1000000000000000000) , new(1690286212) };
-        var poolInfo = new BasePoolInfo(provider, poolId, owner, token, parameters);
-        var erc721Metadata = new Erc721Metadata(poolInfo);
+            // Assert
+            Assert.Equal(poolInfo.Provider.GetDescription(token), result);
+        }
 
-        // Act 
-        var result = erc721Metadata.GetDescription(poolInfo);
+        [Fact]
+        public void GetDescription_ReceiveLockDescription()
+        {
+            // Arrange
+            var parameters = new BigInteger[] { new(1000000000000000000), new(1690286212) };
+            var poolInfo = GetBasePoolInfo(ProviderName.Lock, parameters);
+            var erc721Metadata = new Erc721Metadata(poolInfo);
 
-        // Assert
-        Assert.Equal(Erc721Metadata.LockDescription(1, token, 1690286212), result);
-    }
+            // Act 
+            var result = erc721Metadata.Description;
 
-    [Fact]
-    public void GetDescription_ReceiveTimedDescription()
-    {
-        // Arrange
-        var poolId = new BigInteger(0);
-        var provider = ProviderFactory.Create(ProviderName.Timed, poolId, 18);
-        var parameters = new BigInteger[] { new(1000000000000000000), new(1690286212), new(1690385286), new(1000000000000000000) };
-        var poolInfo = new BasePoolInfo(provider, poolId, owner, token, parameters);
-        var erc721Metadata = new Erc721Metadata(poolInfo);
+            // Assert
+            Assert.Equal(poolInfo.Provider.GetDescription(token), result);
+        }
 
-        // Act 
-        var result = erc721Metadata.GetDescription(poolInfo);
+        [Fact]
+        public void GetDescription_ReceiveTimedDescription()
+        {
+            // Arrange
+            var parameters = new BigInteger[] { new(1000000000000000000), new(1690286212), new(1690385286), new(1000000000000000000) };
+            var poolInfo = GetBasePoolInfo(ProviderName.Timed, parameters);
+            var erc721Metadata = new Erc721Metadata(poolInfo);
 
-        // Assert
-        Assert.Equal(Erc721Metadata.TimedDescription(1, token, 1690286212, 1690385286), result);
+            // Act 
+            var result = erc721Metadata.Description;
+
+            // Assert
+            Assert.Equal(poolInfo.Provider.GetDescription(token), result);
+        }
     }
 }

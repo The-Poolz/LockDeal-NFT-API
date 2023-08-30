@@ -37,4 +37,9 @@ public class CollateralProvider : IProvider
 
         return attributes;
     }
+
+    public string GetDescription(string token)
+    {
+        throw new NotImplementedException();
+    }
 }

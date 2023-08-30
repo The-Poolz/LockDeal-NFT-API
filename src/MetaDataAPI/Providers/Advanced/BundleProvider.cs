@@ -29,4 +29,9 @@ public class BundleProvider : IProvider
 
         return attributes;
     }
+
+    public string GetDescription(string token)
+    {
+        throw new NotImplementedException();
+    }
 }
