@@ -1,6 +1,8 @@
 ﻿using System.Numerics;
 using MetaDataAPI.Models.Types;
 using MetaDataAPI.Models.Response;
+using System.ComponentModel.DataAnnotations;
+using MetaDataAPI.Utils;
 
 namespace MetaDataAPI.Providers.Advanced;
 
@@ -18,9 +20,10 @@ public class RefundProvider : IProvider
 
     public IEnumerable<Erc721Attribute> GetAttributes(params BigInteger[] values)
     {
+        var converter = new ConvertWei(18);
         var attributes = new List<Erc721Attribute>
         {
-            new("RateToWei", values[1], DisplayType.Number),
+            new("Rate", converter.WeiToEth(values[1]), DisplayType.Number),
             AttributesService.GetMainCoinAttribute(poolId),
             AttributesService.GetTokenAttribute(poolId)
         };
