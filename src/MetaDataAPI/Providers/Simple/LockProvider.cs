@@ -28,9 +28,6 @@ public class LockProvider : IProvider
         return attributes;
     }
 
-    public string LockDescription(object leftAmonut, string token, object startTime) =>
-        $"This NFT securely locks {leftAmonut} units of the asset {token}. Access to these assets will commence on the designated start time of {startTime}.";
-
     public string GetDescription(string token) =>
-        LockDescription(attributes[0].Value, token, attributes[1].Value);
+        $"This NFT securely locks {attributes[0].Value} units of the asset {token}. Access to these assets will commence on the designated start time of {attributes[1].Value}.";
 }

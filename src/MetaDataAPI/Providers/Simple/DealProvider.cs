@@ -2,7 +2,6 @@ using System.Numerics;
 using MetaDataAPI.Utils;
 using MetaDataAPI.Models.Types;
 using MetaDataAPI.Models.Response;
-using Nethereum.Contracts.Standards.ERC20.TokenList;
 
 namespace MetaDataAPI.Providers.Simple;
 
@@ -28,9 +27,6 @@ public class DealProvider : IProvider
         return attributes;
     }
 
-    public string DealDescription(object leftAmonut, string token) =>
-        $"This NFT represents immediate access to {leftAmonut} units of the specified asset {token}.";
-
     public string GetDescription(string token) =>
-        DealDescription(attributes[0].Value, token);
+        $"This NFT represents immediate access to {attributes[0].Value} units of the specified asset {token}.";
 }
