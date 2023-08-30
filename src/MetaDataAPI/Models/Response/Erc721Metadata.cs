@@ -25,18 +25,27 @@ public class Erc721Metadata
     [JsonProperty("attributes")]
     public List<Erc721Attribute> Attributes { get; set; }
 
-    private string GetDescription(BasePoolInfo poolInfo)
+    public string GetDescription(BasePoolInfo poolInfo)
     {
         switch (poolInfo.Provider.Name)
         {
             case ProviderName.Deal:
-                return $"This NFT represents immediate access to {Attributes[0].Value} units of the specified asset {poolInfo.Token}.";
+                return DealDescription(Attributes[0].Value, poolInfo.Token);
             case ProviderName.Lock:
-                return $"This NFT securely locks {Attributes[0].Value} units of the asset {poolInfo.Token}. Access to these assets will commence on the designated start time of {Attributes[1].Value}.";
+                return LockDescription(Attributes[0].Value, poolInfo.Token, Attributes[1].Value);
             case ProviderName.Timed:
-                return $"This NFT governs a time-locked pool containing {Attributes[0].Value} units of the asset {poolInfo.Token}. Withdrawals are permitted in a linear fashion beginning at {Attributes[1].Value}, culminating in full access at {Attributes[2].Value}.";
+                return TimedDescription(Attributes[0].Value, poolInfo.Token, Attributes[1].Value, Attributes[2].Value);
             default:
                 throw new InvalidOperationException($"Not found description for '{poolInfo.Provider.Name}' provider.");
         }
     }
+
+    public static string DealDescription(object leftAmonut, string token) =>
+        $"This NFT represents immediate access to {leftAmonut} units of the specified asset {token}.";
+
+    public static string LockDescription(object leftAmonut, string token, object startTime) =>
+        $"This NFT securely locks {leftAmonut} units of the asset {token}. Access to these assets will commence on the designated start time of {startTime}.";
+
+    public static string TimedDescription(object leftAmonut, string token, object startTime, object finishTime) =>
+        $"This NFT governs a time-locked pool containing {leftAmonut} units of the asset {token}. Withdrawals are permitted in a linear fashion beginning at {startTime}, culminating in full access at {finishTime}.";
 }
