@@ -1,8 +1,7 @@
 ﻿using System.Numerics;
+using MetaDataAPI.Utils;
 using MetaDataAPI.Models.Types;
 using MetaDataAPI.Models.Response;
-using System.ComponentModel.DataAnnotations;
-using MetaDataAPI.Utils;
 
 namespace MetaDataAPI.Providers.Advanced;
 
