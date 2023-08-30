@@ -22,10 +22,10 @@ public class RefundProviderTests : SetEnvironments
         var provider = new RefundProvider(poolId, 18);
 
         provider.ParametersCount.Should().Be(2);
-        provider.GetAttributes(new BigInteger(1), new BigInteger(100))
+        provider.GetAttributes(new BigInteger(1), new BigInteger(100000000000000000))
             .Should().BeEquivalentTo(new Erc721Attribute[]
             {
-                new("RateToWei", new BigInteger(100), DisplayType.Number),
+                new("Rate", 0.1m, DisplayType.Number),
                 new("MainCoin", "0x66134461c865f824d294d8ca0d9080cc1acd05f6"),
                 new("Token", "0x66134461c865f824d294d8ca0d9080cc1acd05f6"),
                 new("LeftAmount", 0.000000000000000898m, DisplayType.Number, 0.000000000000000950m),

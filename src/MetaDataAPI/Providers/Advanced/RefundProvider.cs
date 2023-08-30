@@ -1,4 +1,5 @@
 ﻿using System.Numerics;
+using MetaDataAPI.Utils;
 using MetaDataAPI.Models.Types;
 using MetaDataAPI.Models.Response;
 
@@ -20,7 +21,7 @@ public class RefundProvider : IProvider
     {
         var attributes = new List<Erc721Attribute>
         {
-            new("RateToWei", values[1], DisplayType.Number),
+            new("Rate", new ConvertWei(18).WeiToEth(values[1]), DisplayType.Number),
             AttributesService.GetMainCoinAttribute(poolId),
             AttributesService.GetTokenAttribute(poolId)
         };
