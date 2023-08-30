@@ -2,7 +2,7 @@
 using System.Net;
 using Amazon.Lambda.APIGatewayEvents;
 
-namespace ImageAPI.Test;
+namespace ImageAPI.Test
 
 public class ResponseBuilderTests
 {
