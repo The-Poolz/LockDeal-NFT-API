@@ -10,6 +10,7 @@ public class CollateralProvider : IProvider
     private readonly byte decimals;
     private readonly BigInteger poolId;
     public byte ParametersCount => 2;
+    public ProviderName Name => ProviderName.Collateral;
 
     public CollateralProvider(BigInteger poolId, byte decimals)
     {

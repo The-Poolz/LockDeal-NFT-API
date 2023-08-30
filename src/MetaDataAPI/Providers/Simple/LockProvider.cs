@@ -9,6 +9,7 @@ public class LockProvider : IProvider
 {
     private readonly byte decimals;
     public byte ParametersCount => 2;
+    public ProviderName Name => ProviderName.Lock;
 
     public LockProvider(byte decimals)
     {

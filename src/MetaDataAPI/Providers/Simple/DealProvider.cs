@@ -9,6 +9,7 @@ public class DealProvider : IProvider
 {
     private readonly byte decimals;
     public byte ParametersCount => 1;
+    public ProviderName Name => ProviderName.Deal;
 
     public DealProvider(byte decimals)
     {

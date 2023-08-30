@@ -10,6 +10,7 @@ public class RefundProvider : IProvider
     private readonly byte decimals;
     private readonly BigInteger poolId;
     public byte ParametersCount => 2;
+    public ProviderName Name => ProviderName.Refund;
 
     public RefundProvider(BigInteger poolId, byte decimals)
     {

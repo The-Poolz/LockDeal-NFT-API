@@ -9,6 +9,7 @@ public class TimedProvider : IProvider
 {
     private readonly byte decimals;
     public byte ParametersCount => 4;
+    public ProviderName Name => ProviderName.Timed;
 
     public TimedProvider(byte decimals)
     {
