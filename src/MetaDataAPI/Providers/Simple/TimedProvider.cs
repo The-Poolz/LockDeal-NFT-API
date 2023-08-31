@@ -29,9 +29,6 @@ public class TimedProvider : IProvider
         return attributes;
     }
 
-    public string TimedDescription(object leftAmonut, string token, object startTime, object finishTime) =>
-        $"This NFT governs a time-locked pool containing {leftAmonut} units of the asset {token}. Withdrawals are permitted in a linear fashion beginning at {startTime}, culminating in full access at {finishTime}.";
-
     public string GetDescription(string token) =>
-        TimedDescription(attributes[0].Value, token, attributes[1].Value, attributes[2].Value);
+        $"This NFT governs a time-locked pool containing {attributes[0].Value} units of the asset {token}. Withdrawals are permitted in a linear fashion beginning at {attributes[1].Value}, culminating in full access at {attributes[2].Value}.";
 }
