@@ -1,49 +1,50 @@
-# AWS Lambda Empty Function Project
+# MetaDataAPI
 
-This starter project consists of:
-* Function.cs - class file containing a class with a single function handler method
-* aws-lambda-tools-defaults.json - default argument settings for use with Visual Studio and command line deployment tools for AWS
+## Overview
 
-You may also have a test project depending on the options selected.
+This AWS Lambda function is designed to receive metadata from LockDealNFT contract.
+It retrieves metadata for various financial pool types and returns the information in JSON format.
+The Lambda function categorizes providers into "Advanced" and "Simple" based on the complexity of their logic.
 
-The generated function handler is a simple method accepting a string argument that returns the uppercase equivalent of the input string. Replace the body of this method, and parameters, to suit your needs. 
+Docs about each provider metadata can found [here](https://github.com/The-Poolz/LockDealNFT/wiki/Meta-Data).
 
-## Here are some steps to follow from Visual Studio:
+## Functionality
 
-To deploy your function to AWS Lambda, right click the project in Solution Explorer and select *Publish to AWS Lambda*.
+1. The `FunctionHandler` method from `Function` class, handles incoming API Gateway proxy requests.
+   - It extracts the `id` from the query string parameter.
+   - Retrieves metadata using the `RpcCaller` and processes it using `MetadataParser`.
 
-To view your deployed function open its Function View window by double-clicking the function name shown beneath the AWS Lambda node in the AWS Explorer tree.
+2. The `ProviderFactory` class:
+   - Manages the creation of provider instances based on their names or addresses.
+   - Provides a dictionary of provider addresses and their corresponding names.
 
-To perform testing against your deployed function use the Test Invoke tab in the opened Function View window.
+3. The `AttributesService` class:
+   - Retrieves attributes for various provider types based on `poolId` and `decimals`.
 
-To configure event sources for your deployed function, for example to have your function invoked when an object is created in an Amazon S3 bucket, use the Event Sources tab in the opened Function View window.
+4. The "Simple" Providers:
+   - `DealProvider`: Retrieves attributes related to deal provider.
+   - `LockProvider`: Retrieves attributes for locked provider types.
+   - `TimedProvider`: Retrieves attributes for timed provider types.
 
-To update the runtime configuration of your deployed function use the Configuration tab in the opened Function View window.
+5. The "Advanced" Providers:
+   - `RefundProvider`: Retrieves attributes involving rates, main coins, and tokens.
+   - `CollateralProvider`: Retrieves attributes related to collateral pools.
+   - `BundleProvider`: Retrieves attributes for bundled provider types.
 
-To view execution logs of invocations of your function use the Logs tab in the opened Function View window.
+## Provider Categorization
 
-## Here are some steps to follow to get started from the command line:
+### Simple Providers
 
-Once you have edited your template and code you can deploy your application using the [Amazon.Lambda.Tools Global Tool](https://github.com/aws/aws-extensions-for-dotnet-cli#aws-lambda-amazonlambdatools) from the command line.
+These providers involve straightforward attribute conversions and retrieval:
 
-Install Amazon.Lambda.Tools Global Tools if not already installed.
-```
-    dotnet tool install -g Amazon.Lambda.Tools
-```
+1. `DealProvider`: Retrieves attributes related to deal provider.
+2. `LockProvider`: Retrieves attributes for locked provider types.
+3. `TimedProvider`: Retrieves attributes for timed provider types.
 
-If already installed check if new version is available.
-```
-    dotnet tool update -g Amazon.Lambda.Tools
-```
+### Advanced Providers
 
-Execute unit tests
-```
-    cd "MetaDataAPI/test/MetaDataAPI.Tests"
-    dotnet test
-```
+These providers involve more complex logic and interaction with various attributes and services:
 
-Deploy function to AWS Lambda
-```
-    cd "MetaDataAPI/src/MetaDataAPI"
-    dotnet lambda deploy-function
-```
+1. `RefundProvider`: Retrieves refund-related attributes, rates, main coins, and tokens.
+2. `CollateralProvider`: Retrieves attributes for collateral pools, including main coins and tokens.
+3. `BundleProvider`: Retrieves attributes for bundled provider types, iterating over different IDs.
