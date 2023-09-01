@@ -7,21 +7,13 @@ namespace MetaDataAPI.Providers.Advanced;
 
 public class CollateralProvider : IProvider
 {
-    private readonly byte decimals;
-    private readonly BigInteger poolId;
     public byte ParametersCount => 2;
-    public ProviderName Name => ProviderName.Collateral;
+    public List<Erc721Attribute> Attributes { get; }
 
-    public CollateralProvider(BigInteger poolId, byte decimals)
-    {
-        this.poolId = poolId;
-        this.decimals = decimals;
-    }
-
-    public IEnumerable<Erc721Attribute> GetAttributes(params BigInteger[] values)
+    public CollateralProvider(BigInteger poolId, byte decimals, params BigInteger[] values)
     {
         var converter = new ConvertWei(decimals);
-        var attributes = new List<Erc721Attribute>
+        Attributes = new List<Erc721Attribute>
         {
             new("LeftAmount", converter.WeiToEth(values[0]), DisplayType.Number),
             new("FinishTime", values[1], DisplayType.Date),
@@ -32,14 +24,12 @@ public class CollateralProvider : IProvider
         for (var id = poolId + 1; id <= poolId + 3; id++)
         {
             var providerAttributes = AttributesService.GetProviderAttributes(id, decimals);
-            attributes.AddRange(providerAttributes.Select(attribute => attribute.IncludeUnderscoreForTraitType(id)));
+            Attributes.AddRange(providerAttributes.Select(attribute => attribute.IncludeUnderscoreForTraitType(id)));
         }
-
-        return attributes;
     }
 
-    public string GetDescription(string token)
-    {
-        throw new NotImplementedException();
-    }
+    public string GetDescription(string token) =>
+        $"Exclusively utilized by project administrators, this NFT serves as a secure vault for holding refundable tokens. " +
+        $"It holds {Attributes[4].Value} for the main coin collector, {Attributes[5].Value} for the token collector," +
+        $" and {Attributes[6].Value} for the main coin holder, valid until {Attributes[1].Value}.";
 }
