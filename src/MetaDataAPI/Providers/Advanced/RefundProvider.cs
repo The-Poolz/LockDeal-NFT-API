@@ -10,27 +10,29 @@ public class RefundProvider : IProvider
     private readonly byte decimals;
     private readonly BigInteger poolId;
     public byte ParametersCount => 2;
-    public List<Erc721Attribute> Attributes { get; }
+    public ProviderName Name => ProviderName.Refund;
 
-    public RefundProvider(BigInteger poolId, byte decimals, params BigInteger[] values)
+    public RefundProvider(BigInteger poolId, byte decimals)
     {
-        this.decimals = decimals;
         this.poolId = poolId;
-        Attributes = new List<Erc721Attribute>
+        this.decimals = decimals;
+    }
+
+    public IEnumerable<Erc721Attribute> GetAttributes(params BigInteger[] values)
+    {
+        var attributes = new List<Erc721Attribute>
         {
             new("Rate", new ConvertWei(18).WeiToEth(values[1]), DisplayType.Number),
             AttributesService.GetMainCoinAttribute(poolId),
             AttributesService.GetTokenAttribute(poolId)
         };
-        Attributes.AddRange(AttributesService.GetProviderAttributes(poolId + 1, decimals));
+        attributes.AddRange(AttributesService.GetProviderAttributes(poolId + 1, decimals));
+
+        return attributes;
     }
 
     public string GetDescription(string token)
     {
-        var dealProviderAttributes = AttributesService.GetProviderAttributes(poolId + 3, decimals).ToArray();
-        var mainCoinAmountCalc = Attributes[3].Value; // not sure
-        var mainCoin = Attributes[1].Value;
-
-        return $"This NFT encompasses {dealProviderAttributes[0].Value} units of the asset {token} with an associated refund rate of {Attributes[1].Value}. Post rate calculation, the refundable amount in the primary asset {mainCoin} will be {mainCoinAmountCalc}.";
+        throw new NotImplementedException();
     }
 }
