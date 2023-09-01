@@ -15,6 +15,7 @@ public class Function
 {
     public APIGatewayProxyResponse FunctionHandler(APIGatewayProxyRequest request)
     {
+        // do some changes
         var poolId = BigInteger.Parse(request.QueryStringParameters["id"]);
 
         var metadata = RpcCaller.GetMetadata(poolId);
