@@ -10,7 +10,7 @@ public class CollateralProvider : IProvider
     public byte ParametersCount => 2;
     public List<Erc721Attribute> Attributes { get; }
 
-    public CollateralProvider(BigInteger poolId, byte decimals, BigInteger[] values)
+    public CollateralProvider(BigInteger poolId, byte decimals, IReadOnlyList<BigInteger> values)
     {
         var converter = new ConvertWei(decimals);
         Attributes = new List<Erc721Attribute>

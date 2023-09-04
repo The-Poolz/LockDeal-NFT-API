@@ -10,7 +10,7 @@ public class DealProvider : IProvider
     public byte ParametersCount => 1;
     public List<Erc721Attribute> Attributes { get; }
 
-    public DealProvider(byte decimals, BigInteger[] values)
+    public DealProvider(byte decimals, IReadOnlyList<BigInteger> values)
     {
         var converter = new ConvertWei(decimals);
         Attributes = new List<Erc721Attribute>

@@ -10,7 +10,7 @@ public class RefundProvider : IProvider
     public byte ParametersCount => 2;
     public List<Erc721Attribute> Attributes { get; }
 
-    public RefundProvider(BigInteger poolId, byte decimals, BigInteger[] values)
+    public RefundProvider(BigInteger poolId, byte decimals, IReadOnlyList<BigInteger> values)
     {
         Attributes = new List<Erc721Attribute>
         {

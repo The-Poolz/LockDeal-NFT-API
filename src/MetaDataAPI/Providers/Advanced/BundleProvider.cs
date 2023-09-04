@@ -5,14 +5,12 @@ namespace MetaDataAPI.Providers.Advanced;
 
 public class BundleProvider : IProvider
 {
-    private readonly BigInteger poolId;
     public byte ParametersCount => 1;
     public List<Erc721Attribute> Attributes { get; }
 
-    public BundleProvider(BigInteger poolId, byte decimals, BigInteger[] values)
+    public BundleProvider(BigInteger poolId, byte decimals, IReadOnlyList<BigInteger> values)
     {
-        this.poolId = poolId;
-        Attributes = new();
+        Attributes = new List<Erc721Attribute>();
         for (var id = poolId + 1; id <= values[0]; id++)
         {
             var providerAttributes = AttributesService.GetProviderAttributes(id, decimals);

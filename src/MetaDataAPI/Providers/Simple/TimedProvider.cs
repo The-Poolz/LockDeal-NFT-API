@@ -2,7 +2,6 @@ using System.Numerics;
 using MetaDataAPI.Utils;
 using MetaDataAPI.Models.Types;
 using MetaDataAPI.Models.Response;
-using Org.BouncyCastle.Asn1.Cms;
 
 namespace MetaDataAPI.Providers.Simple;
 
@@ -11,7 +10,7 @@ public class TimedProvider : IProvider
     public byte ParametersCount => 4;
     public List<Erc721Attribute> Attributes { get; }
 
-    public TimedProvider(byte decimals, BigInteger[] values)
+    public TimedProvider(byte decimals, IReadOnlyList<BigInteger> values)
     {
         var converter = new ConvertWei(decimals);
         Attributes = new List<Erc721Attribute>
