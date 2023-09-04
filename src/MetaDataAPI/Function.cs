@@ -23,7 +23,7 @@ public class Function
         var decimals = RpcCaller.GetDecimals(parser.GetTokenAddress());
 
         var basePoolInfo = new BasePoolInfo(
-            provider: ProviderFactory.Create(parser.GetProviderAddress(), poolId, decimals), 
+            provider: ProviderFactory.Create(parser.GetProviderAddress(), poolId, decimals, parser.GetProviderParameters().ToArray()), 
             poolId: parser.GetPoolId(),
             owner: parser.GetOwnerAddress(),
             token: parser.GetTokenAddress(),

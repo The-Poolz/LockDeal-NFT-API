@@ -17,11 +17,12 @@ public class BundleProviderTests : SetEnvironments
         using var httpTest = new HttpTest();
         httpTest.ForCallsTo(HttpMock.RpcUrl)
             .RespondWith(HttpMock.DealResponse);
+        var values = new BigInteger[] { new(2) };
 
-        var provider = new BundleProvider(new BigInteger(0), 18);
+        var provider = new BundleProvider(new BigInteger(0), 18, values);
 
         provider.ParametersCount.Should().Be(1);
-        provider.GetAttributes(new BigInteger(2))
+        provider.Attributes
             .Should().BeEquivalentTo(new Erc721Attribute[]
             {
                 new("LeftAmount_1", 0m, DisplayType.Number),

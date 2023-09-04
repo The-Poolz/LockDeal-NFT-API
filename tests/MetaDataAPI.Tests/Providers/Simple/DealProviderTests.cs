@@ -12,9 +12,9 @@ public class DealProviderTests
     [Fact]
     public void GetAttributes_ShouldReturnCorrectAttributes()
     {
-        var provider = new DealProvider(18);
         var values = new BigInteger[] { 42 };
-        var result = provider.GetAttributes(values).ToArray();
+        var provider = new DealProvider(18, values);
+        var result = provider.Attributes;
 
         provider.ParametersCount.Should().Be(1);
         result.Should().HaveCount(1);
