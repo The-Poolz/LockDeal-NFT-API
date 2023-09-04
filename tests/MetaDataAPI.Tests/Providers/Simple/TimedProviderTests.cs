@@ -12,9 +12,9 @@ public class TimedProviderTests
     [Fact]
     public void GetAttributes_ShouldReturnCorrectAttributes()
     {
-        var provider = new TimedProvider(18);
         var values = new BigInteger[] { 42, 1692106619, 1692106620, 100 };
-        var result = provider.GetAttributes(values).ToArray();
+        var provider = new TimedProvider(18, values);
+        var result = provider.Attributes;
 
         provider.ParametersCount.Should().Be(4);
         result.Should().HaveCount(3);

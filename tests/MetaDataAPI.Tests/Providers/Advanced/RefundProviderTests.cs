@@ -18,11 +18,12 @@ public class RefundProviderTests : SetEnvironments
         using var httpTest = new HttpTest();
         httpTest.ForCallsTo(HttpMock.RpcUrl)
             .RespondWith(HttpMock.TimedResponse);
+        var values = new BigInteger[] { new(1), new(100000000000000000) };
 
-        var provider = new RefundProvider(poolId, 18);
+        var provider = new RefundProvider(poolId, 18, values);
 
         provider.ParametersCount.Should().Be(2);
-        provider.GetAttributes(new BigInteger(1), new BigInteger(100000000000000000))
+        provider.Attributes
             .Should().BeEquivalentTo(new Erc721Attribute[]
             {
                 new("Rate", 0.1m, DisplayType.Number),

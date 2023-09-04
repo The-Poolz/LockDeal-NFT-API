@@ -17,11 +17,12 @@ public class CollateralProviderTests : SetEnvironments
         using var httpTest = new HttpTest();
         httpTest.ForCallsTo(HttpMock.RpcUrl)
             .RespondWith(HttpMock.DealResponse);
+        var values = new BigInteger[] { new(100), new(1690286212) };
 
-        var provider = new CollateralProvider(new BigInteger(0), 18);
+        var provider = new CollateralProvider(new BigInteger(0), 18, values);
 
         provider.ParametersCount.Should().Be(2);
-        provider.GetAttributes(new BigInteger(100), new BigInteger(1690286212))
+        provider.Attributes
             .Should().BeEquivalentTo(new Erc721Attribute[]
             {
                 new("LeftAmount", 0.0000000000000001m, DisplayType.Number),
