@@ -18,9 +18,8 @@ public class DealProvider : IProvider
         {
             new("LeftAmount", converter.WeiToEth(values[0]), DisplayType.Number)
         };
-        return attributes;
     }
 
     public string GetDescription(string token) =>
-        $"This NFT represents immediate access to {attributes[0].Value} units of the specified asset {token}.";
+        $"This NFT represents immediate access to {Attributes[0].Value} units of the specified asset {token}.";
 }

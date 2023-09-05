@@ -10,10 +10,11 @@ namespace MetaDataAPI.Tests.Models.Response
     {
         private const string owner = "0x57e0433551460e85dfc5a5ddaff4db199d0f960a";
         private const string token = "0x66134461c865f824d294d8ca0d9080cc1acd05f6";
-        private BasePoolInfo GetBasePoolInfo(ProviderName providerName, BigInteger[] parameters)
+
+        private static BasePoolInfo GetBasePoolInfo(ProviderName providerName, BigInteger[] parameters)
         {
             var poolId = new BigInteger(0);
-            var provider = ProviderFactory.Create(providerName, poolId, 18);
+            var provider = ProviderFactory.Create(providerName, poolId, 18, parameters);
             return new BasePoolInfo(provider, poolId, owner, token, parameters);
         }
 
