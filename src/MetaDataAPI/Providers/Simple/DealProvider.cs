@@ -7,7 +7,6 @@ namespace MetaDataAPI.Providers.Simple;
 
 public class DealProvider : IProvider
 {
-    public ProviderName Name => ProviderName.Deal;
     public byte ParametersCount => 1;
     public List<Erc721Attribute> Attributes { get; }
 

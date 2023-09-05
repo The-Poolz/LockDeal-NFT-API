@@ -8,7 +8,6 @@ namespace MetaDataAPI.Providers.Advanced;
 public class CollateralProvider : IProvider
 {
     public byte ParametersCount => 2;
-    public ProviderName Name => ProviderName.Collateral;
     public List<Erc721Attribute> Attributes { get; }
 
     public CollateralProvider(BigInteger poolId, byte decimals, IReadOnlyList<BigInteger> values)

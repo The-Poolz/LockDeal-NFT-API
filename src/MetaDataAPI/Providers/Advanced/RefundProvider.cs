@@ -8,7 +8,6 @@ namespace MetaDataAPI.Providers.Advanced;
 public class RefundProvider : IProvider
 {
     public byte ParametersCount => 2;
-    public ProviderName Name => ProviderName.Refund;
     public List<Erc721Attribute> Attributes { get; }
 
     public RefundProvider(BigInteger poolId, byte decimals, IReadOnlyList<BigInteger> values)

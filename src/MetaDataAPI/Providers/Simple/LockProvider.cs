@@ -7,7 +7,6 @@ namespace MetaDataAPI.Providers.Simple;
 
 public class LockProvider : IProvider
 {
-    public ProviderName Name => ProviderName.Lock;
     public byte ParametersCount => 2;
     public List<Erc721Attribute> Attributes { get; }
 

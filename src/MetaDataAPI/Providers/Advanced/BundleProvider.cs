@@ -1,13 +1,11 @@
 ﻿using System.Numerics;
 using MetaDataAPI.Models.Response;
-using MetaDataAPI.Models.Types;
 
 namespace MetaDataAPI.Providers.Advanced;
 
 public class BundleProvider : IProvider
 {
     public byte ParametersCount => 1;
-    public ProviderName Name => ProviderName.Bundle;
     public List<Erc721Attribute> Attributes { get; }
 
     public BundleProvider(BigInteger poolId, byte decimals, IReadOnlyList<BigInteger> values)

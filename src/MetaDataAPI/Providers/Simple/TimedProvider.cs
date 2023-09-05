@@ -7,7 +7,6 @@ namespace MetaDataAPI.Providers.Simple;
 
 public class TimedProvider : IProvider
 {
-    public ProviderName Name => ProviderName.Timed;
     public byte ParametersCount => 4;
     public List<Erc721Attribute> Attributes { get; }
 
