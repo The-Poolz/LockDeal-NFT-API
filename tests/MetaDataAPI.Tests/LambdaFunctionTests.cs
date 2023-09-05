@@ -33,7 +33,7 @@ public class LambdaFunctionTests : SetEnvironments
             QueryStringParameters = new Dictionary<string, string> { { "id", "0" } }
         };
 
-        var response = new LambdaFunction().FunctionHandler(request);
+        var response = LambdaFunction.FunctionHandler(request);
 
         response.StatusCode.Should().Be((int)HttpStatusCode.OK);
         response.Headers.Should().Contain(new KeyValuePair<string, string>("Content-Type", "application/json"));
