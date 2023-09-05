@@ -11,7 +11,7 @@ using Amazon.Lambda.APIGatewayEvents;
 
 namespace MetaDataAPI;
 
-public class Function
+public class LambdaFunction
 {
     public APIGatewayProxyResponse FunctionHandler(APIGatewayProxyRequest request)
     {
