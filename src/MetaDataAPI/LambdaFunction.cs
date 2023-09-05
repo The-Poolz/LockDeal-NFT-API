@@ -11,9 +11,9 @@ using Amazon.Lambda.APIGatewayEvents;
 
 namespace MetaDataAPI;
 
-public class Function
+public static class LambdaFunction
 {
-    public APIGatewayProxyResponse FunctionHandler(APIGatewayProxyRequest request)
+    public static APIGatewayProxyResponse FunctionHandler(APIGatewayProxyRequest request)
     {
         var poolId = BigInteger.Parse(request.QueryStringParameters["id"]);
 
