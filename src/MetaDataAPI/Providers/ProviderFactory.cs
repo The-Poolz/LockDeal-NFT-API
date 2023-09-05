@@ -8,20 +8,20 @@ namespace MetaDataAPI.Providers;
 
 public static class ProviderFactory
 {
-    public static IProvider Create(string address, BigInteger poolId, byte decimals) =>
-        Create(ProvidersAddresses[address], poolId, decimals);
+    public static IProvider Create(string address, BigInteger poolId, byte decimals, BigInteger[] values) =>
+         Create(ProvidersAddresses[address], poolId, decimals, values);
 
-    public static IProvider Create(ProviderName name, BigInteger poolId, byte decimals) =>
-        Providers(poolId, decimals)[name];
+    public static IProvider Create(ProviderName name, BigInteger poolId, byte decimals, BigInteger[] values) =>
+        Providers(poolId, decimals, values)[name]();
 
-    public static Dictionary<ProviderName, IProvider> Providers(BigInteger poolId, byte decimals) => new()
+    public static Dictionary<ProviderName, Func<IProvider>> Providers(BigInteger poolId, byte decimals, BigInteger[] values) => new()
     {
-        { ProviderName.Deal, new DealProvider(decimals) },
-        { ProviderName.Lock, new LockProvider(decimals) },
-        { ProviderName.Timed, new TimedProvider(decimals) },
-        { ProviderName.Bundle, new BundleProvider(poolId, decimals) },
-        { ProviderName.Refund, new RefundProvider(poolId, decimals) },
-        { ProviderName.Collateral, new CollateralProvider(poolId, decimals) }
+        { ProviderName.Deal, () => new DealProvider(decimals, values) },
+        { ProviderName.Lock, () => new LockProvider(decimals, values) },
+        { ProviderName.Timed, () => new TimedProvider(decimals, values) },
+        { ProviderName.Bundle, () => new BundleProvider(poolId, decimals, values) },
+        { ProviderName.Refund, () => new RefundProvider(poolId, decimals, values) },
+        { ProviderName.Collateral, () => new CollateralProvider(poolId, decimals, values) }
     };
 
     public static Dictionary<string, ProviderName> ProvidersAddresses => new()

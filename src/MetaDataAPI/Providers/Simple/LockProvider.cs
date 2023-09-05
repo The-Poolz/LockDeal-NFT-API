@@ -7,20 +7,14 @@ namespace MetaDataAPI.Providers.Simple;
 
 public class LockProvider : IProvider
 {
-    private readonly byte decimals;
-    private List<Erc721Attribute> attributes = new();
-    public byte ParametersCount => 2;
     public ProviderName Name => ProviderName.Lock;
+    public byte ParametersCount => 2;
+    public List<Erc721Attribute> Attributes { get; }
 
-    public LockProvider(byte decimals)
-    {
-        this.decimals = decimals;
-    }
-
-    public IEnumerable<Erc721Attribute> GetAttributes(params BigInteger[] values)
+    public LockProvider(byte decimals, IReadOnlyList<BigInteger> values)
     {
         var converter = new ConvertWei(decimals);
-        attributes = new List<Erc721Attribute>
+        Attributes = new List<Erc721Attribute>
         {
             new("LeftAmount", converter.WeiToEth(values[0]), DisplayType.Number),
             new("StartTime", values[1], DisplayType.Date)

@@ -24,6 +24,6 @@ public class BasePoolInfo
             throw new InvalidOperationException("Mismatch between keys and params counts");
         }
 
-        Attributes = provider.GetAttributes(parameters.ToArray()).ToArray();
+        Attributes = provider.Attributes;
     }
 }

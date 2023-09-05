@@ -11,8 +11,9 @@ public static class AttributesService
         var metadata = RpcCaller.GetMetadata(poolId);
         var parser = new MetadataParser(metadata);
 
-        var provider = ProviderFactory.Create(parser.GetProviderAddress(), poolId, decimals);
-        return provider.GetAttributes(parser.GetProviderParameters().ToArray());
+        return ProviderFactory
+            .Create(parser.GetProviderAddress(), poolId, decimals, parser.GetProviderParameters().ToArray())
+            .Attributes;
     }
 
     public static Erc721Attribute GetMainCoinAttribute(BigInteger collateralId) =>
