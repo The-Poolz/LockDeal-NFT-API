@@ -6,6 +6,7 @@ namespace MetaDataAPI;
 
 public class BasePoolInfo
 {
+    public IProvider Provider { get; }
     public BigInteger PoolId { get; }
     public string Owner { get; }
     public string Token { get; }
@@ -13,6 +14,7 @@ public class BasePoolInfo
 
     public BasePoolInfo(IProvider provider, BigInteger poolId, string owner, string token)
     {
+        Provider = provider;
         PoolId = poolId;
         Owner = owner;
         Token = token;

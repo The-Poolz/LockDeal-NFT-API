@@ -34,4 +34,23 @@ public class CollateralProviderTests : SetEnvironments
                 new("LeftAmount_3", 0m, DisplayType.Number),
             });
     }
+
+    [Fact]
+    public void GetDescription_ShouldExpectedDescription()
+    {
+        const string token = "0x66134461c865f824d294d8ca0d9080cc1acd05f6";
+        var values = new BigInteger[] { 1000, 1690385286 };
+        var httpTest = new HttpTest();
+        httpTest.SetupRpcCall(13, HttpMock.DealResponse);
+        httpTest.SetupRpcCall(14, HttpMock.DealResponse);
+        httpTest.SetupRpcCall(15, HttpMock.DealResponse);
+        var provider = new CollateralProvider(12, 18, values);
+
+        var result = provider.GetDescription(token);
+
+        result.Should()
+            .BeEquivalentTo($"Exclusively utilized by project administrators, this NFT serves as a secure vault for holding refundable tokens. " +
+                            $"It holds {0} for the main coin collector, {0} for the token collector," +
+                            $" and {0} for the main coin holder, valid until {1690385286}.");
+    }
 }
