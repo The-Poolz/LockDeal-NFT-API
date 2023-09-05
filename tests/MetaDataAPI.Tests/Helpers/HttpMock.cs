@@ -1,4 +1,8 @@
-﻿using Newtonsoft.Json.Linq;
+﻿using System.Numerics;
+using Flurl.Http.Testing;
+using MetaDataAPI.Storage;
+using Newtonsoft.Json.Linq;
+using Nethereum.Hex.HexTypes;
 
 namespace MetaDataAPI.Tests.Helpers;
 
@@ -15,6 +19,7 @@ internal static class HttpMock
 
     internal static string DecimalsResponse => CreateRpcResponse("0x12");
     internal static string DealResponse => CreateRpcResponse(DealMetadata);
+    internal static string LockResponse => CreateRpcResponse(LockMetadata);
     internal static string TimedResponse => CreateRpcResponse(TimedMetadata);
     internal static string CollateralResponse => CreateRpcResponse(CollateralMetadata);
 
@@ -22,4 +27,15 @@ internal static class HttpMock
     {
         { "result", result }
     }.ToString();
+
+    public static HttpTestSetup SetupRpcCall(this HttpTest httpTest, BigInteger poolId, string response)
+    {
+        var data = MethodSignatures.GetData + new HexBigInteger(poolId).HexValue[2..].PadLeft(64, '0');
+        httpTest
+            .ForCallsTo(RpcUrl)
+            .WithRequestBody($"{{\"jsonrpc\":\"2.0\",\"method\":\"eth_call\",\"params\":[{{\"to\":\"0x57e0433551460e85dfc5a5ddaff4db199d0f960a\",\"data\":\"{data}\"}},\"latest\"],\"id\":0}}")
+            .RespondWith(response);
+
+        return httpTest;
+    }
 }

@@ -7,9 +7,9 @@ public class Erc721Metadata
     public Erc721Metadata(BasePoolInfo poolInfo)
     {
         Name = "Lock Deal NFT Pool: " + poolInfo.PoolId;
-        Description = "Poolz.finance Lock Deal NFT for token Vesting Pool: " + poolInfo.PoolId;
-        Image = @"https://nft.poolz.finance/test/image?id=" + poolInfo.PoolId;
         Attributes = poolInfo.Attributes.ToList();
+        Image = @"https://nft.poolz.finance/test/image?id=" + poolInfo.PoolId;
+        Description = poolInfo.Provider.GetDescription(poolInfo.Token);
     }
 
     [JsonProperty("name")]

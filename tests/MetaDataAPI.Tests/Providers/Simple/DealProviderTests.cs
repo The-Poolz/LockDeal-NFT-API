@@ -23,4 +23,17 @@ public class DealProviderTests
             new("LeftAmount", 0.000000000000000042m, DisplayType.Number)
         });
     }
+
+    [Fact]
+    public void GetDescription_ShouldExpectedDescription()
+    {
+        const string token = "0x66134461c865f824d294d8ca0d9080cc1acd05f6";
+        var values = new BigInteger[] { 0 };
+        var provider = new DealProvider(18, values);
+
+        var result = provider.GetDescription(token);
+
+        result.Should()
+            .BeEquivalentTo($"This NFT represents immediate access to {values[0]} units of the specified asset {token}.");
+    }
 }

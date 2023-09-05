@@ -19,4 +19,7 @@ public class LockProvider : IProvider
             new("StartTime", values[1], DisplayType.Date)
         };
     }
+
+    public string GetDescription(string token) =>
+        $"This NFT securely locks {Attributes[0].Value} units of the asset {token}. Access to these assets will commence on the designated start time of {Attributes[1].Value}.";
 }

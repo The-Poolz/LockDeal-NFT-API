@@ -25,4 +25,17 @@ public class TimedProviderTests
             new("FinishTime", values[2], DisplayType.Date)
         });
     }
+
+    [Fact]
+    public void GetDescription_ShouldExpectedDescription()
+    {
+        const string token = "0x66134461c865f824d294d8ca0d9080cc1acd05f6";
+        var values = new BigInteger[] { 1000000000000000000, 1692106619, 1692106620, 2000000000000000000 };
+        var provider = new TimedProvider(18, values);
+
+        var result = provider.GetDescription(token);
+
+        result.Should()
+            .BeEquivalentTo($"This NFT governs a time-locked pool containing {1} units of the asset {token}. Withdrawals are permitted in a linear fashion beginning at {values[1]}, culminating in full access at {values[2]}.");
+    }
 }
