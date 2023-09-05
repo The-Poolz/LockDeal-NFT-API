@@ -29,8 +29,8 @@ public class CollateralProvider : IProvider
         }
     }
 
-    public string GetDescription(string token)
-    {
-        throw new NotImplementedException();
-    }
+    public string GetDescription(string token) =>
+        $"Exclusively utilized by project administrators, this NFT serves as a secure vault for holding refundable tokens. " +
+        $"It holds {Attributes[4].Value} for the main coin collector, {Attributes[5].Value} for the token collector," +
+        $" and {Attributes[6].Value} for the main coin holder, valid until {Attributes[1].Value}.";
 }
