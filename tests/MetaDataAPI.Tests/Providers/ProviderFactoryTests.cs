@@ -4,7 +4,6 @@ using FluentAssertions;
 using Flurl.Http.Testing;
 using MetaDataAPI.Storage;
 using MetaDataAPI.Providers;
-using Nethereum.Hex.HexTypes;
 using MetaDataAPI.Models.Types;
 using MetaDataAPI.Tests.Helpers;
 using MetaDataAPI.Models.Response;
@@ -57,17 +56,8 @@ public class ProviderFactoryTests : SetEnvironments
     public void Create_ShouldCreateRefundProvider_WhenAddressIsProvided()
     {
         using var httpTest = new HttpTest();
-
-        var data = MethodSignatures.GetData + new HexBigInteger(11).HexValue[2..].PadLeft(64, '0');
-        httpTest
-            .ForCallsTo(HttpMock.RpcUrl)
-            .WithRequestBody($"{{\"jsonrpc\":\"2.0\",\"method\":\"eth_call\",\"params\":[{{\"to\":\"0x57e0433551460e85dfc5a5ddaff4db199d0f960a\",\"data\":\"{data}\"}},\"latest\"],\"id\":0}}")
-            .RespondWith(HttpMock.TimedResponse);
-
-        data = MethodSignatures.GetData + new HexBigInteger(12).HexValue[2..].PadLeft(64, '0');
-        httpTest.ForCallsTo(HttpMock.RpcUrl)
-            .WithRequestBody($"{{\"jsonrpc\":\"2.0\",\"method\":\"eth_call\",\"params\":[{{\"to\":\"0x57e0433551460e85dfc5a5ddaff4db199d0f960a\",\"data\":\"{data}\"}},\"latest\"],\"id\":0}}")
-            .RespondWith(HttpMock.CollateralResponse);
+        httpTest.SetupRpcCall(11, HttpMock.TimedResponse);
+        httpTest.SetupRpcCall(12, HttpMock.CollateralResponse);
 
         var values = new BigInteger[] { 12, 100000000000000000 };
 
@@ -90,22 +80,9 @@ public class ProviderFactoryTests : SetEnvironments
     public void Create_ShouldCreateCollateralProvider_WhenAddressIsProvided()
     {
         using var httpTest = new HttpTest();
-
-        var data = MethodSignatures.GetData + new HexBigInteger(13).HexValue[2..].PadLeft(64, '0');
-        httpTest
-            .ForCallsTo(HttpMock.RpcUrl)
-            .WithRequestBody($"{{\"jsonrpc\":\"2.0\",\"method\":\"eth_call\",\"params\":[{{\"to\":\"0x57e0433551460e85dfc5a5ddaff4db199d0f960a\",\"data\":\"{data}\"}},\"latest\"],\"id\":0}}")
-            .RespondWith(HttpMock.DealResponse);
-
-        data = MethodSignatures.GetData + new HexBigInteger(14).HexValue[2..].PadLeft(64, '0');
-        httpTest.ForCallsTo(HttpMock.RpcUrl)
-            .WithRequestBody($"{{\"jsonrpc\":\"2.0\",\"method\":\"eth_call\",\"params\":[{{\"to\":\"0x57e0433551460e85dfc5a5ddaff4db199d0f960a\",\"data\":\"{data}\"}},\"latest\"],\"id\":0}}")
-            .RespondWith(HttpMock.DealResponse);
-
-        data = MethodSignatures.GetData + new HexBigInteger(15).HexValue[2..].PadLeft(64, '0');
-        httpTest.ForCallsTo(HttpMock.RpcUrl)
-            .WithRequestBody($"{{\"jsonrpc\":\"2.0\",\"method\":\"eth_call\",\"params\":[{{\"to\":\"0x57e0433551460e85dfc5a5ddaff4db199d0f960a\",\"data\":\"{data}\"}},\"latest\"],\"id\":0}}")
-            .RespondWith(HttpMock.DealResponse);
+        httpTest.SetupRpcCall(13, HttpMock.DealResponse);
+        httpTest.SetupRpcCall(14, HttpMock.DealResponse);
+        httpTest.SetupRpcCall(15, HttpMock.DealResponse);
 
         var values = new BigInteger[] { 1000, 1690385286 };
 

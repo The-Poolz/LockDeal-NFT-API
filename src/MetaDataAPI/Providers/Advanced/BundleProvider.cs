@@ -30,11 +30,11 @@ public class BundleProvider : IProvider
 
     public string GetDescription(string token)
     {
-        var descriptionBuilder = new StringBuilder("This NFT orchestrates a series of sub-pools to enable sophisticated asset management strategies. The following are the inner pools under its governance:");
+        var descriptionBuilder = new StringBuilder().AppendLine("This NFT orchestrates a series of sub-pools to enable sophisticated asset management strategies. The following are the inner pools under its governance:");
 
         for (var id = poolId + 1; id <= lastSubPoolId; id++)
         {
-            var metadata = RpcCaller.GetMetadata(poolId);
+            var metadata = RpcCaller.GetMetadata(id);
             var parser = new MetadataParser(metadata);
 
             var provider = ProviderFactory.Create(parser.GetProviderAddress(), poolId, decimals, parser.GetProviderParameters().ToArray());

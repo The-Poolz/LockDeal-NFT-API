@@ -31,6 +31,6 @@ public class RefundProvider : IProvider
         var mainCoin = Attributes[1].Value;
         var mainCoinAmountCalc = Attributes[3].Value; // not sure
 
-        return $"This NFT encompasses {dealProviderAttributes[0].Value} units of the asset {token} with an associated refund rate of {Attributes[1].Value}. Post rate calculation, the refundable amount in the primary asset {mainCoin} will be {mainCoinAmountCalc}.";
+        return $"This NFT encompasses {dealProviderAttributes[0].Value} units of the asset {token} with an associated refund rate of {mainCoin}. Post rate calculation, the refundable amount in the primary asset {mainCoin} will be {mainCoinAmountCalc}.";
     }
 }

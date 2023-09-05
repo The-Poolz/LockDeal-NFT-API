@@ -24,4 +24,17 @@ public class LockProviderTests
             new("StartTime", values[1], DisplayType.Date)
         });
     }
+
+    [Fact]
+    public void GetDescription_ShouldExpectedDescription()
+    {
+        const string token = "0x66134461c865f824d294d8ca0d9080cc1acd05f6";
+        var values = new BigInteger[] { 1000000000000000000, 1692106619 };
+        var provider = new LockProvider(18, values);
+
+        var result = provider.GetDescription(token);
+
+        result.Should()
+            .BeEquivalentTo($"This NFT securely locks {1} units of the asset {token}. Access to these assets will commence on the designated start time of {values[1]}.");
+    }
 }
