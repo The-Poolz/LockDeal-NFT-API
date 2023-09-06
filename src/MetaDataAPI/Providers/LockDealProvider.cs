@@ -2,9 +2,9 @@ using MetaDataAPI.Utils;
 using MetaDataAPI.Models.Types;
 using MetaDataAPI.Models.Response;
 
-namespace MetaDataAPI.Providers.Simple;
+namespace MetaDataAPI.Providers;
 
-public class LockProvider : IProvider
+public class LockDealProvider : IProvider
 {
     public List<Erc721Attribute> Attributes => new()
     { new("LeftAmount", LeftAmount, DisplayType.Number),
@@ -12,12 +12,12 @@ public class LockProvider : IProvider
     public BasePoolInfo PoolInfo { get; }
     public decimal LeftAmount { get; }
     public long StartTime { get; }
-    public LockProvider(BasePoolInfo basePoolInfo)
+    public LockDealProvider(BasePoolInfo basePoolInfo)
     {
         PoolInfo = basePoolInfo;
         var converter = new ConvertWei(basePoolInfo.Token.Decimals);
         LeftAmount = converter.WeiToEth(basePoolInfo.Params[0]);
-        StartTime = Convert.ToInt64(basePoolInfo.Params[1]);
+        StartTime = (long)new ConvertWei(0).WeiToEth(basePoolInfo.Params[1]);
     }
 
     public string GetDescription() =>

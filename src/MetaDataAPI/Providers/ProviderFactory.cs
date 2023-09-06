@@ -1,7 +1,4 @@
 ﻿using System.Numerics;
-using MetaDataAPI.Models.Types;
-using MetaDataAPI.Providers.Simple;
-using MetaDataAPI.Providers.Advanced;
 using MetaDataAPI.Utils;
 using MetaDataAPI.Models.Response;
 
@@ -11,17 +8,12 @@ public static class ProviderFactory
 {
     public static IProvider Create(BigInteger poolId) => Create(RpcCaller.GetMetadata(poolId));
     public static IProvider Create(string metadata) => Create(new BasePoolInfo(metadata));
-    public static IProvider Create(BasePoolInfo basePoolInfo) => Providers(basePoolInfo)[ProvidersAddresses(basePoolInfo.ProviderAddress)]();
-    public static Dictionary<ProviderName, Func<IProvider>> Providers(BasePoolInfo basePoolInfo) => new()
-    {
-        { ProviderName.DealProvider,() => new DealProvider(basePoolInfo) },
-        { ProviderName.LockDealProvider,() => new LockProvider(basePoolInfo) },
-        { ProviderName.TimedDealProvider,() => new TimedProvider(basePoolInfo) },
-        { ProviderName.BundleProvider,() => new BundleProvider(basePoolInfo) },
-        { ProviderName.RefundProvider,() => new RefundProvider(basePoolInfo) },
-        { ProviderName.CollateralProvider,() => new CollateralProvider(basePoolInfo) }
-    };
-
-    public static ProviderName ProvidersAddresses(string providerAddress) =>
-        Enum.Parse<ProviderName>(RpcCaller.GetName(providerAddress));
+    public static IProvider Create(BasePoolInfo basePoolInfo) => Providers(basePoolInfo) ?? throw new ArgumentNullException();
+    public static IProvider? Providers(BasePoolInfo basePoolInfo)
+    {    
+        var name = RpcCaller.GetName(basePoolInfo.ProviderAddress);
+        var objectToInstantiate = $"MetaDataAPI.Providers.{name}, MetaDataAPI";
+        var objectType = Type.GetType(objectToInstantiate);
+        return Activator.CreateInstance(objectType!, new object[] { basePoolInfo }) as IProvider;
+    }
 }

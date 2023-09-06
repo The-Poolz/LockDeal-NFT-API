@@ -2,9 +2,9 @@ using MetaDataAPI.Utils;
 using MetaDataAPI.Models.Types;
 using MetaDataAPI.Models.Response;
 
-namespace MetaDataAPI.Providers.Simple;
+namespace MetaDataAPI.Providers;
 
-public class TimedProvider : IProvider
+public class TimedDealProvider : IProvider
 {
     public List<Erc721Attribute> Attributes => new()
     {
@@ -18,7 +18,7 @@ public class TimedProvider : IProvider
     public decimal StartAmount { get; }
     public long StartTime { get; }
     public long FinishTime { get; }
-    public TimedProvider(BasePoolInfo basePoolInfo)
+    public TimedDealProvider(BasePoolInfo basePoolInfo)
     {
         PoolInfo = basePoolInfo;
         var converter = new ConvertWei(basePoolInfo.Token.Decimals);

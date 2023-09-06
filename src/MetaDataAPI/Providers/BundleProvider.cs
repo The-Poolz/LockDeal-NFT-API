@@ -2,7 +2,7 @@
 using System.Numerics;
 using MetaDataAPI.Models.Response;
 
-namespace MetaDataAPI.Providers.Advanced;
+namespace MetaDataAPI.Providers;
 
 public class BundleProvider : IProvider
 {

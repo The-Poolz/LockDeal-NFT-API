@@ -17,4 +17,24 @@
     <PackageReference Include="EthSmartContractIO" Version="1.0.0" />
     <PackageReference Include="Utils.EnvironmentManager" Version="2.0.1" />
   </ItemGroup>
+  <ItemGroup>
+    <Compile Update="Providers\BundleProvider.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
+    <Compile Update="Providers\CollateralProvider.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
+    <Compile Update="Providers\RefundProvider.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
+    <Compile Update="Providers\DealProvider.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
+    <Compile Update="Providers\LockDealProvider.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
+    <Compile Update="Providers\TimedDealProvider.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
+  </ItemGroup>
 </Project>
