@@ -6,9 +6,6 @@ namespace MetaDataAPI.Providers;
 
 public static class AttributesService
 {
-    public static IEnumerable<Erc721Attribute> GetProviderAttributes(BigInteger poolId) =>  
-         new BasePoolInfo(RpcCaller.GetMetadata(poolId)).Provider.Attributes;
-
     public static Erc721Attribute GetMainCoinAttribute(BigInteger collateralId) =>
         new("MainCoin", GetAddress(collateralId + 1));
 

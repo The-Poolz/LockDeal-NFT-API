@@ -22,7 +22,7 @@ public class ProviderFactoryTests : SetEnvironments
             .RespondWith(HttpMock.DealResponse);
         var values = new BigInteger[] { new(2) };
 
-        var provider = ProviderFactory.Create(Environments.BundleAddress, new BigInteger(0), 18, values);
+        var provider = ProviderFactory.Create(new BigInteger(0));
 
         provider.Should().BeOfType<BundleProvider>();
         provider.Attributes
@@ -41,7 +41,7 @@ public class ProviderFactoryTests : SetEnvironments
             .RespondWith(HttpMock.LockMetadata);
         var values = new BigInteger[] { 0, 1690286212 };
 
-        var provider = ProviderFactory.Create(Environments.LockAddress, new BigInteger(1), 18, values);
+        var provider = ProviderFactory.Create(new BigInteger(1));
 
         provider.Should().BeOfType<LockProvider>();
         provider.Attributes
@@ -61,7 +61,7 @@ public class ProviderFactoryTests : SetEnvironments
 
         var values = new BigInteger[] { 12, 100000000000000000 };
 
-        var provider = ProviderFactory.Create(Environments.RefundAddress, new BigInteger(10), 18, values);
+        var provider = ProviderFactory.Create(new BigInteger(10));
 
         provider.Should().BeOfType<RefundProvider>();
         provider.Attributes
@@ -86,7 +86,7 @@ public class ProviderFactoryTests : SetEnvironments
 
         var values = new BigInteger[] { 1000, 1690385286 };
 
-        var provider = ProviderFactory.Create(Environments.CollateralAddress, new BigInteger(12), 18, values);
+        var provider = ProviderFactory.Create(new BigInteger(12));
 
         provider.Should().BeOfType<CollateralProvider>();
         provider.Attributes

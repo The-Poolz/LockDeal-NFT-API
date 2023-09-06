@@ -1,5 +1,4 @@
 ﻿using System.Numerics;
-using MetaDataAPI.Storage;
 using MetaDataAPI.Models.Types;
 using MetaDataAPI.Providers.Simple;
 using MetaDataAPI.Providers.Advanced;
@@ -12,7 +11,7 @@ public static class ProviderFactory
 {
     public static IProvider Create(BigInteger poolId) => Create(RpcCaller.GetMetadata(poolId));
     public static IProvider Create(string metadata) => Create(new BasePoolInfo(metadata));
-    public static IProvider Create(BasePoolInfo basePoolInfo) => Providers(basePoolInfo)[ProvidersAddresses[basePoolInfo.ProviderAddress]];
+    public static IProvider Create(BasePoolInfo basePoolInfo) => Providers(basePoolInfo)[ProvidersAddresses(basePoolInfo.ProviderAddress)];
      public static Dictionary<ProviderName, IProvider> Providers(BasePoolInfo basePoolInfo) => new()
     {
         { ProviderName.Deal, new DealProvider(basePoolInfo) },
@@ -23,13 +22,18 @@ public static class ProviderFactory
         { ProviderName.Collateral, new CollateralProvider(basePoolInfo) }
     };
 
-    public static Dictionary<string, ProviderName> ProvidersAddresses => new()
+    public static ProviderName ProvidersAddresses(string providerAddress)
     {
-        { Environments.DealAddress, ProviderName.Deal },
-        { Environments.LockAddress, ProviderName.Lock },
-        { Environments.TimedAddress, ProviderName.Timed },
-        { Environments.RefundAddress, ProviderName.Refund },
-        { Environments.BundleAddress, ProviderName.Bundle },
-        { Environments.CollateralAddress, ProviderName.Collateral }
-    };
+        var name = RpcCaller.GetName(providerAddress);
+        return name switch
+        {
+            "DealProvider" => ProviderName.Deal,
+            "LockProvider" => ProviderName.Lock,
+            "TimedProvider" => ProviderName.Timed,
+            "BundleProvider" => ProviderName.Bundle,
+            "RefundProvider" => ProviderName.Refund,
+            "Collateral" => ProviderName.Collateral,
+            _ => throw new Exception($"Unknown provider name: {name}")
+        };
+    }
 }

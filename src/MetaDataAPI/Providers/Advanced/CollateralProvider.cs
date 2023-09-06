@@ -8,9 +8,11 @@ public class CollateralProvider : IProvider
 {
     public byte ParametersCount => 2;
     public List<Erc721Attribute> Attributes { get; }
+    public BasePoolInfo PoolInfo { get; }
 
     public CollateralProvider(BasePoolInfo basePoolInfo)
     {
+        PoolInfo = basePoolInfo;
         var converter = new ConvertWei(basePoolInfo.Token.Decimals);
         Attributes = new List<Erc721Attribute>
         {
@@ -21,14 +23,14 @@ public class CollateralProvider : IProvider
         };
         for (var id = basePoolInfo.PoolId + 1; id <= basePoolInfo.PoolId + 3; id++)
         {
-            var providerAttributes = AttributesService.GetProviderAttributes(id);
+            var providerAttributes = ProviderFactory.Create(id).Attributes;
 
             Attributes.AddRange(providerAttributes.Select(attribute =>
             attribute.IncludeUnderscoreForTraitType(id)));
         }
     }
 
-    public string GetDescription(string token) =>
+    public string GetDescription() =>
         $"Exclusively utilized by project administrators, this NFT serves as a secure vault for holding refundable tokens. " +
         $"It holds {Attributes[4].Value} for the main coin collector, {Attributes[5].Value} for the token collector," +
         $" and {Attributes[6].Value} for the main coin holder, valid until {Attributes[1].Value}.";

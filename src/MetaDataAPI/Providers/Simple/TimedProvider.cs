@@ -8,9 +8,11 @@ public class TimedProvider : IProvider
 {
     public byte ParametersCount => 4;
     public List<Erc721Attribute> Attributes { get; }
+    public BasePoolInfo PoolInfo { get; }
 
     public TimedProvider(BasePoolInfo basePoolInfo)
     {
+        PoolInfo = basePoolInfo;
         var converter = new ConvertWei(basePoolInfo.Token.Decimals);
         Attributes = new List<Erc721Attribute>
         {
@@ -21,6 +23,6 @@ public class TimedProvider : IProvider
         };
     }
 
-    public string GetDescription(string token) =>
-        $"This NFT governs a time-locked pool containing {Attributes[0].Value} units of the asset {token}. Withdrawals are permitted in a linear fashion beginning at {Attributes[1].Value}, culminating in full access at {Attributes[2].Value}.";
+    public string GetDescription() =>
+        $"This NFT governs a time-locked pool containing {Attributes[0].Value} units of the asset {PoolInfo.Token.Address}. Withdrawals are permitted in a linear fashion beginning at {Attributes[1].Value}, culminating in full access at {Attributes[2].Value}.";
 }

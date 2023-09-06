@@ -30,7 +30,17 @@ public static class RpcCaller
             to: token,
             data: MethodSignatures.Decimals
         );
+        var result = contractIO.ExecuteAction(readRequest); 
+        return Convert.ToByte(result, 16);
+    }
+    public static string GetName(string address)
+    {
+        var readRequest = new RpcRequest(
+            rpcUrl: Environments.RpcUrl,
+            to: address,
+            data: MethodSignatures.Name
+        );
 
-        return Convert.ToByte(contractIO.ExecuteAction(readRequest), 16);
+        return contractIO.ExecuteAction(readRequest);
     }
 }

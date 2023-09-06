@@ -8,9 +8,11 @@ public class LockProvider : IProvider
 {
     public byte ParametersCount => 2;
     public List<Erc721Attribute> Attributes { get; }
+    public BasePoolInfo PoolInfo { get; }
 
     public LockProvider(BasePoolInfo basePoolInfo)
     {
+        PoolInfo = basePoolInfo;
         var converter = new ConvertWei(basePoolInfo.Token.Decimals);
         Attributes = new List<Erc721Attribute>
         {
@@ -19,6 +21,6 @@ public class LockProvider : IProvider
         };
     }
 
-    public string GetDescription(string token) =>
-        $"This NFT securely locks {Attributes[0].Value} units of the asset {token}. Access to these assets will commence on the designated start time of {Attributes[1].Value}.";
+    public string GetDescription() =>
+        $"This NFT securely locks {Attributes[0].Value} units of the asset {PoolInfo.Token.Address}. Access to these assets will commence on the designated start time of {Attributes[1].Value}.";
 }

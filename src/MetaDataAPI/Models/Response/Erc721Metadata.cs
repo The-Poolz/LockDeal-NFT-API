@@ -4,12 +4,12 @@ namespace MetaDataAPI.Models.Response;
 
 public class Erc721Metadata
 {
-    public Erc721Metadata(BasePoolInfo poolInfo)
+    public Erc721Metadata(string name, string description, string image, List<Erc721Attribute> attributes)
     {
-        Name = "Lock Deal NFT Pool: " + poolInfo.PoolId;
-        Attributes = poolInfo.Provider.Attributes;
-        Image = @"https://nft.poolz.finance/test/image?id=" + poolInfo.PoolId;
-        Description = poolInfo.Provider.GetDescription(poolInfo.Token.Address);
+        Name = name;
+        Description = description;
+        Image = image;
+        Attributes = attributes;
     }
 
     [JsonProperty("name")]

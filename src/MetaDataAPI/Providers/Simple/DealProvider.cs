@@ -8,8 +8,11 @@ public class DealProvider : IProvider
 {
     public byte ParametersCount => 1;
     public List<Erc721Attribute> Attributes { get; }
+    public BasePoolInfo PoolInfo { get; }
+
     public DealProvider(BasePoolInfo basePoolInfo)
     {
+        PoolInfo = basePoolInfo;
         var converter = new ConvertWei(basePoolInfo.Token.Decimals);
         Attributes = new List<Erc721Attribute>
         {
@@ -17,6 +20,7 @@ public class DealProvider : IProvider
         };
     }
 
-    public string GetDescription(string token) =>
-        $"This NFT represents immediate access to {Attributes[0].Value} units of the specified asset {token}.";
+    public string GetDescription() =>
+        $"This NFT represents immediate access to {Attributes[0].Value} units of the specified asset {PoolInfo.Token.Address}.";
+
 }
