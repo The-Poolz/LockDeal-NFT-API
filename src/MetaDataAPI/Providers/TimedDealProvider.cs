@@ -23,8 +23,8 @@ public class TimedDealProvider : IProvider
         PoolInfo = basePoolInfo;
         var converter = new ConvertWei(basePoolInfo.Token.Decimals);
         LeftAmount = converter.WeiToEth(basePoolInfo.Params[0]);
-        StartTime = Convert.ToInt64(basePoolInfo.Params[1]);
-        FinishTime = Convert.ToInt64(basePoolInfo.Params[2]);
+        StartTime = (long)new ConvertWei(0).WeiToEth(basePoolInfo.Params[1]);
+        FinishTime = (long)new ConvertWei(0).WeiToEth(basePoolInfo.Params[2]);
         StartAmount = converter.WeiToEth(basePoolInfo.Params[3]);   
     }
 
