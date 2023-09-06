@@ -12,6 +12,5 @@ public static class AttributesService
     public static Erc721Attribute GetTokenAttribute(BigInteger collateralId) =>
         new("Token", GetAddress(collateralId + 2));
 
-    private static string GetAddress(BigInteger poolId) =>
-        new BasePoolInfo(RpcCaller.GetMetadata(poolId)).Token.Address;
+    private static string GetAddress(BigInteger poolId) => ProviderFactory.Create(poolId).PoolInfo.Token.Address;
 }

@@ -4,7 +4,6 @@ using Nethereum.Hex.HexTypes;
 using EthSmartContractIO.Models;
 using EthSmartContractIO.ContractIO;
 using System.Text;
-using Nethereum.Model;
 using Nethereum.Hex.HexConvertors.Extensions;
 
 namespace MetaDataAPI.Utils;
@@ -44,9 +43,8 @@ public static class RpcCaller
             data: MethodSignatures.Name
         );
         var result = contractIO.ExecuteAction(readRequest);
-        return FromHexString(result.Substring(2).HexToByteArray())
-            .Replace("\0", string.Empty).Substring(2);
+        return FromHexString(result[2..].HexToByteArray());
     }
-    public static string FromHexString(byte[] data) => Encoding.ASCII.GetString(data);
+    public static string FromHexString(byte[] data) => Encoding.ASCII.GetString(data).Replace("\0", string.Empty)[2..];
     
 }
