@@ -3,6 +3,9 @@ using MetaDataAPI.Storage;
 using Nethereum.Hex.HexTypes;
 using EthSmartContractIO.Models;
 using EthSmartContractIO.ContractIO;
+using System.Text;
+using Nethereum.Model;
+using Nethereum.Hex.HexConvertors.Extensions;
 
 namespace MetaDataAPI.Utils;
 
@@ -40,7 +43,10 @@ public static class RpcCaller
             to: address,
             data: MethodSignatures.Name
         );
-
-        return contractIO.ExecuteAction(readRequest);
+        var result = contractIO.ExecuteAction(readRequest);
+        return FromHexString(result.Substring(2).HexToByteArray())
+            .Replace("\0", string.Empty).Substring(2);
     }
+    public static string FromHexString(byte[] data) => Encoding.ASCII.GetString(data);
+    
 }

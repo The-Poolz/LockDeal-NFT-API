@@ -2,10 +2,10 @@
 
 public enum ProviderName
 {
-    Deal,
-    Lock,
-    Timed,
-    Refund,
-    Bundle,
-    Collateral
+    DealProvider,
+    LockDealProvider,
+    TimedDealProvider,
+    RefundProvider,
+    BundleProvider,
+    CollateralProvider
 }
