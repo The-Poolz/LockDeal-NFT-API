@@ -18,7 +18,7 @@ public class BundleProvider : IProvider
         SubProviders = new List<IProvider>();
         for (var id = PoolInfo.PoolId + 1; id <= lastSubPoolId; id++)
         {
-            var subProvider = ProviderFactory.Create(id);
+            var subProvider = ProviderFactory.FromPoolId(id);
             SubProviders.Add(subProvider);
             Attributes.AddRange(subProvider.Attributes.Select(attribute =>
             attribute.IncludeUnderscoreForTraitType(id)));

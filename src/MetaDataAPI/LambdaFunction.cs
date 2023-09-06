@@ -14,7 +14,7 @@ public static class LambdaFunction
     public static APIGatewayProxyResponse FunctionHandler(APIGatewayProxyRequest request)
     {
         var poolId = BigInteger.Parse(request.QueryStringParameters["id"]);
-        var provider = ProviderFactory.Create(poolId);
+        var provider = ProviderFactory.FromPoolId(poolId);
 
         return new APIGatewayProxyResponse
         {
