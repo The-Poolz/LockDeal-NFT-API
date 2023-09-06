@@ -19,7 +19,7 @@ public class Erc721Attribute
     public Erc721Attribute(
         string traitType,
         object value,
-        DisplayType displayType = Types.DisplayType.String,
+        DisplayType displayType = Types.DisplayType.String
     )
     {
         TraitType = traitType;
