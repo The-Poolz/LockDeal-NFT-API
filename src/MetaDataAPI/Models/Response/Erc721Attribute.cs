@@ -7,9 +7,6 @@ namespace MetaDataAPI.Models.Response;
 
 public class Erc721Attribute
 {
-    [JsonProperty("max_value", NullValueHandling = NullValueHandling.Ignore)]
-    public object? MaxValue { get; }
-
     [JsonProperty("display_type", NullValueHandling = NullValueHandling.Ignore)]
     public string? DisplayType { get; }
 
@@ -23,12 +20,10 @@ public class Erc721Attribute
         string traitType,
         object value,
         DisplayType displayType = Types.DisplayType.String,
-        object? maxValue = null
     )
     {
         TraitType = traitType;
         Value = value;
-        MaxValue = maxValue;
 
         // For string values don't need to set DisplayType, because of this here ternary expression.
         DisplayType = displayType == Types.DisplayType.String ? null : displayType.ToLowerString();
