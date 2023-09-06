@@ -42,9 +42,19 @@ public static class RpcCaller
             to: address,
             data: MethodSignatures.Name
         );
-        var result = contractIO.ExecuteAction(readRequest);
-        return FromHexString(result[2..].HexToByteArray());
+        return FromHexString(contractIO.ExecuteAction(readRequest));
     }
+
+    public static string GetSymbol(string address)
+    {
+        var readRequest = new RpcRequest(
+            rpcUrl: Environments.RpcUrl,
+            to: address,
+            data: MethodSignatures.Symbol
+        );
+        return FromHexString(contractIO.ExecuteAction(readRequest));
+    }
+    public static string FromHexString(string hexString) => FromHexString(hexString[2..].HexToByteArray());
     public static string FromHexString(byte[] data) => Encoding.ASCII.GetString(data).Replace("\0", string.Empty)[2..];
     
 }
