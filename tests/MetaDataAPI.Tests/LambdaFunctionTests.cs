@@ -42,8 +42,7 @@ public class LambdaFunctionTests : SetEnvironments
                 provider: new DealProvider(18, new BigInteger[] { new(0) }),
                 poolId: new BigInteger(0),
                 owner: "0x57e0433551460e85dfc5a5ddaff4db199d0f960a",
-                token: "0x66134461c865f824d294d8ca0d9080cc1acd05f6",
-                new BigInteger[] { new(0) }
+                token: "0x66134461c865f824d294d8ca0d9080cc1acd05f6"
             ))
         ).ToString());
     }

@@ -26,8 +26,7 @@ public static class LambdaFunction
             provider: ProviderFactory.Create(parser.GetProviderAddress(), poolId, decimals, parser.GetProviderParameters().ToArray()), 
             poolId: parser.GetPoolId(),
             owner: parser.GetOwnerAddress(),
-            token: parser.GetTokenAddress(),
-            parameters: parser.GetProviderParameters().ToArray()
+            token: parser.GetTokenAddress()
         );
 
         var responseBody = new Erc721Metadata(basePoolInfo);

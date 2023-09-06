@@ -15,7 +15,7 @@ namespace MetaDataAPI.Tests.Models.Response
         {
             var poolId = new BigInteger(0);
             var provider = ProviderFactory.Create(providerName, poolId, 18, parameters);
-            return new BasePoolInfo(provider, poolId, owner, token, parameters);
+            return new BasePoolInfo(provider, poolId, owner, token);
         }
 
         [Fact]
