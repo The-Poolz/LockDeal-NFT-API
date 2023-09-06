@@ -18,7 +18,7 @@ public class BasePoolInfo
         VaultId = BigInteger.Parse(chunks[3], NumberStyles.AllowHexSpecifier);
         Owner = "0x" + chunks[4][24..];
         Token = new Erc20Token("0x" + chunks[5][24..]);
-        Params = chunks.Skip(6)
+        Params = chunks.Skip(8)
             .Select(chunk => BigInteger.Parse(chunk, NumberStyles.AllowHexSpecifier)).ToArray();     
     }
     public string ProviderAddress { get; }

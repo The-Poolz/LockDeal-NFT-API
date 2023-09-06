@@ -26,7 +26,7 @@ public class Erc20Token
         else
         {
             Decimals = RpcCaller.GetDecimals(address);
-            Name = "Test";//RpcCaller.GetName(address); //Todo: Fix this
+            Name = RpcCaller.GetName(address); 
             Symbol = "TST"; //"RpcCaller.GetSymbol(address); //Todo: Fix this
             Tokens.Add(address, this);
         }
