@@ -8,7 +8,7 @@ public static class ProviderFactory
 {
     public static IProvider FromPoolId(BigInteger poolId) => FromMetdata(RpcCaller.GetMetadata(poolId));
     public static IProvider FromMetdata(string metadata) => FromPoolInfo(new BasePoolInfo(metadata));
-    public static IProvider FromPoolInfo(BasePoolInfo basePoolInfo) => Create(basePoolInfo) ?? throw new ArgumentNullException();
+    public static IProvider FromPoolInfo(BasePoolInfo basePoolInfo) => Create(basePoolInfo)!;
     internal static IProvider? Create(BasePoolInfo basePoolInfo)
     {    
         var name = RpcCaller.GetName(basePoolInfo.ProviderAddress);
