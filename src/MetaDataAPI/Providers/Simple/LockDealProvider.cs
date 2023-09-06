@@ -2,7 +2,7 @@ using MetaDataAPI.Utils;
 using MetaDataAPI.Models.Types;
 using MetaDataAPI.Models.Response;
 
-namespace MetaDataAPI.Providers.Simple;
+namespace MetaDataAPI.Providers;
 
 public class LockDealProvider : IProvider
 {

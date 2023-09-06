@@ -2,7 +2,7 @@
 using MetaDataAPI.Models.Types;
 using MetaDataAPI.Models.Response;
 
-namespace MetaDataAPI.Providers.Advanced;
+namespace MetaDataAPI.Providers;
 
 public class RefundProvider : IProvider
 {
