@@ -8,24 +8,27 @@ public class CollateralProvider : IProvider
 {
     public List<Erc721Attribute> Attributes { get; }
     public BasePoolInfo PoolInfo { get; }
-
+    public IProvider[] SubProvider { get; } = new IProvider[3];
     public CollateralProvider(BasePoolInfo basePoolInfo)
     {
         PoolInfo = basePoolInfo;
         var converter = new ConvertWei(basePoolInfo.Token.Decimals);
+        for (var i = 0; i < 3; i++)
+        {
+            SubProvider[i] = ProviderFactory.Create(basePoolInfo.PoolId + i + 1);
+        }
         Attributes = new List<Erc721Attribute>
         {
             new("LeftAmount", converter.WeiToEth(basePoolInfo.Params[0]), DisplayType.Number),
             new("FinishTime", basePoolInfo.Params[1], DisplayType.Date),
-            AttributesService.GetMainCoinAttribute(basePoolInfo.PoolId),
-            AttributesService.GetTokenAttribute(basePoolInfo.PoolId),
+            new("MainCoin",SubProvider[0].PoolInfo.Token.Address),
+            new("Token", SubProvider[1].PoolInfo.Token.Address),
         };
-        for (var id = basePoolInfo.PoolId + 1; id <= basePoolInfo.PoolId + 3; id++)
-        {
-            var providerAttributes = ProviderFactory.Create(id).Attributes;
 
-            Attributes.AddRange(providerAttributes.Select(attribute =>
-            attribute.IncludeUnderscoreForTraitType(id)));
+        foreach (var provider in SubProvider)
+        {
+            Attributes.AddRange(provider.Attributes.Select(attribute =>
+            attribute.IncludeUnderscoreForTraitType(provider.PoolInfo.PoolId)));
         }
     }
 
