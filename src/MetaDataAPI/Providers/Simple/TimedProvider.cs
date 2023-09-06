@@ -6,23 +6,28 @@ namespace MetaDataAPI.Providers.Simple;
 
 public class TimedProvider : IProvider
 {
-    public byte ParametersCount => 4;
-    public List<Erc721Attribute> Attributes { get; }
+    public List<Erc721Attribute> Attributes => new()
+    {
+        new("LeftAmount", LeftAmount, DisplayType.Number),
+        new("StartAmount", StartAmount, DisplayType.Number),
+        new("StartTime", StartTime, DisplayType.Date),
+        new("FinishTime", FinishTime, DisplayType.Date),
+    };
     public BasePoolInfo PoolInfo { get; }
-
+    public decimal LeftAmount { get; }
+    public decimal StartAmount { get; }
+    public long StartTime { get; }
+    public long FinishTime { get; }
     public TimedProvider(BasePoolInfo basePoolInfo)
     {
         PoolInfo = basePoolInfo;
         var converter = new ConvertWei(basePoolInfo.Token.Decimals);
-        Attributes = new List<Erc721Attribute>
-        {
-            new("LeftAmount", converter.WeiToEth(basePoolInfo.Params[0]), DisplayType.Number),
-            new("StartAmount",converter.WeiToEth(basePoolInfo.Params[3]),DisplayType.Number),
-            new("StartTime", basePoolInfo.Params[1], DisplayType.Date),
-            new("FinishTime", basePoolInfo.Params[2], DisplayType.Date),
-        };
+        LeftAmount = converter.WeiToEth(basePoolInfo.Params[0]);
+        StartTime = Convert.ToInt64(basePoolInfo.Params[1]);
+        FinishTime = Convert.ToInt64(basePoolInfo.Params[2]);
+        StartAmount = converter.WeiToEth(basePoolInfo.Params[3]);   
     }
 
     public string GetDescription() =>
-        $"This NFT governs a time-locked pool containing {Attributes[0].Value} units of the asset {PoolInfo.Token}. Withdrawals are permitted in a linear fashion beginning at {Attributes[1].Value}, culminating in full access at {Attributes[2].Value}.";
+        $"This NFT governs a time-locked pool containing {LeftAmount}/{StartAmount} units of the asset {PoolInfo.Token}. Withdrawals are permitted in a linear fashion beginning at {TimeUtils.FromUnixTimestamp(StartTime)}, culminating in full access at {TimeUtils.FromUnixTimestamp(FinishTime)}.";
 }

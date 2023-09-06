@@ -4,7 +4,6 @@ namespace MetaDataAPI.Providers;
 
 public interface IProvider
 {
-    public byte ParametersCount { get; }
     public BasePoolInfo PoolInfo { get; }
     public string GetDescription();
     public List<Erc721Attribute> Attributes { get; }

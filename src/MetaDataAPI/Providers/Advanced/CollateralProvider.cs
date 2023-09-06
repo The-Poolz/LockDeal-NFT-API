@@ -6,7 +6,6 @@ namespace MetaDataAPI.Providers.Advanced;
 
 public class CollateralProvider : IProvider
 {
-    public byte ParametersCount => 2;
     public List<Erc721Attribute> Attributes { get; }
     public BasePoolInfo PoolInfo { get; }
 
