@@ -1,4 +1,3 @@
-using System.Numerics;
 using MetaDataAPI.Utils;
 using MetaDataAPI.Models.Types;
 using MetaDataAPI.Models.Response;
@@ -9,13 +8,12 @@ public class DealProvider : IProvider
 {
     public byte ParametersCount => 1;
     public List<Erc721Attribute> Attributes { get; }
-
-    public DealProvider(byte decimals, IReadOnlyList<BigInteger> values)
+    public DealProvider(BasePoolInfo basePoolInfo)
     {
-        var converter = new ConvertWei(decimals);
+        var converter = new ConvertWei(basePoolInfo.Token.Decimals);
         Attributes = new List<Erc721Attribute>
         {
-            new("LeftAmount", converter.WeiToEth(values[0]), DisplayType.Number)
+            new("LeftAmount", converter.WeiToEth(basePoolInfo.Params[0]), DisplayType.Number)
         };
     }
 

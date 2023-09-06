@@ -11,12 +11,12 @@ public class RefundProvider : IProvider
     public byte ParametersCount => 2;
     public List<Erc721Attribute> Attributes { get; }
 
-    public RefundProvider(BigInteger poolId, IReadOnlyList<BigInteger> values)
+    public RefundProvider(BasePoolInfo basePoolInfo)
     {
-        this.poolId = poolId;
+        poolId = basePoolInfo.PoolId;
         Attributes = new List<Erc721Attribute>
         {
-            new("Rate", new ConvertWei(18).WeiToEth(values[1]), DisplayType.Number),
+            new("Rate", new ConvertWei(18).WeiToEth(basePoolInfo.Params[1]), DisplayType.Number),
             AttributesService.GetMainCoinAttribute(poolId),
             AttributesService.GetTokenAttribute(poolId)
         };

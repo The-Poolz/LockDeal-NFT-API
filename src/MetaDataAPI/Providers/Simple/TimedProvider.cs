@@ -1,4 +1,3 @@
-using System.Numerics;
 using MetaDataAPI.Utils;
 using MetaDataAPI.Models.Types;
 using MetaDataAPI.Models.Response;
@@ -10,14 +9,15 @@ public class TimedProvider : IProvider
     public byte ParametersCount => 4;
     public List<Erc721Attribute> Attributes { get; }
 
-    public TimedProvider(byte decimals, IReadOnlyList<BigInteger> values)
+    public TimedProvider(BasePoolInfo basePoolInfo)
     {
-        var converter = new ConvertWei(decimals);
+        var converter = new ConvertWei(basePoolInfo.Token.Decimals);
         Attributes = new List<Erc721Attribute>
         {
-            new("LeftAmount", converter.WeiToEth(values[0]), DisplayType.Number, converter.WeiToEth(values[3])),
-            new("StartTime", values[1], DisplayType.Date),
-            new("FinishTime", values[2], DisplayType.Date),
+            new("LeftAmount", converter.WeiToEth(basePoolInfo.Params[0]), DisplayType.Number),
+            new("StartAmount",converter.WeiToEth(basePoolInfo.Params[3]),DisplayType.Number),
+            new("StartTime", basePoolInfo.Params[1], DisplayType.Date),
+            new("FinishTime", basePoolInfo.Params[2], DisplayType.Date),
         };
     }
 

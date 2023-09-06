@@ -1,6 +1,5 @@
 ﻿using System.Text;
 using System.Numerics;
-using MetaDataAPI.Utils;
 using MetaDataAPI.Models.Response;
 
 namespace MetaDataAPI.Providers.Advanced;
@@ -12,10 +11,10 @@ public class BundleProvider : IProvider
     public byte ParametersCount => 1;
     public List<Erc721Attribute> Attributes { get; }
 
-    public BundleProvider(BigInteger poolId, IReadOnlyList<BigInteger> values)
+    public BundleProvider(BasePoolInfo basePoolInfo)
     {
-        this.poolId = poolId;
-        lastSubPoolId = values[0];
+        poolId = basePoolInfo.PoolId;
+        lastSubPoolId = basePoolInfo.Params[0];
         Attributes = new List<Erc721Attribute>();
         for (var id = poolId + 1; id <= lastSubPoolId; id++)
         {
@@ -32,7 +31,7 @@ public class BundleProvider : IProvider
 
         for (var id = poolId + 1; id <= lastSubPoolId; id++)
         {
-            var description = new BasePoolInfo(RpcCaller.GetMetadata(id)).Provider.GetDescription(token);
+            var description = ProviderFactory.Create(id).GetDescription(token);
 
             descriptionBuilder.AppendLine($"- {id}: {description}");
         }

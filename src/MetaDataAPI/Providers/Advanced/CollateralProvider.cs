@@ -1,4 +1,3 @@
-using System.Numerics;
 using MetaDataAPI.Utils;
 using MetaDataAPI.Models.Types;
 using MetaDataAPI.Models.Response;
@@ -10,17 +9,17 @@ public class CollateralProvider : IProvider
     public byte ParametersCount => 2;
     public List<Erc721Attribute> Attributes { get; }
 
-    public CollateralProvider(BigInteger poolId, byte decimals, IReadOnlyList<BigInteger> values)
+    public CollateralProvider(BasePoolInfo basePoolInfo)
     {
-        var converter = new ConvertWei(decimals);
+        var converter = new ConvertWei(basePoolInfo.Token.Decimals);
         Attributes = new List<Erc721Attribute>
         {
-            new("LeftAmount", converter.WeiToEth(values[0]), DisplayType.Number),
-            new("FinishTime", values[1], DisplayType.Date),
-            AttributesService.GetMainCoinAttribute(poolId),
-            AttributesService.GetTokenAttribute(poolId),
+            new("LeftAmount", converter.WeiToEth(basePoolInfo.Params[0]), DisplayType.Number),
+            new("FinishTime", basePoolInfo.Params[1], DisplayType.Date),
+            AttributesService.GetMainCoinAttribute(basePoolInfo.PoolId),
+            AttributesService.GetTokenAttribute(basePoolInfo.PoolId),
         };
-        for (var id = poolId + 1; id <= poolId + 3; id++)
+        for (var id = basePoolInfo.PoolId + 1; id <= basePoolInfo.PoolId + 3; id++)
         {
             var providerAttributes = AttributesService.GetProviderAttributes(id);
 
