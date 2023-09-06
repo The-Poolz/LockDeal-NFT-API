@@ -8,26 +8,24 @@ namespace MetaDataAPI.Providers.Advanced;
 public class RefundProvider : IProvider
 {
     private readonly BigInteger poolId;
-    private readonly byte decimals;
     public byte ParametersCount => 2;
     public List<Erc721Attribute> Attributes { get; }
 
-    public RefundProvider(BigInteger poolId, byte decimals, IReadOnlyList<BigInteger> values)
+    public RefundProvider(BigInteger poolId, IReadOnlyList<BigInteger> values)
     {
         this.poolId = poolId;
-        this.decimals = decimals;
         Attributes = new List<Erc721Attribute>
         {
             new("Rate", new ConvertWei(18).WeiToEth(values[1]), DisplayType.Number),
             AttributesService.GetMainCoinAttribute(poolId),
             AttributesService.GetTokenAttribute(poolId)
         };
-        Attributes.AddRange(AttributesService.GetProviderAttributes(poolId + 1, decimals));
+        Attributes.AddRange(AttributesService.GetProviderAttributes(poolId + 1));
     }
 
     public string GetDescription(string token)
     {
-        var dealProviderAttributes = AttributesService.GetProviderAttributes(poolId + 3, decimals).ToArray();
+        var dealProviderAttributes = AttributesService.GetProviderAttributes(poolId + 3).ToArray();
         var mainCoin = Attributes[1].Value;
         var mainCoinAmountCalc = Attributes[3].Value; // not sure
 

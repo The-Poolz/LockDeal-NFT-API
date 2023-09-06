@@ -9,19 +9,17 @@ public class BundleProvider : IProvider
 {
     private readonly BigInteger poolId;
     private readonly BigInteger lastSubPoolId;
-    private readonly byte decimals;
     public byte ParametersCount => 1;
     public List<Erc721Attribute> Attributes { get; }
 
-    public BundleProvider(BigInteger poolId, byte decimals, IReadOnlyList<BigInteger> values)
+    public BundleProvider(BigInteger poolId, IReadOnlyList<BigInteger> values)
     {
         this.poolId = poolId;
         lastSubPoolId = values[0];
-        this.decimals = decimals;
         Attributes = new List<Erc721Attribute>();
         for (var id = poolId + 1; id <= lastSubPoolId; id++)
         {
-            var providerAttributes = AttributesService.GetProviderAttributes(id, decimals);
+            var providerAttributes = AttributesService.GetProviderAttributes(id);
 
             Attributes.AddRange(providerAttributes.Select(attribute => 
             attribute.IncludeUnderscoreForTraitType(id)));
@@ -34,12 +32,9 @@ public class BundleProvider : IProvider
 
         for (var id = poolId + 1; id <= lastSubPoolId; id++)
         {
-            var metadata = RpcCaller.GetMetadata(id);
-            var parser = new MetadataParser(metadata);
+            var description = new BasePoolInfo(RpcCaller.GetMetadata(id)).Provider.GetDescription(token);
 
-            var provider = ProviderFactory.Create(parser.GetProviderAddress(), poolId, decimals, parser.GetProviderParameters().ToArray());
-
-            descriptionBuilder.AppendLine($"- {id}: {provider.GetDescription(token)}");
+            descriptionBuilder.AppendLine($"- {id}: {description}");
         }
 
         return descriptionBuilder.ToString();
