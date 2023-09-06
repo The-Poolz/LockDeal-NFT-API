@@ -4,7 +4,15 @@ namespace MetaDataAPI.Models.Response;
 
 public class Erc20Token
 {
-    private readonly static Dictionary<string, Erc20Token> Tokens = new();
+    const string AddressZero = "0x0000000000000000000000000000";
+    private readonly static Dictionary<string, Erc20Token> Tokens = new()
+    { { AddressZero, new() } };
+    internal Erc20Token() {
+        Address = AddressZero;
+        Name = string.Empty;
+        Decimals = 0;
+        Symbol = string.Empty;
+    }
     public Erc20Token(string address)
     {
         Address = address;
@@ -23,8 +31,8 @@ public class Erc20Token
             Tokens.Add(address, this);
         }
     }
-    public string Name { get; }
-    public string Symbol { get; }
-    public string Address { get; }
-    public byte Decimals { get; }
+    public string Name { get; internal set; }
+    public string Symbol { get; internal set; }
+    public string Address { get; internal set; }
+    public byte Decimals { get; internal set; }
 }
