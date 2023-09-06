@@ -2,7 +2,7 @@
 using System.Numerics;
 using MetaDataAPI.Models.Response;
 
-namespace MetaDataAPI.Providers;
+namespace MetaDataAPI.Providers.Advanced;
 
 public class BundleProvider : IProvider
 {
@@ -20,7 +20,7 @@ public class BundleProvider : IProvider
         {
             var subProvider = ProviderFactory.Create(id);
             SubProviders.Add(subProvider);
-            Attributes.AddRange(subProvider.Attributes.Select(attribute => 
+            Attributes.AddRange(subProvider.Attributes.Select(attribute =>
             attribute.IncludeUnderscoreForTraitType(id)));
         }
     }

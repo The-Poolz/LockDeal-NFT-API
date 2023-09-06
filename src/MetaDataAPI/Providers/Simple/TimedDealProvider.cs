@@ -2,7 +2,7 @@ using MetaDataAPI.Utils;
 using MetaDataAPI.Models.Types;
 using MetaDataAPI.Models.Response;
 
-namespace MetaDataAPI.Providers;
+namespace MetaDataAPI.Providers.Simple;
 
 public class TimedDealProvider : IProvider
 {
@@ -25,7 +25,7 @@ public class TimedDealProvider : IProvider
         LeftAmount = converter.WeiToEth(basePoolInfo.Params[0]);
         StartTime = (long)new ConvertWei(0).WeiToEth(basePoolInfo.Params[1]);
         FinishTime = (long)new ConvertWei(0).WeiToEth(basePoolInfo.Params[2]);
-        StartAmount = converter.WeiToEth(basePoolInfo.Params[3]);   
+        StartAmount = converter.WeiToEth(basePoolInfo.Params[3]);
     }
 
     public string GetDescription() =>
