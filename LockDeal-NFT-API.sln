@@ -13,6 +13,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{320AB552
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ImageAPI.Test", "tests\ImageAPI.Test\ImageAPI.Test.csproj", "{88A9ADF0-F783-4442-BAA2-467693DD2048}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MetaDataAPI.Tests", "tests\MetaDataAPI.Tests\MetaDataAPI.Tests.csproj", "{5C26358F-3DB2-4826-AD1A-98C264AA7FB0}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -31,6 +33,10 @@ Global
 		{88A9ADF0-F783-4442-BAA2-467693DD2048}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{88A9ADF0-F783-4442-BAA2-467693DD2048}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{88A9ADF0-F783-4442-BAA2-467693DD2048}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5C26358F-3DB2-4826-AD1A-98C264AA7FB0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5C26358F-3DB2-4826-AD1A-98C264AA7FB0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5C26358F-3DB2-4826-AD1A-98C264AA7FB0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5C26358F-3DB2-4826-AD1A-98C264AA7FB0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -39,6 +45,7 @@ Global
 		{813C6EB9-873A-4DC4-9D8B-E3830F0DF2E6} = {FBF3AF2F-F3A8-407C-A68E-C129D08B59F2}
 		{1087D093-685B-47A1-AE4C-510BEF8EB8FE} = {FBF3AF2F-F3A8-407C-A68E-C129D08B59F2}
 		{88A9ADF0-F783-4442-BAA2-467693DD2048} = {320AB552-0F05-4008-AD2B-F604D05FBD3C}
+		{5C26358F-3DB2-4826-AD1A-98C264AA7FB0} = {320AB552-0F05-4008-AD2B-F604D05FBD3C}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {1ABE94B3-AC28-41A1-9950-4C78E34BA1F1}

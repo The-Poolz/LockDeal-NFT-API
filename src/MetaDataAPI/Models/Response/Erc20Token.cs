@@ -5,8 +5,10 @@ namespace MetaDataAPI.Models.Response;
 public class Erc20Token
 {
     private readonly static Dictionary<string, Erc20Token> Tokens = new();
-    public Erc20Token(string address)
+    private readonly IRpcCaller _rpcCaller;
+    public Erc20Token(string address, IRpcCaller? rpcCaller = null)
     {
+        _rpcCaller = rpcCaller ?? new RpcCaller();
         Address = address;
         if (Tokens.ContainsKey(address))
         {
@@ -17,9 +19,9 @@ public class Erc20Token
         }
         else
         {
-            Decimals = RpcCaller.GetDecimals(address);
-            Name = RpcCaller.GetName(address); 
-            Symbol = RpcCaller.GetSymbol(address); 
+            Decimals = _rpcCaller.GetDecimals(address);
+            Name = _rpcCaller.GetName(address); 
+            Symbol = _rpcCaller.GetSymbol(address); 
             Tokens.Add(address, this);
         }
     }

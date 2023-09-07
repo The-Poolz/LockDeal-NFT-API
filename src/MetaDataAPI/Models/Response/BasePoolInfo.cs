@@ -1,23 +1,23 @@
-﻿using System.Globalization;
+﻿using MetaDataAPI.Providers;
+using System.Globalization;
 using System.Numerics;
 
 namespace MetaDataAPI.Models.Response;
 
 public class BasePoolInfo
 {
-    public BasePoolInfo(string? rawMetadata)
+    public BasePoolInfo(string? rawMetadata, ProviderFactory providerFactory)
     {
         if (string.IsNullOrEmpty(rawMetadata))
         {
             throw new ArgumentNullException(nameof(rawMetadata), "Invalid data.");
         }
-
         var chunks = SplitHex(RemoveHexPrefix(rawMetadata));
         ProviderAddress = "0x" + chunks[1][24..];
         PoolId = BigInteger.Parse(chunks[2], NumberStyles.AllowHexSpecifier);
         VaultId = BigInteger.Parse(chunks[3], NumberStyles.AllowHexSpecifier);
         Owner = "0x" + chunks[4][24..];
-        Token = new Erc20Token("0x" + chunks[5][24..]);
+        Token = providerFactory.GetErc20Token("0x" + chunks[5][24..]);
         Params = chunks.Skip(8)
             .Select(chunk => BigInteger.Parse(chunk, NumberStyles.AllowHexSpecifier)).ToArray();     
     }

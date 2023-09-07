@@ -9,12 +9,18 @@ using MetaDataAPI.Providers;
 
 namespace MetaDataAPI;
 
-public static class LambdaFunction
+public class LambdaFunction
 {
-    public static APIGatewayProxyResponse FunctionHandler(APIGatewayProxyRequest request)
+    public LambdaFunction() : this(new ProviderFactory()) { }
+    public LambdaFunction(ProviderFactory providerFactory)
+    {
+        this.providerFactory = providerFactory;
+    }
+    private readonly ProviderFactory providerFactory;
+    public APIGatewayProxyResponse FunctionHandler(APIGatewayProxyRequest request)
     {
         var poolId = BigInteger.Parse(request.QueryStringParameters["id"]);
-        var provider = ProviderFactory.FromPoolId(poolId);
+        var provider = providerFactory.FromPoolId(poolId);
 
         return new APIGatewayProxyResponse
         {

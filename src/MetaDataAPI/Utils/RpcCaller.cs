@@ -8,40 +8,45 @@ using Nethereum.Hex.HexConvertors.Extensions;
 
 namespace MetaDataAPI.Utils;
 
-public static class RpcCaller
+public class RpcCaller : IRpcCaller
 {
     private static readonly ContractIO contractIO = new();
-
-    public static string GetMetadata(BigInteger poolId)
+    private static readonly string rpcUrl = Environments.RpcUrl;
+    public RpcCaller()  {  }
+    public string GetMetadata(BigInteger poolId)
     {
         var param = new HexBigInteger(poolId).HexValue[2..].PadLeft(64, '0');
-        return getRawData(Environments.LockDealNftAddress, MethodSignatures.GetData + param);
+        var data = GetRawData(Environments.LockDealNftAddress, MethodSignatures.GetData + param);
+        Console.WriteLine($"{poolId},{data}");
+        return data;
     }
 
-    internal static string getRawData(string address,string methodSignature)
+    internal static string GetRawData(string address, string methodSignature)
     {
         var readRequest = new RpcRequest(
-            rpcUrl: Environments.RpcUrl,
+            rpcUrl: rpcUrl,
             to: address,
             data: methodSignature
         );
         return contractIO.ExecuteAction(readRequest);
     }
-    public static byte GetDecimals(string token)
+    public byte GetDecimals(string token)
     {
-        var result = getRawData(token, MethodSignatures.Decimals);
+        if (token == "0x0000000000000000000000000000000000000000") return 0;
+        var result = GetRawData(token, MethodSignatures.Decimals);
         return Convert.ToByte(result, 16);
     }
-    public static string GetName(string address)
+    public string GetName(string address)
     {
-        var result = getRawData(address, MethodSignatures.Name);
-        return FromHexString(result);
+        var result = FromHexString(GetRawData(address, MethodSignatures.Name));
+        Console.WriteLine($"{address},{result}");
+        return result;
     }
 
-    public static string GetSymbol(string address)
+    public string GetSymbol(string address)
     {
-        var result = getRawData(address, MethodSignatures.Symbol);
-        return FromHexString(result);
+        var result = FromHexString(GetRawData(address, MethodSignatures.Symbol));
+        return result;
     }
     public static string FromHexString(string hexString) => FromHexString(hexString[2..].HexToByteArray());
     public static string FromHexString(byte[] data) => Encoding.ASCII.GetString(data).Replace("\0", string.Empty)[2..];

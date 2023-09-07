@@ -15,7 +15,7 @@ public class CollateralProvider : IProvider
         var converter = new ConvertWei(basePoolInfo.Token.Decimals);
         for (var i = 0; i < 3; i++)
         {
-            SubProvider[i] = ProviderFactory.FromPoolId(basePoolInfo.PoolId + i + 1);
+            SubProvider[i] = new ProviderFactory().FromPoolId(basePoolInfo.PoolId + i + 1);
         }
         Attributes = new List<Erc721Attribute>
         {

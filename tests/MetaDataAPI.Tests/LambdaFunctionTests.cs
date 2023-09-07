@@ -1,37 +1,39 @@
 ﻿using Xunit;
 using System.Net;
 using FluentAssertions;
-using Flurl.Http.Testing;
-using MetaDataAPI.Storage;
-using Nethereum.Hex.HexTypes;
 using MetaDataAPI.Tests.Helpers;
 using Amazon.Lambda.APIGatewayEvents;
+using MetaDataAPI.Providers;
 
 namespace MetaDataAPI.Tests;
 
 public class LambdaFunctionTests : SetEnvironments
 {
-    [Fact]
-    public void FunctionHandler_ShouldReturnCorrectResponse()
-    {
-        var httpTest = new HttpTest();
-        httpTest.ForCallsTo(HttpMock.RpcUrl)
-            .WithRequestBody(HttpMock.DecimalsRequest)
-            .RespondWith(HttpMock.DecimalsResponse);
-        var data = MethodSignatures.GetData + new HexBigInteger(0).HexValue[2..].PadLeft(64, '0');
-        httpTest
-            .ForCallsTo(HttpMock.RpcUrl)
-            .WithRequestBody($"{{\"jsonrpc\":\"2.0\",\"method\":\"eth_call\",\"params\":[{{\"to\":\"0x57e0433551460e85dfc5a5ddaff4db199d0f960a\",\"data\":\"{data}\"}},\"latest\"],\"id\":0}}")
-            .RespondWith(HttpMock.DealResponse);
-
+    const int start = 0;
+    const int end = 5;
+    private static MockRpcCaller caller = MockRpcCaller.InstallFullTest();
+    [Theory]
+    [MemberData(nameof(TestCases))]
+    public void FunctionHandler_ShouldReturnCorrectResponsea(int id)
+    {   
+        var factory = new ProviderFactory(caller);
+        var lambda = new LambdaFunction(factory);
         var request = new APIGatewayProxyRequest
         {
-            QueryStringParameters = new Dictionary<string, string> { { "id", "0" } }
+            QueryStringParameters = new Dictionary<string, string> { { "id", id.ToString() } }
         };
 
-        var response = LambdaFunction.FunctionHandler(request);
+        var response = lambda.FunctionHandler(request);
 
         response.StatusCode.Should().Be((int)HttpStatusCode.OK);
         response.Headers.Should().Contain(new KeyValuePair<string, string>("Content-Type", "application/json"));
+    }
+
+    public static IEnumerable<object[]> TestCases()
+    {
+        for (int i = start; i <= end; i++)
+        {
+            yield return new object[] { i };
+        }
     }
 }
