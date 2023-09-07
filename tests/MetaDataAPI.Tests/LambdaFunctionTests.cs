@@ -9,6 +9,13 @@ namespace MetaDataAPI.Tests;
 
 public class LambdaFunctionTests : SetEnvironments
 {
+    [Fact] 
+    public void FunctionHandler_DefultCtor()
+    {
+        var lambda = new LambdaFunction();
+        lambda.Should().NotBeNull();
+    }
+
     const int start = 0;
     const int end = 12;
     internal static MockRpcCaller caller = MockRpcCaller.InstallFullTest();
