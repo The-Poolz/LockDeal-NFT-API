@@ -1,5 +1,10 @@
-﻿using Flurl.Http.Testing;
+﻿using FluentAssertions;
+using Flurl.Http.Testing;
+using MetaDataAPI.Models.Response;
+using MetaDataAPI.Providers;
+using MetaDataAPI.Storage;
 using MetaDataAPI.Utils;
+using System.Linq.Expressions;
 using Xunit;
 
 namespace MetaDataAPI.Tests.Utils
@@ -69,6 +74,30 @@ namespace MetaDataAPI.Tests.Utils
 
             var result = _rpcCaller.GetMetadata(11);
             Assert.Equal("hello world", result);
+        }
+        [Fact]
+        public void TestErc20()
+        {
+            HttpTest httpTest = new();
+            httpTest.ForCallsTo(url).WithRequestBody($"*{MethodSignatures.Decimals}*")
+                .RespondWithJson(new { result = "12" });
+            httpTest.ForCallsTo(url).WithRequestBody($"*{MethodSignatures.Name}*")
+                .RespondWithJson(new { result = "0x0000111168656c6c6f20776f726c64" });
+            httpTest.ForCallsTo(url).WithRequestBody($"*{MethodSignatures.Symbol}*")
+                .RespondWithJson(new { result = "0x0000111168656c6c6f20776f726c64" });
+
+
+            var token = new Erc20Token("0x0000000000000000000000000000000000000001");
+
+            token.Should().NotBeNull();
+            token.Name.Should().Be("hello world");
+            token.Symbol.Should().Be("hello world");
+            token.Decimals.Should().Be(18);
+        }
+        [Fact]
+        public void TestThrowBasePoolInfo()
+        {
+            Assert.Throws<ArgumentNullException>(() => new BasePoolInfo(string.Empty, new ProviderFactory()));
         }
     }
 }
