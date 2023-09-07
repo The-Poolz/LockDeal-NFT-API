@@ -11,7 +11,7 @@ namespace MetaDataAPI.Utils;
 public class RpcCaller : IRpcCaller
 {
     private static readonly ContractIO contractIO = new();
-    private static readonly string rpcUrl = Environments.RpcUrl;
+    public static readonly string rpcUrl = Environments.RpcUrl;
     public RpcCaller()  {  }
     public string GetMetadata(BigInteger poolId)
     {
@@ -21,7 +21,7 @@ public class RpcCaller : IRpcCaller
         return data;
     }
 
-    internal static string GetRawData(string address, string methodSignature)
+    public static string GetRawData(string address, string methodSignature)
     {
         var readRequest = new RpcRequest(
             rpcUrl: rpcUrl,
