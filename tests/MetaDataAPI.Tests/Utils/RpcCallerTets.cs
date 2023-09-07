@@ -59,5 +59,16 @@ namespace MetaDataAPI.Tests.Utils
             var result = _rpcCaller.GetSymbol("0x0000000000000000000000000000000000000000");
             Assert.Equal("hello world", result);
         }
+        [Fact]
+        public void Test_GetMetdata()
+        {
+            Environment.SetEnvironmentVariable("LOCK_DEAL_NFT_ADDRESS", "0x0000000000000000000000000000000000000000");
+            HttpTest httpTest = new();
+            httpTest.ForCallsTo(url)
+                .RespondWithJson(new { result = "hello world" });
+
+            var result = _rpcCaller.GetMetadata(11);
+            Assert.Equal("hello world", result);
+        }
     }
 }
