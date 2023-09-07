@@ -5,7 +5,6 @@ namespace MetaDataAPI.Providers;
 
 public class BundleProvider : IProvider
 {
-    private readonly ProviderFactory providerFactory = new();
     public List<Erc721Attribute> Attributes { get; }
     public BasePoolInfo PoolInfo { get; }
     public List<IProvider> SubProviders { get; }
@@ -17,7 +16,7 @@ public class BundleProvider : IProvider
         SubProviders = new List<IProvider>();
         for (var id = PoolInfo.PoolId + 1; id <= lastSubPoolId; id++)
         {
-            var subProvider = providerFactory.FromPoolId(id);
+            var subProvider = basePoolInfo.Factory.FromPoolId(id);
             SubProviders.Add(subProvider);
             Attributes.AddRange(subProvider.Attributes.Select(attribute =>
             attribute.IncludeUnderscoreForTraitType(id)));

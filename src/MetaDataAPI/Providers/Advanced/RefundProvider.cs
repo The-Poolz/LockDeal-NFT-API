@@ -14,8 +14,8 @@ public class RefundProvider : IProvider
     public RefundProvider(BasePoolInfo basePoolInfo)
     {
         PoolInfo = basePoolInfo;
-        SubProvider = new ProviderFactory().FromPoolId(PoolInfo.PoolId + 1);
-        CollateralProvider = new ProviderFactory().FromPoolId(basePoolInfo.Params[1]);
+        SubProvider = basePoolInfo.Factory.FromPoolId(PoolInfo.PoolId + 1);
+        CollateralProvider = basePoolInfo.Factory.FromPoolId(basePoolInfo.Params[1]);
         Rate = new ConvertWei(18).WeiToEth(basePoolInfo.Params[2]);
         Attributes = new List<Erc721Attribute>
         {

@@ -12,6 +12,7 @@ public class BasePoolInfo
         {
             throw new ArgumentNullException(nameof(rawMetadata), "Invalid data.");
         }
+        Factory = providerFactory;
         var chunks = SplitHex(RemoveHexPrefix(rawMetadata));
         ProviderAddress = "0x" + chunks[1][24..];
         PoolId = BigInteger.Parse(chunks[2], NumberStyles.AllowHexSpecifier);
@@ -21,6 +22,7 @@ public class BasePoolInfo
         Params = chunks.Skip(8)
             .Select(chunk => BigInteger.Parse(chunk, NumberStyles.AllowHexSpecifier)).ToArray();     
     }
+    public ProviderFactory Factory { get; }
     public string ProviderAddress { get; }
     public BigInteger PoolId { get; }
     public BigInteger VaultId { get;  }
