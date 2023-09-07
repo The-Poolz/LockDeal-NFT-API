@@ -14,6 +14,6 @@ public static class ProviderFactory
         var name = RpcCaller.GetName(basePoolInfo.ProviderAddress);
         var objectToInstantiate = $"MetaDataAPI.Providers.{name}, MetaDataAPI";
         var objectType = Type.GetType(objectToInstantiate);
-        return Activator.CreateInstance(objectType!, new object[] { basePoolInfo }) as IProvider;
+        return Activator.CreateInstance(objectType!, args: basePoolInfo ) as IProvider;
     }
 }
