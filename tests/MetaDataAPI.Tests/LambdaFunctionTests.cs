@@ -10,7 +10,7 @@ namespace MetaDataAPI.Tests;
 public class LambdaFunctionTests : SetEnvironments
 {
     const int start = 0;
-    const int end = 6;
+    const int end = 12;
     internal static MockRpcCaller caller = MockRpcCaller.InstallFullTest();
     [Theory]
     [MemberData(nameof(TestCases))]
