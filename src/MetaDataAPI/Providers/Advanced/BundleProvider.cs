@@ -28,9 +28,9 @@ public class BundleProvider : IProvider
         var descriptionBuilder = new StringBuilder()
             .AppendLine("This NFT orchestrates a series of sub-pools to enable sophisticated asset management strategies. The following are the inner pools under its governance:");
 
-        SubProviders.Aggregate(descriptionBuilder, (sb, item) => sb.AppendLine($"- {item.PoolInfo}: {item.GetDescription()}"));
-
-        return descriptionBuilder.ToString();
+        return SubProviders.Aggregate(descriptionBuilder, (sb, item) =>
+        sb.AppendLine($"- {item.PoolInfo}: {item.GetDescription()}"))
+            !.ToString();
     }
 
 }
