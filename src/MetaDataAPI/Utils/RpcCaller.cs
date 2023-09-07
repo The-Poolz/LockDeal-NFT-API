@@ -21,7 +21,7 @@ public class RpcCaller : IRpcCaller
         return data;
     }
 
-    public static string GetRawData(string address, string methodSignature)
+    internal static string GetRawData(string address, string methodSignature)
     {
         var readRequest = new RpcRequest(
             rpcUrl: rpcUrl,
