@@ -11,4 +11,12 @@ public static class MethodSignatures
     /// Signature of 'getData(uint256)' method.
     /// </summary>
     public const string GetData = "0x0178fe3f";
+    /// <summary>
+    /// Signature of 'name()' method.
+    /// </summary> 
+    public const string Name = "0x06fdde03";
+    /// <summary>
+    /// Signature of 'symbol()' method.
+    /// </summary>
+    public const string Symbol = "0x95d89b41";
 }

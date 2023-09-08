@@ -1,36 +1,25 @@
 ﻿using System.Numerics;
-using MetaDataAPI.Storage;
-using MetaDataAPI.Models.Types;
-using MetaDataAPI.Providers.Simple;
-using MetaDataAPI.Providers.Advanced;
+using MetaDataAPI.Utils;
+using MetaDataAPI.Models.Response;
 
 namespace MetaDataAPI.Providers;
 
-public static class ProviderFactory
+public class ProviderFactory
 {
-    public static IProvider Create(string address, BigInteger poolId, byte decimals, BigInteger[] values) =>
-         Create(ProvidersAddresses[address], poolId, decimals, values);
-
-    public static IProvider Create(ProviderName name, BigInteger poolId, byte decimals, BigInteger[] values) =>
-        Providers(poolId, decimals, values)[name]();
-
-    public static Dictionary<ProviderName, Func<IProvider>> Providers(BigInteger poolId, byte decimals, BigInteger[] values) => new()
+    private readonly IRpcCaller RpcCaller;
+    public ProviderFactory(IRpcCaller? rpcCaller = null)
     {
-        { ProviderName.Deal, () => new DealProvider(decimals, values) },
-        { ProviderName.Lock, () => new LockProvider(decimals, values) },
-        { ProviderName.Timed, () => new TimedProvider(decimals, values) },
-        { ProviderName.Bundle, () => new BundleProvider(poolId, decimals, values) },
-        { ProviderName.Refund, () => new RefundProvider(poolId, decimals, values) },
-        { ProviderName.Collateral, () => new CollateralProvider(poolId, decimals, values) }
-    };
-
-    public static Dictionary<string, ProviderName> ProvidersAddresses => new()
-    {
-        { Environments.DealAddress, ProviderName.Deal },
-        { Environments.LockAddress, ProviderName.Lock },
-        { Environments.TimedAddress, ProviderName.Timed },
-        { Environments.RefundAddress, ProviderName.Refund },
-        { Environments.BundleAddress, ProviderName.Bundle },
-        { Environments.CollateralAddress, ProviderName.Collateral }
-    };
+        RpcCaller = rpcCaller ?? new RpcCaller();
+    }
+    public IProvider FromPoolId(BigInteger poolId) => FromMetdata(RpcCaller.GetMetadata(poolId));
+    public IProvider FromMetdata(string metadata) => FromPoolInfo(new BasePoolInfo(metadata,this));
+    public IProvider FromPoolInfo(BasePoolInfo basePoolInfo) => Create(basePoolInfo)!;
+    internal IProvider? Create(BasePoolInfo basePoolInfo)
+    {    
+        var name = RpcCaller.GetName(basePoolInfo.ProviderAddress);
+        var objectToInstantiate = $"MetaDataAPI.Providers.{name}, MetaDataAPI";
+        var objectType = Type.GetType(objectToInstantiate);
+        return Activator.CreateInstance(objectType!, args: basePoolInfo ) as IProvider;
+    }
+    public Erc20Token GetErc20Token(string address) => new(address, RpcCaller);
 }
