@@ -1,5 +1,4 @@
-﻿using AutoMapper.Configuration.Annotations;
-using MetaDataAPI.Utils;
+﻿using MetaDataAPI.Utils;
 using System.Numerics;
 
 namespace MetaDataAPI.Tests.Helpers

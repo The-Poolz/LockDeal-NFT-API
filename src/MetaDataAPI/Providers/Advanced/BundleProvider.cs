@@ -11,7 +11,7 @@ public class BundleProvider : IProvider
     public BundleProvider(BasePoolInfo basePoolInfo)
     {
         PoolInfo = basePoolInfo;
-        var lastSubPoolId = basePoolInfo.Params[0];
+        var lastSubPoolId = basePoolInfo.Params[1];
         Attributes = new List<Erc721Attribute>();
         SubProviders = new List<IProvider>();
         for (var id = PoolInfo.PoolId + 1; id <= lastSubPoolId; id++)
