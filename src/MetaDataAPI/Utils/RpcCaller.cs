@@ -17,7 +17,6 @@ public class RpcCaller : IRpcCaller
     {
         var param = new HexBigInteger(poolId).HexValue[2..].PadLeft(64, '0');
         var data = GetRawData(Environments.LockDealNftAddress, MethodSignatures.GetData + param);
-        Console.WriteLine($"{poolId},{data}");
         return data;
     }
 
@@ -39,7 +38,6 @@ public class RpcCaller : IRpcCaller
     public string GetName(string address)
     {
         var result = FromHexString(GetRawData(address, MethodSignatures.Name));
-        Console.WriteLine($"{address},{result}");
         return result;
     }
 

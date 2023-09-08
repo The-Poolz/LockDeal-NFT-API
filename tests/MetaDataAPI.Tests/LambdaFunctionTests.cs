@@ -18,7 +18,7 @@ public class LambdaFunctionTests : SetEnvironments
 
     const int start = 0;
     const int end = 20;
-    internal static MockRpcCaller caller = MockRpcCaller.InstallFullTest();
+    internal static MockRpcCaller caller = new ();
     [Theory]
     [MemberData(nameof(TestCases))]
     public void FunctionHandler_ShouldReturnCorrectResponsea(int id)
