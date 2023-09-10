@@ -4,7 +4,6 @@ using MetaDataAPI.Models.Response;
 using MetaDataAPI.Providers;
 using MetaDataAPI.Storage;
 using MetaDataAPI.Utils;
-using System.Linq.Expressions;
 using Xunit;
 
 namespace MetaDataAPI.Tests.Utils
