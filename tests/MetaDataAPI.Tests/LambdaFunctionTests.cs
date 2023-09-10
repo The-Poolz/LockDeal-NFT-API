@@ -4,6 +4,7 @@ using FluentAssertions;
 using MetaDataAPI.Tests.Helpers;
 using Amazon.Lambda.APIGatewayEvents;
 using MetaDataAPI.Providers;
+using MetaDataAPI.Models.Response;
 
 namespace MetaDataAPI.Tests;
 
@@ -14,6 +15,15 @@ public class LambdaFunctionTests : SetEnvironments
     {
         var lambda = new LambdaFunction();
         lambda.Should().NotBeNull();
+    }
+    [Fact]
+    public void TestBasePoolInfo_Ctor()
+    {
+        var info = new BasePoolInfo(StaticResults.MetaData[0][2..],new ProviderFactory(new MockRpcCaller()));
+        info.Should().NotBeNull();
+        info.Params.Should().NotBeNull();
+        info.VaultId.Should().NotBeNull();
+        info.Owner.Should().NotBeNull();
     }
 
     const int start = 0;
