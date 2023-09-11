@@ -6,20 +6,21 @@ namespace MetaDataAPI.Providers;
 
 public class ProviderFactory
 {
-    private readonly IRpcCaller RpcCaller;
+    private readonly IRpcCaller rpcCaller;
+
     public ProviderFactory(IRpcCaller? rpcCaller = null)
     {
-        RpcCaller = rpcCaller ?? new RpcCaller();
+        this.rpcCaller = rpcCaller ?? new RpcCaller();
     }
-    public IProvider FromPoolId(BigInteger poolId) => FromMetdata(RpcCaller.GetMetadata(poolId));
-    public IProvider FromMetdata(string metadata) => FromPoolInfo(new BasePoolInfo(metadata,this));
-    public IProvider FromPoolInfo(BasePoolInfo basePoolInfo) => Create(basePoolInfo)!;
-    internal IProvider? Create(BasePoolInfo basePoolInfo)
+
+    public Erc20Token GetErc20Token(string address) => new(address, rpcCaller);
+    public IProvider Create(BigInteger poolId) => Create(rpcCaller.GetMetadata(poolId));
+    private IProvider Create(string metadata) => Create(new BasePoolInfo(metadata,this));
+    private IProvider Create(BasePoolInfo basePoolInfo)
     {    
-        var name = RpcCaller.GetName(basePoolInfo.ProviderAddress);
+        var name = rpcCaller.GetName(basePoolInfo.ProviderAddress);
         var objectToInstantiate = $"MetaDataAPI.Providers.{name}, MetaDataAPI";
         var objectType = Type.GetType(objectToInstantiate);
-        return Activator.CreateInstance(objectType!, args: basePoolInfo ) as IProvider;
+        return (IProvider)Activator.CreateInstance(objectType!, args: basePoolInfo )!;
     }
-    public Erc20Token GetErc20Token(string address) => new(address, RpcCaller);
 }

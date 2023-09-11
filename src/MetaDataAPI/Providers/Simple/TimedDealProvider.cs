@@ -8,23 +8,24 @@ public class TimedDealProvider : IProvider
 {
     public List<Erc721Attribute> Attributes => new()
     {
-        new("LeftAmount", LeftAmount, DisplayType.Number),
-        new("StartAmount", StartAmount, DisplayType.Number),
-        new("StartTime", StartTime, DisplayType.Date),
-        new("FinishTime", FinishTime, DisplayType.Date),
+        new Erc721Attribute("LeftAmount", LeftAmount, DisplayType.Number),
+        new Erc721Attribute("StartAmount", StartAmount, DisplayType.Number),
+        new Erc721Attribute("StartTime", StartTime, DisplayType.Date),
+        new Erc721Attribute("FinishTime", FinishTime, DisplayType.Date),
     };
     public BasePoolInfo PoolInfo { get; }
     public decimal LeftAmount { get; }
     public decimal StartAmount { get; }
-    public long StartTime { get; }
-    public long FinishTime { get; }
+    public uint StartTime { get; }
+    public uint FinishTime { get; }
+
     public TimedDealProvider(BasePoolInfo basePoolInfo)
     {
         PoolInfo = basePoolInfo;
         var converter = new ConvertWei(basePoolInfo.Token.Decimals);
         LeftAmount = converter.WeiToEth(basePoolInfo.Params[0]);
-        StartTime = (long)new ConvertWei(0).WeiToEth(basePoolInfo.Params[1]);
-        FinishTime = (long)new ConvertWei(0).WeiToEth(basePoolInfo.Params[2]);
+        StartTime = (uint)new ConvertWei(0).WeiToEth(basePoolInfo.Params[1]);
+        FinishTime = (uint)new ConvertWei(0).WeiToEth(basePoolInfo.Params[2]);
         StartAmount = converter.WeiToEth(basePoolInfo.Params[3]);
     }
 
