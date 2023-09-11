@@ -11,15 +11,16 @@ public class RefundProvider : IProvider
     public IProvider SubProvider { get; }
     public IProvider CollateralProvider { get; }
     public decimal Rate { get; }
+
     public RefundProvider(BasePoolInfo basePoolInfo)
     {
         PoolInfo = basePoolInfo;
-        SubProvider = basePoolInfo.Factory.FromPoolId(PoolInfo.PoolId + 1);
-        CollateralProvider = basePoolInfo.Factory.FromPoolId(basePoolInfo.Params[1]);
+        SubProvider = basePoolInfo.Factory.Create(PoolInfo.PoolId + 1);
+        CollateralProvider = basePoolInfo.Factory.Create(basePoolInfo.Params[1]);
         Rate = new ConvertWei(18).WeiToEth(basePoolInfo.Params[2]);
         Attributes = new List<Erc721Attribute>
         {
-            new("Rate", Rate,DisplayType.Number)
+            new("Rate", Rate, DisplayType.Number)
         };
         Attributes.AddRange(CollateralProvider.Attributes);
         Attributes.AddRange(SubProvider.Attributes);
