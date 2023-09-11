@@ -22,5 +22,4 @@ public class DealProvider : IProvider
 
     public string GetDescription() =>
         $"This NFT represents immediate access to {LeftAmount} units of the specified asset {PoolInfo.Token}.";
-
 }

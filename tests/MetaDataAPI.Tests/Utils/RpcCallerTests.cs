@@ -94,7 +94,6 @@ public class RpcCallerTests : SetEnvironments
             .WithRequestBody($"*{MethodSignatures.Symbol}*")
             .RespondWithJson(new { result = "0x0000111168656c6c6f20776f726c64" });
 
-
         var result = new Erc20Token("0x0000000000000000000000000000000000000001");
 
         result.Should().NotBeNull();
