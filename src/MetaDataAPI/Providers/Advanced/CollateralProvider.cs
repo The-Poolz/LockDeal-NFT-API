@@ -9,14 +9,17 @@ public class CollateralProvider : IProvider
     public List<Erc721Attribute> Attributes { get; }
     public BasePoolInfo PoolInfo { get; }
     public IProvider[] SubProvider { get; } = new IProvider[3];
+
     public CollateralProvider(BasePoolInfo basePoolInfo)
     {
         PoolInfo = basePoolInfo;
-        var converter = new ConvertWei(basePoolInfo.Token.Decimals);
+
         for (var i = 0; i < 3; i++)
         {
-            SubProvider[i] = basePoolInfo.Factory.FromPoolId(basePoolInfo.PoolId + i + 1);
+            SubProvider[i] = basePoolInfo.Factory.Create(basePoolInfo.PoolId + i + 1);
         }
+
+        var converter = new ConvertWei(basePoolInfo.Token.Decimals);
         Attributes = new List<Erc721Attribute>
         {
             new("LeftAmount", converter.WeiToEth(basePoolInfo.Params[0]), DisplayType.Number),

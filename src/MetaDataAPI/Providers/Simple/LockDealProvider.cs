@@ -7,17 +7,20 @@ namespace MetaDataAPI.Providers;
 public class LockDealProvider : IProvider
 {
     public List<Erc721Attribute> Attributes => new()
-    { new("LeftAmount", LeftAmount, DisplayType.Number),
-        new("StartTime", StartTime, DisplayType.Date) };
+    {
+        new Erc721Attribute("LeftAmount", LeftAmount, DisplayType.Number),
+        new Erc721Attribute("StartTime", StartTime, DisplayType.Date)
+    };
     public BasePoolInfo PoolInfo { get; }
     public decimal LeftAmount { get; }
-    public long StartTime { get; }
+    public uint StartTime { get; }
+
     public LockDealProvider(BasePoolInfo basePoolInfo)
     {
         PoolInfo = basePoolInfo;
         var converter = new ConvertWei(basePoolInfo.Token.Decimals);
         LeftAmount = converter.WeiToEth(basePoolInfo.Params[0]);
-        StartTime = (long)new ConvertWei(0).WeiToEth(basePoolInfo.Params[1]);
+        StartTime = (uint)new ConvertWei(0).WeiToEth(basePoolInfo.Params[1]);
     }
 
     public string GetDescription() =>

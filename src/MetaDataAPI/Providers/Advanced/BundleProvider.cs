@@ -8,15 +8,17 @@ public class BundleProvider : IProvider
     public List<Erc721Attribute> Attributes { get; }
     public BasePoolInfo PoolInfo { get; }
     public List<IProvider> SubProviders { get; }
+
     public BundleProvider(BasePoolInfo basePoolInfo)
     {
         PoolInfo = basePoolInfo;
+
         var lastSubPoolId = basePoolInfo.Params[1];
         Attributes = new List<Erc721Attribute>();
         SubProviders = new List<IProvider>();
         for (var id = PoolInfo.PoolId + 1; id <= lastSubPoolId; id++)
         {
-            var subProvider = basePoolInfo.Factory.FromPoolId(id);
+            var subProvider = basePoolInfo.Factory.Create(id);
             SubProviders.Add(subProvider);
             Attributes.AddRange(subProvider.Attributes.Select(attribute =>
             attribute.IncludeUnderscoreForTraitType(id)));
@@ -32,5 +34,4 @@ public class BundleProvider : IProvider
         sb.AppendLine($"- {item.PoolInfo}: {item.GetDescription()}"))
             !.ToString();
     }
-
 }

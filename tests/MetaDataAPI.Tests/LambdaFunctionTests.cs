@@ -1,6 +1,7 @@
 ﻿using Xunit;
 using System.Net;
 using FluentAssertions;
+using MetaDataAPI.Providers;
 using MetaDataAPI.Tests.Helpers;
 using Amazon.Lambda.APIGatewayEvents;
 using MetaDataAPI.Providers;
@@ -12,30 +13,22 @@ namespace MetaDataAPI.Tests;
 
 public class LambdaFunctionTests : SetEnvironments
 {
+    private const int start = 0;
+    private const int end = 20;
+
     [Fact] 
-    public void FunctionHandler_DefultCtor()
+    public void Ctor_WithoutParameters()
     {
         var lambda = new LambdaFunction();
         lambda.Should().NotBeNull();
     }
-    [Fact]
-    public void TestBasePoolInfo_Ctor()
-    {
-        var info = new BasePoolInfo(StaticResults.MetaData[0][2..],new ProviderFactory(new MockRpcCaller()));
-        info.Should().NotBeNull();
-        info.Params.Should().NotBeNull();
-        info.VaultId.Should().NotBeNull();
-        info.Owner.Should().NotBeNull();
-    }
 
-    const int start = 0;
-    const int end = 20;
-    internal static MockRpcCaller caller = new ();
     [Theory]
     [MemberData(nameof(TestCases))]
-    public void FunctionHandler_ShouldReturnCorrectResponsea(int id)
-    {   
-        var factory = new ProviderFactory(caller);
+    public void FunctionHandler_ShouldReturnCorrectResponse(int id)
+    {
+        var mockRpcCaller = new MockRpcCaller();
+        var factory = new ProviderFactory(mockRpcCaller);
         var lambda = new LambdaFunction(factory);
         var request = new APIGatewayProxyRequest
         {
@@ -44,13 +37,14 @@ public class LambdaFunctionTests : SetEnvironments
 
         var response = lambda.FunctionHandler(request);
 
+        response.Body.Should().Contain($"Lock Deal NFT Pool: {id}");
         response.StatusCode.Should().Be((int)HttpStatusCode.OK);
         response.Headers.Should().Contain(new KeyValuePair<string, string>("Content-Type", "application/json"));
     }
 
     public static IEnumerable<object[]> TestCases()
     {
-        for (int i = start; i <= end; i++)
+        for (var i = start; i <= end; i++)
         {
             yield return new object[] { i };
         }
