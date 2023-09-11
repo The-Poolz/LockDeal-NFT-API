@@ -14,12 +14,8 @@ public class BasePoolInfo
     public Erc20Token Token { get;  }
     public BigInteger[] Params { get; }
 
-    public BasePoolInfo(string? rawMetadata, ProviderFactory providerFactory)
+    public BasePoolInfo(string rawMetadata, ProviderFactory providerFactory)
     {
-        if (string.IsNullOrEmpty(rawMetadata))
-        {
-            throw new ArgumentNullException(nameof(rawMetadata), "Invalid data.");
-        }
         Factory = providerFactory;
         var chunks = SplitHex(RemoveHexPrefix(rawMetadata));
         ProviderAddress = "0x" + chunks[1][24..];
