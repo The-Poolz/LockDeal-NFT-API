@@ -4,15 +4,12 @@ using FluentAssertions;
 using MetaDataAPI.Providers;
 using MetaDataAPI.Tests.Helpers;
 using Amazon.Lambda.APIGatewayEvents;
-using MetaDataAPI.Providers;
-using MetaDataAPI.Models.Response;
-using System.Collections.Generic;
-using System;
 
 namespace MetaDataAPI.Tests;
 
 public class LambdaFunctionTests : SetEnvironments
 {
+    private readonly LambdaFunction lambdaFunction = new();
     private const int start = 0;
     private const int end = 20;
 
@@ -53,13 +50,12 @@ public class LambdaFunctionTests : SetEnvironments
     [Fact]
     public void FunctionHandler_ShouldThrowInvalidOperationExceptionWhenIdIsMissing()
     {
-        var lambda = new LambdaFunction();
         var request = new APIGatewayProxyRequest
         {
             QueryStringParameters = new Dictionary<string, string>()
         };
 
-        var exception = Assert.Throws<InvalidOperationException>(() => lambda.FunctionHandler(request));
+        var exception = Assert.Throws<InvalidOperationException>(() => lambdaFunction.FunctionHandler(request));
 
         exception.Message.Should().Be("Invalid request. The 'id' parameter is missing.");
     }
@@ -67,14 +63,29 @@ public class LambdaFunctionTests : SetEnvironments
     [Fact]
     public void FunctionHandler_ShouldThrowInvalidOperationExceptionWhenIdIsInvalid()
     {
-        var lambda = new LambdaFunction();
         var request = new APIGatewayProxyRequest
         {
             QueryStringParameters = new Dictionary<string, string> { { "id", "invalid" } }
         };
 
-        var exception = Assert.Throws<InvalidOperationException>(() => lambda.FunctionHandler(request));
+        var exception = Assert.Throws<InvalidOperationException>(() => lambdaFunction.FunctionHandler(request));
 
         exception.Message.Should().Be("Invalid request. The 'id' parameter is not a valid BigInteger.");
+    }
+
+    [Fact]
+    public void FunctionHandler_ShouldThrowInvalidOperationExceptionWhenIdNotTheSameInResponse()
+    {
+        var mockRpcCaller = new MockRpcCaller();
+        var factory = new ProviderFactory(mockRpcCaller);
+        var function = new LambdaFunction(factory);
+        var request = new APIGatewayProxyRequest
+        {
+            QueryStringParameters = new Dictionary<string, string> { { "id", "123" } }
+        };
+
+        var exception = Assert.Throws<InvalidOperationException>(() => function.FunctionHandler(request));
+
+        exception.Message.Should().Be("Invalid response. Id from metadata needs to be the same as Id from request.");
     }
 }
