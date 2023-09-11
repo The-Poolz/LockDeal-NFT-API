@@ -19,7 +19,16 @@ public class LambdaFunction
     private readonly ProviderFactory providerFactory;
     public APIGatewayProxyResponse FunctionHandler(APIGatewayProxyRequest request)
     {
-        var poolId = BigInteger.Parse(request.QueryStringParameters["id"]);
+        if (!request.QueryStringParameters.TryGetValue("id", out string idParam))
+        {
+            throw new InvalidOperationException("Invalid request. The 'id' parameter is missing.");
+        }
+
+        if (!BigInteger.TryParse(idParam, out BigInteger poolId))
+        {
+            throw new InvalidOperationException("Invalid request. The 'id' parameter is not a valid BigInteger.");
+        }
+
         var provider = providerFactory.FromPoolId(poolId);
 
         return new APIGatewayProxyResponse

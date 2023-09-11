@@ -5,6 +5,8 @@ using MetaDataAPI.Tests.Helpers;
 using Amazon.Lambda.APIGatewayEvents;
 using MetaDataAPI.Providers;
 using MetaDataAPI.Models.Response;
+using System.Collections.Generic;
+using System;
 
 namespace MetaDataAPI.Tests;
 
@@ -52,5 +54,33 @@ public class LambdaFunctionTests : SetEnvironments
         {
             yield return new object[] { i };
         }
+    }
+
+    [Fact]
+    public void FunctionHandler_ShouldThrowInvalidOperationExceptionWhenIdIsMissing()
+    {
+        var lambda = new LambdaFunction();
+        var request = new APIGatewayProxyRequest
+        {
+            QueryStringParameters = new Dictionary<string, string>()
+        };
+
+        var exception = Assert.Throws<InvalidOperationException>(() => lambda.FunctionHandler(request));
+
+        exception.Message.Should().Be("Invalid request. The 'id' parameter is missing.");
+    }
+
+    [Fact]
+    public void FunctionHandler_ShouldThrowInvalidOperationExceptionWhenIdIsInvalid()
+    {
+        var lambda = new LambdaFunction();
+        var request = new APIGatewayProxyRequest
+        {
+            QueryStringParameters = new Dictionary<string, string> { { "id", "invalid" } }
+        };
+
+        var exception = Assert.Throws<InvalidOperationException>(() => lambda.FunctionHandler(request));
+
+        exception.Message.Should().Be("Invalid request. The 'id' parameter is not a valid BigInteger.");
     }
 }
