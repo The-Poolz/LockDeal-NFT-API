@@ -11,38 +11,48 @@ public class DynamoDbHelper
 {
     private readonly AmazonDynamoDBClient client;
 
+    public DynamoDbHelper()
+        : this(new AmazonDynamoDBClient())
+    { }
+
     public DynamoDbHelper(AmazonDynamoDBClient client)
     {
         this.client = client;
     }
 
-    public async Task<PutItemResponse> PutItemAsync(IProvider provider)
+    public async Task PutItemAsync(IProvider provider)
     {
         var jsonProvider = JsonConvert.SerializeObject(provider);
         var hash = StringToSha256(jsonProvider);
 
-        var item = new Dictionary<string, AttributeValue>
-        {
-            { "Hash", new AttributeValue { S = hash } },
-            { "Data", new AttributeValue { S = jsonProvider } },
-            { "InsertedTime", new AttributeValue { S = DateTimeOffset.UtcNow.ToUnixTimeSeconds().ToString() } },
-        };
+        var item = await GetItemAsync(hash);
+        if (item.Item.Count != 0) return;
 
-        var request = new PutItemRequest
+        await client.PutItemAsync(new PutItemRequest
         {
             TableName = "MetaDataCache",
-            Item = item
-        };
-
-        return await client.PutItemAsync(request);
-
-        //if (response.HttpStatusCode == System.Net.HttpStatusCode.OK)
-        //{
-        //    Console.WriteLine("Item successfully inserted.");
-        //}
+            Item = new Dictionary<string, AttributeValue>
+            {
+                { "Hash", new AttributeValue { S = hash } },
+                { "Data", new AttributeValue { S = jsonProvider } },
+                { "InsertedTime", new AttributeValue { S = DateTimeOffset.UtcNow.ToUnixTimeSeconds().ToString() } },
+            }
+        });
     }
 
-    private string StringToSha256(string str)
+    public async Task<GetItemResponse> GetItemAsync(string hash)
+    {
+        return await client.GetItemAsync(new GetItemRequest
+        {
+            TableName = "MetaDataCache",
+            Key = new Dictionary<string, AttributeValue>
+            {
+                { "Hash", new AttributeValue { S = hash } }
+            }
+        });
+    }
+
+    private static string StringToSha256(string str)
     {
         using var sha256Hash = SHA256.Create();
         var bytes = sha256Hash.ComputeHash(Encoding.UTF8.GetBytes(str));
