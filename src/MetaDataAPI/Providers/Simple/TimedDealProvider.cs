@@ -24,6 +24,7 @@ public class TimedDealProvider : Provider
         StartTime = (uint)new ConvertWei(0).WeiToEth(basePoolInfo.Params[1]);
         FinishTime = (uint)new ConvertWei(0).WeiToEth(basePoolInfo.Params[2]);
         StartAmount = converter.WeiToEth(basePoolInfo.Params[3]);
+        AddAttributes("TimedDealProvider");
     }
 
     public override string GetDescription() =>
