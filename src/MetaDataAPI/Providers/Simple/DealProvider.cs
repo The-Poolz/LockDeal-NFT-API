@@ -22,8 +22,4 @@ public class DealProvider : Provider
 
     public override string GetDescription() =>
         $"This NFT represents immediate access to {LeftAmount} units of the specified asset {PoolInfo.Token}.";
-    public override List<Erc721Attribute> GetParams() => new()
-        {
-            new Erc721Attribute("LeftAmount", LeftAmount, DisplayType.Number)
-        };
 }
