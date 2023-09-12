@@ -20,6 +20,4 @@ public class DealProvider : Provider
         {
             new Erc721Attribute("LeftAmount", LeftAmount, DisplayType.Number)
         };
-
-
 }

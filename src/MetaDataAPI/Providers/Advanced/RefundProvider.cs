@@ -28,7 +28,6 @@ public class RefundProvider : Provider
         var result = new List<Erc721Attribute>()
         {
            new("Rate", Rate, DisplayType.Number),
-
         };
         result.AddRange(CollateralProvider.Attributes);
         result.AddRange(SubProvider.Attributes);
