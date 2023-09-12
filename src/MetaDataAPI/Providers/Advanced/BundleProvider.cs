@@ -5,6 +5,14 @@ namespace MetaDataAPI.Providers;
 
 public class BundleProvider : Provider
 {
+    public List<IProvider> SubProviders { get; }
+
+    public BundleProvider(BasePoolInfo basePoolInfo) : base(basePoolInfo)
+    {
+        SubProviders = new List<IProvider>();
+        AddAttributes(nameof(BundleProvider));
+    }
+
     public override List<Erc721Attribute> GetParams()
     {
         var result = new List<Erc721Attribute>();
@@ -13,16 +21,9 @@ public class BundleProvider : Provider
             var subProvider = PoolInfo.Factory.Create(id);
             SubProviders.Add(subProvider);
             result.AddRange(subProvider.Attributes.Select(attribute =>
-            attribute.IncludeUnderscoreForTraitType(id)));
+                attribute.IncludeUnderscoreForTraitType(id)));
         }
         return result;
-    }
-    public List<IProvider> SubProviders { get; }
-
-    public BundleProvider(BasePoolInfo basePoolInfo) : base(basePoolInfo)
-    {
-        SubProviders = new List<IProvider>();
-        AddAttributes("BundleProvider");
     }
 
     public override string GetDescription()

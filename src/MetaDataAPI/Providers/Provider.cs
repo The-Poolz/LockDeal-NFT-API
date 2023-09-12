@@ -4,20 +4,20 @@ namespace MetaDataAPI.Providers;
 
 public abstract class Provider : IProvider
 {
+    public BasePoolInfo PoolInfo { get; }
+    public List<Erc721Attribute> Attributes { get; }
+
     protected Provider(BasePoolInfo basePoolInfo)
     {
         PoolInfo = basePoolInfo;
-        Attributes = new();
+        Attributes = new List<Erc721Attribute>();
     }
-    public BasePoolInfo PoolInfo { get;}
-
-    public List<Erc721Attribute> Attributes { get; }
 
     public abstract string GetDescription();
+    public abstract List<Erc721Attribute> GetParams();
     internal void AddAttributes(string name)
     {
-        Attributes.Add(new Erc721Attribute("ProviderName", name, Models.Types.DisplayType.String));
+        Attributes.Add(new Erc721Attribute("ProviderName", name));
         Attributes.AddRange(GetParams());
     }
-    public abstract List<Erc721Attribute> GetParams();
 }
