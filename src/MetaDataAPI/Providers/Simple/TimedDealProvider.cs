@@ -28,7 +28,7 @@ public class TimedDealProvider : Provider
         new Erc721Attribute("StartTime", StartTime, DisplayType.Date),
         new Erc721Attribute("FinishTime", FinishTime, DisplayType.Date),
     };
-
+    
     public override string GetDescription() =>
         $"This NFT governs a time-locked pool containing {LeftAmount}/{StartAmount} units of the asset {PoolInfo.Token}. Withdrawals are permitted in a linear fashion beginning at {TimeUtils.FromUnixTimestamp(StartTime)}, culminating in full access at {TimeUtils.FromUnixTimestamp(FinishTime)}.";
 }
