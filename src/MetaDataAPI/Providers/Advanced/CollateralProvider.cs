@@ -6,6 +6,17 @@ namespace MetaDataAPI.Providers;
 
 public class CollateralProvider : Provider
 {
+    public IProvider[] SubProvider { get; } = new IProvider[3];
+    
+    public CollateralProvider(BasePoolInfo basePoolInfo) : base(basePoolInfo)
+    {
+        for (var i = 0; i < 3; i++)
+        {
+            SubProvider[i] = basePoolInfo.Factory.Create(basePoolInfo.PoolId + i + 1);
+        }
+        AddAttributes(nameof(CollateralProvider));
+    }
+
     public override List<Erc721Attribute> GetParams()
     {
         var converter = new ConvertWei(PoolInfo.Token.Decimals);
@@ -20,18 +31,9 @@ public class CollateralProvider : Provider
         foreach (var provider in SubProvider)
         {
             result.AddRange(provider.Attributes.Select(attribute =>
-            attribute.IncludeUnderscoreForTraitType(provider.PoolInfo.PoolId)));
+                attribute.IncludeUnderscoreForTraitType(provider.PoolInfo.PoolId)));
         }
         return result;
-    }
-    public IProvider[] SubProvider { get; } = new IProvider[3];
-    public CollateralProvider(BasePoolInfo basePoolInfo) : base(basePoolInfo)
-    {
-        for (var i = 0; i < 3; i++)
-        {
-            SubProvider[i] = basePoolInfo.Factory.Create(basePoolInfo.PoolId + i + 1);
-        }
-        AddAttributes("CollateralProvider");
     }
 
     public override string GetDescription() =>
