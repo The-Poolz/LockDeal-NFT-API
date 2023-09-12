@@ -1,8 +1,9 @@
 ﻿using Xunit;
 using System.Net;
 using Amazon.Lambda.APIGatewayEvents;
+using ImageAPI.Utils;
 
-namespace ImageAPI.Test;
+namespace ImageAPI.Test.Utils;
 
 public class ResponseBuilderTests
 {
