@@ -11,7 +11,7 @@ using System.Reflection;
 
 namespace ImageAPI;
 
-public class Function
+public class LambdaFunction
 {
     public async Task<APIGatewayProxyResponse> FunctionHandler(APIGatewayProxyRequest input, ILambdaContext context)
     {
