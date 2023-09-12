@@ -3,29 +3,29 @@ using MetaDataAPI.Models.Response;
 
 namespace MetaDataAPI.Providers;
 
-public class BundleProvider : IProvider
+public class BundleProvider : Provider
 {
-    public List<Erc721Attribute> Attributes { get; }
-    public BasePoolInfo PoolInfo { get; }
-    public List<IProvider> SubProviders { get; }
-
-    public BundleProvider(BasePoolInfo basePoolInfo)
+    public override List<Erc721Attribute> GetParams()
     {
-        PoolInfo = basePoolInfo;
-
-        var lastSubPoolId = basePoolInfo.Params[1];
-        Attributes = new List<Erc721Attribute>();
-        SubProviders = new List<IProvider>();
-        for (var id = PoolInfo.PoolId + 1; id <= lastSubPoolId; id++)
+        var result = new List<Erc721Attribute>();
+        for (var id = PoolInfo.PoolId + 1; id <= PoolInfo.Params[1]; id++)
         {
-            var subProvider = basePoolInfo.Factory.Create(id);
+            var subProvider = PoolInfo.Factory.Create(id);
             SubProviders.Add(subProvider);
-            Attributes.AddRange(subProvider.Attributes.Select(attribute =>
+            result.AddRange(subProvider.Attributes.Select(attribute =>
             attribute.IncludeUnderscoreForTraitType(id)));
         }
+        return result;
+    }
+    public List<IProvider> SubProviders { get; }
+
+    public BundleProvider(BasePoolInfo basePoolInfo) : base(basePoolInfo)
+    {
+        SubProviders = new List<IProvider>();
+        AddAttributes("BundleProvider");
     }
 
-    public string GetDescription()
+    public override string GetDescription()
     {
         var descriptionBuilder = new StringBuilder()
             .AppendLine("This NFT orchestrates a series of sub-pools to enable sophisticated asset management strategies. The following are the inner pools under its governance:");

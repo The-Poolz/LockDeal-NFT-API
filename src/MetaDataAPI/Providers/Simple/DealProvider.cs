@@ -4,22 +4,22 @@ using MetaDataAPI.Models.Response;
 
 namespace MetaDataAPI.Providers;
 
-public class DealProvider : IProvider
+public class DealProvider : Provider
 {
-    public List<Erc721Attribute> Attributes => new()
-    {
-        new Erc721Attribute("LeftAmount", LeftAmount, DisplayType.Number)
-    };
-    public BasePoolInfo PoolInfo { get; }
     public decimal LeftAmount { get; }
-
-    public DealProvider(BasePoolInfo basePoolInfo)
+    public DealProvider(BasePoolInfo basePoolInfo) : base(basePoolInfo)
     {
-        PoolInfo = basePoolInfo;
         var converter = new ConvertWei(basePoolInfo.Token.Decimals);
         LeftAmount = converter.WeiToEth(basePoolInfo.Params[0]);
+        AddAttributes("DealProvider");
     }
 
-    public string GetDescription() =>
+    public override string GetDescription() =>
         $"This NFT represents immediate access to {LeftAmount} units of the specified asset {PoolInfo.Token}.";
+    public override List<Erc721Attribute> GetParams() => new()
+        {
+            new Erc721Attribute("LeftAmount", LeftAmount, DisplayType.Number)
+        };
+
+
 }
