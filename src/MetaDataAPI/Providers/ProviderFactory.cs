@@ -14,6 +14,7 @@ public class ProviderFactory
     }
 
     public Erc20Token GetErc20Token(string address) => new(address, rpcCaller);
+
     public IProvider Create(BigInteger poolId) => Create(rpcCaller.GetMetadata(poolId));
     private IProvider Create(string metadata) => Create(new BasePoolInfo(metadata,this));
     private IProvider Create(BasePoolInfo basePoolInfo)
@@ -21,6 +22,6 @@ public class ProviderFactory
         var name = rpcCaller.GetName(basePoolInfo.ProviderAddress);
         var objectToInstantiate = $"MetaDataAPI.Providers.{name}, MetaDataAPI";
         var objectType = Type.GetType(objectToInstantiate);
-        return (IProvider)Activator.CreateInstance(objectType!, args: basePoolInfo )!;
+        return (IProvider)Activator.CreateInstance(objectType!, args: basePoolInfo)!;
     }
 }
