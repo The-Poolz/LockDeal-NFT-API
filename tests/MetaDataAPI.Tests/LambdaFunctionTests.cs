@@ -95,4 +95,36 @@ public class LambdaFunctionTests : SetEnvironments
 
         result.Body.Should().Be(ErrorMessages.invalidResponseMessage);
     }
+
+    [Fact]
+    public void FunctionHandler_ShouldThrowInvalidOperationExceptionWhenPoolIdNotInRange()
+    {
+        var mockRpcCaller = new MockRpcCaller();
+        var factory = new ProviderFactory(mockRpcCaller);
+        var function = new LambdaFunction(factory, new DynamoDb(MockAmazonDynamoDB.MockClient()));
+        var request = new APIGatewayProxyRequest
+        {
+            QueryStringParameters = new Dictionary<string, string> { { "id", "9999999" } }
+        };
+
+        var result = function.FunctionHandler(request);
+
+        result.Body.Should().Be(ErrorMessages.poolIdNotInRangeMessage);
+    }
+
+    [Fact]
+    public void FunctionHandler_ShouldThrowInvalidOperationExceptionWhenFailedToCreateProvider()
+    {
+        var mockRpcCaller = new MockRpcError();
+        var factory = new ProviderFactory(mockRpcCaller);
+        var function = new LambdaFunction(factory, new DynamoDb(MockAmazonDynamoDB.MockClient()));
+        var request = new APIGatewayProxyRequest
+        {
+            QueryStringParameters = new Dictionary<string, string> { { "id", "1" } }
+        };
+
+        var result = function.FunctionHandler(request);
+
+        result.Body.Should().Be(ErrorMessages.failedToCreateProviderMessage);
+    }
 }

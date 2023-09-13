@@ -33,7 +33,7 @@ public class LambdaFunction
         try
         {
             if (!providerFactory.IsPoolIdWithinSupplyRange(poolId))
-                return ApiResponseFactory.CreateResponse(ErrorMessages.poolIdNowInRangeMessage, HttpStatusCode.UnprocessableEntity);
+                return ApiResponseFactory.CreateResponse(ErrorMessages.poolIdNotInRangeMessage, HttpStatusCode.UnprocessableEntity);
 
             provider = providerFactory.Create(poolId);
         }
