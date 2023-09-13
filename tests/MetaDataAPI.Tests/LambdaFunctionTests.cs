@@ -5,7 +5,6 @@ using MetaDataAPI.Utils;
 using MetaDataAPI.Providers;
 using MetaDataAPI.Tests.Helpers;
 using Amazon.Lambda.APIGatewayEvents;
-using Nethereum.Contracts.QueryHandlers.MultiCall;
 
 namespace MetaDataAPI.Tests;
 
