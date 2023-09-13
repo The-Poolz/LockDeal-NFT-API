@@ -27,6 +27,6 @@ internal class MockRpcError : IRpcCaller
 
     public BigInteger GetTotalSupply(string address)
     {
-        return 99;
+        throw new NotImplementedException();
     }
 }
