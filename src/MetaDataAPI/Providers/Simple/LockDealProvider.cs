@@ -1,4 +1,3 @@
-using Newtonsoft.Json;
 using MetaDataAPI.Utils;
 using MetaDataAPI.Models.Types;
 using MetaDataAPI.Models.Response;
@@ -7,10 +6,7 @@ namespace MetaDataAPI.Providers;
 
 public class LockDealProvider : Provider
 {
-    [JsonIgnore]
     public decimal LeftAmount { get; }
-
-    [JsonIgnore]
     public uint StartTime { get; }
 
     public LockDealProvider(BasePoolInfo basePoolInfo) : base(basePoolInfo)

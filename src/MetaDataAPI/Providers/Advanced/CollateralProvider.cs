@@ -1,4 +1,3 @@
-using Newtonsoft.Json;
 using MetaDataAPI.Utils;
 using MetaDataAPI.Models.Types;
 using MetaDataAPI.Models.Response;
@@ -7,7 +6,6 @@ namespace MetaDataAPI.Providers;
 
 public class CollateralProvider : Provider
 {
-    [JsonIgnore]
     public IProvider[] SubProvider { get; } = new IProvider[3];
     
     public CollateralProvider(BasePoolInfo basePoolInfo) : base(basePoolInfo)

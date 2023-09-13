@@ -30,7 +30,7 @@ public class DynamoDb
             {
                 { "Hash", new AttributeValue { S = hash } },
                 { "Data", new AttributeValue { S = jsonProvider } },
-                { "InsertedTime", new AttributeValue { S = DateTimeOffset.UtcNow.ToUnixTimeSeconds().ToString() } },
+                { "InsertedTime", new AttributeValue { N = DateTimeOffset.UtcNow.ToUnixTimeSeconds().ToString() } },
             }
         });
     }

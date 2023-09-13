@@ -42,9 +42,7 @@ public class LambdaFunction
             throw new InvalidOperationException("Invalid response. Id from metadata needs to be the same as Id from request.");
         }
 
-        Console.WriteLine(JToken.FromObject(provider));
-
-        var jsonProvider = JsonConvert.SerializeObject(provider);
+        var jsonProvider = JsonConvert.SerializeObject(provider.Attributes);
         var hash = DynamoDb.StringToSha256(jsonProvider);
 
         dynamoDb.PutItemAsync(hash, jsonProvider)

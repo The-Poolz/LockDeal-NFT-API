@@ -1,4 +1,5 @@
-﻿using MetaDataAPI.Models.Response;
+﻿using Newtonsoft.Json;
+using MetaDataAPI.Models.Response;
 
 namespace MetaDataAPI.Providers;
 

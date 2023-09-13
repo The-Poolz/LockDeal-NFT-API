@@ -1,12 +1,10 @@
 ﻿using System.Text;
-using Newtonsoft.Json;
 using MetaDataAPI.Models.Response;
 
 namespace MetaDataAPI.Providers;
 
 public class BundleProvider : Provider
 {
-    [JsonIgnore]
     public List<IProvider> SubProviders { get; }
 
     public BundleProvider(BasePoolInfo basePoolInfo) : base(basePoolInfo)

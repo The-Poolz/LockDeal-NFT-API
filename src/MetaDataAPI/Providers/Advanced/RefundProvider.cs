@@ -1,5 +1,4 @@
-﻿using Newtonsoft.Json;
-using MetaDataAPI.Utils;
+﻿using MetaDataAPI.Utils;
 using MetaDataAPI.Models.Types;
 using MetaDataAPI.Models.Response;
 
@@ -7,13 +6,8 @@ namespace MetaDataAPI.Providers;
 
 public class RefundProvider : Provider
 {
-    [JsonIgnore]
     public IProvider SubProvider { get; }
-
-    [JsonIgnore]
     public IProvider CollateralProvider { get; }
-
-    [JsonIgnore]
     public decimal Rate { get; }
 
     public RefundProvider(BasePoolInfo basePoolInfo) : base(basePoolInfo)
