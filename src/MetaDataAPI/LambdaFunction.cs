@@ -45,7 +45,7 @@ public class LambdaFunction
         return new APIGatewayProxyResponse
         {
             StatusCode = (int)HttpStatusCode.OK,
-            Body = JObject.FromObject(provider.GetErc721Metadata(dynamoDb)).ToString(),
+            Body = provider.GetJsonErc721Metadata(dynamoDb),
             Headers = new Dictionary<string, string> { { "Content-Type", "application/json" } }
         };
     }

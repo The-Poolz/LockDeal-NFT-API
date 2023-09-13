@@ -1,6 +1,6 @@
 ﻿using MetaDataAPI.Models.Response;
 using MetaDataAPI.Utils;
-using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace MetaDataAPI.Providers;
 
@@ -18,4 +18,7 @@ public interface IProvider
         var image = @$"https://nft.poolz.finance/test/image?id={hash}";
         return new Erc721Metadata(name, GetDescription(), image, Attributes);
     }
+
+    public string GetJsonErc721Metadata(DynamoDb dynamoDb) =>
+        JToken.FromObject(GetErc721Metadata(dynamoDb)).ToString();
 }
