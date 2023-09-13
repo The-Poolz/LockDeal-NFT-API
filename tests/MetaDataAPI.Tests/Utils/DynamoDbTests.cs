@@ -46,12 +46,9 @@ public class DynamoDbTests
     [Fact]
     internal void PutItemAsync_AddNewItem()
     {
-        var providerFactory = new ProviderFactory(new MockRpcCaller());
-        var dealMetadata = StaticResults.MetaData[0];
-        var provider = new DealProvider(new BasePoolInfo(dealMetadata, providerFactory));
         var client = MockAmazonDynamoDB.MockClient();
 
-        var result = new DynamoDb(client).PutItemAsync(provider).GetAwaiter();
+        var result = new DynamoDb(client).PutItemAsync("hash", "json of provider").GetAwaiter();
         result.GetResult();
 
         result.IsCompleted.Should().BeTrue();
@@ -71,7 +68,7 @@ public class DynamoDbTests
             }
         });
 
-        var result = new DynamoDb(client).PutItemAsync(provider).GetAwaiter();
+        var result = new DynamoDb(client).PutItemAsync("hash", "json of provider").GetAwaiter();
         result.GetResult();
 
         result.IsCompleted.Should().BeTrue();
