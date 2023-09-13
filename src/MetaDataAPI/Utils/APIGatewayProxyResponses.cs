@@ -3,7 +3,7 @@ using Amazon.Lambda.APIGatewayEvents;
 
 namespace MetaDataAPI.Utils;
 
-public static class APIGatewayProxyResponses
+public static class ApiGatewayProxyResponses
 {
     public static APIGatewayProxyResponse GetErrorResponse(string errorMessage)
     {
