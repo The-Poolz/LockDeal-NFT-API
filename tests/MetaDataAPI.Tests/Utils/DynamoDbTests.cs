@@ -4,6 +4,9 @@ using FluentAssertions;
 using Amazon.DynamoDBv2;
 using MetaDataAPI.Utils;
 using Amazon.DynamoDBv2.Model;
+using MetaDataAPI.Models.Response;
+using MetaDataAPI.Providers;
+using MetaDataAPI.Tests.Helpers;
 
 namespace MetaDataAPI.Tests.Utils;
 
@@ -29,5 +32,29 @@ public class DynamoDbTests
         var result = await new DynamoDb(client.Object).GetItemAsync(hash);
 
         result.Should().BeEquivalentTo(expected);
+    }
+
+    [Fact]
+    internal void PutItemAsync()
+    {
+        var providerFactory = new ProviderFactory(new MockRpcCaller());
+        var dealMetadata = StaticResults.MetaData[0];
+        var provider = new DealProvider(new BasePoolInfo(dealMetadata, providerFactory));
+        var client = new Mock<IAmazonDynamoDB>();
+        client
+            .Setup(x => x.PutItemAsync(It.IsAny<PutItemRequest>(), It.IsAny<CancellationToken>()))
+            .ReturnsAsync(new PutItemResponse());
+
+        client
+            .Setup(x => x.GetItemAsync(It.IsAny<GetItemRequest>(), It.IsAny<CancellationToken>()))
+            .ReturnsAsync(new GetItemResponse
+            {
+                Item = new Dictionary<string, AttributeValue>()
+            });
+
+        var result = new DynamoDb(client.Object).PutItemAsync(provider).GetAwaiter();
+        result.GetResult();
+
+        result.IsCompleted.Should().BeTrue();
     }
 }
