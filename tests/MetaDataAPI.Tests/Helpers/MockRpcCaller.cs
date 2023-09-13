@@ -7,9 +7,11 @@ internal class MockRpcCaller : IRpcCaller
 {
     private readonly Dictionary<BigInteger,string> metadata;
     private readonly Dictionary<string, string> name;
+    private readonly bool error;
 
-    public MockRpcCaller()
+    public MockRpcCaller(bool error = false)
     {
+        this.error = error;
         metadata = StaticResults.MetaData;
         name = StaticResults.Names;
     }
@@ -22,5 +24,5 @@ internal class MockRpcCaller : IRpcCaller
 
     public string GetSymbol(string address) => "TST";
 
-    public BigInteger GetTotalSupply(string address) => 100000;
+    public BigInteger GetTotalSupply(string address) => error ? throw new Exception() : 100000;
 }

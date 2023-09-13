@@ -115,7 +115,7 @@ public class LambdaFunctionTests : SetEnvironments
     [Fact]
     public void FunctionHandler_ShouldThrowInvalidOperationExceptionWhenFailedToCreateProvider()
     {
-        var mockRpcCaller = new MockRpcError();
+        var mockRpcCaller = new MockRpcCaller(true);
         var factory = new ProviderFactory(mockRpcCaller);
         var function = new LambdaFunction(factory, new DynamoDb(MockAmazonDynamoDB.MockClient()));
         var request = new APIGatewayProxyRequest
