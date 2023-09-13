@@ -4,6 +4,7 @@ using SixLabors.Fonts;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
 using Xunit;
+using FluentAssertions;
 
 namespace ImageAPI.Tests;
 
@@ -23,9 +24,7 @@ public class ResourcesLoaderTests
         {
             var expectedResult = Image.Load<Rgba32>(imageStream);
 
-            // Compare the dimensions of the loaded image
-            Assert.Equal(expectedResult.Width, result.Width);
-            Assert.Equal(expectedResult.Height, result.Height);
+            result.Should().BeEquivalentTo(expectedResult);
         }
     }
 
@@ -47,9 +46,7 @@ public class ResourcesLoaderTests
             var fontFamily = fontCollection.Add(fontStream);
             var expectedResult = new Font(fontFamily, expectedSize);
 
-            // Compare font family and size
-            Assert.Equal(expectedResult.Family.Name, result.Family.Name);
-            Assert.Equal(expectedSize, result.Size);
+            result.Should().BeEquivalentTo(expectedResult);
         }
     }
 }
