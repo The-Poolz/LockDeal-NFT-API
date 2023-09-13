@@ -1,7 +1,5 @@
 ﻿using System.Text;
-using Newtonsoft.Json;
 using Amazon.DynamoDBv2;
-using MetaDataAPI.Providers;
 using Amazon.DynamoDBv2.Model;
 using System.Security.Cryptography;
 
@@ -20,11 +18,8 @@ public class DynamoDb
         this.client = client;
     }
 
-    public async Task PutItemAsync(IProvider provider)
+    public async Task PutItemAsync(string hash, string jsonProvider)
     {
-        var jsonProvider = JsonConvert.SerializeObject(provider);
-        var hash = StringToSha256(jsonProvider);
-
         var item = await GetItemAsync(hash);
         if (item.Item.Count != 0) return;
 

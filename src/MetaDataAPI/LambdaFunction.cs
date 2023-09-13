@@ -5,6 +5,7 @@ using Amazon.Lambda.Core;
 using Newtonsoft.Json.Linq;
 using MetaDataAPI.Providers;
 using Amazon.Lambda.APIGatewayEvents;
+using Newtonsoft.Json;
 
 [assembly: LambdaSerializer(typeof(Amazon.Lambda.Serialization.Json.JsonSerializer))]
 
@@ -43,12 +44,15 @@ public class LambdaFunction
 
         Console.WriteLine(JToken.FromObject(provider));
 
-        dynamoDb.PutItemAsync(provider)
+        var jsonProvider = JsonConvert.SerializeObject(provider);
+        var hash = DynamoDb.StringToSha256(jsonProvider);
+
+        dynamoDb.PutItemAsync(hash, jsonProvider)
             .GetAwaiter()
             .GetResult();
 
         var response = provider.GetErc721Metadata();
-        //response.Image = 
+        response.Image += hash;
 
         return new APIGatewayProxyResponse
         {
