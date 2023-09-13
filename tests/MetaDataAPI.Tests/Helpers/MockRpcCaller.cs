@@ -21,4 +21,6 @@ internal class MockRpcCaller : IRpcCaller
     public string GetName(string address) => name[address];
 
     public string GetSymbol(string address) => "TST";
+
+    public BigInteger GetTotalSupply(string address) => 100000;
 }

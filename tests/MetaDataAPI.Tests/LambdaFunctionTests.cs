@@ -64,7 +64,7 @@ public class LambdaFunctionTests : SetEnvironments
 
         var result = new LambdaFunction().FunctionHandler(request);
 
-        result.Body.Should().Be("Invalid request. The 'id' parameter is missing.");
+        result.Body.Should().Be(ErrorMessages.missingIdMessage);
     }
 
     [Fact]
@@ -77,7 +77,7 @@ public class LambdaFunctionTests : SetEnvironments
 
         var result = new LambdaFunction().FunctionHandler(request);
 
-        result.Body.Should().Be("Invalid request. The 'id' parameter is not a valid BigInteger.");
+        result.Body.Should().Be(ErrorMessages.invalidIdMessage);
     }
 
     [Fact]
@@ -93,6 +93,6 @@ public class LambdaFunctionTests : SetEnvironments
 
         var result = function.FunctionHandler(request);
 
-        result.Body.Should().Be("Invalid response. Id from metadata needs to be the same as Id from request.");
+        result.Body.Should().Be(ErrorMessages.invalidResponseMessage);
     }
 }
