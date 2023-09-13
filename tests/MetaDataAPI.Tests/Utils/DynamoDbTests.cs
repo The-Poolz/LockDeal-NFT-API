@@ -3,7 +3,6 @@ using Xunit;
 using FluentAssertions;
 using Amazon.DynamoDBv2;
 using MetaDataAPI.Utils;
-using MetaDataAPI.Providers;
 using Amazon.DynamoDBv2.Model;
 using MetaDataAPI.Models.Response;
 using MetaDataAPI.Models.Types;
