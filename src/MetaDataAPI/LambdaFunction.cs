@@ -37,20 +37,7 @@ public class LambdaFunction
       
         var provider = providerFactory.Create(poolId);
 
-        if (poolId != provider.PoolInfo.PoolId)
-        {
-            throw new InvalidOperationException("Invalid response. Id from metadata needs to be the same as Id from request.");
-        }
-
-        var jsonProvider = JsonConvert.SerializeObject(provider.Attributes);
-        var hash = DynamoDb.StringToSha256(jsonProvider);
-
-        dynamoDb.PutItemAsync(hash, jsonProvider)
-            .GetAwaiter()
-            .GetResult();
-
-        var response = provider.GetErc721Metadata();
-        response.Image += hash;
+        var response = provider.SaveToCache(dynamoDb);
 
         return new APIGatewayProxyResponse
         {

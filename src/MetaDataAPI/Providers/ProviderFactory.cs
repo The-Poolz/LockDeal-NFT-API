@@ -14,13 +14,24 @@ public class ProviderFactory
     }
 
     public Erc20Token GetErc20Token(string address) => new(address, rpcCaller);
-    public IProvider Create(BigInteger poolId) => Create(rpcCaller.GetMetadata(poolId));
-    private IProvider Create(string metadata) => Create(new BasePoolInfo(metadata,this));
-    private IProvider Create(BasePoolInfo basePoolInfo)
+
+    public Provider Create(BigInteger poolId)
+    {
+        var provider = Create(rpcCaller.GetMetadata(poolId));
+
+        if (poolId != provider.PoolInfo.PoolId)
+        {
+            throw new InvalidOperationException("Invalid response. Id from metadata needs to be the same as Id from request.");
+        }
+
+        return provider;
+    }
+    private Provider Create(string metadata) => Create(new BasePoolInfo(metadata,this));
+    private Provider Create(BasePoolInfo basePoolInfo)
     {    
         var name = rpcCaller.GetName(basePoolInfo.ProviderAddress);
         var objectToInstantiate = $"MetaDataAPI.Providers.{name}, MetaDataAPI";
         var objectType = Type.GetType(objectToInstantiate);
-        return (IProvider)Activator.CreateInstance(objectType!, args: basePoolInfo )!;
+        return (Provider)Activator.CreateInstance(objectType!, args: basePoolInfo)!;
     }
 }
