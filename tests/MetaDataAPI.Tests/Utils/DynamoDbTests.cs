@@ -3,15 +3,24 @@ using Xunit;
 using FluentAssertions;
 using Amazon.DynamoDBv2;
 using MetaDataAPI.Utils;
+using MetaDataAPI.Providers;
 using Amazon.DynamoDBv2.Model;
 using MetaDataAPI.Models.Response;
-using MetaDataAPI.Providers;
 using MetaDataAPI.Tests.Helpers;
 
 namespace MetaDataAPI.Tests.Utils;
 
 public class DynamoDbTests
 {
+    [Fact]
+    internal void Ctor_Default()
+    {
+        Environment.SetEnvironmentVariable("AWS_REGION", "us-west-2");
+        var dynamoDb = new DynamoDb();
+
+        dynamoDb.Should().NotBeNull();
+    }
+
     [Fact]
     internal async Task GetItemAsync()
     {
@@ -35,7 +44,7 @@ public class DynamoDbTests
     }
 
     [Fact]
-    internal void PutItemAsync()
+    internal void PutItemAsync_AddNewItem()
     {
         var providerFactory = new ProviderFactory(new MockRpcCaller());
         var dealMetadata = StaticResults.MetaData[0];
@@ -50,6 +59,33 @@ public class DynamoDbTests
             .ReturnsAsync(new GetItemResponse
             {
                 Item = new Dictionary<string, AttributeValue>()
+            });
+
+        var result = new DynamoDb(client.Object).PutItemAsync(provider).GetAwaiter();
+        result.GetResult();
+
+        result.IsCompleted.Should().BeTrue();
+    }
+
+    [Fact]
+    internal void PutItemAsync_SkipAddNewItem()
+    {
+        var providerFactory = new ProviderFactory(new MockRpcCaller());
+        var dealMetadata = StaticResults.MetaData[0];
+        var provider = new DealProvider(new BasePoolInfo(dealMetadata, providerFactory));
+        var client = new Mock<IAmazonDynamoDB>();
+        client
+            .Setup(x => x.PutItemAsync(It.IsAny<PutItemRequest>(), It.IsAny<CancellationToken>()))
+            .ReturnsAsync(new PutItemResponse());
+
+        client
+            .Setup(x => x.GetItemAsync(It.IsAny<GetItemRequest>(), It.IsAny<CancellationToken>()))
+            .ReturnsAsync(new GetItemResponse
+            {
+                Item = new Dictionary<string, AttributeValue>
+                {
+                    { "Hash", new AttributeValue { S = "hash" } }
+                }
             });
 
         var result = new DynamoDb(client.Object).PutItemAsync(provider).GetAwaiter();
