@@ -38,7 +38,7 @@ public class RpcCaller : IRpcCaller
     public BigInteger GetTotalSupply(string address)
     {
         var result = GetRawData(address, MethodSignatures.TotalSupply);
-        return BigInteger.Parse(result, System.Globalization.NumberStyles.HexNumber);
+        return new HexBigInteger(result).Value;
     }
 
     private static string GetRawData(string address, string methodSignature)
