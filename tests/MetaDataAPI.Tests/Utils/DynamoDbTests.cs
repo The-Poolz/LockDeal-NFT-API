@@ -49,19 +49,9 @@ public class DynamoDbTests
         var providerFactory = new ProviderFactory(new MockRpcCaller());
         var dealMetadata = StaticResults.MetaData[0];
         var provider = new DealProvider(new BasePoolInfo(dealMetadata, providerFactory));
-        var client = new Mock<IAmazonDynamoDB>();
-        client
-            .Setup(x => x.PutItemAsync(It.IsAny<PutItemRequest>(), It.IsAny<CancellationToken>()))
-            .ReturnsAsync(new PutItemResponse());
+        var client = MockAmazonDynamoDB.MockClient();
 
-        client
-            .Setup(x => x.GetItemAsync(It.IsAny<GetItemRequest>(), It.IsAny<CancellationToken>()))
-            .ReturnsAsync(new GetItemResponse
-            {
-                Item = new Dictionary<string, AttributeValue>()
-            });
-
-        var result = new DynamoDb(client.Object).PutItemAsync(provider).GetAwaiter();
+        var result = new DynamoDb(client).PutItemAsync(provider).GetAwaiter();
         result.GetResult();
 
         result.IsCompleted.Should().BeTrue();
@@ -73,22 +63,15 @@ public class DynamoDbTests
         var providerFactory = new ProviderFactory(new MockRpcCaller());
         var dealMetadata = StaticResults.MetaData[0];
         var provider = new DealProvider(new BasePoolInfo(dealMetadata, providerFactory));
-        var client = new Mock<IAmazonDynamoDB>();
-        client
-            .Setup(x => x.PutItemAsync(It.IsAny<PutItemRequest>(), It.IsAny<CancellationToken>()))
-            .ReturnsAsync(new PutItemResponse());
-
-        client
-            .Setup(x => x.GetItemAsync(It.IsAny<GetItemRequest>(), It.IsAny<CancellationToken>()))
-            .ReturnsAsync(new GetItemResponse
+        var client = MockAmazonDynamoDB.MockClient(getItemResponse: new GetItemResponse
+        {
+            Item = new Dictionary<string, AttributeValue>
             {
-                Item = new Dictionary<string, AttributeValue>
-                {
-                    { "Hash", new AttributeValue { S = "hash" } }
-                }
-            });
+                { "Hash", new AttributeValue { S = "hash" } }
+            }
+        });
 
-        var result = new DynamoDb(client.Object).PutItemAsync(provider).GetAwaiter();
+        var result = new DynamoDb(client).PutItemAsync(provider).GetAwaiter();
         result.GetResult();
 
         result.IsCompleted.Should().BeTrue();

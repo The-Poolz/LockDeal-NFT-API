@@ -1,5 +1,6 @@
 using System.Net;
 using System.Numerics;
+using MetaDataAPI.Utils;
 using Amazon.Lambda.Core;
 using Newtonsoft.Json.Linq;
 using MetaDataAPI.Providers;
@@ -12,11 +13,13 @@ namespace MetaDataAPI;
 public class LambdaFunction
 {
     private readonly ProviderFactory providerFactory;
+    private readonly DynamoDb dynamoDb;
 
-    public LambdaFunction() : this(new ProviderFactory()) { }
-    public LambdaFunction(ProviderFactory providerFactory)
+    public LambdaFunction() : this(new ProviderFactory(), new DynamoDb()) { }
+    public LambdaFunction(ProviderFactory providerFactory, DynamoDb dynamoDb)
     {
         this.providerFactory = providerFactory;
+        this.dynamoDb = dynamoDb;
     }
 
     public APIGatewayProxyResponse FunctionHandler(APIGatewayProxyRequest request)
@@ -38,10 +41,19 @@ public class LambdaFunction
             throw new InvalidOperationException("Invalid response. Id from metadata needs to be the same as Id from request.");
         }
 
+        Console.WriteLine(JToken.FromObject(provider));
+
+        dynamoDb.PutItemAsync(provider)
+            .GetAwaiter()
+            .GetResult();
+
+        var response = provider.GetErc721Metadata();
+        //response.Image = 
+
         return new APIGatewayProxyResponse
         {
             StatusCode = (int)HttpStatusCode.OK,
-            Body = JObject.FromObject(provider.GetErc721Metadata()).ToString(),
+            Body = JObject.FromObject(response).ToString(),
             Headers = new Dictionary<string, string> { { "Content-Type", "application/json" } }
         };
     }

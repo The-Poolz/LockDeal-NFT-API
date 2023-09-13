@@ -1,4 +1,5 @@
-﻿using System.Numerics;
+﻿using Newtonsoft.Json;
+using System.Numerics;
 using System.Globalization;
 using MetaDataAPI.Providers;
 
@@ -6,12 +7,22 @@ namespace MetaDataAPI.Models.Response;
 
 public class BasePoolInfo
 {
+    [JsonIgnore]
     public ProviderFactory Factory { get; }
+
     public string ProviderAddress { get; }
+
+    [JsonIgnore]
     public BigInteger PoolId { get; }
+
+    [JsonIgnore]
     public BigInteger VaultId { get;  }
+
     public string Owner { get; }
+
     public Erc20Token Token { get;  }
+
+    [JsonIgnore]
     public BigInteger[] Params { get; }
 
     public BasePoolInfo(string rawMetadata, ProviderFactory providerFactory)

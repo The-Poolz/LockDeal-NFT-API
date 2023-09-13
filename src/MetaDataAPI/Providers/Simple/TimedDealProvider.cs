@@ -1,3 +1,4 @@
+using Newtonsoft.Json;
 using MetaDataAPI.Utils;
 using MetaDataAPI.Models.Types;
 using MetaDataAPI.Models.Response;
@@ -6,9 +7,16 @@ namespace MetaDataAPI.Providers;
 
 public class TimedDealProvider : Provider
 {
+    [JsonIgnore]
     public decimal LeftAmount { get; }
+
+    [JsonIgnore]
     public decimal StartAmount { get; }
+
+    [JsonIgnore]
     public uint StartTime { get; }
+
+    [JsonIgnore]
     public uint FinishTime { get; }
 
     public TimedDealProvider(BasePoolInfo basePoolInfo) : base(basePoolInfo)

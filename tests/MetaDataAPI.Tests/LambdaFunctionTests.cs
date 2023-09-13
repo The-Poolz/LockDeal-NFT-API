@@ -1,6 +1,7 @@
 ﻿using Xunit;
 using System.Net;
 using FluentAssertions;
+using MetaDataAPI.Utils;
 using MetaDataAPI.Providers;
 using MetaDataAPI.Tests.Helpers;
 using Amazon.Lambda.APIGatewayEvents;
@@ -9,13 +10,13 @@ namespace MetaDataAPI.Tests;
 
 public class LambdaFunctionTests : SetEnvironments
 {
-    private readonly LambdaFunction lambdaFunction = new();
     private const int start = 0;
     private const int end = 20;
 
     [Fact] 
     public void Ctor_WithoutParameters()
     {
+        Environment.SetEnvironmentVariable("AWS_REGION", "us-west-2");
         var lambda = new LambdaFunction();
         lambda.Should().NotBeNull();
     }
@@ -26,7 +27,8 @@ public class LambdaFunctionTests : SetEnvironments
     {
         var mockRpcCaller = new MockRpcCaller();
         var factory = new ProviderFactory(mockRpcCaller);
-        var lambda = new LambdaFunction(factory);
+        var dynamoDb = new DynamoDb(MockAmazonDynamoDB.MockClient());
+        var lambda = new LambdaFunction(factory, dynamoDb);
         var request = new APIGatewayProxyRequest
         {
             QueryStringParameters = new Dictionary<string, string> { { "id", id.ToString() } }
@@ -55,7 +57,7 @@ public class LambdaFunctionTests : SetEnvironments
             QueryStringParameters = new Dictionary<string, string>()
         };
 
-        var exception = Assert.Throws<InvalidOperationException>(() => lambdaFunction.FunctionHandler(request));
+        var exception = Assert.Throws<InvalidOperationException>(() => new LambdaFunction().FunctionHandler(request));
 
         exception.Message.Should().Be("Invalid request. The 'id' parameter is missing.");
     }
@@ -68,7 +70,7 @@ public class LambdaFunctionTests : SetEnvironments
             QueryStringParameters = new Dictionary<string, string> { { "id", "invalid" } }
         };
 
-        var exception = Assert.Throws<InvalidOperationException>(() => lambdaFunction.FunctionHandler(request));
+        var exception = Assert.Throws<InvalidOperationException>(() => new LambdaFunction().FunctionHandler(request));
 
         exception.Message.Should().Be("Invalid request. The 'id' parameter is not a valid BigInteger.");
     }
@@ -78,7 +80,7 @@ public class LambdaFunctionTests : SetEnvironments
     {
         var mockRpcCaller = new MockRpcCaller();
         var factory = new ProviderFactory(mockRpcCaller);
-        var function = new LambdaFunction(factory);
+        var function = new LambdaFunction(factory, new DynamoDb(MockAmazonDynamoDB.MockClient()));
         var request = new APIGatewayProxyRequest
         {
             QueryStringParameters = new Dictionary<string, string> { { "id", "123" } }
