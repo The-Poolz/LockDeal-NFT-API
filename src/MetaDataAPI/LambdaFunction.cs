@@ -34,15 +34,18 @@ public class LambdaFunction
         {
             throw new InvalidOperationException("Invalid request. The 'id' parameter is not a valid BigInteger.");
         }
-      
+
         var provider = providerFactory.Create(poolId);
 
-        var response = provider.SaveToCache(dynamoDb);
+        if (poolId != provider.PoolInfo.PoolId)
+        {
+            throw new InvalidOperationException("Invalid response. Id from metadata needs to be the same as Id from request.");
+        }
 
         return new APIGatewayProxyResponse
         {
             StatusCode = (int)HttpStatusCode.OK,
-            Body = JObject.FromObject(response).ToString(),
+            Body = JObject.FromObject(provider.GetErc721Metadata(dynamoDb)).ToString(),
             Headers = new Dictionary<string, string> { { "Content-Type", "application/json" } }
         };
     }
