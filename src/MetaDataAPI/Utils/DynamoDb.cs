@@ -1,7 +1,9 @@
 ﻿using System.Text;
+using Newtonsoft.Json;
 using Amazon.DynamoDBv2;
 using Amazon.DynamoDBv2.Model;
 using System.Security.Cryptography;
+using MetaDataAPI.Models.Response;
 
 namespace MetaDataAPI.Utils;
 
@@ -18,21 +20,32 @@ public class DynamoDb
         this.client = client;
     }
 
-    public async Task PutItemAsync(string hash, string jsonProvider)
+    public string PutItem(IEnumerable<Erc721Attribute> attributes)
     {
-        var item = await GetItemAsync(hash);
-        if (item.Item.Count != 0) return;
+        var jsonAttributes = JsonConvert.SerializeObject(attributes);
+        var hash = StringToSha256(jsonAttributes);
 
-        await client.PutItemAsync(new PutItemRequest
+        var item = GetItemAsync(hash)
+            .GetAwaiter()
+            .GetResult();
+
+        if (item.Item.Count == 0)
         {
-            TableName = "MetaDataCache",
-            Item = new Dictionary<string, AttributeValue>
+            client.PutItemAsync(new PutItemRequest
             {
-                { "Hash", new AttributeValue { S = hash } },
-                { "Data", new AttributeValue { S = jsonProvider } },
-                { "InsertedTime", new AttributeValue { N = DateTimeOffset.UtcNow.ToUnixTimeSeconds().ToString() } },
-            }
-        });
+                TableName = "MetaDataCache",
+                Item = new Dictionary<string, AttributeValue>
+                {
+                    { "Hash", new AttributeValue { S = hash } },
+                    { "Data", new AttributeValue { S = jsonAttributes } },
+                    { "InsertedTime", new AttributeValue { N = DateTimeOffset.UtcNow.ToUnixTimeSeconds().ToString() } },
+                }
+            })
+            .GetAwaiter()
+            .GetResult();
+        }
+
+        return hash;
     }
 
     public async Task<GetItemResponse> GetItemAsync(string hash)

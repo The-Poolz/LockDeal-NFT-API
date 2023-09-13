@@ -12,12 +12,7 @@ public interface IProvider
 
     public Erc721Metadata GetErc721Metadata(DynamoDb dynamoDb)
     {
-        var jsonProvider = JsonConvert.SerializeObject(Attributes);
-        var hash = DynamoDb.StringToSha256(jsonProvider);
-
-        dynamoDb.PutItemAsync(hash, jsonProvider)
-            .GetAwaiter()
-            .GetResult();
+        var hash = dynamoDb.PutItem(Attributes);
 
         var name = "Lock Deal NFT Pool: " + PoolInfo.PoolId;
         var image = @$"https://nft.poolz.finance/test/image?id={hash}";

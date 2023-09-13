@@ -6,6 +6,7 @@ using MetaDataAPI.Utils;
 using MetaDataAPI.Providers;
 using Amazon.DynamoDBv2.Model;
 using MetaDataAPI.Models.Response;
+using MetaDataAPI.Models.Types;
 using MetaDataAPI.Tests.Helpers;
 
 namespace MetaDataAPI.Tests.Utils;
@@ -46,20 +47,25 @@ public class DynamoDbTests
     [Fact]
     internal void PutItemAsync_AddNewItem()
     {
+        var attributes = new Erc721Attribute[]
+        {
+            new("trait_Type", 1, DisplayType.Number)
+        };
         var client = MockAmazonDynamoDB.MockClient();
 
-        var result = new DynamoDb(client).PutItemAsync("hash", "json of provider").GetAwaiter();
-        result.GetResult();
+        var result = new DynamoDb(client).PutItem(attributes);
 
-        result.IsCompleted.Should().BeTrue();
+        result.Should().BeEquivalentTo("000102030405060708090a0b0c0d0e0f101112131415161718191a1b1c1d1e1f");
     }
 
     [Fact]
     internal void PutItemAsync_SkipAddNewItem()
     {
-        var providerFactory = new ProviderFactory(new MockRpcCaller());
-        var dealMetadata = StaticResults.MetaData[0];
-        var provider = new DealProvider(new BasePoolInfo(dealMetadata, providerFactory));
+        var attributes = new Erc721Attribute[]
+        {
+            new("trait_Type", 1, DisplayType.Number)
+        };
+
         var client = MockAmazonDynamoDB.MockClient(getItemResponse: new GetItemResponse
         {
             Item = new Dictionary<string, AttributeValue>
@@ -68,9 +74,8 @@ public class DynamoDbTests
             }
         });
 
-        var result = new DynamoDb(client).PutItemAsync("hash", "json of provider").GetAwaiter();
-        result.GetResult();
+        var result = new DynamoDb(client).PutItem(attributes);
 
-        result.IsCompleted.Should().BeTrue();
+        result.Should().BeEquivalentTo("000102030405060708090a0b0c0d0e0f101112131415161718191a1b1c1d1e1f");
     }
 }
