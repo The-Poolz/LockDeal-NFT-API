@@ -5,6 +5,7 @@ using MetaDataAPI.Utils;
 using MetaDataAPI.Providers;
 using MetaDataAPI.Tests.Helpers;
 using Amazon.Lambda.APIGatewayEvents;
+using System.Data.Common;
 
 namespace MetaDataAPI.Tests;
 
@@ -54,77 +55,66 @@ public class LambdaFunctionTests : SetEnvironments
         }
     }
 
-    [Fact]
-    public void FunctionHandler_ShouldThrowInvalidOperationExceptionWhenIdIsMissing()
+    [Theory]
+    [MemberData(nameof(ErrorCases))]
+    public void FunctionHandler_ShouldThrowInvalidOperationException(
+            string expectedError,
+            Dictionary<string, string> queryStringParameters,
+            bool useErrorMock)
     {
-        var request = new APIGatewayProxyRequest
-        {
-            QueryStringParameters = new Dictionary<string, string>()
-        };
 
-        var result = new LambdaFunction().FunctionHandler(request);
-
-        result.Body.Should().Be(ErrorMessages.missingIdMessage);
-    }
-
-    [Fact]
-    public void FunctionHandler_ShouldThrowInvalidOperationExceptionWhenIdIsInvalid()
-    {
-        var request = new APIGatewayProxyRequest
-        {
-            QueryStringParameters = new Dictionary<string, string> { { "id", "invalid" } }
-        };
-
-        var result = new LambdaFunction().FunctionHandler(request);
-
-        result.Body.Should().Be(ErrorMessages.invalidIdMessage);
-    }
-
-    [Fact]
-    public void FunctionHandler_ShouldThrowInvalidOperationExceptionWhenIdNotTheSameInResponse()
-    {
-        var mockRpcCaller = new MockRpcCaller();
+        var mockRpcCaller = new MockRpcCaller(useErrorMock);
         var factory = new ProviderFactory(mockRpcCaller);
-        var function = new LambdaFunction(factory, new DynamoDb(MockAmazonDynamoDB.MockClient()));
-        var request = new APIGatewayProxyRequest
-        {
-            QueryStringParameters = new Dictionary<string, string> { { "id", "123" } }
-        };
+        var dynamoDb = new DynamoDb(MockAmazonDynamoDB.MockClient());
+        var lambda = new LambdaFunction(factory, dynamoDb);
 
-        var result = function.FunctionHandler(request);
+        var request = new APIGatewayProxyRequest { QueryStringParameters = queryStringParameters };
 
-        result.Body.Should().Be(ErrorMessages.invalidResponseMessage);
+        var result = lambda.FunctionHandler(request);
+
+        result.Body.Should().Be(expectedError);
     }
 
-    [Fact]
-    public void FunctionHandler_ShouldThrowInvalidOperationExceptionWhenPoolIdNotInRange()
+    public static IEnumerable<object[]> ErrorCases()
     {
-        var mockRpcCaller = new MockRpcCaller();
-        var factory = new ProviderFactory(mockRpcCaller);
-        var function = new LambdaFunction(factory, new DynamoDb(MockAmazonDynamoDB.MockClient()));
-        var request = new APIGatewayProxyRequest
+        // No id parameter
+        yield return new object[]
         {
-            QueryStringParameters = new Dictionary<string, string> { { "id", "9999999" } }
+            ErrorMessages.missingIdMessage,
+            new Dictionary<string, string>(),
+            false
         };
 
-        var result = function.FunctionHandler(request);
-
-        result.Body.Should().Be(ErrorMessages.poolIdNotInRangeMessage);
-    }
-
-    [Fact]
-    public void FunctionHandler_ShouldThrowInvalidOperationExceptionWhenFailedToCreateProvider()
-    {
-        var mockRpcCaller = new MockRpcCaller(true);
-        var factory = new ProviderFactory(mockRpcCaller);
-        var function = new LambdaFunction(factory, new DynamoDb(MockAmazonDynamoDB.MockClient()));
-        var request = new APIGatewayProxyRequest
+        // Invalid id parameter
+        yield return new object[]
         {
-            QueryStringParameters = new Dictionary<string, string> { { "id", "1" } }
+            ErrorMessages.invalidIdMessage,
+            new Dictionary<string, string> { { "id", "invalid" } },
+            false
         };
 
-        var result = function.FunctionHandler(request);
+        // Id not the same in response
+        yield return new object[]
+        {
+            ErrorMessages.invalidResponseMessage,
+            new Dictionary<string, string> { { "id", "123" } },
+            false
+        };
 
-        result.Body.Should().Be(ErrorMessages.failedToCreateProviderMessage);
+        // Pool id not in range
+        yield return new object[]
+        {
+            ErrorMessages.poolIdNotInRangeMessage,
+            new Dictionary<string, string> { { "id", "9999999" } },
+            false
+        };
+
+        // Failed to create provider
+        yield return new object[]
+        {
+            ErrorMessages.failedToCreateProviderMessage,
+            new Dictionary<string, string> { { "id", "1" } },
+            true
+        };
     }
 }
