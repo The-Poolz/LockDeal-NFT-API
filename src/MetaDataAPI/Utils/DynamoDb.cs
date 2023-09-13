@@ -7,15 +7,15 @@ using System.Security.Cryptography;
 
 namespace MetaDataAPI.Utils;
 
-public class DynamoDbHelper
+public class DynamoDb
 {
     private readonly AmazonDynamoDBClient client;
 
-    public DynamoDbHelper()
+    public DynamoDb()
         : this(new AmazonDynamoDBClient())
     { }
 
-    public DynamoDbHelper(AmazonDynamoDBClient client)
+    public DynamoDb(AmazonDynamoDBClient client)
     {
         this.client = client;
     }
