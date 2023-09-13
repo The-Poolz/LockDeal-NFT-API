@@ -9,13 +9,13 @@ namespace MetaDataAPI.Utils;
 
 public class DynamoDb
 {
-    private readonly AmazonDynamoDBClient client;
+    private readonly IAmazonDynamoDB client;
 
     public DynamoDb()
         : this(new AmazonDynamoDBClient())
     { }
 
-    public DynamoDb(AmazonDynamoDBClient client)
+    public DynamoDb(IAmazonDynamoDB client)
     {
         this.client = client;
     }

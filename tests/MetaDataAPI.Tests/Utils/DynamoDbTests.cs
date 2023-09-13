@@ -1,9 +1,9 @@
 ﻿using Moq;
 using Xunit;
+using FluentAssertions;
 using Amazon.DynamoDBv2;
 using MetaDataAPI.Utils;
 using Amazon.DynamoDBv2.Model;
-using FluentAssertions;
 
 namespace MetaDataAPI.Tests.Utils;
 
@@ -20,16 +20,11 @@ public class DynamoDbTests
                 { "Hash", new AttributeValue { S = hash } }
             }
         };
-        var client = new Mock<AmazonDynamoDBClient>();
-        client.Setup(x => x.GetItemAsync(new GetItemRequest
-        {
-            TableName = "MetaDataCache",
-            Key = new Dictionary<string, AttributeValue>
-            {
-                { "Hash", new AttributeValue { S = hash } }
-            }
-        }, default))
-        .Returns(Task.FromResult(expected));
+        var client = new Mock<IAmazonDynamoDB>();
+        client.Setup(x => x.GetItemAsync(
+                It.Is<GetItemRequest>(req => req.TableName == "MetaDataCache" && req.Key["Hash"].S == hash), 
+                It.IsAny<CancellationToken>())
+        ).ReturnsAsync(expected);
 
         var result = await new DynamoDb(client.Object).GetItemAsync(hash);
 
