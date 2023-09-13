@@ -29,13 +29,17 @@ public class LambdaFunction
         if (!BigInteger.TryParse(idParam, out var poolId))
             return ApiResponseFactory.CreateResponse(ErrorMessages.invalidIdMessage, HttpStatusCode.BadRequest);
 
-        IProvider provider;
         try
         {
             if (!providerFactory.IsPoolIdWithinSupplyRange(poolId))
                 return ApiResponseFactory.CreateResponse(ErrorMessages.poolIdNotInRangeMessage, HttpStatusCode.UnprocessableEntity);
 
-            provider = providerFactory.Create(poolId);
+            var provider = providerFactory.Create(poolId);
+
+            if (poolId != provider.PoolInfo.PoolId)
+                return ApiResponseFactory.CreateResponse(ErrorMessages.invalidResponseMessage, HttpStatusCode.Conflict);
+
+            return ApiResponseFactory.CreateResponse(provider.GetJsonErc721Metadata(dynamoDb), HttpStatusCode.OK);
         }
         catch (Exception e)
         {
@@ -43,10 +47,5 @@ public class LambdaFunction
             Console.WriteLine(e.StackTrace);
             return ApiResponseFactory.CreateResponse(ErrorMessages.failedToCreateProviderMessage, HttpStatusCode.InternalServerError);
         }
-
-        if (poolId != provider.PoolInfo.PoolId)
-            return ApiResponseFactory.CreateResponse(ErrorMessages.invalidResponseMessage, HttpStatusCode.Conflict);
-
-        return ApiResponseFactory.CreateResponse(provider.GetJsonErc721Metadata(dynamoDb), HttpStatusCode.OK);
     }
 }
