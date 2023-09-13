@@ -1,9 +1,7 @@
 using System.Net;
-using Newtonsoft.Json;
 using System.Numerics;
 using MetaDataAPI.Utils;
 using Amazon.Lambda.Core;
-using Newtonsoft.Json.Linq;
 using MetaDataAPI.Providers;
 using Amazon.Lambda.APIGatewayEvents;
 
