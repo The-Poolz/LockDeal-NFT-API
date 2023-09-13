@@ -18,6 +18,7 @@ public abstract class Provider : IProvider
     internal void AddAttributes(string name)
     {
         Attributes.Add(new Erc721Attribute("ProviderName", name));
+        Attributes.Add(new Erc721Attribute("TokenName", PoolInfo.Token.Name));
         Attributes.AddRange(GetParams());
     }
 }
