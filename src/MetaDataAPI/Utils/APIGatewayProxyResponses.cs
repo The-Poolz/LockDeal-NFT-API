@@ -1,6 +1,5 @@
-﻿using Amazon.Lambda.APIGatewayEvents;
-using MetaDataAPI.Providers;
-using System.Net;
+﻿using System.Net;
+using Amazon.Lambda.APIGatewayEvents;
 
 namespace MetaDataAPI.Utils;
 
