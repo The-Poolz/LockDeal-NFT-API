@@ -25,19 +25,19 @@ public class LambdaFunction
     {
         if (!request.QueryStringParameters.TryGetValue("id", out var idParam))
         {
-            throw new InvalidOperationException("Invalid request. The 'id' parameter is missing.");
+            return APIGatewayProxyResponses.GetErrorResponse("Invalid request. The 'id' parameter is missing.");
         }
 
         if (!BigInteger.TryParse(idParam, out var poolId))
         {
-            throw new InvalidOperationException("Invalid request. The 'id' parameter is not a valid BigInteger.");
+            return APIGatewayProxyResponses.GetErrorResponse("Invalid request. The 'id' parameter is not a valid BigInteger.");
         }
 
         var provider = providerFactory.Create(poolId);
 
         if (poolId != provider.PoolInfo.PoolId)
         {
-            throw new InvalidOperationException("Invalid response. Id from metadata needs to be the same as Id from request.");
+            return APIGatewayProxyResponses.GetErrorResponse("Invalid response. Id from metadata needs to be the same as Id from request.");
         }
 
         return new APIGatewayProxyResponse

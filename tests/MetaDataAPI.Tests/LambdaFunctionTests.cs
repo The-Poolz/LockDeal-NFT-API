@@ -5,6 +5,7 @@ using MetaDataAPI.Utils;
 using MetaDataAPI.Providers;
 using MetaDataAPI.Tests.Helpers;
 using Amazon.Lambda.APIGatewayEvents;
+using Nethereum.Contracts.QueryHandlers.MultiCall;
 
 namespace MetaDataAPI.Tests;
 
@@ -12,6 +13,11 @@ public class LambdaFunctionTests : SetEnvironments
 {
     private const int start = 0;
     private const int end = 20;
+
+    public LambdaFunctionTests()
+    {
+        Environment.SetEnvironmentVariable("AWS_REGION", "us-west-2");
+    }
 
     [Fact] 
     public void Ctor_WithoutParameters()
@@ -57,9 +63,9 @@ public class LambdaFunctionTests : SetEnvironments
             QueryStringParameters = new Dictionary<string, string>()
         };
 
-        var exception = Assert.Throws<InvalidOperationException>(() => new LambdaFunction().FunctionHandler(request));
+        var result = new LambdaFunction().FunctionHandler(request);
 
-        exception.Message.Should().Be("Invalid request. The 'id' parameter is missing.");
+        result.Body.Should().Be("Invalid request. The 'id' parameter is missing.");
     }
 
     [Fact]
@@ -70,9 +76,9 @@ public class LambdaFunctionTests : SetEnvironments
             QueryStringParameters = new Dictionary<string, string> { { "id", "invalid" } }
         };
 
-        var exception = Assert.Throws<InvalidOperationException>(() => new LambdaFunction().FunctionHandler(request));
+        var result = new LambdaFunction().FunctionHandler(request);
 
-        exception.Message.Should().Be("Invalid request. The 'id' parameter is not a valid BigInteger.");
+        result.Body.Should().Be("Invalid request. The 'id' parameter is not a valid BigInteger.");
     }
 
     [Fact]
@@ -86,8 +92,8 @@ public class LambdaFunctionTests : SetEnvironments
             QueryStringParameters = new Dictionary<string, string> { { "id", "123" } }
         };
 
-        var exception = Assert.Throws<InvalidOperationException>(() => function.FunctionHandler(request));
+        var result = function.FunctionHandler(request);
 
-        exception.Message.Should().Be("Invalid response. Id from metadata needs to be the same as Id from request.");
+        result.Body.Should().Be("Invalid response. Id from metadata needs to be the same as Id from request.");
     }
 }
