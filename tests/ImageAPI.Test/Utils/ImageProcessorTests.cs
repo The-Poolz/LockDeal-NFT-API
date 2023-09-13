@@ -2,9 +2,7 @@
 using SixLabors.Fonts;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.Processing;
-using SixLabors.ImageSharp.Drawing.Processing;
 using Xunit;
-using SixLabors.ImageSharp.Processing.Processors;
 using SixLabors.ImageSharp.PixelFormats;
 using FluentAssertions;
 
@@ -35,23 +33,11 @@ public class ImageProcessorTests
     [Fact]
     public void DrawText_ShouldDrawCorrectTextOnImage()
     {
-        // Arrange
-        string text = "abc";
-        var textOptions = imageProcessor.CreateTextOptions(50, 50, 100);
-        var brush = Brushes.Solid(Color.Blue);
-        var pen = Pens.Solid(Color.Green, 2);
+        var textOptions = imageProcessor.CreateTextOptions(50, 50, 100);;
 
-        imageProcessor.DrawText(text, textOptions, brush, pen);
-
-        /*var base64Image = imageProcessor.GetBase64ImageAsync().Result;
-        using var decodedImageStream = new MemoryStream(Convert.FromBase64String(base64Image));
-        using var decodedImage = Image.Load<Rgba32>(decodedImageStream);
-
-        decodedImage.Should().NotBeNull();
-
-        var pixelColorAtX50Y50 = decodedImage[50, 50];
-        var pixelColorAtX51Y51 = decodedImage[51, 51];
-        var pixelColorAtX52Y52 = decodedImage[53, 53];*/
+        Action drawTextResult = () => imageProcessor.DrawText("Text for test", textOptions);
+        
+        drawTextResult.Should().NotThrow();
     }
 
 
