@@ -26,7 +26,6 @@ public class LambdaFunction
             return ResponseBuilder.WrongInput();
         }
 
-        // TODO: Receive the metadata by ID.
         try
         {
             var options = imageProcessor.CreateTextOptions(400,100);
