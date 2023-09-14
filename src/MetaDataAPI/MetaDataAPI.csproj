@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
@@ -16,27 +16,6 @@
     <PackageReference Include="Amazon.Lambda.Serialization.Json" Version="2.1.1" />
     <PackageReference Include="AWSSDK.DynamoDBv2" Version="3.7.201.7" />
     <PackageReference Include="EthSmartContractIO" Version="1.0.0" />
-    <PackageReference Include="FluentAssertions" Version="6.11.0" />
     <PackageReference Include="Utils.EnvironmentManager" Version="2.0.1" />
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Update="Providers\Advanced\BundleProvider.cs">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Compile>
-    <Compile Update="Providers\Advanced\CollateralProvider.cs">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Compile>
-    <Compile Update="Providers\Advanced\RefundProvider.cs">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Compile>
-    <Compile Update="Providers\Simple\DealProvider.cs">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Compile>
-    <Compile Update="Providers\Simple\LockDealProvider.cs">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Compile>
-    <Compile Update="Providers\Simple\TimedDealProvider.cs">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Compile>
-  </ItemGroup>
+	</ItemGroup>
 </Project>
