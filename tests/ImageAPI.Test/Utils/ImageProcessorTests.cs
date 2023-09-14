@@ -32,7 +32,7 @@ public class ImageProcessorTests
     [Fact]
     public void DrawText_ShouldDrawCorrectTextOnImage()
     {
-        var textOptions = imageProcessor.CreateTextOptions(50, 50, 100);;
+        var textOptions = imageProcessor.CreateTextOptions(50, 50);
 
         var drawTextResult = () => imageProcessor.DrawText("Text for test", textOptions);
         
