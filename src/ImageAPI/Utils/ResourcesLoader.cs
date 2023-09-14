@@ -4,27 +4,29 @@ using SixLabors.ImageSharp;
 
 namespace ImageAPI.Utils;
 
-public static class ResourcesLoader
+public class ResourcesLoader
 {
-    private const string BackgroundResourceName = "ImageAPI.Resources.Sample-png-Image-for-Testing.png";
-    private const string FontResourceName = "ImageAPI.Resources.LEMONMILK-Regular.otf";
+    public const string BackgroundResourceName = "ImageAPI.Resources.Sample-png-Image-for-Testing.png";
+    public const string FontResourceName = "ImageAPI.Resources.LEMONMILK-Regular.otf";
 
-    public static Image LoadImageFromEmbeddedResources()
+    public virtual Image LoadImageFromEmbeddedResources()
     {
-        using var imageStream = Assembly.GetExecutingAssembly().GetManifestResourceStream(BackgroundResourceName);
+        using var imageStream = GetStream(BackgroundResourceName) ??
+            throw new FileNotFoundException($"Could not find the embedded resource '{BackgroundResourceName}'. Make sure the resource exists and its 'Build Action' is set to 'Embedded Resource'.");
 
-        return imageStream == null
-            ? throw new FileNotFoundException($"Could not find the embedded resource '{BackgroundResourceName}'. Make sure the resource exists and its 'Build Action' is set to 'Embedded Resource'.")
-            : Image.Load(imageStream);
+        return Image.Load(imageStream);
     }
 
-    public static Font LoadFontFromEmbeddedResources(float size = 24f)
+    public virtual Font LoadFontFromEmbeddedResources(float size = 24f)
     {
-        using var fontStream = Assembly.GetExecutingAssembly().GetManifestResourceStream(FontResourceName) ??
-                               throw new FileNotFoundException($"Could not find the embedded resource '{FontResourceName}'. Make sure the resource exists and its 'Build Action' is set to 'Embedded Resource'.");
+        using var fontStream = GetStream(FontResourceName) ??
+            throw new FileNotFoundException($"Could not find the embedded resource '{FontResourceName}'. Make sure the resource exists and its 'Build Action' is set to 'Embedded Resource'.");
 
         var fontCollection = new FontCollection();
         var fontFamily = fontCollection.Add(fontStream);
         return new Font(fontFamily, size);
     }
+
+    public virtual Stream? GetStream(string resourceName) =>
+        Assembly.GetExecutingAssembly().GetManifestResourceStream(resourceName);
 }

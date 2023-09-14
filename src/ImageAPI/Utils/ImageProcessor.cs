@@ -12,8 +12,9 @@ public class ImageProcessor
 
     public ImageProcessor()
     {
-        image = ResourcesLoader.LoadImageFromEmbeddedResources();
-        font = ResourcesLoader.LoadFontFromEmbeddedResources();
+        var resourcesLoader = new ResourcesLoader();
+        image = resourcesLoader.LoadImageFromEmbeddedResources();
+        font = resourcesLoader.LoadFontFromEmbeddedResources();
     }
 
     public virtual async Task<string> GetBase64ImageAsync()
