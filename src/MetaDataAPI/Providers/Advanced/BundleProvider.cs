@@ -28,11 +28,8 @@ public class BundleProvider : Provider
                 var subProvider = PoolInfo.Factory.Create(poolId);
                 SubProviders.Add(subProvider);
 
-                foreach (var attribute in subProvider.Attributes)
-                {
-                    var modifiedAttribute = attribute.IncludeUnderscoreForTraitType(poolId);
-                    result.Add(modifiedAttribute);
-                }
+                result.AddRange(subProvider.ProviderAttributes.Select(
+                    attribute => attribute.IncludeUnderscoreForTraitType(poolId)));
             }
             return result;
         }
