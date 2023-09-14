@@ -17,7 +17,7 @@ public class CollateralProvider : Provider
         AddAttributes(nameof(CollateralProvider));
     }
 
-    public override List<Erc721Attribute> GetParams()
+    public override List<Erc721Attribute> GetErc721Attributes()
     {
         var converter = new ConvertWei(PoolInfo.Token.Decimals);
         var result = new List<Erc721Attribute>

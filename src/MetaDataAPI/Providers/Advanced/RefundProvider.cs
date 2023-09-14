@@ -18,7 +18,7 @@ public class RefundProvider : Provider
         AddAttributes(nameof(RefundProvider));
     }
 
-    public override List<Erc721Attribute> GetParams()
+    public override List<Erc721Attribute> GetErc721Attributes()
     {
         var result = new List<Erc721Attribute>
         {

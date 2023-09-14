@@ -13,7 +13,7 @@ public class BundleProvider : Provider
         AddAttributes(nameof(BundleProvider));
     }
 
-    public override List<Erc721Attribute> GetParams()
+    public override List<Erc721Attribute> GetErc721Attributes()
     {
         var result = new List<Erc721Attribute>();
         for (var id = PoolInfo.PoolId + 1; id <= PoolInfo.Params[1]; id++)
