@@ -1,16 +1,16 @@
-﻿using ImageAPI.Utils;
+﻿using Xunit;
+using ImageAPI.Utils;
 using SixLabors.Fonts;
+using FluentAssertions;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.Processing;
-using Xunit;
 using SixLabors.ImageSharp.PixelFormats;
-using FluentAssertions;
 
 namespace ImageAPI.Test.Utils;
 
 public class ImageProcessorTests
 {
-    ImageProcessor imageProcessor = new ImageProcessor();
+    private readonly ImageProcessor imageProcessor = new();
 
     [Fact]
     public async Task GetBase64ImageAsync_ShouldReturnCorrectBase64String()
@@ -29,24 +29,22 @@ public class ImageProcessorTests
         result.Should().NotBeEquivalentTo(expectedResult);
     }
 
-
     [Fact]
     public void DrawText_ShouldDrawCorrectTextOnImage()
     {
         var textOptions = imageProcessor.CreateTextOptions(50, 50, 100);;
 
-        Action drawTextResult = () => imageProcessor.DrawText("Text for test", textOptions);
+        var drawTextResult = () => imageProcessor.DrawText("Text for test", textOptions);
         
         drawTextResult.Should().NotThrow();
     }
 
-
     [Fact]
     public void CreateTextOptions_ShouldCreateCorrectTextOptions()
     {
-        float x = 10;
-        float y = 20;
-        float wrappingLength = 200;
+        const float x = 10;
+        const float y = 20;
+        const float wrappingLength = 200;
 
         var result = imageProcessor.CreateTextOptions(x, y, wrappingLength);
 
