@@ -21,4 +21,9 @@ public static class MethodSignatures
     /// Signature of 'symbol()' method.
     /// </summary>
     public const string Symbol = "0x95d89b41";
+
+    /// <summary>
+    /// Signature of 'totalSupply()' method.
+    /// </summary>
+    public const string TotalSupply = "0x18160ddd";
 }
