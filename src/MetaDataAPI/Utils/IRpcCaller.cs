@@ -8,4 +8,5 @@ public interface IRpcCaller
     public string GetName(string address);
     public string GetSymbol(string address);
     public byte GetDecimals(string token);
+    public BigInteger GetTotalSupply(string address);
 }

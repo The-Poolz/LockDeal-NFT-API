@@ -1,6 +1,7 @@
 ﻿using System.Numerics;
 using MetaDataAPI.Utils;
 using MetaDataAPI.Models.Response;
+using MetaDataAPI.Storage;
 
 namespace MetaDataAPI.Providers;
 
@@ -12,8 +13,9 @@ public class ProviderFactory
     {
         this.rpcCaller = rpcCaller ?? new RpcCaller();
     }
-
     public Erc20Token GetErc20Token(string address) => new(address, rpcCaller);
+    public bool IsPoolIdWithinSupplyRange(BigInteger poolId) =>
+        rpcCaller.GetTotalSupply(Environments.LockDealNftAddress) > poolId;
     public IProvider Create(BigInteger poolId) => Create(rpcCaller.GetMetadata(poolId));
     private IProvider Create(string metadata) => Create(new BasePoolInfo(metadata,this));
     private IProvider Create(BasePoolInfo basePoolInfo)
@@ -21,6 +23,6 @@ public class ProviderFactory
         var name = rpcCaller.GetName(basePoolInfo.ProviderAddress);
         var objectToInstantiate = $"MetaDataAPI.Providers.{name}, MetaDataAPI";
         var objectType = Type.GetType(objectToInstantiate);
-        return (IProvider)Activator.CreateInstance(objectType!, args: basePoolInfo )!;
+        return (IProvider)Activator.CreateInstance(objectType!, args: basePoolInfo)!;
     }
 }

@@ -1,7 +1,7 @@
 using System.Net;
 using System.Numerics;
+using MetaDataAPI.Utils;
 using Amazon.Lambda.Core;
-using Newtonsoft.Json.Linq;
 using MetaDataAPI.Providers;
 using Amazon.Lambda.APIGatewayEvents;
 
@@ -12,37 +12,40 @@ namespace MetaDataAPI;
 public class LambdaFunction
 {
     private readonly ProviderFactory providerFactory;
+    private readonly DynamoDb dynamoDb;
 
-    public LambdaFunction() : this(new ProviderFactory()) { }
-    public LambdaFunction(ProviderFactory providerFactory)
+    public LambdaFunction() : this(new ProviderFactory(), new DynamoDb()) { }
+    public LambdaFunction(ProviderFactory providerFactory, DynamoDb dynamoDb)
     {
         this.providerFactory = providerFactory;
+        this.dynamoDb = dynamoDb;
     }
 
     public APIGatewayProxyResponse FunctionHandler(APIGatewayProxyRequest request)
     {
         if (!request.QueryStringParameters.TryGetValue("id", out var idParam))
-        {
-            throw new InvalidOperationException("Invalid request. The 'id' parameter is missing.");
-        }
+            return ApiResponseFactory.CreateResponse(ErrorMessages.missingIdMessage, HttpStatusCode.BadRequest);
 
         if (!BigInteger.TryParse(idParam, out var poolId))
-        {
-            throw new InvalidOperationException("Invalid request. The 'id' parameter is not a valid BigInteger.");
-        }
-      
-        var provider = providerFactory.Create(poolId);
+            return ApiResponseFactory.CreateResponse(ErrorMessages.invalidIdMessage, HttpStatusCode.BadRequest);
 
-        if (poolId != provider.PoolInfo.PoolId)
+        try
         {
-            throw new InvalidOperationException("Invalid response. Id from metadata needs to be the same as Id from request.");
-        }
+            if (!providerFactory.IsPoolIdWithinSupplyRange(poolId))
+                return ApiResponseFactory.CreateResponse(ErrorMessages.poolIdNotInRangeMessage, HttpStatusCode.UnprocessableEntity);
 
-        return new APIGatewayProxyResponse
+            var provider = providerFactory.Create(poolId);
+
+            if (poolId != provider.PoolInfo.PoolId)
+                return ApiResponseFactory.CreateResponse(ErrorMessages.invalidResponseMessage, HttpStatusCode.Conflict);
+
+            return ApiResponseFactory.CreateResponse(provider.GetJsonErc721Metadata(dynamoDb), HttpStatusCode.OK);
+        }
+        catch (Exception e)
         {
-            StatusCode = (int)HttpStatusCode.OK,
-            Body = JObject.FromObject(provider.GetErc721Metadata()).ToString(),
-            Headers = new Dictionary<string, string> { { "Content-Type", "application/json" } }
-        };
+            Console.WriteLine(e.Message);
+            Console.WriteLine(e.StackTrace);
+            return ApiResponseFactory.CreateResponse(ErrorMessages.failedToCreateProviderMessage, HttpStatusCode.InternalServerError);
+        }
     }
 }
