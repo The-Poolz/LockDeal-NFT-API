@@ -8,7 +8,16 @@ namespace ImageAPI;
 
 public class LambdaFunction
 {
-    private readonly ImageProcessor imageProcessor = new();
+    private readonly ImageProcessor imageProcessor;
+
+    public LambdaFunction()
+        : this(new ImageProcessor())
+    { }
+
+    public LambdaFunction(ImageProcessor imageProcessor)
+    {
+        this.imageProcessor = imageProcessor;
+    }
 
     public async Task<APIGatewayProxyResponse> RunAsync(APIGatewayProxyRequest input)
     {

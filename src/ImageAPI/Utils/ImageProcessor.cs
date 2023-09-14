@@ -16,7 +16,7 @@ public class ImageProcessor
         font = ResourcesLoader.LoadFontFromEmbeddedResources();
     }
 
-    public async Task<string> GetBase64ImageAsync()
+    public virtual async Task<string> GetBase64ImageAsync()
     {
         using var outputStream = new MemoryStream();
         await image.SaveAsPngAsync(outputStream);
@@ -25,7 +25,7 @@ public class ImageProcessor
         return Convert.ToBase64String(imageBytes);
     }
 
-    public void DrawText(string text, TextOptions textOptions, IBrush? brush = null, IPen? pen = null)
+    public virtual void DrawText(string text, TextOptions textOptions, IBrush? brush = null, IPen? pen = null)
     {
         brush ??= Brushes.Solid(Color.Black);
         pen ??= Pens.Solid(Color.DarkRed, 2);
@@ -33,7 +33,7 @@ public class ImageProcessor
         image.Mutate(x => x.DrawText(textOptions, text, brush, pen));
     }
 
-    public TextOptions CreateTextOptions(float x, float y, float wrappingLength = 100)
+    public virtual TextOptions CreateTextOptions(float x, float y, float wrappingLength = 100)
     {
         return new TextOptions(font)
         {
