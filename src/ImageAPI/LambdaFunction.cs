@@ -8,9 +8,18 @@ namespace ImageAPI;
 
 public class LambdaFunction
 {
-    private readonly ImageProcessor imageProcessor = new();
+    private readonly ImageProcessor imageProcessor;
 
-    public async Task<APIGatewayProxyResponse> FunctionHandler(APIGatewayProxyRequest input, ILambdaContext context)
+    public LambdaFunction()
+        : this(new ImageProcessor())
+    { }
+
+    public LambdaFunction(ImageProcessor imageProcessor)
+    {
+        this.imageProcessor = imageProcessor;
+    }
+
+    public async Task<APIGatewayProxyResponse> RunAsync(APIGatewayProxyRequest input)
     {
         if (!int.TryParse(input.QueryStringParameters["id"], out var id))
         {
@@ -30,7 +39,7 @@ public class LambdaFunction
         }
         catch (Exception e)
         {
-            context.Logger.LogLine($"Failed to process request: {e}");
+            Console.WriteLine($"Failed to process request: {e}");
             return ResponseBuilder.GeneralError();
         }
     }

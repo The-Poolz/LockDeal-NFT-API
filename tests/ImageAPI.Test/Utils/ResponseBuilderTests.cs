@@ -1,8 +1,9 @@
 ﻿using Xunit;
 using System.Net;
+using ImageAPI.Utils;
 using Amazon.Lambda.APIGatewayEvents;
 
-namespace ImageAPI.Test;
+namespace ImageAPI.Test.Utils;
 
 public class ResponseBuilderTests
 {
@@ -26,7 +27,7 @@ public class ResponseBuilderTests
     [Fact]
     public void ImageResponse()
     {
-        var base64Image = "some string";
+        const string base64Image = "some string";
         var expectedResponse = new APIGatewayProxyResponse
         {
             IsBase64Encoded = true,
