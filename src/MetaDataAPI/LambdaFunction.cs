@@ -2,6 +2,7 @@ using System.Net;
 using System.Numerics;
 using MetaDataAPI.Utils;
 using Amazon.Lambda.Core;
+using MetaDataAPI.Storage;
 using MetaDataAPI.Providers;
 using Amazon.Lambda.APIGatewayEvents;
 

@@ -1,4 +1,4 @@
-﻿namespace MetaDataAPI;
+﻿namespace MetaDataAPI.Storage;
 
 public static class ErrorMessages
 {
