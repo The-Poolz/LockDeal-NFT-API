@@ -79,7 +79,7 @@ public class LambdaFunctionTests : SetEnvironments
         // No id parameter
         yield return new object[]
         {
-            ErrorMessages.missingIdMessage,
+            ErrorMessages.MissingIdMessage,
             new Dictionary<string, string>(),
             false
         };
@@ -87,7 +87,7 @@ public class LambdaFunctionTests : SetEnvironments
         // Invalid id parameter
         yield return new object[]
         {
-            ErrorMessages.invalidIdMessage,
+            ErrorMessages.InvalidIdMessage,
             new Dictionary<string, string> { { "id", "invalid" } },
             false
         };
@@ -95,7 +95,7 @@ public class LambdaFunctionTests : SetEnvironments
         // Id not the same in response
         yield return new object[]
         {
-            ErrorMessages.invalidResponseMessage,
+            ErrorMessages.InvalidResponseMessage,
             new Dictionary<string, string> { { "id", "123" } },
             false
         };
@@ -103,7 +103,7 @@ public class LambdaFunctionTests : SetEnvironments
         // Pool id not in range
         yield return new object[]
         {
-            ErrorMessages.poolIdNotInRangeMessage,
+            ErrorMessages.PoolIdNotInRangeMessage,
             new Dictionary<string, string> { { "id", "9999999" } },
             false
         };
@@ -111,7 +111,7 @@ public class LambdaFunctionTests : SetEnvironments
         // Failed to create provider
         yield return new object[]
         {
-            ErrorMessages.failedToCreateProviderMessage,
+            ErrorMessages.FailedToCreateProviderMessage,
             new Dictionary<string, string> { { "id", "1" } },
             true
         };
