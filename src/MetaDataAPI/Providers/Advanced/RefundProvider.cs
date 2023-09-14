@@ -29,7 +29,7 @@ public class RefundProvider : Provider
         return result;
     }
 
-    public override string GetDescription()
+    public override string Description()
     {
         var mainCoinAmountCalc = new ConvertWei(18).WeiToEth(CollateralProvider.PoolInfo.Params[0]) * Rate;
         return $"This NFT encompasses {Attributes[0].Value} units of the asset {PoolInfo.Token} with an associated refund rate of {Rate}. Post rate calculation, the refundable amount in the primary asset {CollateralProvider.PoolInfo.Token} will be {mainCoinAmountCalc}.";

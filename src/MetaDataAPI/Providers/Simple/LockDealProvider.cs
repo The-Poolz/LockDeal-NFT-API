@@ -7,6 +7,8 @@ namespace MetaDataAPI.Providers;
 public class LockDealProvider : Provider
 {
     public override string ProviderName => nameof(LockDealProvider);
+    public override string Description =>
+        $"This NFT securely locks {LeftAmount} units of the asset {PoolInfo.Token}. Access to these assets will commence on the designated start time of {TimeUtils.FromUnixTimestamp(StartTime)}.";
     public override IEnumerable<Erc721Attribute> ProviderAttributes => new Erc721Attribute[]
     {
         new("LeftAmount", LeftAmount, DisplayType.Number),
@@ -21,9 +23,6 @@ public class LockDealProvider : Provider
     {
         var converter = new ConvertWei(basePoolInfo.Token.Decimals);
         LeftAmount = converter.WeiToEth(basePoolInfo.Params[0]);
-        StartTime = (uint)new ConvertWei(0).WeiToEth(basePoolInfo.Params[1]);
+        StartTime = (uint)basePoolInfo.Params[1];
     }
-
-    public override string GetDescription() =>
-        $"This NFT securely locks {LeftAmount} units of the asset {PoolInfo.Token}. Access to these assets will commence on the designated start time of {TimeUtils.FromUnixTimestamp(StartTime)}.";
 }

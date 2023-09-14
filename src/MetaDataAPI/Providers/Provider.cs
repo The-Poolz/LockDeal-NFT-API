@@ -1,29 +1,40 @@
-﻿using MetaDataAPI.Models.Response;
+﻿using MetaDataAPI.Utils;
+using Newtonsoft.Json.Linq;
+using MetaDataAPI.Models.Response;
 
 namespace MetaDataAPI.Providers;
 
-public abstract class Provider : IProvider
+public abstract class Provider
 {
     public abstract string ProviderName { get; }
+    public abstract string Description { get; }
     public abstract IEnumerable<Erc721Attribute> ProviderAttributes { get; }
     public BasePoolInfo PoolInfo { get; }
-    public List<Erc721Attribute> Attributes { get; }
 
     protected Provider(BasePoolInfo basePoolInfo)
     {
         PoolInfo = basePoolInfo;
-        Attributes = new List<Erc721Attribute>();
-        AddAttributes();
     }
 
-    public abstract string GetDescription();
-    internal void AddAttributes()
+    public IEnumerable<Erc721Attribute> GetErc721Attributes() =>
+        new List<Erc721Attribute>(ProviderAttributes)
+        {
+            ProviderNameAttribute,
+            TokenNameAttribute
+        };
+
+    public string GetJsonErc721Metadata(DynamoDb dynamoDb) =>
+        JToken.FromObject(GetErc721Metadata(dynamoDb)).ToString();
+
+    private Erc721Metadata GetErc721Metadata(DynamoDb dynamoDb)
     {
-        Attributes.Add(ProviderNameAttribute);
-        Attributes.Add(TokenNameAttribute);
-        Attributes.AddRange(ProviderAttributes);
-    }
+        var attributes = GetErc721Attributes().ToArray();
+        var hash = dynamoDb.PutItem(attributes);
 
+        var name = "Lock Deal NFT Pool: " + PoolInfo.PoolId;
+        var image = @$"https://nft.poolz.finance/test/image?id={hash}";
+        return new Erc721Metadata(name, Description, image, attributes);
+    }
     private Erc721Attribute ProviderNameAttribute => new("ProviderName", ProviderName);
     private Erc721Attribute TokenNameAttribute => new("TokenName", PoolInfo.Token.Name);
 }

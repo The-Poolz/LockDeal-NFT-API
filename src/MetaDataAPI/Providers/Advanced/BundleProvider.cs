@@ -5,34 +5,44 @@ namespace MetaDataAPI.Providers;
 
 public class BundleProvider : Provider
 {
-    public List<IProvider> SubProviders { get; }
-
-    public BundleProvider(BasePoolInfo basePoolInfo) : base(basePoolInfo)
+    public override string ProviderName => nameof(BundleProvider);
+    public override string Description
     {
-        SubProviders = new List<IProvider>();
-        AddAttributes(nameof(BundleProvider));
-    }
-
-    public override List<Erc721Attribute> GetErc721Attributes()
-    {
-        var result = new List<Erc721Attribute>();
-        for (var id = PoolInfo.PoolId + 1; id <= PoolInfo.Params[1]; id++)
+        get
         {
-            var subProvider = PoolInfo.Factory.Create(id);
-            SubProviders.Add(subProvider);
-            result.AddRange(subProvider.Attributes.Select(attribute =>
-                attribute.IncludeUnderscoreForTraitType(id)));
+            var descriptionBuilder = new StringBuilder()
+                .AppendLine("This NFT orchestrates a series of sub-pools to enable sophisticated asset management strategies. The following are the inner pools under its governance:");
+
+            return SubProviders.Aggregate(descriptionBuilder, (sb, item) =>
+                sb.AppendLine($"- {item.PoolInfo}: {item.Description}")).ToString();
         }
-        return result;
     }
 
-    public override string GetDescription()
+    public override IEnumerable<Erc721Attribute> ProviderAttributes
     {
-        var descriptionBuilder = new StringBuilder()
-            .AppendLine("This NFT orchestrates a series of sub-pools to enable sophisticated asset management strategies. The following are the inner pools under its governance:");
+        get
+        {
+            var result = new List<Erc721Attribute>();
+            for (var poolId = PoolInfo.PoolId + 1; poolId <= PoolInfo.Params[1]; poolId++)
+            {
+                var subProvider = PoolInfo.Factory.Create(poolId);
+                SubProviders.Add(subProvider);
 
-        return SubProviders.Aggregate(descriptionBuilder, (sb, item) =>
-        sb.AppendLine($"- {item.PoolInfo}: {item.GetDescription()}"))
-            !.ToString();
+                foreach (var attribute in subProvider.Attributes)
+                {
+                    var modifiedAttribute = attribute.IncludeUnderscoreForTraitType(poolId);
+                    result.Add(modifiedAttribute);
+                }
+            }
+            return result;
+        }
+    }
+
+    public List<Provider> SubProviders { get; }
+
+    public BundleProvider(BasePoolInfo basePoolInfo)
+        : base(basePoolInfo)
+    {
+        SubProviders = new List<Provider>();
     }
 }
