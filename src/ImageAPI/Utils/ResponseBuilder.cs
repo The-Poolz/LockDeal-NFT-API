@@ -1,7 +1,7 @@
 ﻿using Amazon.Lambda.APIGatewayEvents;
 using System.Net;
 
-namespace ImageAPI
+namespace ImageAPI.Utils
 {
     public static class ResponseBuilder
     {
