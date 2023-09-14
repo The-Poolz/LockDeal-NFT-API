@@ -5,6 +5,7 @@ using MetaDataAPI.Utils;
 using MetaDataAPI.Providers;
 using MetaDataAPI.Tests.Helpers;
 using Amazon.Lambda.APIGatewayEvents;
+using System.Data.Common;
 
 namespace MetaDataAPI.Tests;
 
@@ -54,45 +55,66 @@ public class LambdaFunctionTests : SetEnvironments
         }
     }
 
-    [Fact]
-    public void FunctionHandler_ShouldThrowInvalidOperationExceptionWhenIdIsMissing()
+    [Theory]
+    [MemberData(nameof(ErrorCases))]
+    public void FunctionHandler_ShouldThrowInvalidOperationException(
+            string expectedError,
+            Dictionary<string, string> queryStringParameters,
+            bool useErrorMock)
     {
-        var request = new APIGatewayProxyRequest
-        {
-            QueryStringParameters = new Dictionary<string, string>()
-        };
 
-        var result = new LambdaFunction().FunctionHandler(request);
-
-        result.Body.Should().Be("Invalid request. The 'id' parameter is missing.");
-    }
-
-    [Fact]
-    public void FunctionHandler_ShouldThrowInvalidOperationExceptionWhenIdIsInvalid()
-    {
-        var request = new APIGatewayProxyRequest
-        {
-            QueryStringParameters = new Dictionary<string, string> { { "id", "invalid" } }
-        };
-
-        var result = new LambdaFunction().FunctionHandler(request);
-
-        result.Body.Should().Be("Invalid request. The 'id' parameter is not a valid BigInteger.");
-    }
-
-    [Fact]
-    public void FunctionHandler_ShouldThrowInvalidOperationExceptionWhenIdNotTheSameInResponse()
-    {
-        var mockRpcCaller = new MockRpcCaller();
+        var mockRpcCaller = new MockRpcCaller(useErrorMock);
         var factory = new ProviderFactory(mockRpcCaller);
-        var function = new LambdaFunction(factory, new DynamoDb(MockAmazonDynamoDB.MockClient()));
-        var request = new APIGatewayProxyRequest
+        var dynamoDb = new DynamoDb(MockAmazonDynamoDB.MockClient());
+        var lambda = new LambdaFunction(factory, dynamoDb);
+
+        var request = new APIGatewayProxyRequest { QueryStringParameters = queryStringParameters };
+
+        var result = lambda.FunctionHandler(request);
+
+        result.Body.Should().Be(expectedError);
+    }
+
+    public static IEnumerable<object[]> ErrorCases()
+    {
+        // No id parameter
+        yield return new object[]
         {
-            QueryStringParameters = new Dictionary<string, string> { { "id", "123" } }
+            ErrorMessages.missingIdMessage,
+            new Dictionary<string, string>(),
+            false
         };
 
-        var result = function.FunctionHandler(request);
+        // Invalid id parameter
+        yield return new object[]
+        {
+            ErrorMessages.invalidIdMessage,
+            new Dictionary<string, string> { { "id", "invalid" } },
+            false
+        };
 
-        result.Body.Should().Be("Invalid response. Id from metadata needs to be the same as Id from request.");
+        // Id not the same in response
+        yield return new object[]
+        {
+            ErrorMessages.invalidResponseMessage,
+            new Dictionary<string, string> { { "id", "123" } },
+            false
+        };
+
+        // Pool id not in range
+        yield return new object[]
+        {
+            ErrorMessages.poolIdNotInRangeMessage,
+            new Dictionary<string, string> { { "id", "9999999" } },
+            false
+        };
+
+        // Failed to create provider
+        yield return new object[]
+        {
+            ErrorMessages.failedToCreateProviderMessage,
+            new Dictionary<string, string> { { "id", "1" } },
+            true
+        };
     }
 }

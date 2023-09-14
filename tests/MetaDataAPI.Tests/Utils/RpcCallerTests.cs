@@ -65,6 +65,19 @@ public class RpcCallerTests : SetEnvironments
     }
 
     [Fact]
+    public void GetTotalSupply_ShouldReturnExpectedTotalSupply()
+    {
+        using var httpTest = new HttpTest();
+        httpTest
+            .ForCallsTo(HttpMock.RpcUrl)
+            .RespondWithJson(new { result = "0xf" });
+
+        var result = rpcCaller.GetTotalSupply(ZeroAddress);
+
+        Assert.Equal(15, result);
+    }
+
+    [Fact]
     public void GetMetadata_ShouldReturnExpectedMetadata()
     {
         using var httpTest = new HttpTest();

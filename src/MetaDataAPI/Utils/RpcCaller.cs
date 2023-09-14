@@ -35,6 +35,12 @@ public class RpcCaller : IRpcCaller
         return FromHexString(GetRawData(address, MethodSignatures.Symbol));
     }
 
+    public BigInteger GetTotalSupply(string address)
+    {
+        var result = GetRawData(address, MethodSignatures.TotalSupply);
+        return new HexBigInteger(result).Value;
+    }
+
     private static string GetRawData(string address, string methodSignature)
     {
         var readRequest = new RpcRequest(

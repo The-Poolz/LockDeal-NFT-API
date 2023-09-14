@@ -24,27 +24,28 @@ public class LambdaFunction
     public APIGatewayProxyResponse FunctionHandler(APIGatewayProxyRequest request)
     {
         if (!request.QueryStringParameters.TryGetValue("id", out var idParam))
-        {
-            return ApiGatewayProxyResponses.GetErrorResponse("Invalid request. The 'id' parameter is missing.");
-        }
+            return ApiResponseFactory.CreateResponse(ErrorMessages.missingIdMessage, HttpStatusCode.BadRequest);
 
         if (!BigInteger.TryParse(idParam, out var poolId))
+            return ApiResponseFactory.CreateResponse(ErrorMessages.invalidIdMessage, HttpStatusCode.BadRequest);
+
+        try
         {
-            return ApiGatewayProxyResponses.GetErrorResponse("Invalid request. The 'id' parameter is not a valid BigInteger.");
+            if (!providerFactory.IsPoolIdWithinSupplyRange(poolId))
+                return ApiResponseFactory.CreateResponse(ErrorMessages.poolIdNotInRangeMessage, HttpStatusCode.UnprocessableEntity);
+
+            var provider = providerFactory.Create(poolId);
+
+            if (poolId != provider.PoolInfo.PoolId)
+                return ApiResponseFactory.CreateResponse(ErrorMessages.invalidResponseMessage, HttpStatusCode.Conflict);
+
+            return ApiResponseFactory.CreateResponse(provider.GetJsonErc721Metadata(dynamoDb), HttpStatusCode.OK);
         }
-
-        var provider = providerFactory.Create(poolId);
-
-        if (poolId != provider.PoolInfo.PoolId)
+        catch (Exception e)
         {
-            return ApiGatewayProxyResponses.GetErrorResponse("Invalid response. Id from metadata needs to be the same as Id from request.");
+            Console.WriteLine(e.Message);
+            Console.WriteLine(e.StackTrace);
+            return ApiResponseFactory.CreateResponse(ErrorMessages.failedToCreateProviderMessage, HttpStatusCode.InternalServerError);
         }
-
-        return new APIGatewayProxyResponse
-        {
-            StatusCode = (int)HttpStatusCode.OK,
-            Body = provider.GetJsonErc721Metadata(dynamoDb),
-            Headers = new Dictionary<string, string> { { "Content-Type", "application/json" } }
-        };
     }
 }
