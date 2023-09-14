@@ -58,11 +58,10 @@ public class LambdaFunctionTests : SetEnvironments
     [Theory]
     [MemberData(nameof(ErrorCases))]
     public void FunctionHandler_ShouldThrowInvalidOperationException(
-            string expectedError,
-            Dictionary<string, string> queryStringParameters,
-            bool useErrorMock)
+        string expectedError,
+        Dictionary<string, string> queryStringParameters,
+        bool useErrorMock)
     {
-
         var mockRpcCaller = new MockRpcCaller(useErrorMock);
         var factory = new ProviderFactory(mockRpcCaller);
         var dynamoDb = new DynamoDb(MockAmazonDynamoDB.MockClient());
