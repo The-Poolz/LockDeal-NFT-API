@@ -1,49 +1,31 @@
-# AWS Lambda Empty Function Project
+# ImageAPI
 
-This starter project consists of:
-* Function.cs - class file containing a class with a single function handler method
-* aws-lambda-tools-defaults.json - default argument settings for use with Visual Studio and command line deployment tools for AWS
+## Overview
+The ImageAPI Lambda function is responsible for creating an NFT image based on attributes fetched from a DynamoDB database.
+The attributes are fetched using a hash, which is the unique identifier of the NFT.
 
-You may also have a test project depending on the options selected.
+## Flow
+1. `API Invocation`: The client invokes the API by making a GET request to `https://nft.poolz.finance/test/image?id=HASH_HERE`, where `HASH_HERE` is the unique identifier for the NFT attributes.
 
-The generated function handler is a simple method accepting a string argument that returns the uppercase equivalent of the input string. Replace the body of this method, and parameters, to suit your needs. 
+2. `Input Validation`: The function first validates the provided `hash` from the query string. If it's missing or invalid, a `400 Bad Request` status code is returned.
 
-## Here are some steps to follow from Visual Studio:
+3. `DynamoDB Query`: The DynamoDb class is used to asynchronously fetch NFT attributes from the DynamoDB table named `MetaDataCache`.
+This table is queried using the hash value provided as primary key.
 
-To deploy your function to AWS Lambda, right click the project in Solution Explorer and select *Publish to AWS Lambda*.
+4. `Resource Loading`: The ResourcesLoader class loads the image and font resources required for generating the NFT image. These resources are embedded in the project.
 
-To view your deployed function open its Function View window by double-clicking the function name shown beneath the AWS Lambda node in the AWS Explorer tree.
+5. `Text Rendering`: The ImageProcessor class takes the fetched attributes and draws them on the loaded image using the loaded font.
+Drawing options are created using the `CreateTextOptions` method, which sets the origin, tab width, wrapping length, and alignment of the text.
 
-To perform testing against your deployed function use the Test Invoke tab in the opened Function View window.
+6. `Image Generation`: The ImageProcessor then generates the final NFT image in PNG format and converts it into a Base64 encoded string.
 
-To configure event sources for your deployed function, for example to have your function invoked when an object is created in an Amazon S3 bucket, use the Event Sources tab in the opened Function View window.
+7. `API Response`: Finally, a `200 OK` status code is returned, with the generated Base64 encoded string in the body. In the event of any error, a `500 Internal Server Error` status code is returned.
 
-To update the runtime configuration of your deployed function use the Configuration tab in the opened Function View window.
+## Exception Handling
+- 400 Bad Request: Returned if the `hash` parameter in the query string is missing or invalid.
 
-To view execution logs of invocations of your function use the Logs tab in the opened Function View window.
+- 500 Internal Server Error: Returned if any exception occurs while processing the request, e.g., failing to fetch data from DynamoDB, issues during image rendering, etc.
 
-## Here are some steps to follow to get started from the command line:
+## API URL
 
-Once you have edited your template and code you can deploy your application using the [Amazon.Lambda.Tools Global Tool](https://github.com/aws/aws-extensions-for-dotnet-cli#aws-lambda-amazonlambdatools) from the command line.
-
-Install Amazon.Lambda.Tools Global Tools if not already installed.
-```
-    dotnet tool install -g Amazon.Lambda.Tools
-```
-
-If already installed check if new version is available.
-```
-    dotnet tool update -g Amazon.Lambda.Tools
-```
-
-Execute unit tests
-```
-    cd "ImageAPI/test/ImageAPI.Tests"
-    dotnet test
-```
-
-Deploy function to AWS Lambda
-```
-    cd "ImageAPI/src/ImageAPI"
-    dotnet lambda deploy-function
-```
+- https://nft.poolz.finance/test/image?id=HASH_HERE
