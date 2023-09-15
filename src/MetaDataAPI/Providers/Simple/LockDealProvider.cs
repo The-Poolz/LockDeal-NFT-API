@@ -9,10 +9,11 @@ public class LockDealProvider : Provider
     public override string ProviderName => nameof(LockDealProvider);
     public override string Description =>
         $"This NFT securely locks {LeftAmount} units of the asset {PoolInfo.Token}. Access to these assets will commence on the designated start time of {TimeUtils.FromUnixTimestamp(StartTime)}.";
-    public override IEnumerable<Erc721Attribute> ProviderAttributes => new Erc721Attribute[]
+    public override IEnumerable<Erc721Attribute> ProviderAttributes => new[]
     {
-        new("LeftAmount", LeftAmount, DisplayType.Number),
-        new("StartTime", StartTime, DisplayType.Date)
+        new Erc721Attribute("LeftAmount", LeftAmount, DisplayType.Number),
+        new Erc721Attribute("StartTime", StartTime, DisplayType.Date),
+        new Erc721Attribute("VaultId", PoolInfo.VaultId, DisplayType.Number)
     };
 
     public decimal LeftAmount { get; }

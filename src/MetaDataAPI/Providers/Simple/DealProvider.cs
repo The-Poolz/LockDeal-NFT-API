@@ -9,9 +9,10 @@ public class DealProvider : Provider
     public override string ProviderName => nameof(DealProvider);
     public override string Description =>
         $"This NFT represents immediate access to {LeftAmount} units of the specified asset {PoolInfo.Token}.";
-    public override IEnumerable<Erc721Attribute> ProviderAttributes => new Erc721Attribute[]
+    public override IEnumerable<Erc721Attribute> ProviderAttributes => new[]
     {
-        new("LeftAmount", LeftAmount, DisplayType.Number)
+        new Erc721Attribute("LeftAmount", LeftAmount, DisplayType.Number),
+        new Erc721Attribute("VaultId", PoolInfo.VaultId, DisplayType.Number)
     };
 
     public decimal LeftAmount { get; }
