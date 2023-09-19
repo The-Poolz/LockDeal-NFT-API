@@ -75,4 +75,3 @@ public class DealProviderTests
         leftAmount.Should().Be(50);
     }
 }
-
