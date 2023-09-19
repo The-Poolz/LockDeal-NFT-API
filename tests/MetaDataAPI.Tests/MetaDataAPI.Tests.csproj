@@ -29,4 +29,8 @@
     <ProjectReference Include="..\..\src\MetaDataAPI\MetaDataAPI.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Providers\Advanced\" />
+  </ItemGroup>
+
 </Project>
