@@ -22,13 +22,21 @@ public class BundleProvider : Provider
     {
         get
         {
+            var isAddedVaultId = false;
             var result = new List<Erc721Attribute>();
             for (var poolId = PoolInfo.PoolId + 1; poolId <= PoolInfo.Params[1]; poolId++)
             {
                 var subProvider = PoolInfo.Factory.Create(poolId);
                 SubProviders.Add(subProvider);
 
-                result.AddRange(subProvider.ProviderAttributes.Select(
+                if (!isAddedVaultId)
+                {
+                    result.AddRange(subProvider.ProviderAttributes.Where(x => x.TraitType.Contains("VaultId")));
+
+                    isAddedVaultId = true;
+                }
+
+                result.AddRange(subProvider.ProviderAttributes.Where(x => !x.TraitType.Contains("VaultId")).Select(
                     attribute => attribute.IncludeUnderscoreForTraitType(poolId)));
             }
             return result;

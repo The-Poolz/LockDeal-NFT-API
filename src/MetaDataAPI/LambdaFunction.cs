@@ -5,6 +5,7 @@ using Amazon.Lambda.Core;
 using MetaDataAPI.Storage;
 using MetaDataAPI.Providers;
 using Amazon.Lambda.APIGatewayEvents;
+using Newtonsoft.Json.Linq;
 
 [assembly: LambdaSerializer(typeof(Amazon.Lambda.Serialization.Json.JsonSerializer))]
 
@@ -36,6 +37,8 @@ public class LambdaFunction
                 return ApiResponseFactory.CreateResponse(ErrorMessages.PoolIdNotInRangeMessage, HttpStatusCode.UnprocessableEntity);
 
             var provider = providerFactory.Create(poolId);
+
+            Console.WriteLine(provider.GetJsonErc721Metadata(dynamoDb));
 
             if (poolId != provider.PoolInfo.PoolId)
                 return ApiResponseFactory.CreateResponse(ErrorMessages.InvalidResponseMessage, HttpStatusCode.Conflict);
