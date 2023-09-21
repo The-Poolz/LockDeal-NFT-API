@@ -31,11 +31,20 @@ public class CollateralProvider : Provider
                 new("Token", SubProvider[1].PoolInfo.Token.Address),
             };
 
-            foreach (var provider in SubProvider)
+            for (var index = 0; index < SubProvider.Length; index++)
             {
+                var provider = SubProvider[index];
+                if (index == 1)
+                {
+                    result.AddRange(provider.GetErc721Attributes()
+                        .Where(x => !x.TraitType.Contains("TokenName"))
+                        .Select(attribute => attribute.IncludeUnderscoreForTraitType(provider.PoolInfo.PoolId)));
+                    continue;
+                }
                 result.AddRange(provider.GetErc721Attributes().Select(attribute =>
                     attribute.IncludeUnderscoreForTraitType(provider.PoolInfo.PoolId)));
             }
+
             return result;
         }
     }
