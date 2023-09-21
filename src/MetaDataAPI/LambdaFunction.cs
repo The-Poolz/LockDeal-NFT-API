@@ -38,8 +38,6 @@ public class LambdaFunction
 
             var provider = providerFactory.Create(poolId);
 
-            Console.WriteLine(provider.GetJsonErc721Metadata(dynamoDb));
-
             if (poolId != provider.PoolInfo.PoolId)
                 return ApiResponseFactory.CreateResponse(ErrorMessages.InvalidResponseMessage, HttpStatusCode.Conflict);
 
