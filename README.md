@@ -1,6 +1,7 @@
 # LockDeal-NFT-API
 
 The LockDeal-NFT-API repository contains two C# AWS Lambda functions designed to fetch and render NFT (Non-Fungible Token) images via an API.
+This is to use with [LockDeal-NFT](https://github.com/The-Poolz/LockDealNFT)
 
 ## Overview
 
