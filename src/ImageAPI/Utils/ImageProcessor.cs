@@ -41,7 +41,7 @@ public class ImageProcessor
             Origin = new PointF(x, y),
             TabWidth = 4,
             WrappingLength = wrappingLength,
-            HorizontalAlignment = HorizontalAlignment.Right
+            HorizontalAlignment = HorizontalAlignment.Left
         };
     }
 }
