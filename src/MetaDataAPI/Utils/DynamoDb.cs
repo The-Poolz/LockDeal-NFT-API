@@ -66,18 +66,6 @@ public class DynamoDb
         return hash;
     }
 
-    public async Task<GetItemResponse> GetItemAsync(string hash)
-    {
-        return await client.GetItemAsync(new GetItemRequest
-        {
-            TableName = TableName,
-            Key = new Dictionary<string, AttributeValue>
-            {
-                { "Hash", new AttributeValue { S = hash } }
-            }
-        });
-    }
-
     public static string StringToSha256(string str)
     {
         using var sha256Hash = SHA256.Create();
