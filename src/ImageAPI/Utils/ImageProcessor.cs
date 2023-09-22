@@ -1,4 +1,8 @@
-﻿using SixLabors.Fonts;
+﻿using System.Globalization;
+using MetaDataAPI.Models.Response;
+using MetaDataAPI.Models.Types;
+using MetaDataAPI.Utils;
+using SixLabors.Fonts;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.Processing;
 using SixLabors.ImageSharp.Drawing.Processing;
@@ -24,6 +28,23 @@ public class ImageProcessor
         var imageBytes = outputStream.ToArray();
 
         return Convert.ToBase64String(imageBytes);
+    }
+
+    public virtual void DrawText(Erc721Attribute attribute, TextOptions textOptions, IBrush? brush = null, IPen? pen = null)
+    {
+        string text;
+        if (attribute.DisplayType == null)
+        {
+            text = attribute.Value.ToString()!;
+        }
+        else
+        {
+            var displayType = Enum.Parse<DisplayType>(attribute.DisplayType);
+
+            text = displayType == DisplayType.Date ? TimeUtils.FromUnixTimestamp((long)attribute.Value).ToString(CultureInfo.InvariantCulture) : attribute.Value.ToString()!;
+        }
+
+        DrawText(text, textOptions, brush, pen);
     }
 
     public virtual void DrawText(string text, TextOptions textOptions, IBrush? brush = null, IPen? pen = null)

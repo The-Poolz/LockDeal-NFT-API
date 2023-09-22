@@ -53,7 +53,7 @@ public class LambdaFunction
             {
                 var options = imageProcessor.CreateTextOptions(400, y);
 
-                imageProcessor.DrawText(attribute.Value.ToString()!, options);
+                imageProcessor.DrawText(attribute, options);
 
                 y += fontSize + 10f;
             }
