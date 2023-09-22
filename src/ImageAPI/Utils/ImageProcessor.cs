@@ -10,11 +10,11 @@ public class ImageProcessor
     private readonly Image image;
     private readonly Font font;
 
-    public ImageProcessor()
+    public ImageProcessor(float fontSize = 24f)
     {
         var resourcesLoader = new ResourcesLoader();
         image = resourcesLoader.LoadImageFromEmbeddedResources();
-        font = resourcesLoader.LoadFontFromEmbeddedResources();
+        font = resourcesLoader.LoadFontFromEmbeddedResources(fontSize);
     }
 
     public virtual async Task<string> GetBase64ImageAsync()

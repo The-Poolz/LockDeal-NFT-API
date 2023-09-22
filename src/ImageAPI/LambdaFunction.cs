@@ -10,11 +10,12 @@ namespace ImageAPI;
 
 public class LambdaFunction
 {
+    private const float fontSize = 24f;
     private readonly ImageProcessor imageProcessor;
     private readonly DynamoDb dynamoDb;
 
     public LambdaFunction()
-        : this(new ImageProcessor(), new DynamoDb())
+        : this(new ImageProcessor(fontSize), new DynamoDb())
     { }
 
     public LambdaFunction(ImageProcessor imageProcessor, DynamoDb dynamoDb)
@@ -37,7 +38,7 @@ public class LambdaFunction
             return ResponseBuilder.WrongHash();
         }
 
-        var attributes = JsonConvert.DeserializeObject<IEnumerable<Erc721Attribute>>(databaseItem.Item["Data"].S)!;
+        var attributes = JsonConvert.DeserializeObject<Erc721Attribute[]>(databaseItem.Item["Data"].S)!;
 
         foreach (var attribute in attributes)
         {
@@ -46,9 +47,16 @@ public class LambdaFunction
 
         try
         {
-            var options = imageProcessor.CreateTextOptions(400,100);
+            float y = 0;
 
-            imageProcessor.DrawText(hash, options);
+            foreach (var attribute in attributes)
+            {
+                var options = imageProcessor.CreateTextOptions(400, y);
+
+                imageProcessor.DrawText(attribute.Value.ToString()!, options);
+
+                y += fontSize + 10f;
+            }
 
             var base64Image = await imageProcessor.GetBase64ImageAsync();
 
