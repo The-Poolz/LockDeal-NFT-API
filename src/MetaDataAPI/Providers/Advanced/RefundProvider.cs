@@ -39,6 +39,6 @@ public class RefundProvider : Provider
     {
         SubProvider = basePoolInfo.Factory.Create(PoolInfo.PoolId + 1);
         CollateralProvider = basePoolInfo.Factory.Create(basePoolInfo.Params[1]);
-        Rate = new ConvertWei(18).WeiToEth(basePoolInfo.Params[2]);
+        Rate = new ConvertWei(21).WeiToEth(basePoolInfo.Params[2]);
     }
 }
