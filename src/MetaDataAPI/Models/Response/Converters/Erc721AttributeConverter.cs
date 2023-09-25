@@ -9,8 +9,8 @@ public class Erc721AttributeConverter : JsonConverter<Erc721Attribute>
     public override Erc721Attribute ReadJson(JsonReader reader, Type objectType, Erc721Attribute? existingValue, bool hasExistingValue, JsonSerializer serializer)
     {
         var jsonObject = JObject.Load(reader);
-        var traitType = jsonObject["trait_type"].Value<string>();
-        var value = jsonObject["value"].ToObject<object>();
+        var traitType = jsonObject["trait_type"]!.Value<string>()!;
+        var value = jsonObject["value"]!.ToObject<object>()!;
         var displayTypeString = jsonObject["display_type"]?.Value<string>();
 
         var displayType = DisplayType.String;
@@ -26,7 +26,7 @@ public class Erc721AttributeConverter : JsonConverter<Erc721Attribute>
     {
         var obj = new JObject
         {
-            ["trait_type"] = value.TraitType,
+            ["trait_type"] = value!.TraitType,
             ["value"] = JToken.FromObject(value.Value)
         };
 
