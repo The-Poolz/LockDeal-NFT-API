@@ -39,4 +39,16 @@ public class DynamoDbTests
 
         result.Should().BeEquivalentTo(expected);
     }
+
+    [Fact]
+    internal void UpdateItem()
+    {
+        var hash = Guid.NewGuid().ToString();
+        var base64Image = Guid.NewGuid().ToString();
+        var client = new Mock<IAmazonDynamoDB>();
+
+        var testCode = () => new DynamoDb(client.Object).UpdateItem(hash, base64Image);
+
+        testCode.Should().NotThrow<Exception>();
+    }
 }
