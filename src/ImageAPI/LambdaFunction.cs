@@ -10,7 +10,7 @@ namespace ImageAPI;
 
 public class LambdaFunction
 {
-    private const float fontSize = 24f;
+    private const float fontSize = 14f;
     private readonly ImageProcessor imageProcessor;
     private readonly DynamoDb dynamoDb;
 
@@ -39,11 +39,6 @@ public class LambdaFunction
         }
 
         var attributes = JsonConvert.DeserializeObject<Erc721Attribute[]>(databaseItem.Item["Data"].S)!;
-
-        foreach (var attribute in attributes)
-        {
-            Console.WriteLine(JsonConvert.SerializeObject(attribute));
-        }
 
         try
         {
