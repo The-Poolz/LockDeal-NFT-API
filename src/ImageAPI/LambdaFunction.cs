@@ -51,7 +51,7 @@ public class LambdaFunction
 
             foreach (var attribute in attributes)
             {
-                var options = imageProcessor.CreateTextOptions(400, y);
+                var options = imageProcessor.CreateTextOptions(0, y);
 
                 imageProcessor.DrawText(attribute, options);
 

@@ -1,9 +1,9 @@
-﻿using System.Globalization;
-using MetaDataAPI.Models.Response;
-using MetaDataAPI.Models.Types;
+﻿using SixLabors.Fonts;
 using MetaDataAPI.Utils;
-using SixLabors.Fonts;
+using System.Globalization;
 using SixLabors.ImageSharp;
+using MetaDataAPI.Models.Types;
+using MetaDataAPI.Models.Response;
 using SixLabors.ImageSharp.Processing;
 using SixLabors.ImageSharp.Drawing.Processing;
 
@@ -33,15 +33,13 @@ public class ImageProcessor
     public virtual void DrawText(Erc721Attribute attribute, TextOptions textOptions, IBrush? brush = null, IPen? pen = null)
     {
         string text;
-        if (attribute.DisplayType == null)
+        if (attribute.DisplayType == DisplayType.String)
         {
             text = attribute.Value.ToString()!;
         }
         else
         {
-            var displayType = Enum.Parse<DisplayType>(attribute.DisplayType);
-
-            text = displayType == DisplayType.Date ? TimeUtils.FromUnixTimestamp((long)attribute.Value).ToString(CultureInfo.InvariantCulture) : attribute.Value.ToString()!;
+            text = attribute.DisplayType == DisplayType.Date ? TimeUtils.FromUnixTimestamp((long)attribute.Value).ToString(CultureInfo.InvariantCulture) : attribute.Value.ToString()!;
         }
 
         DrawText(text, textOptions, brush, pen);
@@ -55,13 +53,12 @@ public class ImageProcessor
         image.Mutate(x => x.DrawText(textOptions, text, brush, pen));
     }
 
-    public virtual TextOptions CreateTextOptions(float x, float y, float wrappingLength = 100)
+    public virtual TextOptions CreateTextOptions(float x, float y)
     {
         return new TextOptions(font)
         {
             Origin = new PointF(x, y),
             TabWidth = 4,
-            WrappingLength = wrappingLength,
             HorizontalAlignment = HorizontalAlignment.Left
         };
     }
