@@ -29,7 +29,7 @@ public class DynamoDb
         });
     }
 
-    public void UpdateItem(string hash, string base64Image)
+    public async Task UpdateItemAsync(string hash, string base64Image)
     {
         var request = new UpdateItemRequest
         {
@@ -50,8 +50,6 @@ public class DynamoDb
             }
         };
 
-        client.UpdateItemAsync(request)
-            .GetAwaiter()
-            .GetResult();
+        await client.UpdateItemAsync(request);
     }
 }

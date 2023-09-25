@@ -41,14 +41,14 @@ public class DynamoDbTests
     }
 
     [Fact]
-    internal void UpdateItem()
+    internal async Task UpdateItemAsync()
     {
         var hash = Guid.NewGuid().ToString();
         var base64Image = Guid.NewGuid().ToString();
         var client = new Mock<IAmazonDynamoDB>();
 
-        var testCode = () => new DynamoDb(client.Object).UpdateItem(hash, base64Image);
+        var testCode = async () => await new DynamoDb(client.Object).UpdateItemAsync(hash, base64Image);
 
-        testCode.Should().NotThrow<Exception>();
+        await testCode.Should().NotThrowAsync<Exception>();
     }
 }
