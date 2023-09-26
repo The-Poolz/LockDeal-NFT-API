@@ -43,36 +43,24 @@ public class CollateralProvider : Provider
                 foreach (var attribute in attributes)
                 {
                     var newTraitType = attribute.TraitType;
-                    switch (id)
-                    {
-                        case MAIN_COIN_COLLECTOR when newTraitType.Contains("TokenName"):
-                            newTraitType = "MainCoin Name";
-                            break;
-                        case MAIN_COIN_COLLECTOR when newTraitType.Contains("LeftAmount"):
-                            newTraitType = "Main Coin Collector Amount";
-                            break;
-                        case MAIN_COIN_COLLECTOR when newTraitType.Contains("VaultId"):
-                            newTraitType = "MainCoin VaultId";
-                            break;
-                        case TOKEN_HOLDER when newTraitType.Contains("TokenName"):
-                            continue;
-                        case TOKEN_HOLDER when newTraitType.Contains("LeftAmount"):
-                            newTraitType = "Token Holder Amount";
-                            break;
-                        case TOKEN_HOLDER when newTraitType.Contains("VaultId"):
-                            newTraitType = "Token VaultId";
-                            break;
-                        case MAIN_COIN_HOLDER when newTraitType.Contains("TokenName") || newTraitType.Contains("VaultId"):
-                            continue;
-                        case MAIN_COIN_HOLDER when newTraitType.Contains("LeftAmount"):
-                            newTraitType = "Main Coin Holder Amount";
-                            break;
-                    }
-
-                    if (newTraitType.Contains("ProviderName"))
-                    {
+                    if (id == MAIN_COIN_COLLECTOR && newTraitType.Contains("TokenName"))
+                        newTraitType = "MainCoin Name";
+                    else if (id == MAIN_COIN_COLLECTOR && newTraitType.Contains("LeftAmount"))
+                        newTraitType = "Main Coin Collector Amount";
+                    else if (id == MAIN_COIN_COLLECTOR && newTraitType.Contains("VaultId"))
+                        newTraitType = "MainCoin VaultId";
+                    else if (id == TOKEN_HOLDER && newTraitType.Contains("TokenName"))
                         continue;
-                    }
+                    else if (id == TOKEN_HOLDER && newTraitType.Contains("LeftAmount"))
+                        newTraitType = "Token Holder Amount";
+                    else if (id == TOKEN_HOLDER && newTraitType.Contains("VaultId"))
+                        newTraitType = "Token VaultId";
+                    else if (id == MAIN_COIN_HOLDER && (newTraitType.Contains("TokenName") || newTraitType.Contains("VaultId")))
+                        continue;
+                    else if (id == MAIN_COIN_HOLDER && newTraitType.Contains("LeftAmount"))
+                        newTraitType = "Main Coin Holder Amount";
+                    else if (newTraitType.Contains("ProviderName"))
+                        continue;
 
                     Enum.TryParse(attribute.DisplayType, true, out DisplayType displayType);
                     modifiedAttributes.Add(new Erc721Attribute(newTraitType, attribute.Value, displayType));
