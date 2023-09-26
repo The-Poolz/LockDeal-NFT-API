@@ -5,9 +5,9 @@ using ImageAPI.ProvidersImages.Simple;
 
 namespace ImageAPI.ProvidersImages;
 
-public class ProviderImageFactory
+public static class ProviderImageFactory
 {
-    public ProviderImage Create(ImageProcessor imageProcessor, Erc721Attribute[] attributes)
+    public static ProviderImage Create(ImageProcessor imageProcessor, Erc721Attribute[] attributes)
     {
         var providerName = Array.Find(attributes, x => x.TraitType == "ProviderName") ??
             throw new InvalidOperationException("Attributes don't contains attribute with name 'ProviderName'.");

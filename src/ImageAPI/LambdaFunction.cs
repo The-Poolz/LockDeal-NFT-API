@@ -3,6 +3,7 @@ using Newtonsoft.Json;
 using Amazon.Lambda.Core;
 using MetaDataAPI.Models.Response;
 using Amazon.Lambda.APIGatewayEvents;
+using ImageAPI.ProvidersImages;
 
 [assembly: LambdaSerializer(typeof(Amazon.Lambda.Serialization.Json.JsonSerializer))]
 
@@ -24,7 +25,7 @@ public class LambdaFunction
         this.dynamoDb = dynamoDb;
     }
 
-    public async Task<APIGatewayProxyResponse> RunAsync(APIGatewayProxyRequest input)
+    public APIGatewayProxyResponse Run(APIGatewayProxyRequest input)
     {
         //if (input.QueryStringParameters.ContainsKey("hash"))
         //{
@@ -43,25 +44,9 @@ public class LambdaFunction
 
         try
         {
-            var textCoordinatesManager = new TextCoordinatesManager();
+            var providerImage = ProviderImageFactory.Create(imageProcessor, attributes);
 
-            foreach (var attribute in attributes)
-            {
-                try
-                {
-                    var coordinates = textCoordinatesManager.GetCoordinatesForTraitType(attribute.TraitType);
-                    var options = imageProcessor.CreateTextOptions(coordinates);
-                    imageProcessor.DrawText(attribute, options);
-                }
-                catch (Exception e)
-                {
-                    Console.WriteLine(e);
-                }
-            }
-
-            var base64Image = await imageProcessor.GetBase64ImageAsync();
-
-            return ResponseBuilder.ImageResponse(base64Image);
+            return ResponseBuilder.ImageResponse(providerImage.Base64Image);
         }
         catch (Exception e)
         {

@@ -21,15 +21,6 @@ public class ImageProcessor
         font = resourcesLoader.LoadFontFromEmbeddedResources(fontSize);
     }
 
-    public virtual async Task<string> GetBase64ImageAsync()
-    {
-        using var outputStream = new MemoryStream();
-        await Image.SaveAsPngAsync(outputStream);
-        var imageBytes = outputStream.ToArray();
-
-        return Convert.ToBase64String(imageBytes);
-    }
-
     public virtual void DrawText(Erc721Attribute attribute, TextOptions textOptions, IBrush? brush = null, IPen? pen = null)
     {
         string text;
