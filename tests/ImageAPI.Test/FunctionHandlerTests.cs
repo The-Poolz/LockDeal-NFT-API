@@ -1,15 +1,16 @@
-﻿using Xunit;
+﻿using Moq;
+using Xunit;
 using ImageAPI.Utils;
 using FluentAssertions;
 using Amazon.Lambda.APIGatewayEvents;
-using Moq;
+using SixLabors.ImageSharp;
 
 namespace ImageAPI.Test;
 
 public class FunctionHandlerTests
 {
     [Fact]
-    internal async Task FunctionHandler_ShouldReturnResponse_WrongInput()
+    internal void FunctionHandler_ShouldReturnResponse_WrongInput()
     {
         var request = new APIGatewayProxyRequest
         {
@@ -19,13 +20,13 @@ public class FunctionHandlerTests
             }
         };
 
-        var result = await new LambdaFunction().RunAsync(request);
+        var result = new LambdaFunction().Run(request);
 
         result.Should().BeEquivalentTo(ResponseBuilder.WrongInput());
     }
 
     [Fact]
-    internal async Task FunctionHandler_ShouldReturnResponse_ImageResponse()
+    internal void FunctionHandler_ShouldReturnResponse_ImageResponse()
     {
         var expected = ResponseBuilder.ImageResponse("base64ImageHere");
         var request = new APIGatewayProxyRequest
@@ -36,7 +37,7 @@ public class FunctionHandlerTests
             }
         };
 
-        var result = await new LambdaFunction().RunAsync(request);
+        var result = new LambdaFunction().Run(request);
 
         result.Body.Should().NotBe(string.Empty);
         result.Headers.Should().BeEquivalentTo(expected.Headers);
@@ -45,11 +46,11 @@ public class FunctionHandlerTests
     }
 
     [Fact]
-    internal async Task FunctionHandler_ShouldReturnResponse_GeneralError()
+    internal void FunctionHandler_ShouldReturnResponse_GeneralError()
     {
         var imageProcessor = new Mock<ImageProcessor>();
         imageProcessor
-            .Setup(x => x.CreateTextOptions(It.IsAny<float>(), It.IsAny<float>()))
+            .Setup(x => x.CreateTextOptions(It.IsAny<PointF>()))
             .Throws<InvalidOperationException>();
         var dynamoDb = new Mock<DynamoDb>();
 
@@ -61,7 +62,7 @@ public class FunctionHandlerTests
             }
         };
 
-        var result = await new LambdaFunction(imageProcessor.Object, dynamoDb.Object).RunAsync(request);
+        var result = new LambdaFunction(imageProcessor.Object, dynamoDb.Object).Run(request);
 
         result.Should().BeEquivalentTo(ResponseBuilder.GeneralError());
     }
