@@ -5,7 +5,6 @@ using Amazon.Lambda.Core;
 using MetaDataAPI.Storage;
 using MetaDataAPI.Providers;
 using Amazon.Lambda.APIGatewayEvents;
-using Newtonsoft.Json.Linq;
 
 [assembly: LambdaSerializer(typeof(Amazon.Lambda.Serialization.Json.JsonSerializer))]
 

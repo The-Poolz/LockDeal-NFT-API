@@ -42,6 +42,7 @@ public class CollateralProvider : Provider
 
                 foreach (var attribute in attributes)
                 {
+                    attribute.IncludeUnderscoreForTraitType(provider.PoolInfo.PoolId);
                     var newTraitType = attribute.TraitType;
                     switch (id)
                     {
@@ -49,17 +50,13 @@ public class CollateralProvider : Provider
                             newTraitType = "MainCoin Name";
                             break;
                         case MAIN_COIN_COLLECTOR:
-                        {
                             if (newTraitType.Contains("VaultId")) newTraitType = "MainCoin VaultId";
                             break;
-                        }
                         case TOKEN_HOLDER when newTraitType.Contains("TokenName"):
                             continue;
                         case TOKEN_HOLDER:
-                        {
                             if (newTraitType.Contains("VaultId")) newTraitType = "Token VaultId";
                             break;
-                        }
                         case MAIN_COIN_HOLDER when newTraitType.Contains("TokenName") || newTraitType.Contains("VaultId"):
                             continue;
                     }
