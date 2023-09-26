@@ -13,7 +13,8 @@ public class LockDealProvider : Provider
     {
         new Erc721Attribute("LeftAmount", LeftAmount, DisplayType.Number),
         new Erc721Attribute("StartTime", StartTime, DisplayType.Date),
-        new Erc721Attribute("VaultId", PoolInfo.VaultId, DisplayType.Number)
+        new Erc721Attribute("VaultId", PoolInfo.VaultId, DisplayType.Number),
+        TokenNameAttribute
     };
 
     public decimal LeftAmount { get; }

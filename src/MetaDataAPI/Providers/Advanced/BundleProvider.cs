@@ -23,7 +23,10 @@ public class BundleProvider : Provider
         get
         {
             var isAddedVaultId = false;
-            var result = new List<Erc721Attribute>();
+            var result = new List<Erc721Attribute>
+            {
+                TokenNameAttribute
+            };
             for (var poolId = PoolInfo.PoolId + 1; poolId <= PoolInfo.Params[1]; poolId++)
             {
                 var subProvider = PoolInfo.Factory.Create(poolId);

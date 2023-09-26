@@ -37,52 +37,48 @@ public class CollateralProvider : Provider
             for (var id = 0; id < SubProvider.Length; id++)
             {
                 var provider = SubProvider[id];
-                var attributes = provider.GetErc721Attributes();
-                var modifiedAttributes = new List<Erc721Attribute>();
 
-                foreach (var attribute in attributes)
+                if (id == MAIN_COIN_COLLECTOR)
                 {
-                    var newTraitType = attribute.TraitType;
-                    if (id == MAIN_COIN_COLLECTOR && newTraitType.Contains("TokenName"))
-                        newTraitType = "MainCoin Name";
-                    else if (id == MAIN_COIN_COLLECTOR && newTraitType.Contains("LeftAmount"))
-                        newTraitType = "Main Coin Collector Amount";
-                    else if (id == MAIN_COIN_COLLECTOR && newTraitType.Contains("VaultId"))
-                        newTraitType = "MainCoin VaultId";
-                    else if (id == TOKEN_HOLDER && newTraitType.Contains("TokenName"))
-                        continue;
-                    else if (id == TOKEN_HOLDER && newTraitType.Contains("LeftAmount"))
-                        newTraitType = "Token Holder Amount";
-                    else if (id == TOKEN_HOLDER && newTraitType.Contains("VaultId"))
-                        newTraitType = "Token VaultId";
-                    else if (id == MAIN_COIN_HOLDER && (newTraitType.Contains("TokenName") || newTraitType.Contains("VaultId")))
-                        continue;
-                    else if (id == MAIN_COIN_HOLDER && newTraitType.Contains("LeftAmount"))
-                        newTraitType = "Main Coin Holder Amount";
-                    else if (newTraitType.Contains("ProviderName"))
-                        continue;
-
-                    Enum.TryParse(attribute.DisplayType, true, out DisplayType displayType);
-                    modifiedAttributes.Add(new Erc721Attribute(newTraitType, attribute.Value, displayType));
+                    result.AddRange(new Erc721Attribute[]
+                    {
+                        new("Main Coin Collector Amount", provider.LeftAmount, DisplayType.Number),
+                        new("MainCoin VaultId", provider.PoolInfo.VaultId, DisplayType.Number),
+                        new("MainCoin Name", provider.PoolInfo.Token.Name)
+                    });
                 }
-
-                result.AddRange(modifiedAttributes);
+                if (id == TOKEN_HOLDER)
+                {
+                    result.AddRange(new Erc721Attribute[]
+                    {
+                        new("Token Holder Amount", provider.LeftAmount, DisplayType.Number),
+                        new("Token VaultId", provider.PoolInfo.VaultId, DisplayType.Number),
+                        new("TokenName", provider.PoolInfo.Token.Name)
+                    });
+                }
+                if (id == MAIN_COIN_HOLDER)
+                {
+                    result.AddRange(new Erc721Attribute[]
+                    {
+                        new("Main Coin Holder Amount", provider.LeftAmount, DisplayType.Number)
+                    });
+                }
             }
 
             return result;
         }
     }
 
-    public Provider[] SubProvider { get; }
+    public DealProvider[] SubProvider { get; }
     
     public CollateralProvider(BasePoolInfo basePoolInfo)
         : base(basePoolInfo)
     {
-        SubProvider = new Provider[3];
+        SubProvider = new DealProvider[3];
 
         for (var i = 0; i < 3; i++)
         {
-            SubProvider[i] = basePoolInfo.Factory.Create(basePoolInfo.PoolId + i + 1);
+            SubProvider[i] = (DealProvider)basePoolInfo.Factory.Create(basePoolInfo.PoolId + i + 1);
         }
     }
 }

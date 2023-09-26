@@ -12,7 +12,8 @@ public class DealProvider : Provider
     public override IEnumerable<Erc721Attribute> ProviderAttributes => new[]
     {
         new Erc721Attribute("LeftAmount", LeftAmount, DisplayType.Number),
-        new Erc721Attribute("VaultId", PoolInfo.VaultId, DisplayType.Number)
+        new Erc721Attribute("VaultId", PoolInfo.VaultId, DisplayType.Number),
+        TokenNameAttribute
     };
 
     public decimal LeftAmount { get; }

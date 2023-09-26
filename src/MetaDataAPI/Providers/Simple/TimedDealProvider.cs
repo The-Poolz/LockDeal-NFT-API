@@ -14,7 +14,8 @@ public class TimedDealProvider : Provider
         new Erc721Attribute("LeftAmount", LeftAmount, DisplayType.Number),
         new Erc721Attribute("StartAmount", StartAmount, DisplayType.Number),
         new Erc721Attribute("StartTime", StartTime, DisplayType.Date),
-        new Erc721Attribute("FinishTime", FinishTime, DisplayType.Date)
+        new Erc721Attribute("FinishTime", FinishTime, DisplayType.Date),
+        TokenNameAttribute
     };
 
     public decimal LeftAmount { get; }

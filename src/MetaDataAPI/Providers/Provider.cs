@@ -19,8 +19,7 @@ public abstract class Provider
     public IEnumerable<Erc721Attribute> GetErc721Attributes() =>
         new List<Erc721Attribute>(ProviderAttributes)
         {
-            ProviderNameAttribute,
-            TokenNameAttribute
+            ProviderNameAttribute
         };
 
     public string GetJsonErc721Metadata(DynamoDb dynamoDb) =>
@@ -36,5 +35,5 @@ public abstract class Provider
         return new Erc721Metadata(name, Description, image, attributes);
     }
     private Erc721Attribute ProviderNameAttribute => new("ProviderName", ProviderName);
-    private Erc721Attribute TokenNameAttribute => new("TokenName", PoolInfo.Token.Name);
+    protected Erc721Attribute TokenNameAttribute => new("TokenName", PoolInfo.Token.Name);
 }
