@@ -49,8 +49,9 @@ public class FunctionHandlerTests
     {
         var imageProcessor = new Mock<ImageProcessor>();
         imageProcessor
-            .Setup(x => x.CreateTextOptions(It.IsAny<float>(), It.IsAny<float>(), It.IsAny<float>()))
+            .Setup(x => x.CreateTextOptions(It.IsAny<float>(), It.IsAny<float>()))
             .Throws<InvalidOperationException>();
+        var dynamoDb = new Mock<DynamoDb>();
 
         var request = new APIGatewayProxyRequest
         {
@@ -60,7 +61,7 @@ public class FunctionHandlerTests
             }
         };
 
-        var result = await new LambdaFunction(imageProcessor.Object).RunAsync(request);
+        var result = await new LambdaFunction(imageProcessor.Object, dynamoDb.Object).RunAsync(request);
 
         result.Should().BeEquivalentTo(ResponseBuilder.GeneralError());
     }

@@ -33,7 +33,7 @@ public class ResponseBuilderTests
             IsBase64Encoded = true,
             StatusCode = (int)HttpStatusCode.OK,
             Body = base64Image,
-            Headers = new Dictionary<string, string> { { "Content-Type", "image/png" } }
+            Headers = new Dictionary<string, string> { { "Content-Type", "Image/png" } }
         };
 
         var result = ResponseBuilder.ImageResponse(base64Image);

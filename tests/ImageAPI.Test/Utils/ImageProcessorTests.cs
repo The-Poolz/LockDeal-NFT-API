@@ -46,7 +46,7 @@ public class ImageProcessorTests
         const float y = 20;
         const float wrappingLength = 200;
 
-        var result = imageProcessor.CreateTextOptions(x, y, wrappingLength);
+        var result = imageProcessor.CreateTextOptions(x, y);
 
         Assert.NotNull(result);
         Assert.Equal(x, result.Origin.X);
