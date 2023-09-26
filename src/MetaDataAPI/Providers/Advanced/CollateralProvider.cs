@@ -24,12 +24,12 @@ public class CollateralProvider : Provider
         {
             var converter = new ConvertWei(PoolInfo.Token.Decimals);
             var result = new List<Erc721Attribute>
-        {
-            new("LeftAmount", converter.WeiToEth(PoolInfo.Params[0]), DisplayType.Number),
-            new("FinishTime", PoolInfo.Params[1], DisplayType.Date),
-            new("MainCoin", SubProvider[0].PoolInfo.Token.Address),
-            new("Token", SubProvider[1].PoolInfo.Token.Address),
-        };
+            {
+                new("LeftAmount", converter.WeiToEth(PoolInfo.Params[0]), DisplayType.Number),
+                new("FinishTime", PoolInfo.Params[1], DisplayType.Date),
+                new("MainCoin", SubProvider[0].PoolInfo.Token.Address),
+                new("Token", SubProvider[1].PoolInfo.Token.Address),
+            };
 
             const int MAIN_COIN_COLLECTOR = 0;
             const int TOKEN_HOLDER = 1;
