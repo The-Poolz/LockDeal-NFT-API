@@ -9,6 +9,7 @@ namespace MetaDataAPI.Utils;
 
 public class DynamoDb
 {
+    private const string TableName = "MetaDataCache";
     private readonly IAmazonDynamoDB client;
 
     public DynamoDb()
@@ -25,39 +26,44 @@ public class DynamoDb
         var jsonAttributes = JsonConvert.SerializeObject(attributes);
         var hash = StringToSha256(jsonAttributes);
 
-        var item = GetItemAsync(hash)
-            .GetAwaiter()
-            .GetResult();
-
-        if (item.Item.Count == 0)
+        var conditionCheck = new ConditionCheck
         {
-            client.PutItemAsync(new PutItemRequest
+            TableName = TableName,
+            Key = new Dictionary<string, AttributeValue>
             {
-                TableName = "MetaDataCache",
+                { "Hash", new AttributeValue { S = hash } }
+            },
+            ConditionExpression = "attribute_not_exists(Hash)"
+        };
+
+        var put = new TransactWriteItem
+        {
+            Put = new Put
+            {
+                TableName = TableName,
                 Item = new Dictionary<string, AttributeValue>
                 {
                     { "Hash", new AttributeValue { S = hash } },
                     { "Data", new AttributeValue { S = jsonAttributes } },
-                    { "InsertedTime", new AttributeValue { N = DateTimeOffset.UtcNow.ToUnixTimeSeconds().ToString() } },
+                    { "InsertedTime", new AttributeValue { N = DateTimeOffset.UtcNow.ToUnixTimeSeconds().ToString() } }
                 }
-            })
+            }
+        };
+
+        var request = new TransactWriteItemsRequest
+        {
+            TransactItems = new List<TransactWriteItem>
+            {
+                new() { ConditionCheck = conditionCheck },
+                new() { Put = put.Put }
+            }
+        };
+
+        client.TransactWriteItemsAsync(request)
             .GetAwaiter()
             .GetResult();
-        }
 
         return hash;
-    }
-
-    public async Task<GetItemResponse> GetItemAsync(string hash)
-    {
-        return await client.GetItemAsync(new GetItemRequest
-        {
-            TableName = "MetaDataCache",
-            Key = new Dictionary<string, AttributeValue>
-            {
-                { "Hash", new AttributeValue { S = hash } }
-            }
-        });
     }
 
     public static string StringToSha256(string str)
