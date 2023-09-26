@@ -18,30 +18,28 @@ public class CollateralProvider : Provider
     public override string Description =>
                 $"Exclusively utilized by project administrators, this NFT serves as a secure vault for holding refundable tokens {Token}, for Main Coin {MainCoin}. " +
                 $"It holds {MainCoinCollectorAmount} for the main coin collector, {TokenCollectorAmount} for the token collector," +
-                $" and {MainCoinHolderAmount} for the main coin holder, valid until {FinishTime}.";    
-    
-    internal string MainCoinAddress => MainCoin.Address;
-    internal Erc20Token Token => SubProvider[CollateralType.TokenCollector].PoolInfo.Token;
+                $" and {MainCoinHolderAmount} for the main coin holder, valid until {FinishTime}.";
     [Display(DisplayType.String)]
-    public override string TokenName => Token.Name;
-    [Display(DisplayType.String)]
-    public string MainCoinName => MainCoin.Name;
-    [Display(DisplayType.String)]
-    public string TokenAddress => Token.Address;
+    public override Erc20Token Token => SubProvider[CollateralType.TokenCollector].PoolInfo.Token;
+  
     [Display(DisplayType.String)]
     public Erc20Token MainCoin => PoolInfo.Token;
+
     [Display(DisplayType.Number)]
-    public override BigInteger VaultId => SubProvider[CollateralType.TokenCollector].PoolInfo.VaultId;
-    [Display(DisplayType.Number)]
-    public BigInteger MainCoinVaultId => PoolInfo.VaultId;
+    public override BigInteger Collection => SubProvider[CollateralType.TokenCollector].PoolInfo.VaultId;
+
     [Display(DisplayType.Ignore)]
     public override decimal LeftAmount => base.LeftAmount;
+
     [Display(DisplayType.Number)]
     public decimal MainCoinCollectorAmount => SubProvider[CollateralType.MainCoinCollector].LeftAmount;
+
     [Display(DisplayType.Number)]
     public decimal TokenCollectorAmount => SubProvider[CollateralType.TokenCollector].LeftAmount;
+
     [Display(DisplayType.Number)]
     public decimal MainCoinHolderAmount => SubProvider[CollateralType.MainCoinHolder].LeftAmount;
+
     [Display(DisplayType.Date)]
     public uint FinishTimestamp => (uint)PoolInfo.Params[1];
     internal DateTime FinishTime => TimeUtils.FromUnixTimestamp(FinishTimestamp);

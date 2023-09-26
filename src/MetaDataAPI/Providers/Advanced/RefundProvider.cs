@@ -2,7 +2,6 @@
 using MetaDataAPI.Models.Types;
 using MetaDataAPI.Models.Response;
 using MetaDataAPI.Models;
-using System.Numerics;
 
 namespace MetaDataAPI.Providers;
 
@@ -28,8 +27,6 @@ public class RefundProvider : DealProvider
     public string MainCoinName => CollateralProvider.MainCoin.Name;
     [Display(DisplayType.String)]
     public string MainCoinAddress => CollateralProvider.MainCoin.Address;
-    [Display(DisplayType.Number)]
-    public BigInteger MainCoinVaultId => CollateralProvider.MainCoinVaultId;
     public RefundProvider(BasePoolInfo basePoolInfo)
         : base(basePoolInfo)
     {

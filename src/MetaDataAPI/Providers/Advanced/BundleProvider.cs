@@ -22,7 +22,7 @@ public class BundleProvider : DealProvider
                 $" The following are the inner pools under its governance that holds total {LeftAmount} {PoolInfo.Token}:");
 
             return SubProviders.Aggregate(descriptionBuilder, (sb, item) =>
-                sb.AppendLine($"- {item.PoolInfo.PoolId}: {item.ToString()}")).ToString();
+                sb.AppendLine($"{item.PoolInfo.PoolId}: {item.ToString()}")).ToString();
         }
     }
 

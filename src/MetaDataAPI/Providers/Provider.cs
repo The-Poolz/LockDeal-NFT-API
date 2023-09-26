@@ -13,7 +13,7 @@ public abstract class Provider
     [Display(DisplayType.String)]
     public abstract string ProviderName { get; }
     [Display(DisplayType.String)]
-    public virtual string TokenName => PoolInfo.Token.Name;
+    public virtual Erc20Token Token => PoolInfo.Token;
     public abstract string Description { get; }
     public virtual IEnumerable<Erc721Attribute> Attributes
     => GetType()
@@ -31,7 +31,7 @@ public abstract class Provider
 
     public BasePoolInfo PoolInfo { get; }
     [Display(DisplayType.Number)]
-    public virtual BigInteger VaultId => PoolInfo.VaultId;
+    public virtual BigInteger Collection => PoolInfo.VaultId;
     protected Provider(BasePoolInfo basePoolInfo)
     {
         PoolInfo = basePoolInfo;
