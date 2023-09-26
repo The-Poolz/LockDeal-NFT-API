@@ -31,18 +31,48 @@ public class CollateralProvider : Provider
                 new("Token", SubProvider[1].PoolInfo.Token.Address),
             };
 
-            for (var index = 0; index < SubProvider.Length; index++)
+            const int MAIN_COIN_COLLECTOR = 0;
+            const int TOKEN_HOLDER = 1;
+            const int MAIN_COIN_HOLDER = 2;
+            for (var id = 0; id < SubProvider.Length; id++)
             {
-                var provider = SubProvider[index];
-                if (index == 1)
+                var provider = SubProvider[id];
+                var attributes = provider.GetErc721Attributes();
+                var modifiedAttributes = new List<Erc721Attribute>();
+
+                foreach (var attribute in attributes)
                 {
-                    result.AddRange(provider.GetErc721Attributes()
-                        .Where(x => !x.TraitType.Contains("TokenName"))
-                        .Select(attribute => attribute.IncludeUnderscoreForTraitType(provider.PoolInfo.PoolId)));
-                    continue;
+                    var newTraitType = attribute.TraitType;
+                    switch (id)
+                    {
+                        case MAIN_COIN_COLLECTOR when newTraitType.Contains("TokenName"):
+                            newTraitType = "MainCoin Name";
+                            break;
+                        case MAIN_COIN_COLLECTOR:
+                        {
+                            if (newTraitType.Contains("VaultId")) newTraitType = "MainCoin VaultId";
+                            break;
+                        }
+                        case TOKEN_HOLDER when newTraitType.Contains("TokenName"):
+                            continue;
+                        case TOKEN_HOLDER:
+                        {
+                            if (newTraitType.Contains("VaultId")) newTraitType = "Token VaultId";
+                            break;
+                        }
+                        case MAIN_COIN_HOLDER when newTraitType.Contains("TokenName") || newTraitType.Contains("VaultId"):
+                            continue;
+                    }
+                    if (newTraitType.Contains("ProviderName"))
+                    {
+                        continue;
+                    }
+
+                    Enum.TryParse(attribute.DisplayType, true, out DisplayType displayType);
+                    modifiedAttributes.Add(new Erc721Attribute(newTraitType, attribute.Value, displayType));
                 }
-                result.AddRange(provider.GetErc721Attributes().Select(attribute =>
-                    attribute.IncludeUnderscoreForTraitType(provider.PoolInfo.PoolId)));
+
+                result.AddRange(modifiedAttributes);
             }
 
             return result;
