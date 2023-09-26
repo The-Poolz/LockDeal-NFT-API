@@ -24,12 +24,12 @@ public class CollateralProvider : Provider
         {
             var converter = new ConvertWei(PoolInfo.Token.Decimals);
             var result = new List<Erc721Attribute>
-            {
-                new("LeftAmount", converter.WeiToEth(PoolInfo.Params[0]), DisplayType.Number),
-                new("FinishTime", PoolInfo.Params[1], DisplayType.Date),
-                new("MainCoin",SubProvider[0].PoolInfo.Token.Address),
-                new("Token", SubProvider[1].PoolInfo.Token.Address),
-            };
+        {
+            new("LeftAmount", converter.WeiToEth(PoolInfo.Params[0]), DisplayType.Number),
+            new("FinishTime", PoolInfo.Params[1], DisplayType.Date),
+            new("MainCoin", SubProvider[0].PoolInfo.Token.Address),
+            new("Token", SubProvider[1].PoolInfo.Token.Address),
+        };
 
             const int MAIN_COIN_COLLECTOR = 0;
             const int TOKEN_HOLDER = 1;
@@ -42,24 +42,33 @@ public class CollateralProvider : Provider
 
                 foreach (var attribute in attributes)
                 {
-                    attribute.IncludeUnderscoreForTraitType(provider.PoolInfo.PoolId);
                     var newTraitType = attribute.TraitType;
                     switch (id)
                     {
                         case MAIN_COIN_COLLECTOR when newTraitType.Contains("TokenName"):
                             newTraitType = "MainCoin Name";
                             break;
-                        case MAIN_COIN_COLLECTOR:
-                            if (newTraitType.Contains("VaultId")) newTraitType = "MainCoin VaultId";
+                        case MAIN_COIN_COLLECTOR when newTraitType.Contains("LeftAmount"):
+                            newTraitType = "Main Coin Collector Amount";
+                            break;
+                        case MAIN_COIN_COLLECTOR when newTraitType.Contains("VaultId"):
+                            newTraitType = "MainCoin VaultId";
                             break;
                         case TOKEN_HOLDER when newTraitType.Contains("TokenName"):
                             continue;
-                        case TOKEN_HOLDER:
-                            if (newTraitType.Contains("VaultId")) newTraitType = "Token VaultId";
+                        case TOKEN_HOLDER when newTraitType.Contains("LeftAmount"):
+                            newTraitType = "Token Holder Amount";
+                            break;
+                        case TOKEN_HOLDER when newTraitType.Contains("VaultId"):
+                            newTraitType = "Token VaultId";
                             break;
                         case MAIN_COIN_HOLDER when newTraitType.Contains("TokenName") || newTraitType.Contains("VaultId"):
                             continue;
+                        case MAIN_COIN_HOLDER when newTraitType.Contains("LeftAmount"):
+                            newTraitType = "Main Coin Holder Amount";
+                            break;
                     }
+
                     if (newTraitType.Contains("ProviderName"))
                     {
                         continue;
