@@ -26,7 +26,7 @@ public class DynamoDbTests
         {
             Item = new Dictionary<string, AttributeValue>
             {
-                { "Hash", new AttributeValue { S = hash } }
+                { "HashKey", new AttributeValue { S = hash } }
             }
         };
         var client = new Mock<IAmazonDynamoDB>();
