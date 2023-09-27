@@ -50,9 +50,16 @@ public class DynamoDb
             }
         };
 
-        client.TransactWriteItemsAsync(request)
-            .GetAwaiter()
-            .GetResult();
+        try
+        {
+            client.TransactWriteItemsAsync(request)
+                .GetAwaiter()
+                .GetResult();
+        }
+        catch (AmazonDynamoDBException e)
+        {
+            Console.WriteLine(e);
+        }
 
         return hash;
     }
