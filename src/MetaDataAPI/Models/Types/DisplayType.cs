@@ -4,5 +4,6 @@ public enum DisplayType
 {
     String,
     Number,
-    Date
+    Date,
+    Ignore
 }

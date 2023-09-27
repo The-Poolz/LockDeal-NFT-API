@@ -1,55 +1,56 @@
-using MetaDataAPI.Utils;
 using MetaDataAPI.Models.Types;
 using MetaDataAPI.Models.Response;
+using System.Numerics;
+using MetaDataAPI.Utils;
+using MetaDataAPI.Models;
 
 namespace MetaDataAPI.Providers;
 
 public class CollateralProvider : Provider
 {
     public override string ProviderName => nameof(CollateralProvider);
-    public override string Description
+    internal enum CollateralType
     {
-        get
-        {
-            var attributes = GetErc721Attributes().ToArray();
-
-            return $"Exclusively utilized by project administrators, this NFT serves as a secure vault for holding refundable tokens. " +
-                $"It holds {attributes[4].Value} for the main coin collector, {attributes[5].Value} for the token collector," +
-                $" and {attributes[6].Value} for the main coin holder, valid until {attributes[1].Value}.";
-        }
+        MainCoinCollector = 1,
+        TokenCollector = 2,
+        MainCoinHolder = 3
     }
-    public override IEnumerable<Erc721Attribute> ProviderAttributes
-    {
-        get
-        {
-            var converter = new ConvertWei(PoolInfo.Token.Decimals);
-            var result = new List<Erc721Attribute>
-            {
-                new("LeftAmount", converter.WeiToEth(PoolInfo.Params[0]), DisplayType.Number),
-                new("FinishTime", PoolInfo.Params[1], DisplayType.Date),
-                new("MainCoin",SubProvider[0].PoolInfo.Token.Address),
-                new("Token", SubProvider[1].PoolInfo.Token.Address),
-            };
+    public override string Description =>
+                $"Exclusively utilized by project administrators, this NFT serves as a secure vault for holding refundable tokens {Token}, for Main Coin {MainCoin}. " +
+                $"It holds {MainCoinCollectorAmount} for the main coin collector, {TokenCollectorAmount} for the token collector," +
+                $" and {MainCoinHolderAmount} for the main coin holder, valid until {FinishTime}.";
+    [Display(DisplayType.String)]
+    public override Erc20Token Token => SubProvider[CollateralType.TokenCollector].PoolInfo.Token;
+  
+    [Display(DisplayType.String)]
+    public Erc20Token MainCoin => PoolInfo.Token;
 
-            foreach (var provider in SubProvider)
-            {
-                result.AddRange(provider.GetErc721Attributes().Select(attribute =>
-                    attribute.IncludeUnderscoreForTraitType(provider.PoolInfo.PoolId)));
-            }
-            return result;
-        }
-    }
+    [Display(DisplayType.Number)]
+    public override BigInteger Collection => SubProvider[CollateralType.TokenCollector].PoolInfo.VaultId;
 
-    public Provider[] SubProvider { get; }
-    
+    [Display(DisplayType.Ignore)]
+    public override decimal LeftAmount => base.LeftAmount;
+
+    [Display(DisplayType.Number)]
+    public decimal MainCoinCollectorAmount => SubProvider[CollateralType.MainCoinCollector].LeftAmount;
+
+    [Display(DisplayType.Number)]
+    public decimal TokenCollectorAmount => SubProvider[CollateralType.TokenCollector].LeftAmount;
+
+    [Display(DisplayType.Number)]
+    public decimal MainCoinHolderAmount => SubProvider[CollateralType.MainCoinHolder].LeftAmount;
+
+    [Display(DisplayType.Date)]
+    public uint FinishTimestamp => (uint)PoolInfo.Params[1];
+    internal DateTime FinishTime => TimeUtils.FromUnixTimestamp(FinishTimestamp);
+    internal Dictionary<CollateralType,DealProvider> SubProvider { get; }
     public CollateralProvider(BasePoolInfo basePoolInfo)
         : base(basePoolInfo)
     {
-        SubProvider = new Provider[3];
-
-        for (var i = 0; i < 3; i++)
-        {
-            SubProvider[i] = basePoolInfo.Factory.Create(basePoolInfo.PoolId + i + 1);
-        }
+        SubProvider = Enum.GetValues(typeof(CollateralType))
+                          .Cast<CollateralType>()
+                          .ToDictionary(
+                            val => val,
+                            val => basePoolInfo.Factory.Create<DealProvider>(basePoolInfo.PoolId + (int)val));
     }
 }
