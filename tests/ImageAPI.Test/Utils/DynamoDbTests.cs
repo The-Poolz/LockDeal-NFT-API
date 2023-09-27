@@ -31,7 +31,7 @@ public class DynamoDbTests
         };
         var client = new Mock<IAmazonDynamoDB>();
         client.Setup(x => x.GetItemAsync(
-            It.Is<GetItemRequest>(req => req.TableName == "MetaDataCache" && req.Key["Hash"].S == hash),
+            It.Is<GetItemRequest>(req => req.TableName == "MetaDataCache" && req.Key["HashKey"].S == hash),
             It.IsAny<CancellationToken>())
         ).ReturnsAsync(expected);
 
