@@ -25,4 +25,5 @@ public class ProviderFactory
         var objectType = Type.GetType(objectToInstantiate);
         return (Provider)Activator.CreateInstance(objectType!, args: basePoolInfo)!;
     }
+    public T Create<T>(BigInteger poolId) where T : Provider => (T)Create(poolId);
 }
