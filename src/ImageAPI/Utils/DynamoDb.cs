@@ -6,6 +6,7 @@ namespace ImageAPI.Utils;
 public class DynamoDb
 {
     private const string TableName = "MetaDataCache";
+    private const string PrimaryKey = "HashKey";
     private readonly IAmazonDynamoDB client;
 
     public DynamoDb()
@@ -24,7 +25,7 @@ public class DynamoDb
             TableName = TableName,
             Key = new Dictionary<string, AttributeValue>
             {
-                { "Hash", new AttributeValue { S = hash } }
+                { PrimaryKey, new AttributeValue { S = hash } }
             }
         });
     }
@@ -36,7 +37,7 @@ public class DynamoDb
             TableName = TableName,
             Key = new Dictionary<string, AttributeValue>
             {
-                { "Hash", new AttributeValue { S = hash } }
+                { PrimaryKey, new AttributeValue { S = hash } }
             },
             AttributeUpdates = new Dictionary<string, AttributeValueUpdate>
             {
