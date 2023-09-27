@@ -1,28 +1,24 @@
 using MetaDataAPI.Utils;
-using MetaDataAPI.Models.Types;
 using MetaDataAPI.Models.Response;
+using MetaDataAPI.Models.Types;
+using MetaDataAPI.Models;
 
 namespace MetaDataAPI.Providers;
 
-public class LockDealProvider : Provider
+public class LockDealProvider : DealProvider
 {
+    public override string ToString() => $"securely locks {LeftAmount} units of the asset Until {StartDateTime}";
     public override string ProviderName => nameof(LockDealProvider);
     public override string Description =>
-        $"This NFT securely locks {LeftAmount} units of the asset {PoolInfo.Token}. Access to these assets will commence on the designated start time of {TimeUtils.FromUnixTimestamp(StartTime)}.";
-    public override IEnumerable<Erc721Attribute> ProviderAttributes => new Erc721Attribute[]
-    {
-        new("LeftAmount", LeftAmount, DisplayType.Number),
-        new("StartTime", StartTime, DisplayType.Date)
-    };
-
-    public decimal LeftAmount { get; }
+        $"This NFT securely locks {LeftAmount} units of the asset {PoolInfo.Token}. " +
+        $"Access to these assets will commence on the designated start time of {StartDateTime}.";
+    [Display(DisplayType.Date)]
     public uint StartTime { get; }
+    public DateTime StartDateTime => TimeUtils.FromUnixTimestamp(StartTime);
 
     public LockDealProvider(BasePoolInfo basePoolInfo)
         : base(basePoolInfo)
     {
-        var converter = new ConvertWei(basePoolInfo.Token.Decimals);
-        LeftAmount = converter.WeiToEth(basePoolInfo.Params[0]);
         StartTime = (uint)basePoolInfo.Params[1];
     }
 }
