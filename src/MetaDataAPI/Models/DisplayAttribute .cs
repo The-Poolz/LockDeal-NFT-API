@@ -17,7 +17,7 @@ public class DisplayAttribute : Attribute
     {
         if (DisplayType == DisplayType.Ignore ||
             value == null ||
-            string.IsNullOrEmpty(DisplayName) && string.IsNullOrEmpty(propertyName))
+            (string.IsNullOrEmpty(DisplayName) && string.IsNullOrEmpty(propertyName)))
         {
             erc721Attribute = null!;
             return false;
