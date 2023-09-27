@@ -5,7 +5,7 @@ using MetaDataAPI.Models;
 
 namespace MetaDataAPI.Providers;
 
-public class RefundProvider : DealProvider
+public class RefundProvider : Provider
 {
     public override string ProviderName => nameof(RefundProvider);
     public override string Description

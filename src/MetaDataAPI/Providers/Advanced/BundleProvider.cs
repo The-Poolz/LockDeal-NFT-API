@@ -4,7 +4,7 @@ using MetaDataAPI.Models.Response;
 
 namespace MetaDataAPI.Providers;
 
-public class BundleProvider : DealProvider
+public class BundleProvider : Provider
 {
     public BundleProvider(BasePoolInfo basePoolInfo)
     : base(basePoolInfo)
