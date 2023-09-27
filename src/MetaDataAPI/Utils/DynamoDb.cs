@@ -10,6 +10,7 @@ namespace MetaDataAPI.Utils;
 public class DynamoDb
 {
     private const string TableName = "MetaDataCache";
+    private const string PrimaryKey = "HashKey";
     private readonly IAmazonDynamoDB client;
 
     public DynamoDb()
@@ -31,9 +32,9 @@ public class DynamoDb
             TableName = TableName,
             Key = new Dictionary<string, AttributeValue>
             {
-                { "Hash", new AttributeValue { S = hash } }
+                { PrimaryKey, new AttributeValue { S = hash } }
             },
-            ConditionExpression = "attribute_not_exists(Hash)"
+            ConditionExpression = $"attribute_not_exists({PrimaryKey})"
         };
 
         var put = new TransactWriteItem
@@ -43,7 +44,7 @@ public class DynamoDb
                 TableName = TableName,
                 Item = new Dictionary<string, AttributeValue>
                 {
-                    { "Hash", new AttributeValue { S = hash } },
+                    { PrimaryKey, new AttributeValue { S = hash } },
                     { "Data", new AttributeValue { S = jsonAttributes } },
                     { "InsertedTime", new AttributeValue { N = DateTimeOffset.UtcNow.ToUnixTimeSeconds().ToString() } }
                 }
