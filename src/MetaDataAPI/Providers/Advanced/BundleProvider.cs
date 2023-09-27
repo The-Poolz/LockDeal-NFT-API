@@ -1,56 +1,44 @@
-﻿using System.Text;
+﻿using System.Numerics;
+using System.Text;
 using MetaDataAPI.Models.Response;
 
 namespace MetaDataAPI.Providers;
 
-public class BundleProvider : Provider
+public class BundleProvider : DealProvider
 {
+    public BundleProvider(BasePoolInfo basePoolInfo)
+    : base(basePoolInfo)
+    {
+        SubProviders = Range(PoolInfo.PoolId + 1, LastPoolId)
+                       .Select(poolId => basePoolInfo.Factory.Create(poolId));
+    }
     public override string ProviderName => nameof(BundleProvider);
     public override string Description
     {
         get
         {
             var descriptionBuilder = new StringBuilder()
-                .AppendLine("This NFT orchestrates a series of sub-pools to enable sophisticated asset management strategies. The following are the inner pools under its governance:");
+                .AppendLine("This NFT orchestrates a series of sub-pools to enable sophisticated asset management strategies." +
+                $" The following are the inner pools under its governance that holds total {LeftAmount} {PoolInfo.Token}:");
 
             return SubProviders.Aggregate(descriptionBuilder, (sb, item) =>
-                sb.AppendLine($"- {item.PoolInfo}: {item.Description}")).ToString();
+                sb.AppendLine($"{item.PoolInfo.PoolId}: {item.ToString()}")).ToString();
         }
     }
 
-    public override IEnumerable<Erc721Attribute> ProviderAttributes
+    public override IEnumerable<Erc721Attribute> Attributes => base.Attributes.Concat(
+        SubProviders
+            .SelectMany(p => p.Attributes.Select(attr => new { p.PoolInfo.PoolId, Attribute = attr }))
+            .Where(pa => IncludeTypes.Contains(pa.Attribute.TraitType))
+            .Select(pa => pa.Attribute.IncludeUnderscoreForTraitType(pa.PoolId)));
+
+    internal static List<string> IncludeTypes = new()
+    { "LeftAmount", "StartTime", "FinishTime", "StartAmount", "ProviderName" };
+    internal BigInteger LastPoolId => PoolInfo.Params[1];
+    internal IEnumerable<Provider> SubProviders { get; }
+    internal static IEnumerable<BigInteger> Range(BigInteger first, BigInteger last)
     {
-        get
-        {
-            var isAddedVaultId = false;
-            var result = new List<Erc721Attribute>
-            {
-                TokenNameAttribute
-            };
-            for (var poolId = PoolInfo.PoolId + 1; poolId <= PoolInfo.Params[1]; poolId++)
-            {
-                var subProvider = PoolInfo.Factory.Create(poolId);
-                SubProviders.Add(subProvider);
-
-                if (!isAddedVaultId)
-                {
-                    result.AddRange(subProvider.ProviderAttributes.Where(x => x.TraitType.Contains("VaultId")));
-
-                    isAddedVaultId = true;
-                }
-
-                result.AddRange(subProvider.ProviderAttributes.Where(x => !x.TraitType.Contains("VaultId")).Select(
-                    attribute => attribute.IncludeUnderscoreForTraitType(poolId)));
-            }
-            return result;
-        }
-    }
-
-    public List<Provider> SubProviders { get; }
-
-    public BundleProvider(BasePoolInfo basePoolInfo)
-        : base(basePoolInfo)
-    {
-        SubProviders = new List<Provider>();
+        for (var i = first; i <= last; i++)
+            yield return i;
     }
 }
