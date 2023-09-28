@@ -20,13 +20,12 @@ public abstract class ProviderImage
         }
     }
 
-    protected PointF GetCoordinates(string traitType)
+    protected PointF? GetCoordinates(string traitType)
     {
         if (Coordinates.TryGetValue(traitType, out var coordinates))
         {
             return coordinates;
         }
-
-        throw new Exception($"Coordinates for trait_type '{traitType}' are not defined.");
+        return null;
     }
 }

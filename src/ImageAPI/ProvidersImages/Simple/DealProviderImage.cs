@@ -18,7 +18,9 @@ public class DealProviderImage : ProviderImage
         foreach (var attribute in attributes)
         {
             var coordinates = GetCoordinates(attribute.TraitType);
-            var options = imageProcessor.CreateTextOptions(coordinates);
+            if (coordinates == null)
+                continue;
+            var options = imageProcessor.CreateTextOptions((PointF)coordinates);
             imageProcessor.DrawText(attribute, options);
         }
 
