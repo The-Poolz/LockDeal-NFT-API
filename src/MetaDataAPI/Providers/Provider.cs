@@ -31,7 +31,7 @@ public abstract class Provider
 
     public BasePoolInfo PoolInfo { get; }
     [Display(DisplayType.Number)]
-    public virtual BigInteger Collection => PoolInfo.VaultId;
+    public virtual BigInteger VaultId => PoolInfo.VaultId;
     protected Provider(BasePoolInfo basePoolInfo)
     {
         PoolInfo = basePoolInfo;

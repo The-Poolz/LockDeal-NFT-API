@@ -26,7 +26,7 @@ public class CollateralProvider : Provider
     public Erc20Token MainCoin => PoolInfo.Token;
 
     [Display(DisplayType.Number)]
-    public override BigInteger Collection => SubProvider[CollateralType.TokenCollector].PoolInfo.VaultId;
+    public override BigInteger VaultId => SubProvider[CollateralType.TokenCollector].PoolInfo.VaultId;
 
     [Display(DisplayType.Ignore)]
     public override decimal LeftAmount => base.LeftAmount;
