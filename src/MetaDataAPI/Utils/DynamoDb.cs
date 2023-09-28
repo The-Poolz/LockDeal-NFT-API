@@ -56,9 +56,9 @@ public class DynamoDb
                 .GetAwaiter()
                 .GetResult();
         }
-        catch (AmazonDynamoDBException e)
+        catch (TransactionCanceledException)
         {
-            Console.WriteLine(e);
+            return hash;
         }
 
         return hash;
