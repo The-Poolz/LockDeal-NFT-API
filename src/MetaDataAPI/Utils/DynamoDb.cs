@@ -45,7 +45,7 @@ public class DynamoDb
                 .GetAwaiter()
                 .GetResult();
         }
-        catch (TransactionCanceledException) { }
+        catch (ConditionalCheckFailedException) { }
 
         return hash;
     }
