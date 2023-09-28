@@ -27,32 +27,21 @@ public class DynamoDb
         var jsonAttributes = JsonConvert.SerializeObject(attributes);
         var hash = StringToSha256(jsonAttributes);
 
-        var put = new TransactWriteItem
+        var putRequest = new PutItemRequest
         {
-            Put = new Put
+            TableName = TableName,
+            Item = new Dictionary<string, AttributeValue>
             {
-                TableName = TableName,
-                Item = new Dictionary<string, AttributeValue>
-                {
-                    { PrimaryKey, new AttributeValue { S = hash } },
-                    { "Data", new AttributeValue { S = jsonAttributes } },
-                    { "InsertedTime", new AttributeValue { N = DateTimeOffset.UtcNow.ToUnixTimeSeconds().ToString() } }
-                },
-                ConditionExpression = $"attribute_not_exists({PrimaryKey})"
-            }
-        };
-
-        var request = new TransactWriteItemsRequest
-        {
-            TransactItems = new List<TransactWriteItem>
-            {
-                new() { Put = put.Put }
-            }
+                { PrimaryKey, new AttributeValue { S = hash } },
+                { "Data", new AttributeValue { S = jsonAttributes } },
+                { "InsertedTime", new AttributeValue { N = DateTimeOffset.UtcNow.ToUnixTimeSeconds().ToString() } }
+            },
+            ConditionExpression = $"attribute_not_exists({PrimaryKey})"
         };
 
         try
         {
-            client.TransactWriteItemsAsync(request)
+            client.PutItemAsync(putRequest)
                 .GetAwaiter()
                 .GetResult();
         }
