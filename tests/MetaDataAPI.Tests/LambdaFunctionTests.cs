@@ -45,6 +45,7 @@ public class LambdaFunctionTests : SetEnvironments
         response.Body.Should().Contain($"Lock Deal NFT Pool: {id}");
         response.StatusCode.Should().Be((int)HttpStatusCode.OK);
         response.Headers.Should().Contain(new KeyValuePair<string, string>("Content-Type", "application/json"));
+        response.Body.Should().Contain(StaticResults.ExpectedDescription[id]);
     }
 
     public static IEnumerable<object[]> TestCases()

@@ -2,7 +2,7 @@
 
 namespace MetaDataAPI.Tests.Helpers;
 
-internal static class StaticResults
+public static class StaticResults
 {
     internal static Dictionary<BigInteger, string> MetaData = new()
     {
@@ -41,6 +41,31 @@ internal static class StaticResults
         { "0x7254a337d05d3965d7d3d8c1a94cd1cfcd1b00d6","RefundProvider"},
         { "0xcd1ef832eb8a5a77842c440032e03c4330974d21","Main coin Synthetic"},
         { "0x8bf8cf18c5cb5de075978394624674ba19b96d1b","CollateralProvider"},
-        {"0x70decfd5e51c59ebdc8aca96bf22da6aff00b176","BundleProvider" }
+        { "0x70decfd5e51c59ebdc8aca96bf22da6aff00b176","BundleProvider" }
+    };
+
+    public static readonly Dictionary<int, string> ExpectedDescription = new()
+    {
+        { 0, "This NFT represents immediate access to 0 units of the specified asset Token Synthetic (TST@0x43d...cdffc)."},
+        { 1, "This NFT represents immediate access to 50 units of the specified asset Token Synthetic (TST@0x43d...cdffc)."},
+        { 2, "This NFT securely locks 0 units of the asset Token Synthetic (TST@0x43d...cdffc). Access to these assets will commence on the designated start time of 06/09/2023 13:03:46."},
+        { 3, "This NFT securely locks 50 units of the asset Token Synthetic (TST@0x43d...cdffc). Access to these assets will commence on the designated start time of 06/09/2023 13:03:46."},
+        { 4, "This NFT governs a time-locked pool containing 0/50 units of the asset Token Synthetic (TST@0x43d...cdffc). Withdrawals are permitted in a linear fashion beginning at 06/09/2023 13:11:37, culminating in full access at 06/09/2023 13:11:37."},
+        { 5, "This NFT governs a time-locked pool containing 50/50 units of the asset Token Synthetic (TST@0x43d...cdffc). Withdrawals are permitted in a linear fashion beginning at 06/09/2023 13:11:37, culminating in full access at 06/09/2023 13:11:37."},
+        { 6, "This NFT encompasses 0 units of the asset Token Synthetic (TST@0x43d...cdffc) with an associated refund rate of 50. Post rate calculation, the refundable amount in the primary asset Main coin Synthetic (TST@0xcd1...74d21) will be 0."},
+        { 7, "This NFT represents immediate access to 0 units of the specified asset Token Synthetic (TST@0x43d...cdffc)."},
+        { 8, "Exclusively utilized by project administrators, this NFT serves as a secure vault for holding refundable tokens Token Synthetic (TST@0x43d...cdffc), for Main Coin Main coin Synthetic (TST@0xcd1...74d21). It holds 0 for the main coin collector, 50 for the token collector, and 50 for the main coin holder, valid until 29/09/2023 16:43:16."},
+        { 9, "This NFT represents immediate access to 0 units of the specified asset Main coin Synthetic (TST@0xcd1...74d21)."},
+        { 10, "This NFT represents immediate access to 50 units of the specified asset Token Synthetic (TST@0x43d...cdffc)."},
+        { 11, "This NFT represents immediate access to 50 units of the specified asset Main coin Synthetic (TST@0xcd1...74d21)."},     
+        { 12, "This NFT encompasses 50 units of the asset Token Synthetic (TST@0x43d...cdffc) with an associated refund rate of 50. Post rate calculation, the refundable amount in the primary asset Main coin Synthetic (TST@0xcd1...74d21) will be 2500."},
+        { 13, "This NFT represents immediate access to 50 units of the specified asset Token Synthetic (TST@0x43d...cdffc)."},
+        { 14, "This NFT encompasses 100 units of the asset Token Synthetic (TST@0x43d...cdffc) with an associated refund rate of 50. Post rate calculation, the refundable amount in the primary asset Main coin Synthetic (TST@0xcd1...74d21) will be 5000."},
+        { 15, "This NFT represents immediate access to 100 units of the specified asset Token Synthetic (TST@0x43d...cdffc)."},
+        { 16, "Exclusively utilized by project administrators, this NFT serves as a secure vault for holding refundable tokens Token Synthetic (TST@0x43d...cdffc), for Main Coin Main coin Synthetic (TST@0xcd1...74d21). It holds 0 for the main coin collector, 0 for the token collector, and 0 for the main coin holder, valid until 19/09/2023 10:13:33."},
+        { 17, "This NFT represents immediate access to 0 units of the specified asset Main coin Synthetic (TST@0xcd1...74d21)."},
+        { 18, "This NFT represents immediate access to 0 units of the specified asset Token Synthetic (TST@0x43d...cdffc)."},
+        { 19, "This NFT represents immediate access to 0 units of the specified asset Main coin Synthetic (TST@0xcd1...74d21)."},
+        { 20, "This NFT orchestrates a series of sub-pools to enable sophisticated asset management strategies. The following are the inner pools under its governance that holds total 0.000000000000025 Token Synthetic (TST@0x43d...cdffc):"},
     };
 }
