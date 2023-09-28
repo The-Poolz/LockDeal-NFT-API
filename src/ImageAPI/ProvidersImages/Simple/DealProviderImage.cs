@@ -10,7 +10,9 @@ public class DealProviderImage : ProviderImage
 
     public override IDictionary<string, PointF> Coordinates => new Dictionary<string, PointF>
     {
-        { "LeftAmount", new PointF(0, 0) }
+        { "ProviderName", new PointF(0, 0) },
+        { "LeftAmount", new PointF(0, 32) },
+        { "Collection", new PointF(0, 64) }
     };
 
     public DealProviderImage(ImageProcessor imageProcessor, IEnumerable<Erc721Attribute> attributes)

@@ -5,7 +5,7 @@ using MetaDataAPI.Models.Response.Converters;
 
 namespace MetaDataAPI.Models.Response;
 
-[JsonConverter(typeof(Erc721AttributeConverter))]
+//[JsonConverter(typeof(Erc721AttributeConverter))]
 public class Erc721Attribute
 {
     [JsonProperty("display_type", NullValueHandling = NullValueHandling.Ignore)]
