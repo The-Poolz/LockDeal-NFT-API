@@ -14,11 +14,10 @@ public class ImageProcessor
     private readonly Font font;
     public readonly Image Image;
 
-    public ImageProcessor(float fontSize = 24f)
+    public ImageProcessor(Image image, Font font)
     {
         var resourcesLoader = new ResourcesLoader();
-        Image = resourcesLoader.LoadImageFromEmbeddedResources();
-        font = resourcesLoader.LoadFontFromEmbeddedResources(fontSize);
+        
     }
 
     public virtual void DrawText(Erc721Attribute attribute, TextOptions textOptions, IBrush? brush = null, IPen? pen = null)

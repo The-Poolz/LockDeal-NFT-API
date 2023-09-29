@@ -1,4 +1,5 @@
 ﻿using ImageAPI.Utils;
+using SixLabors.Fonts;
 using SixLabors.ImageSharp;
 using MetaDataAPI.Models.Response;
 
@@ -15,9 +16,10 @@ public class LockDealProviderImage : ProviderImage
         { "Collection", new PointF(BackgroundImage.Width / 2f, BackgroundImage.Height / 4f) }
     };
 
-    public LockDealProviderImage(ImageProcessor imageProcessor, IEnumerable<Erc721Attribute> attributes)
-        : base(imageProcessor)
+    public LockDealProviderImage(Image backgroundImage, Font font, IEnumerable<Erc721Attribute> attributes)
+        : base(backgroundImage)
     {
+        var imageProcessor = new ImageProcessor(backgroundImage, font);
         foreach (var attribute in attributes)
         {
             var coordinates = GetCoordinates(attribute.TraitType);

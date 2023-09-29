@@ -1,4 +1,5 @@
 ﻿using ImageAPI.Utils;
+using SixLabors.Fonts;
 using SixLabors.ImageSharp;
 using MetaDataAPI.Models.Response;
 
@@ -16,9 +17,10 @@ public class TimedDealProviderImage : ProviderImage
         { "Collection", new PointF(BackgroundImage.Width / 2f, BackgroundImage.Height / 5f) }
     };
 
-    public TimedDealProviderImage(ImageProcessor imageProcessor, IEnumerable<Erc721Attribute> attributes)
-        : base(imageProcessor)
+    public TimedDealProviderImage(Image backgroundImage, Font font, IEnumerable<Erc721Attribute> attributes)
+        : base(backgroundImage)
     {
+        var imageProcessor = new ImageProcessor(backgroundImage, font);
         foreach (var attribute in attributes)
         {
             var coordinates = GetCoordinates(attribute.TraitType);

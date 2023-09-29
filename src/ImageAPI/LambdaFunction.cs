@@ -1,9 +1,11 @@
 using ImageAPI.Utils;
 using Newtonsoft.Json;
+using SixLabors.Fonts;
 using Amazon.Lambda.Core;
+using SixLabors.ImageSharp;
+using ImageAPI.ProvidersImages;
 using MetaDataAPI.Models.Response;
 using Amazon.Lambda.APIGatewayEvents;
-using ImageAPI.ProvidersImages;
 
 [assembly: LambdaSerializer(typeof(Amazon.Lambda.Serialization.Json.JsonSerializer))]
 
@@ -12,17 +14,20 @@ namespace ImageAPI;
 public class LambdaFunction
 {
     private const float fontSize = 14f;
-    private readonly ImageProcessor imageProcessor;
     private readonly DynamoDb dynamoDb;
+    private readonly Font font;
+    private readonly Image backgroundImage;
 
     public LambdaFunction()
-        : this(new ImageProcessor(fontSize), new DynamoDb())
+        : this(new DynamoDb())
     { }
 
-    public LambdaFunction(ImageProcessor imageProcessor, DynamoDb dynamoDb)
+    public LambdaFunction(DynamoDb dynamoDb)
     {
-        this.imageProcessor = imageProcessor;
         this.dynamoDb = dynamoDb;
+        var resourcesLoader = new ResourcesLoader();
+        backgroundImage = resourcesLoader.LoadImageFromEmbeddedResources();
+        font = resourcesLoader.LoadFontFromEmbeddedResources(fontSize);
     }
 
     public APIGatewayProxyResponse Run(APIGatewayProxyRequest input)
@@ -46,7 +51,7 @@ public class LambdaFunction
 
         try
         {
-            var providerImage = ProviderImageFactory.Create(imageProcessor, attributes);
+            var providerImage = ProviderImageFactory.Create(backgroundImage, font, attributes);
 
             return ResponseBuilder.ImageResponse(providerImage.Base64Image);
         }

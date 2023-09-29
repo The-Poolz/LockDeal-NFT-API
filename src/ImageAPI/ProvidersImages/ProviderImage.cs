@@ -1,5 +1,4 @@
-﻿using ImageAPI.Utils;
-using SixLabors.ImageSharp;
+﻿using SixLabors.ImageSharp;
 
 namespace ImageAPI.ProvidersImages;
 
@@ -23,9 +22,9 @@ public abstract class ProviderImage
         }
     }
 
-    protected ProviderImage(ImageProcessor imageProcessor)
+    protected ProviderImage(Image backgroundImage)
     {
-        BackgroundImage = imageProcessor.Image;
+        BackgroundImage = backgroundImage;
     }
 
     protected PointF? GetCoordinates(string traitType)

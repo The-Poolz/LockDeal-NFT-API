@@ -1,8 +1,9 @@
-﻿using ImageAPI.Utils;
-using SixLabors.ImageSharp;
+﻿using SixLabors.ImageSharp;
 using MetaDataAPI.Models.Response;
 using System.Text.RegularExpressions;
+using ImageAPI.Utils;
 using SixLabors.ImageSharp.PixelFormats;
+using SixLabors.Fonts;
 
 namespace ImageAPI.ProvidersImages.Advanced;
 
@@ -18,8 +19,8 @@ public class BundleProviderImage : ProviderImage
         { "Collection", new PointF(0, BackgroundImage.Height / 5f) }
     };
 
-    public BundleProviderImage(ImageProcessor imageProcessor, IEnumerable<Erc721Attribute> attributes)
-        : base(imageProcessor)
+    public BundleProviderImage(Image backgroundImage, Font font, IEnumerable<Erc721Attribute> attributes)
+        : base(backgroundImage)
     {
         attributes = attributes.ToArray();
         var groupedAttributes = attributes
@@ -38,10 +39,11 @@ public class BundleProviderImage : ProviderImage
 
 
         var bundleImages = groupedAttributes
-            .Select(includedAttributes => ProviderImageFactory.Create(imageProcessor, includedAttributes))
+            .Select(includedAttributes => ProviderImageFactory.Create(backgroundImage, font, includedAttributes))
             .Select(providerImage => providerImage.Image)
             .ToArray();
 
+        var imageProcessor = new ImageProcessor(backgroundImage, font);
         foreach (var attribute in attributes)
         {
             var coordinates = GetCoordinates(attribute.TraitType);
@@ -56,7 +58,7 @@ public class BundleProviderImage : ProviderImage
 
         var imageList = new List<Image>(bundleImages)
         {
-            
+            imageProcessor.Image
         };
 
         const int frameDelay = 100;
