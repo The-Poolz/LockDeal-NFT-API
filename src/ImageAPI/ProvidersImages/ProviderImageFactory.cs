@@ -20,9 +20,9 @@ public static class ProviderImageFactory
 
     private static Dictionary<string, Func<ProviderImage>> Providers(Image backgroundImage, Font font, IEnumerable<Erc721Attribute> attributes) => new()
     {
-        { nameof(DealProvider), () => new DealProviderImage(backgroundImage.Clone(ctx => {}), font, attributes) },
-        { nameof(LockDealProvider), () => new LockDealProviderImage(backgroundImage.Clone(ctx => {}), font, attributes) },
-        { nameof(TimedDealProvider), () => new TimedDealProviderImage(backgroundImage.Clone(ctx => {}), font, attributes) },
-        { nameof(BundleProvider), () => new BundleProviderImage(backgroundImage.Clone(ctx => {}), font, attributes) },
+        { nameof(DealProvider), () => new DealProviderImage(backgroundImage.Clone(_ => {}), font, attributes) },
+        { nameof(LockDealProvider), () => new LockDealProviderImage(backgroundImage.Clone(_ => {}), font, attributes) },
+        { nameof(TimedDealProvider), () => new TimedDealProviderImage(backgroundImage.Clone(_ => {}), font, attributes) },
+        { nameof(BundleProvider), () => new BundleProviderImage(backgroundImage.Clone(_ => {}), font, attributes) },
     };
 }

@@ -41,8 +41,6 @@ public class ImageProcessor
         pen ??= Pens.Solid(Color.DarkRed, 2);
 
         Image.Mutate(x => x.DrawText(textOptions, text, brush, pen));
-
-        Image.Save("result.jpg");
     }
 
     public virtual TextOptions CreateTextOptions(PointF coordinates)

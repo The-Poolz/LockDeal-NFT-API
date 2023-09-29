@@ -1,5 +1,4 @@
-﻿using ImageAPI.Utils;
-using SixLabors.Fonts;
+﻿using SixLabors.Fonts;
 using SixLabors.ImageSharp;
 using MetaDataAPI.Models.Response;
 
@@ -17,18 +16,8 @@ public class LockDealProviderImage : ProviderImage
     };
 
     public LockDealProviderImage(Image backgroundImage, Font font, IEnumerable<Erc721Attribute> attributes)
-        : base(backgroundImage)
+        : base(backgroundImage, font)
     {
-        var imageProcessor = new ImageProcessor(backgroundImage, font);
-        foreach (var attribute in attributes)
-        {
-            var coordinates = GetCoordinates(attribute.TraitType);
-            if (coordinates == null)
-                continue;
-            var options = imageProcessor.CreateTextOptions((PointF)coordinates);
-            imageProcessor.DrawText(attribute, options);
-        }
-
-        Image = imageProcessor.Image;
+        Image = DrawAttributes(attributes);
     }
 }

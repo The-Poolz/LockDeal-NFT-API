@@ -1,9 +1,7 @@
-﻿using SixLabors.ImageSharp;
+﻿using SixLabors.Fonts;
+using SixLabors.ImageSharp;
 using MetaDataAPI.Models.Response;
 using System.Text.RegularExpressions;
-using ImageAPI.Utils;
-using SixLabors.ImageSharp.PixelFormats;
-using SixLabors.Fonts;
 using SixLabors.ImageSharp.Processing;
 
 namespace ImageAPI.ProvidersImages.Advanced;
@@ -21,9 +19,11 @@ public class BundleProviderImage : ProviderImage
     };
 
     public BundleProviderImage(Image backgroundImage, Font font, IEnumerable<Erc721Attribute> attributes)
-        : base(backgroundImage)
+        : base(backgroundImage, font)
     {
         attributes = attributes.ToArray();
+        Image = DrawAttributes(attributes);
+
         var groupedAttributes = attributes
             .Where(attr => Regex.IsMatch(attr.TraitType, @"_(\d+)"))
             .GroupBy(attr => Regex.Match(attr.TraitType, @"_(\d+)").Groups[1].Value)
@@ -37,48 +37,30 @@ public class BundleProviderImage : ProviderImage
                 );
             }).ToArray())
             .ToArray();
-
-
         var bundleImages = groupedAttributes
             .Select(includedAttributes => ProviderImageFactory.Create(backgroundImage, font, includedAttributes))
             .Select(providerImage => providerImage.Image)
             .ToArray();
-
-        var imageProcessor = new ImageProcessor(backgroundImage, font);
-        foreach (var attribute in attributes)
-        {
-            var coordinates = GetCoordinates(attribute.TraitType);
-            if (coordinates == null)
-                continue;
-
-            var options = imageProcessor.CreateTextOptions((PointF)coordinates);
-            imageProcessor.DrawText(attribute, options);
-        }
-
-        var imageList = new List<Image>(bundleImages)
-        {
-            imageProcessor.Image
-        };
+        var images = new List<Image>(bundleImages);
 
         const int frameDelay = 100;
-
-        using var gif = imageProcessor.Image;
+        using var gif = Image;
 
         var gifMetaData = gif.Metadata.GetGifMetadata();
         gifMetaData.RepeatCount = 5;
 
         var metadata = gif.Frames.RootFrame.Metadata.GetGifMetadata();
         metadata.FrameDelay = frameDelay;
-        for (var i = 0; i < imageList.Count; i++)
+
+        foreach (var image in images)
         {
-            metadata = imageList[i].Frames.RootFrame.Metadata.GetGifMetadata();
+            metadata = image.Frames.RootFrame.Metadata.GetGifMetadata();
             metadata.FrameDelay = frameDelay;
 
-            gif.Frames.AddFrame(imageList[i].Frames.RootFrame);
+            gif.Frames.AddFrame(image.Frames.RootFrame);
         }
 
-        Image = gif.Clone(ctx => {});
-
+        Image = gif.Clone(_ => {});
         gif.SaveAsGif("animated.gif");
     }
 }
