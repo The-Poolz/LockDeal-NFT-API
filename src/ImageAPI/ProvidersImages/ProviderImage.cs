@@ -1,9 +1,12 @@
-﻿using SixLabors.ImageSharp;
+﻿using ImageAPI.Utils;
+using SixLabors.ImageSharp;
 
 namespace ImageAPI.ProvidersImages;
 
 public abstract class ProviderImage
 {
+    public Image BackgroundImage { get; }
+
     public abstract Image Image { get; }
     public abstract IDictionary<string, PointF> Coordinates { get; }
     public string Base64Image
@@ -18,6 +21,11 @@ public abstract class ProviderImage
 
             return Convert.ToBase64String(imageBytes);
         }
+    }
+
+    protected ProviderImage(ImageProcessor imageProcessor)
+    {
+        BackgroundImage = imageProcessor.Image;
     }
 
     protected PointF? GetCoordinates(string traitType)

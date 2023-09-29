@@ -1,4 +1,5 @@
-﻿using ImageAPI.Utils;
+﻿using ImageAPI.ProvidersImages.Advanced;
+using ImageAPI.Utils;
 using MetaDataAPI.Providers;
 using MetaDataAPI.Models.Response;
 using ImageAPI.ProvidersImages.Simple;
@@ -17,6 +18,9 @@ public static class ProviderImageFactory
 
     private static Dictionary<string, Func<ProviderImage>> Providers(ImageProcessor imageProcessor, IEnumerable<Erc721Attribute> attributes) => new()
     {
-        { nameof(DealProvider), () => new DealProviderImage(imageProcessor, attributes) }
+        { nameof(DealProvider), () => new DealProviderImage(imageProcessor, attributes) },
+        { nameof(LockDealProvider), () => new LockDealProviderImage(imageProcessor, attributes) },
+        { nameof(TimedDealProvider), () => new TimedDealProviderImage(imageProcessor, attributes) },
+        { nameof(BundleProvider), () => new BundleProviderImage(imageProcessor, attributes) },
     };
 }
