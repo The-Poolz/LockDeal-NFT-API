@@ -3,6 +3,7 @@ using SixLabors.ImageSharp;
 using MetaDataAPI.Models.Response;
 using System.Text.RegularExpressions;
 using SixLabors.ImageSharp.Processing;
+using SixLabors.ImageSharp.PixelFormats;
 
 namespace ImageAPI.ProvidersImages.Advanced;
 
@@ -11,11 +12,11 @@ public class BundleProviderImage : ProviderImage
     public sealed override Image Image { get; }
     public override IDictionary<string, PointF> Coordinates => new Dictionary<string, PointF>
     {
-        { "ProviderName", new PointF(0, 0) },
-        { "LeftAmount", new PointF(0, BackgroundImage.Height / 2f) },
-        { "StartTime", new PointF(0, BackgroundImage.Height / 3f) },
-        { "FinishTime", new PointF(0, BackgroundImage.Height / 4f) },
-        { "Collection", new PointF(0, BackgroundImage.Height / 5f) }
+        { "ProviderName", new PointF(BackgroundImage.Width / 2f, 0) },
+        { "LeftAmount", new PointF(BackgroundImage.Width / 2f, BackgroundImage.Height / 2f) },
+        { "StartTime", new PointF(BackgroundImage.Width / 2f, BackgroundImage.Height / 3f) },
+        { "FinishTime", new PointF(BackgroundImage.Width / 2f, BackgroundImage.Height / 4f) },
+        { "Collection", new PointF(BackgroundImage.Width / 2f, BackgroundImage.Height / 5f) }
     };
 
     public BundleProviderImage(Image backgroundImage, Font font, IEnumerable<Erc721Attribute> attributes)
@@ -41,26 +42,52 @@ public class BundleProviderImage : ProviderImage
             .Select(includedAttributes => ProviderImageFactory.Create(backgroundImage, font, includedAttributes))
             .Select(providerImage => providerImage.Image)
             .ToArray();
-        var images = new List<Image>(bundleImages);
-
-        const int frameDelay = 100;
-        using var gif = Image;
-
-        var gifMetaData = gif.Metadata.GetGifMetadata();
-        gifMetaData.RepeatCount = 5;
-
-        var metadata = gif.Frames.RootFrame.Metadata.GetGifMetadata();
-        metadata.FrameDelay = frameDelay;
-
-        foreach (var image in images)
+        var images = new List<Image>(bundleImages)
         {
-            metadata = image.Frames.RootFrame.Metadata.GetGifMetadata();
-            metadata.FrameDelay = frameDelay;
+            Image
+        };
 
-            gif.Frames.AddFrame(image.Frames.RootFrame);
-        }
+        const int frameDelay = 10;
+        using var gif = BackgroundImage.Clone(_ => {});
+        var gifMetaData = gif.Metadata.GetGifMetadata();
+        gifMetaData.RepeatCount = 0;
 
-        Image = gif.Clone(_ => {});
+        SlideImages(gif, images, frameDelay);
+
+        Image = gif.Clone(_ => { });
         gif.SaveAsGif("animated.gif");
     }
+
+    private void SlideImages(Image gif, IReadOnlyList<Image> images, int frameDelay)
+    {
+        var slideSteps = 20;
+        var stepSize = images[0].Width / slideSteps;
+
+        for (var i = 0; i < images.Count; i++)
+        {
+            var currentImage = images[i];
+            var nextImage = images[(i + 1) % images.Count];
+
+            for (var step = 0; step < slideSteps; step++)
+            {
+                var offset = step * stepSize;
+                using var frame = new Image<Rgba32>(currentImage.Width, currentImage.Height);
+
+                if (-offset < frame.Width && currentImage.Width - offset > 0)
+                {
+                    frame.Mutate(ctx => ctx.DrawImage(currentImage, new Point(-offset, 0), 1f));
+                }
+
+                if (currentImage.Width - offset < frame.Width && offset > 0)
+                {
+                    frame.Mutate(ctx => ctx.DrawImage(nextImage, new Point(currentImage.Width - offset, 0), 1f));
+                }
+
+                var metadata = frame.Frames.RootFrame.Metadata.GetGifMetadata();
+                metadata.FrameDelay = frameDelay;
+                gif.Frames.AddFrame(frame.Frames.RootFrame);
+            }
+        }
+    }
+
 }
