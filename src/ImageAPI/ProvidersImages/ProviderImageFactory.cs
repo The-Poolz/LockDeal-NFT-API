@@ -3,6 +3,7 @@ using SixLabors.ImageSharp;
 using MetaDataAPI.Providers;
 using MetaDataAPI.Models.Response;
 using ImageAPI.ProvidersImages.Simple;
+using SixLabors.ImageSharp.Processing;
 using ImageAPI.ProvidersImages.Advanced;
 
 namespace ImageAPI.ProvidersImages;
@@ -19,9 +20,9 @@ public static class ProviderImageFactory
 
     private static Dictionary<string, Func<ProviderImage>> Providers(Image backgroundImage, Font font, IEnumerable<Erc721Attribute> attributes) => new()
     {
-        { nameof(DealProvider), () => new DealProviderImage(backgroundImage, font, attributes) },
-        { nameof(LockDealProvider), () => new LockDealProviderImage(backgroundImage, font, attributes) },
-        { nameof(TimedDealProvider), () => new TimedDealProviderImage(backgroundImage, font, attributes) },
-        { nameof(BundleProvider), () => new BundleProviderImage(backgroundImage, font, attributes) },
+        { nameof(DealProvider), () => new DealProviderImage(backgroundImage.Clone(ctx => {}), font, attributes) },
+        { nameof(LockDealProvider), () => new LockDealProviderImage(backgroundImage.Clone(ctx => {}), font, attributes) },
+        { nameof(TimedDealProvider), () => new TimedDealProviderImage(backgroundImage.Clone(ctx => {}), font, attributes) },
+        { nameof(BundleProvider), () => new BundleProviderImage(backgroundImage.Clone(ctx => {}), font, attributes) },
     };
 }

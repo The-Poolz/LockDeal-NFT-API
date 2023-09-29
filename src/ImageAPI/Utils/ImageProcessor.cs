@@ -16,8 +16,8 @@ public class ImageProcessor
 
     public ImageProcessor(Image image, Font font)
     {
-        var resourcesLoader = new ResourcesLoader();
-        
+        Image = image;
+        this.font = font;
     }
 
     public virtual void DrawText(Erc721Attribute attribute, TextOptions textOptions, IBrush? brush = null, IPen? pen = null)

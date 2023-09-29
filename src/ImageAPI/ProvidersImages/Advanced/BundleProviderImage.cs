@@ -4,6 +4,7 @@ using System.Text.RegularExpressions;
 using ImageAPI.Utils;
 using SixLabors.ImageSharp.PixelFormats;
 using SixLabors.Fonts;
+using SixLabors.ImageSharp.Processing;
 
 namespace ImageAPI.ProvidersImages.Advanced;
 
@@ -54,8 +55,6 @@ public class BundleProviderImage : ProviderImage
             imageProcessor.DrawText(attribute, options);
         }
 
-        Image = imageProcessor.Image;
-
         var imageList = new List<Image>(bundleImages)
         {
             imageProcessor.Image
@@ -63,25 +62,23 @@ public class BundleProviderImage : ProviderImage
 
         const int frameDelay = 100;
 
-        // Create empty image.
-        using Image<Rgba32> gif = new(750, 375, Color.Blue);
+        using var gif = imageProcessor.Image;
 
-        // Set animation loop repeat count to 5.
         var gifMetaData = gif.Metadata.GetGifMetadata();
         gifMetaData.RepeatCount = 5;
 
-        // Set the delay until the next image is displayed.
         var metadata = gif.Frames.RootFrame.Metadata.GetGifMetadata();
         metadata.FrameDelay = frameDelay;
         for (var i = 0; i < imageList.Count; i++)
         {
-            // Set the delay until the next image is displayed.
             metadata = imageList[i].Frames.RootFrame.Metadata.GetGifMetadata();
             metadata.FrameDelay = frameDelay;
 
-            // Add the color image to the gif.
             gif.Frames.AddFrame(imageList[i].Frames.RootFrame);
         }
+
+        Image = gif.Clone(ctx => {});
+
         gif.SaveAsGif("animated.gif");
     }
 }
