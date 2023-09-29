@@ -2,9 +2,6 @@
 using SixLabors.ImageSharp;
 using MetaDataAPI.Models.Response;
 using System.Text.RegularExpressions;
-using SixLabors.ImageSharp.Formats.Gif;
-using SixLabors.ImageSharp.Processing.Processors.Quantization;
-using SixLabors.ImageSharp.Processing;
 using SixLabors.ImageSharp.PixelFormats;
 
 namespace ImageAPI.ProvidersImages.Advanced;
@@ -59,45 +56,30 @@ public class BundleProviderImage : ProviderImage
 
         var imageList = new List<Image>(bundleImages)
         {
-            Image
+            
         };
 
         const int frameDelay = 100;
 
-        // For demonstration: use images with different colors.
-        Color[] colors = {
-            Color.Green,
-            Color.Red
-        };
-
         // Create empty image.
-        using Image<Rgba32> gif = new(width, height, Color.Blue);
+        using Image<Rgba32> gif = new(750, 375, Color.Blue);
 
         // Set animation loop repeat count to 5.
         var gifMetaData = gif.Metadata.GetGifMetadata();
         gifMetaData.RepeatCount = 5;
 
         // Set the delay until the next image is displayed.
-        GifFrameMetadata metadata = gif.Frames.RootFrame.Metadata.GetGifMetadata();
+        var metadata = gif.Frames.RootFrame.Metadata.GetGifMetadata();
         metadata.FrameDelay = frameDelay;
-        for (int i = 0; i < colors.Length; i++)
+        for (var i = 0; i < imageList.Count; i++)
         {
-            // Create a color image, which will be added to the gif.
-            using Image<Rgba32> image = new(width, height, colors[i]);
-
             // Set the delay until the next image is displayed.
-            metadata = image.Frames.RootFrame.Metadata.GetGifMetadata();
+            metadata = imageList[i].Frames.RootFrame.Metadata.GetGifMetadata();
             metadata.FrameDelay = frameDelay;
 
             // Add the color image to the gif.
-            gif.Frames.AddFrame(image.Frames.RootFrame);
+            gif.Frames.AddFrame(imageList[i].Frames.RootFrame);
         }
-
-        // Save the final result.
-        gif.SaveAsGif("output.gif");
-
-        // Сохраняем GIF
         gif.SaveAsGif("animated.gif");
-        }
     }
 }
