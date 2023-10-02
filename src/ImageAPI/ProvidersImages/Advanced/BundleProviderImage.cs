@@ -42,13 +42,14 @@ public class BundleProviderImage : ProviderImage
             .Select(includedAttributes => ProviderImageFactory.Create(backgroundImage, font, includedAttributes))
             .Select(providerImage => providerImage.Image)
             .ToArray();
-        var images = new List<Image>(bundleImages)
+        var images = new List<Image>
         {
             Image
         };
+        images.AddRange(bundleImages);
 
         const int frameDelay = 10;
-        using var gif = BackgroundImage.Clone(_ => {});
+        using var gif = Image.Clone(_ => {});
         var gifMetaData = gif.Metadata.GetGifMetadata();
         gifMetaData.RepeatCount = 0;
 
