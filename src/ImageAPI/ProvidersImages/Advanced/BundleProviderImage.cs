@@ -54,19 +54,29 @@ public class BundleProviderImage : ProviderImage
 
         SlideImages(gif, images, frameDelay);
 
-        Image = gif.Clone(_ => { });
+        Image = gif.Clone(_ => {});
         gif.SaveAsGif("animated.gif");
     }
 
-    private void SlideImages(Image gif, IReadOnlyList<Image> images, int frameDelay)
+    private static void SlideImages(Image gif, IReadOnlyList<Image> images, int frameDelay)
     {
-        var slideSteps = 20;
+        const int slideSteps = 20;
         var stepSize = images[0].Width / slideSteps;
+
+        const int staticFrameDelay = 500;
 
         for (var i = 0; i < images.Count; i++)
         {
             var currentImage = images[i];
             var nextImage = images[(i + 1) % images.Count];
+
+            using (var staticFrame = new Image<Rgba32>(currentImage.Width, currentImage.Height))
+            {
+                staticFrame.Mutate(ctx => ctx.DrawImage(currentImage, new Point(0, 0), 1f));
+                var staticMetadata = staticFrame.Frames.RootFrame.Metadata.GetGifMetadata();
+                staticMetadata.FrameDelay = staticFrameDelay;
+                gif.Frames.AddFrame(staticFrame.Frames.RootFrame);
+            }
 
             for (var step = 0; step < slideSteps; step++)
             {
@@ -89,5 +99,4 @@ public class BundleProviderImage : ProviderImage
             }
         }
     }
-
 }
