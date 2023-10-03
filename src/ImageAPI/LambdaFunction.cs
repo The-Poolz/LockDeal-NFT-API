@@ -30,7 +30,7 @@ public class LambdaFunction
 
     public APIGatewayProxyResponse Run(APIGatewayProxyRequest input)
     {
-        if (input.QueryStringParameters.ContainsKey("hash"))
+        if (!input.QueryStringParameters.ContainsKey("hash"))
         {
             return ResponseBuilder.WrongInput();
         }

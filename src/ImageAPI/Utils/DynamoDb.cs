@@ -18,7 +18,7 @@ public class DynamoDb
         this.client = client;
     }
 
-    public async Task<GetItemResponse> GetItemAsync(string hash)
+    public virtual async Task<GetItemResponse> GetItemAsync(string hash)
     {
         return await client.GetItemAsync(new GetItemRequest
         {

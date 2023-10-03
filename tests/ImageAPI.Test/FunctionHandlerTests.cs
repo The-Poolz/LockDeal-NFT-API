@@ -1,14 +1,31 @@
 ﻿using Moq;
 using Xunit;
+using System.Net;
+using Amazon.DynamoDBv2.Model;
 using ImageAPI.Utils;
 using FluentAssertions;
 using Amazon.Lambda.APIGatewayEvents;
-using SixLabors.ImageSharp;
 
 namespace ImageAPI.Test;
 
 public class FunctionHandlerTests
 {
+    public static APIGatewayProxyResponse ValidResponse => new()
+    {
+        IsBase64Encoded = true,
+        StatusCode = (int)HttpStatusCode.OK,
+        Body = string.Empty,
+        Headers = new Dictionary<string, string>
+        {
+            { "Content-Type", "image/png" }
+        }
+    };
+
+    public FunctionHandlerTests()
+    {
+        Environment.SetEnvironmentVariable("AWS_REGION", "us-west-2");
+    }
+
     [Fact]
     internal void FunctionHandler_ShouldReturnResponse_WrongInput()
     {
@@ -16,7 +33,7 @@ public class FunctionHandlerTests
         {
             QueryStringParameters = new Dictionary<string, string>
             {
-                { "id", "not number" }
+                { "not-hash", "value" }
             }
         };
 
@@ -28,41 +45,62 @@ public class FunctionHandlerTests
     [Fact]
     internal void FunctionHandler_ShouldReturnResponse_ImageResponse()
     {
-        var expected = ResponseBuilder.ImageResponse("base64ImageHere");
+        var dynamoDb = new Mock<DynamoDb>();
+        dynamoDb.Setup(x => x.GetItemAsync("0x1"))
+            .ReturnsAsync(new GetItemResponse
+            {
+                Item = new Dictionary<string, AttributeValue>
+                {
+                    {
+                        "Data", new AttributeValue
+                        {
+                            S = "[{\"trait_type\":\"ProviderName\",\"value\":\"DealProvider\"},{\"trait_type\":\"Collection\",\"value\":0},{\"trait_type\":\"LeftAmount\",\"value\":50.0}]"
+                        }
+                    }
+                }
+            });
         var request = new APIGatewayProxyRequest
         {
             QueryStringParameters = new Dictionary<string, string>
             {
-                { "id", "1" }
+                { "hash", "0x1" }
             }
         };
 
-        var result = new LambdaFunction().Run(request);
+        var result = new LambdaFunction(dynamoDb.Object).Run(request);
 
-        result.Body.Should().NotBe(string.Empty);
-        result.Headers.Should().BeEquivalentTo(expected.Headers);
-        result.IsBase64Encoded.Should().Be(expected.IsBase64Encoded);
-        result.StatusCode.Should().Be(expected.StatusCode);
+        result.Body.Should().NotBe(ValidResponse.Body);
+        result.Headers.Should().BeEquivalentTo(ValidResponse.Headers);
+        result.IsBase64Encoded.Should().Be(ValidResponse.IsBase64Encoded);
+        result.StatusCode.Should().Be(ValidResponse.StatusCode);
     }
 
     [Fact]
     internal void FunctionHandler_ShouldReturnResponse_GeneralError()
     {
-        var imageProcessor = new Mock<ImageProcessor>();
-        imageProcessor
-            .Setup(x => x.CreateTextOptions(It.IsAny<PointF>()))
-            .Throws<InvalidOperationException>();
         var dynamoDb = new Mock<DynamoDb>();
-
+        dynamoDb.Setup(x => x.GetItemAsync("0x1"))
+            .ReturnsAsync(new GetItemResponse
+            {
+                Item = new Dictionary<string, AttributeValue>
+                {
+                    {
+                        "Data", new AttributeValue
+                        {
+                            S = "[{\"trait_type\":\"Collection\",\"value\":0},{\"trait_type\":\"LeftAmount\",\"value\":50.0}]"
+                        }
+                    }
+                }
+            });
         var request = new APIGatewayProxyRequest
         {
             QueryStringParameters = new Dictionary<string, string>
             {
-                { "id", "1" }
+                { "hash", "0x1" }
             }
         };
 
-        var result = new LambdaFunction(imageProcessor.Object, dynamoDb.Object).Run(request);
+        var result = new LambdaFunction(dynamoDb.Object).Run(request);
 
         result.Should().BeEquivalentTo(ResponseBuilder.GeneralError());
     }
