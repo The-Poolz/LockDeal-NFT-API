@@ -62,10 +62,7 @@ public class DynamoDb
         client.PutItemAsync(putRequest)
             .ContinueWith(task =>
             {
-                if (!task.IsFaulted) return;
-
-                var exception = task.Exception?.InnerExceptions.FirstOrDefault();
-                if (exception != null && exception is not ConditionalCheckFailedException)
+                if (task.IsFaulted && task.Exception?.InnerExceptions.FirstOrDefault() is { } exception and not ConditionalCheckFailedException)
                     throw exception;
             })
             .GetAwaiter()
