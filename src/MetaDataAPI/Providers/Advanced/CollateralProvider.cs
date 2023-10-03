@@ -19,11 +19,10 @@ public class CollateralProvider : Provider
                 $"Exclusively utilized by project administrators, this NFT serves as a secure vault for holding refundable tokens {Token}, for Main Coin {MainCoin}. " +
                 $"It holds {MainCoinCollectorAmount} for the main coin collector, {TokenCollectorAmount} for the token collector," +
                 $" and {MainCoinHolderAmount} for the main coin holder, valid until {FinishTime}.";
-    [Display(DisplayType.String)]
-    public override Erc20Token Token => SubProvider[CollateralType.TokenCollector].PoolInfo.Token;
-  
-    [Display(DisplayType.String)]
+
     public Erc20Token MainCoin => PoolInfo.Token;
+    [Display(DisplayType.Number)]
+    public BigInteger MainCoinCollection => PoolInfo.VaultId;
 
     [Display(DisplayType.Number)]
     public override BigInteger Collection => SubProvider[CollateralType.TokenCollector].PoolInfo.VaultId;

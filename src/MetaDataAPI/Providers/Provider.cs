@@ -12,7 +12,6 @@ public abstract class Provider
 {
     [Display(DisplayType.String)]
     public abstract string ProviderName { get; }
-    [Display(DisplayType.String)]
     public virtual Erc20Token Token => PoolInfo.Token;
     public abstract string Description { get; }
     public virtual IEnumerable<Erc721Attribute> Attributes

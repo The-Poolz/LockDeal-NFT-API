@@ -2,6 +2,7 @@
 using MetaDataAPI.Models.Types;
 using MetaDataAPI.Models.Response;
 using MetaDataAPI.Models;
+using System.Numerics;
 
 namespace MetaDataAPI.Providers;
 
@@ -23,10 +24,10 @@ public class RefundProvider : Provider
     public decimal Rate => new ConvertWei(18).WeiToEth(PoolInfo.Params[2]);
     [Display(DisplayType.Number)]
     public decimal MainCoinAmount => SubProvider.LeftAmount * Rate;
+    [Display(DisplayType.Number)]
+    public BigInteger MainCoinCollection => CollateralProvider.MainCoinCollection;
     [Display(DisplayType.String)]
-    public string MainCoinName => CollateralProvider.MainCoin.Name;
-    [Display(DisplayType.String)]
-    public string MainCoinAddress => CollateralProvider.MainCoin.Address;
+    public string SubProviderName => SubProvider.ProviderName;
     public RefundProvider(BasePoolInfo basePoolInfo)
         : base(basePoolInfo)
     {
