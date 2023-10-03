@@ -13,7 +13,6 @@
   <ItemGroup>
 	  <None Remove="Resources\background.png" />
     <None Remove="Resources\LEMONMILK-Regular.otf" />
-    <None Remove="Resources\Sample-png-Image-for-Testing.png" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Resources\background.png">
@@ -22,7 +21,6 @@
     <EmbeddedResource Include="Resources\LEMONMILK-Regular.otf">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </EmbeddedResource>
-    <EmbeddedResource Include="Resources\Sample-png-Image-for-Testing.png" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Amazon.Lambda.APIGatewayEvents" Version="2.6.0" />
