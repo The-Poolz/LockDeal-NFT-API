@@ -2,8 +2,8 @@
 using Newtonsoft.Json;
 using Amazon.DynamoDBv2;
 using Amazon.DynamoDBv2.Model;
-using System.Security.Cryptography;
 using MetaDataAPI.Models.Response;
+using System.Security.Cryptography;
 
 namespace MetaDataAPI.Utils;
 
@@ -27,47 +27,24 @@ public class DynamoDb
         var jsonAttributes = JsonConvert.SerializeObject(attributes);
         var hash = StringToSha256(jsonAttributes);
 
-        var conditionCheck = new ConditionCheck
+        var putRequest = new PutItemRequest
         {
             TableName = TableName,
-            Key = new Dictionary<string, AttributeValue>
+            Item = new Dictionary<string, AttributeValue>
             {
-                { PrimaryKey, new AttributeValue { S = hash } }
+                { PrimaryKey, new AttributeValue { S = hash } },
+                { "Data", new AttributeValue { S = jsonAttributes } },
+                { "InsertedTime", new AttributeValue { N = DateTimeOffset.UtcNow.ToUnixTimeSeconds().ToString() } }
             },
             ConditionExpression = $"attribute_not_exists({PrimaryKey})"
         };
 
-        var put = new TransactWriteItem
-        {
-            Put = new Put
-            {
-                TableName = TableName,
-                Item = new Dictionary<string, AttributeValue>
-                {
-                    { PrimaryKey, new AttributeValue { S = hash } },
-                    { "Data", new AttributeValue { S = jsonAttributes } },
-                    { "InsertedTime", new AttributeValue { N = DateTimeOffset.UtcNow.ToUnixTimeSeconds().ToString() } }
-                }
-            }
-        };
-
-        var request = new TransactWriteItemsRequest
-        {
-            TransactItems = new List<TransactWriteItem>
-            {
-                new() { ConditionCheck = conditionCheck },
-                new() { Put = put.Put }
-            }
-        };
-
-        client.TransactWriteItemsAsync(request)
-            .GetAwaiter()
-            .GetResult();
+        TryPutItem(putRequest);
 
         return hash;
     }
 
-    public static string StringToSha256(string str)
+    private static string StringToSha256(string str)
     {
         using var sha256Hash = SHA256.Create();
         var bytes = sha256Hash.ComputeHash(Encoding.UTF8.GetBytes(str));
@@ -78,5 +55,17 @@ public class DynamoDb
             builder.Append(i.ToString("x2"));
         }
         return builder.ToString();
+    }
+
+    private void TryPutItem(PutItemRequest putRequest)
+    {
+        client.PutItemAsync(putRequest)
+            .ContinueWith(task =>
+            {
+                if (task.IsFaulted && task.Exception?.InnerExceptions.FirstOrDefault() is { } exception and not ConditionalCheckFailedException)
+                    throw exception;
+            })
+            .GetAwaiter()
+            .GetResult();
     }
 }
