@@ -76,6 +76,28 @@ public class FunctionHandlerTests
     }
 
     [Fact]
+    internal void FunctionHandler_ShouldReturnResponse_WrongHash()
+    {
+        var dynamoDb = new Mock<DynamoDb>();
+        dynamoDb.Setup(x => x.GetItemAsync(It.IsAny<string>()))
+            .ReturnsAsync(new GetItemResponse
+            {
+                Item = new Dictionary<string, AttributeValue>()
+            });
+        var request = new APIGatewayProxyRequest
+        {
+            QueryStringParameters = new Dictionary<string, string>
+            {
+                { "hash", "0x1" }
+            }
+        };
+
+        var result = new LambdaFunction(dynamoDb.Object).Run(request);
+
+        result.Should().BeEquivalentTo(ResponseBuilder.WrongHash());
+    }
+
+    [Fact]
     internal void FunctionHandler_ShouldReturnResponse_GeneralError()
     {
         var dynamoDb = new Mock<DynamoDb>();
