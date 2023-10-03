@@ -24,5 +24,7 @@ public static class ProviderImageFactory
         { nameof(LockDealProvider), () => new LockDealProviderImage(backgroundImage.Clone(_ => {}), font, attributes) },
         { nameof(TimedDealProvider), () => new TimedDealProviderImage(backgroundImage.Clone(_ => {}), font, attributes) },
         { nameof(BundleProvider), () => new BundleProviderImage(backgroundImage.Clone(_ => {}), font, attributes) },
+        { nameof(CollateralProvider), () => new CollateralProviderImage(backgroundImage.Clone(_ => {}), font, attributes) },
+        { nameof(RefundProvider), () => new RefundProviderImage(backgroundImage.Clone(_ => {}), font, attributes) }
     };
 }

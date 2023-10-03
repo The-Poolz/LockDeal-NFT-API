@@ -46,7 +46,7 @@ public class LambdaFunction
 
         //var attributes = JsonConvert.DeserializeObject<Erc721Attribute[]>(databaseItem.Item["Data"].S)!;
         var attributes = JsonConvert.DeserializeObject<Erc721Attribute[]>(
-            "[{\"trait_type\":\"ProviderName\",\"value\":\"BundleProvider\"},{\"trait_type\":\"Token\",\"value\":{\"Name\":\"TokenSynthetic\",\"Symbol\":\"~TokenPoolz\",\"Address\":\"0x43d81a2cf49238484d6960de1df9d430c81cdffc\",\"Decimals\":18}},{\"display_type\":\"number\",\"trait_type\":\"Collection\",\"value\":0},{\"display_type\":\"number\",\"trait_type\":\"LeftAmount\",\"value\":0.000000000000025},{\"trait_type\":\"ProviderName_21\",\"value\":\"DealProvider\"},{\"display_type\":\"number\",\"trait_type\":\"LeftAmount_21\",\"value\":0.0},{\"trait_type\":\"ProviderName_22\",\"value\":\"LockDealProvider\"},{\"display_type\":\"date\",\"trait_type\":\"StartTime_22\",\"value\":1695007012},{\"display_type\":\"number\",\"trait_type\":\"LeftAmount_22\",\"value\":0.000000000000025}]"
+            "[{\"trait_type\":\"ProviderName\",\"value\":\"RefundProvider\"},{\"trait_type\":\"Rate\",\"value\":50.0},{\"trait_type\":\"MainCoinAmount\",\"value\":2500.0},{\"trait_type\":\"MainCoinCollection\",\"value\":1},{\"trait_type\":\"SubProviderName\",\"value\":\"DealProvider\"},{\"trait_type\":\"Collection\",\"value\":0},{\"trait_type\":\"LeftAmount\",\"value\":50.0}]"
             )!;
 
         try
