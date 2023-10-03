@@ -2,8 +2,8 @@
 using Newtonsoft.Json;
 using Amazon.DynamoDBv2;
 using Amazon.DynamoDBv2.Model;
-using System.Security.Cryptography;
 using MetaDataAPI.Models.Response;
+using System.Security.Cryptography;
 
 namespace MetaDataAPI.Utils;
 
@@ -39,13 +39,7 @@ public class DynamoDb
             ConditionExpression = $"attribute_not_exists({PrimaryKey})"
         };
 
-        try
-        {
-            client.PutItemAsync(putRequest)
-                .GetAwaiter()
-                .GetResult();
-        }
-        catch (ConditionalCheckFailedException) { }
+        TryPutItem(putRequest);
 
         return hash;
     }
@@ -61,5 +55,20 @@ public class DynamoDb
             builder.Append(i.ToString("x2"));
         }
         return builder.ToString();
+    }
+
+    private void TryPutItem(PutItemRequest putRequest)
+    {
+        client.PutItemAsync(putRequest)
+            .ContinueWith(task =>
+            {
+                if (!task.IsFaulted) return;
+
+                var exception = task.Exception?.InnerExceptions.FirstOrDefault();
+                if (exception != null && exception is not ConditionalCheckFailedException)
+                    throw exception;
+            })
+            .GetAwaiter()
+            .GetResult();
     }
 }
