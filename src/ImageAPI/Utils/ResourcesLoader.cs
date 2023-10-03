@@ -6,7 +6,7 @@ namespace ImageAPI.Utils;
 
 public class ResourcesLoader
 {
-    public const string BackgroundResourceName = "ImageAPI.Resources.Sample-png-Image-for-Testing.png";
+    public const string BackgroundResourceName = "ImageAPI.Resources.background.png";
     public const string FontResourceName = "ImageAPI.Resources.LEMONMILK-Regular.otf";
 
     public virtual Image LoadImageFromEmbeddedResources()

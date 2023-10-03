@@ -11,23 +11,13 @@ namespace ImageAPI.Utils;
 
 public class ImageProcessor
 {
-    private readonly Image image;
     private readonly Font font;
+    public readonly Image Image;
 
-    public ImageProcessor(float fontSize = 24f)
+    public ImageProcessor(Image image, Font font)
     {
-        var resourcesLoader = new ResourcesLoader();
-        image = resourcesLoader.LoadImageFromEmbeddedResources();
-        font = resourcesLoader.LoadFontFromEmbeddedResources(fontSize);
-    }
-
-    public virtual async Task<string> GetBase64ImageAsync()
-    {
-        using var outputStream = new MemoryStream();
-        await image.SaveAsPngAsync(outputStream);
-        var imageBytes = outputStream.ToArray();
-
-        return Convert.ToBase64String(imageBytes);
+        Image = image;
+        this.font = font;
     }
 
     public virtual void DrawText(Erc721Attribute attribute, TextOptions textOptions, IBrush? brush = null, IPen? pen = null)
@@ -50,14 +40,14 @@ public class ImageProcessor
         brush ??= Brushes.Solid(Color.Black);
         pen ??= Pens.Solid(Color.DarkRed, 2);
 
-        image.Mutate(x => x.DrawText(textOptions, text, brush, pen));
+        Image.Mutate(x => x.DrawText(textOptions, text, brush, pen));
     }
 
-    public virtual TextOptions CreateTextOptions(float x, float y)
+    public virtual TextOptions CreateTextOptions(PointF coordinates)
     {
         return new TextOptions(font)
         {
-            Origin = new PointF(x, y),
+            Origin = coordinates,
             TabWidth = 4,
             HorizontalAlignment = HorizontalAlignment.Left
         };

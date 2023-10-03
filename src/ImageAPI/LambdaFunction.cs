@@ -1,6 +1,9 @@
 using ImageAPI.Utils;
 using Newtonsoft.Json;
+using SixLabors.Fonts;
 using Amazon.Lambda.Core;
+using SixLabors.ImageSharp;
+using ImageAPI.ProvidersImages;
 using MetaDataAPI.Models.Response;
 using Amazon.Lambda.APIGatewayEvents;
 
@@ -11,28 +14,31 @@ namespace ImageAPI;
 public class LambdaFunction
 {
     private const float fontSize = 14f;
-    private readonly ImageProcessor imageProcessor;
     private readonly DynamoDb dynamoDb;
+    private readonly Font font;
+    private readonly Image backgroundImage;
 
-    public LambdaFunction()
-        : this(new ImageProcessor(fontSize), new DynamoDb())
-    { }
+    public LambdaFunction() : this(new DynamoDb()) { }
 
-    public LambdaFunction(ImageProcessor imageProcessor, DynamoDb dynamoDb)
+    public LambdaFunction(DynamoDb dynamoDb)
     {
-        this.imageProcessor = imageProcessor;
         this.dynamoDb = dynamoDb;
+        var resourcesLoader = new ResourcesLoader();
+        backgroundImage = resourcesLoader.LoadImageFromEmbeddedResources();
+        font = resourcesLoader.LoadFontFromEmbeddedResources(fontSize);
     }
 
-    public async Task<APIGatewayProxyResponse> RunAsync(APIGatewayProxyRequest input)
+    public APIGatewayProxyResponse Run(APIGatewayProxyRequest input)
     {
-        if (input.QueryStringParameters.ContainsKey("hash"))
+        if (!input.QueryStringParameters.ContainsKey("hash"))
         {
             return ResponseBuilder.WrongInput();
         }
         var hash = input.QueryStringParameters["hash"];
 
-        var databaseItem = await dynamoDb.GetItemAsync(hash);
+        var databaseItem = dynamoDb.GetItemAsync(hash)
+            .GetAwaiter()
+            .GetResult();
         if (databaseItem.Item.Count == 0)
         {
             return ResponseBuilder.WrongHash();
@@ -42,20 +48,9 @@ public class LambdaFunction
 
         try
         {
-            float y = 0;
+            var providerImage = ProviderImageFactory.Create(backgroundImage, font, attributes);
 
-            foreach (var attribute in attributes)
-            {
-                var options = imageProcessor.CreateTextOptions(0, y);
-
-                imageProcessor.DrawText(attribute, options);
-
-                y += fontSize + 10f;
-            }
-
-            var base64Image = await imageProcessor.GetBase64ImageAsync();
-
-            return ResponseBuilder.ImageResponse(base64Image);
+            return providerImage.Response;
         }
         catch (Exception e)
         {
