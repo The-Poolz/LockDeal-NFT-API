@@ -57,7 +57,6 @@ public class BundleProviderImage : ProviderImage
         SlideImages(gif, images, frameDelay);
 
         Image = gif.Clone(_ => {});
-        gif.SaveAsGif("animated.gif");
     }
 
     private static void SlideImages(Image gif, IReadOnlyList<Image> images, int frameDelay)
