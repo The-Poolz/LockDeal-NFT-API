@@ -9,6 +9,7 @@ namespace ImageAPI.ProvidersImages.Advanced;
 
 public class BundleProviderImage : ProviderImage
 {
+    public override string ContentType => "image/gif";
     public sealed override Image Image { get; }
     public override IDictionary<string, PointF> Coordinates => new Dictionary<string, PointF>
     {

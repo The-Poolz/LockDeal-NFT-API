@@ -1,7 +1,9 @@
-﻿using ImageAPI.Utils;
-using MetaDataAPI.Models.Response;
+﻿using System.Net;
+using ImageAPI.Utils;
 using SixLabors.Fonts;
 using SixLabors.ImageSharp;
+using MetaDataAPI.Models.Response;
+using Amazon.Lambda.APIGatewayEvents;
 using SixLabors.ImageSharp.Processing;
 
 namespace ImageAPI.ProvidersImages;
@@ -12,6 +14,7 @@ public abstract class ProviderImage
     public Font Font { get; }
     public abstract Image Image { get; }
     public abstract IDictionary<string, PointF> Coordinates { get; }
+    public virtual string ContentType => "image/png";
     public string Base64Image
     {
         get
@@ -25,6 +28,16 @@ public abstract class ProviderImage
             return Convert.ToBase64String(imageBytes);
         }
     }
+    public APIGatewayProxyResponse Response => new()
+    {
+        IsBase64Encoded = true,
+        StatusCode = (int)HttpStatusCode.OK,
+        Body = Base64Image,
+        Headers = new Dictionary<string, string>
+        {
+            { "Content-Type", ContentType }
+        }
+    };
 
     protected ProviderImage(Image backgroundImage, Font font)
     {
