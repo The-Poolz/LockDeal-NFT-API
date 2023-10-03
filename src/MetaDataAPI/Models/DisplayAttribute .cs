@@ -22,7 +22,10 @@ public class DisplayAttribute : Attribute
             erc721Attribute = null!;
             return false;
         }
-        erc721Attribute = new Erc721Attribute(DisplayName ?? propertyName, value, DisplayType);
+        if (DisplayType == DisplayType.Date)
+            erc721Attribute = new Erc721Attribute(DisplayName ?? propertyName, value, DisplayType);
+        else
+            erc721Attribute = new Erc721Attribute(DisplayName ?? propertyName, value);
         return true;
     }
 }

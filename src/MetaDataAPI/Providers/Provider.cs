@@ -12,7 +12,6 @@ public abstract class Provider
 {
     [Display(DisplayType.String)]
     public abstract string ProviderName { get; }
-    [Display(DisplayType.String)]
     public virtual Erc20Token Token => PoolInfo.Token;
     public abstract string Description { get; }
     public virtual IEnumerable<Erc721Attribute> Attributes
@@ -45,10 +44,8 @@ public abstract class Provider
 
     private Erc721Metadata GetErc721Metadata(DynamoDb dynamoDb)
     {
-        var hash = dynamoDb.PutItem(Attributes);
-
         var name = "Lock Deal NFT Pool: " + PoolInfo.PoolId;
-        var image = @$"https://nft.poolz.finance/test/image?id={hash}";
+        var image = @$"https://nft.poolz.finance/test/image?id={PoolInfo.PoolId}";
         return new Erc721Metadata(name, Description, image, Attributes.ToList());
     }
 }
