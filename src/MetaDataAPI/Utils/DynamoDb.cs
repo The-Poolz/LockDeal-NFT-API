@@ -44,7 +44,7 @@ public class DynamoDb
         return hash;
     }
 
-    public static string StringToSha256(string str)
+    private static string StringToSha256(string str)
     {
         using var sha256Hash = SHA256.Create();
         var bytes = sha256Hash.ComputeHash(Encoding.UTF8.GetBytes(str));
