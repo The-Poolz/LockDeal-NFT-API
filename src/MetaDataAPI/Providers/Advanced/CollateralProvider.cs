@@ -3,6 +3,7 @@ using MetaDataAPI.Models.Response;
 using System.Numerics;
 using MetaDataAPI.Utils;
 using MetaDataAPI.Models;
+using MetaDataAPI.Models.DynamoDb;
 
 namespace MetaDataAPI.Providers;
 
@@ -19,6 +20,8 @@ public class CollateralProvider : Provider
                 $"Exclusively utilized by project administrators, this NFT serves as a secure vault for holding refundable tokens {Token}, for Main Coin {MainCoin}. " +
                 $"It holds {MainCoinCollectorAmount} for the main coin collector, {TokenCollectorAmount} for the token collector," +
                 $" and {MainCoinHolderAmount} for the main coin holder, valid until {FinishTime}.";
+
+    public override List<DynamoDbItem> DynamoDbAttributes { get; }
 
     public Erc20Token MainCoin => PoolInfo.Token;
     [Display(DisplayType.Number)]

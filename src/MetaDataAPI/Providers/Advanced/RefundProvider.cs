@@ -3,6 +3,7 @@ using MetaDataAPI.Models.Types;
 using MetaDataAPI.Models.Response;
 using MetaDataAPI.Models;
 using System.Numerics;
+using MetaDataAPI.Models.DynamoDb;
 
 namespace MetaDataAPI.Providers;
 
@@ -18,6 +19,8 @@ public class RefundProvider : Provider
                 $"amount in the primary asset {CollateralProvider.MainCoin} will be {MainCoinAmount}.";
         }
     }
+
+    public override List<DynamoDbItem> DynamoDbAttributes { get; }
     public Provider SubProvider { get; }
     public CollateralProvider CollateralProvider { get; }
     [Display(DisplayType.Number)]

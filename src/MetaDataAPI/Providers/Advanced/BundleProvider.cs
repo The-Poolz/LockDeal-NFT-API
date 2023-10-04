@@ -55,7 +55,7 @@ public class BundleProvider : Provider
                     new("LeftAmount", LeftAmount)
                 })
             };
-            dynamoDbAttributes.AddRange(SubProviders.Select(subProvider => new DynamoDbItem(subProvider.ProviderName, subProvider.Attributes.ToList())));
+            dynamoDbAttributes.AddRange(SubProviders.Select(subProvider => new DynamoDbItem(subProvider.ProviderName, subProvider.Attributes.Where(attr => attr.TraitType != "ProviderName").ToList())));
 
             return dynamoDbAttributes;
         }
