@@ -5,6 +5,7 @@ using MetaDataAPI.Models.Types;
 using MetaDataAPI.Models;
 using System.Numerics;
 using System.Reflection;
+using MetaDataAPI.Models.DynamoDb;
 
 namespace MetaDataAPI.Providers;
 
@@ -14,6 +15,7 @@ public abstract class Provider
     public abstract string ProviderName { get; }
     public virtual Erc20Token Token => PoolInfo.Token;
     public abstract string Description { get; }
+    public abstract List<DynamoDbItem> DynamoDbAttributes { get; }
     public virtual IEnumerable<Erc721Attribute> Attributes
     => GetType()
        .GetProperties(BindingFlags.Public | BindingFlags.Instance)
