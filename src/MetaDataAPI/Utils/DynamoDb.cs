@@ -44,15 +44,15 @@ public class DynamoDb
         return hash;
     }
 
-    private static string StringToSha256(string str)
+    public static string StringToSha256(string str)
     {
         using var sha256Hash = SHA256.Create();
         var bytes = sha256Hash.ComputeHash(Encoding.UTF8.GetBytes(str));
 
         var builder = new StringBuilder();
-        for (var i = 0; i < bytes.Length; i++)
+        foreach (var t in bytes)
         {
-            builder.Append(i.ToString("x2"));
+            builder.Append(t.ToString("x2"));
         }
         return builder.ToString();
     }
