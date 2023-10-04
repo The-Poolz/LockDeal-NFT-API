@@ -6,6 +6,7 @@ using MetaDataAPI.Storage;
 using MetaDataAPI.Providers;
 using MetaDataAPI.Tests.Helpers;
 using Amazon.Lambda.APIGatewayEvents;
+using Newtonsoft.Json.Linq;
 
 namespace MetaDataAPI.Tests;
 
@@ -31,20 +32,12 @@ public class LambdaFunctionTests : SetEnvironments
     [MemberData(nameof(TestCases))]
     public void FunctionHandler_ShouldReturnCorrectResponse(int id)
     {
-        var mockRpcCaller = new MockRpcCaller();
-        var factory = new ProviderFactory(mockRpcCaller);
-        var dynamoDb = new DynamoDb(MockAmazonDynamoDB.MockClient());
-        var lambda = new LambdaFunction(factory, dynamoDb);
-        var request = new APIGatewayProxyRequest
-        {
-            QueryStringParameters = new Dictionary<string, string> { { "id", id.ToString() } }
-        };
+        var lambda = SetupLambdaFunction();
+        var request = CreateRequest(id);
 
         var response = lambda.FunctionHandler(request);
 
-        response.Body.Should().Contain($"Lock Deal NFT Pool: {id}");
-        response.StatusCode.Should().Be((int)HttpStatusCode.OK);
-        response.Headers.Should().Contain(new KeyValuePair<string, string>("Content-Type", "application/json"));
+        AssertResponse(id, response);
     }
 
     public static IEnumerable<object[]> TestCases()
@@ -52,6 +45,38 @@ public class LambdaFunctionTests : SetEnvironments
         for (var i = start; i <= end; i++)
         {
             yield return new object[] { i };
+        }
+    }
+
+    private static LambdaFunction SetupLambdaFunction()
+    {
+        var mockRpcCaller = new MockRpcCaller();
+        var factory = new ProviderFactory(mockRpcCaller);
+        var dynamoDb = new DynamoDb(MockAmazonDynamoDB.MockClient());
+        return new LambdaFunction(factory, dynamoDb);
+    }
+
+    private static APIGatewayProxyRequest CreateRequest(int id)
+    {
+        return new APIGatewayProxyRequest
+        {
+            QueryStringParameters = new Dictionary<string, string> { { "id", id.ToString() } }
+        };
+    }
+
+    private static void AssertResponse(int id, APIGatewayProxyResponse response)
+    {
+        response.Body.Should().Contain($"Lock Deal NFT Pool: {id}");
+        response.StatusCode.Should().Be((int)HttpStatusCode.OK);
+        response.Headers.Should().Contain(new KeyValuePair<string, string>("Content-Type", "application/json"));
+        response.Body.Should().Contain(StaticResults.ExpectedDescription[id]);
+
+        if (StaticResults.ExpectedAttributes.ContainsKey(id))
+        {
+            var responseBody = JObject.Parse(response.Body);
+            var expectedAttributes = JArray.FromObject(StaticResults.ExpectedAttributes[id]);
+            var actualAttributes = responseBody["attributes"] as JArray;
+            actualAttributes.Should().BeEquivalentTo(expectedAttributes);
         }
     }
 

@@ -1,8 +1,13 @@
-﻿using System.Numerics;
+﻿using MetaDataAPI.Models.Response;
+using Newtonsoft.Json.Linq;
+using System.Diagnostics;
+using System.Numerics;
+using MetaDataAPI.Utils;
+using MetaDataAPI.Models.Types;
 
 namespace MetaDataAPI.Tests.Helpers;
 
-internal static class StaticResults
+public static class StaticResults
 {
     internal static Dictionary<BigInteger, string> MetaData = new()
     {
@@ -41,6 +46,215 @@ internal static class StaticResults
         { "0x7254a337d05d3965d7d3d8c1a94cd1cfcd1b00d6","RefundProvider"},
         { "0xcd1ef832eb8a5a77842c440032e03c4330974d21","Main coin Synthetic"},
         { "0x8bf8cf18c5cb5de075978394624674ba19b96d1b","CollateralProvider"},
-        {"0x70decfd5e51c59ebdc8aca96bf22da6aff00b176","BundleProvider" }
+        { "0x70decfd5e51c59ebdc8aca96bf22da6aff00b176","BundleProvider" }
+    };
+
+    public static readonly Dictionary<int, string> ExpectedDescription = new()
+    {
+        { 0, "This NFT represents immediate access to 0 units of the specified asset Token Synthetic (TST@0x43d...cdffc)."},
+        { 1, "This NFT represents immediate access to 50 units of the specified asset Token Synthetic (TST@0x43d...cdffc)."},
+        { 2, $"This NFT securely locks 0 units of the asset Token Synthetic (TST@0x43d...cdffc). Access to these assets will commence on the designated start time of {TimeUtils.FromUnixTimestamp(1694005426)}."},
+        { 3, $"This NFT securely locks 50 units of the asset Token Synthetic (TST@0x43d...cdffc). Access to these assets will commence on the designated start time of {TimeUtils.FromUnixTimestamp(1694005426)}."},
+        { 4, $"This NFT governs a time-locked pool containing 0/50 units of the asset Token Synthetic (TST@0x43d...cdffc). Withdrawals are permitted in a linear fashion beginning at {TimeUtils.FromUnixTimestamp(1694005897)}, culminating in full access at {TimeUtils.FromUnixTimestamp(1694005897)}."},
+        { 5, $"This NFT governs a time-locked pool containing 50/50 units of the asset Token Synthetic (TST@0x43d...cdffc). Withdrawals are permitted in a linear fashion beginning at {TimeUtils.FromUnixTimestamp(1694005897)}, culminating in full access at {TimeUtils.FromUnixTimestamp(1694005897)}."},
+        { 6, "This NFT encompasses 0 units of the asset Token Synthetic (TST@0x43d...cdffc) with an associated refund rate of 50. Post rate calculation, the refundable amount in the primary asset Main coin Synthetic (TST@0xcd1...74d21) will be 0."},
+        { 7, "This NFT represents immediate access to 0 units of the specified asset Token Synthetic (TST@0x43d...cdffc)."},
+        { 8, $"Exclusively utilized by project administrators, this NFT serves as a secure vault for holding refundable tokens Main coin Synthetic (TST@0xcd1...74d21), for Main Coin Main coin Synthetic (TST@0xcd1...74d21). It holds 0 for the main coin collector, 50 for the token collector, and 50 for the main coin holder, valid until {TimeUtils.FromUnixTimestamp(1696005796)}."},
+        { 9, "This NFT represents immediate access to 0 units of the specified asset Main coin Synthetic (TST@0xcd1...74d21)."},
+        { 10, "This NFT represents immediate access to 50 units of the specified asset Token Synthetic (TST@0x43d...cdffc)."},
+        { 11, "This NFT represents immediate access to 50 units of the specified asset Main coin Synthetic (TST@0xcd1...74d21)."},     
+        { 12, "This NFT encompasses 50 units of the asset Token Synthetic (TST@0x43d...cdffc) with an associated refund rate of 50. Post rate calculation, the refundable amount in the primary asset Main coin Synthetic (TST@0xcd1...74d21) will be 2500."},
+        { 13, "This NFT represents immediate access to 50 units of the specified asset Token Synthetic (TST@0x43d...cdffc)."},
+        { 14, "This NFT encompasses 100 units of the asset Token Synthetic (TST@0x43d...cdffc) with an associated refund rate of 50. Post rate calculation, the refundable amount in the primary asset Main coin Synthetic (TST@0xcd1...74d21) will be 5000."},
+        { 15, "This NFT represents immediate access to 100 units of the specified asset Token Synthetic (TST@0x43d...cdffc)."},
+        { 16, $"Exclusively utilized by project administrators, this NFT serves as a secure vault for holding refundable tokens Main coin Synthetic (TST@0xcd1...74d21), for Main Coin Main coin Synthetic (TST@0xcd1...74d21). It holds 0 for the main coin collector, 0 for the token collector, and 0 for the main coin holder, valid until {TimeUtils.FromUnixTimestamp(1695118413)}."},
+        { 17, "This NFT represents immediate access to 0 units of the specified asset Main coin Synthetic (TST@0xcd1...74d21)."},
+        { 18, "This NFT represents immediate access to 0 units of the specified asset Token Synthetic (TST@0x43d...cdffc)."},
+        { 19, "This NFT represents immediate access to 0 units of the specified asset Main coin Synthetic (TST@0xcd1...74d21)."},
+        { 20, "This NFT orchestrates a series of sub-pools to enable sophisticated asset management strategies. The following are the inner pools under its governance that holds total 0.000000000000025 Token Synthetic (TST@0x43d...cdffc):"},
+    };
+
+    public static readonly Dictionary<int, List<Erc721Attribute>> ExpectedAttributes = new()
+    {
+        {0, new()
+            {
+                new("ProviderName", "DealProvider"),
+                new("Collection", 0),
+                new("LeftAmount", 0.0)
+            }
+        },
+        {1, new()
+            {
+                new("ProviderName", "DealProvider"),
+                new("Collection", 0),
+                new("LeftAmount", 50.0)
+            }
+        },
+        {2, new()
+            {
+                new("ProviderName", "LockDealProvider"),
+                new("StartTime", 1694005426, DisplayType.Date),
+                new("Collection", 0),
+                new("LeftAmount", 0.0)
+            }
+        },
+        {3, new()
+            {
+                new("ProviderName", "LockDealProvider"),
+                new("StartTime", 1694005426, DisplayType.Date),
+                new("Collection", 0),
+                new("LeftAmount", 50.0)
+            }
+        },
+        {4, new()
+            {
+                new("ProviderName", "TimedDealProvider"),
+                new("StartAmount", 50.0),
+                new("FinishTime", 1694005897, DisplayType.Date),
+                new("StartTime", 1694005897, DisplayType.Date),
+                new("Collection", 0),
+                new("LeftAmount", 0.0)
+            }
+        },
+        {5, new()
+            {
+                new("ProviderName", "TimedDealProvider"),
+                new("StartAmount", 50.0),
+                new("FinishTime", 1694005897, DisplayType.Date),
+                new("StartTime", 1694005897, DisplayType.Date),
+                new("Collection", 0),
+                new("LeftAmount", 50.0)
+            }
+        },
+        {6, new()
+            {
+                new("ProviderName", "RefundProvider"),
+                new("Rate", 50.0),
+                new("MainCoinAmount", 0.0),
+                new("MainCoinCollection", 1),
+                new("SubProviderName", "DealProvider"),
+                new("Collection", 0),
+                new("LeftAmount", 0.0)
+            }
+        },
+        {7, new()
+            {
+                new("ProviderName", "DealProvider"),
+                new("Collection", 0),
+                new("LeftAmount", 0.0)
+            }
+        },
+        {8, new()
+            {
+                new("ProviderName", "CollateralProvider"),
+                new("MainCoinCollection", 1),
+                new("Collection", 0),
+                new("MainCoinCollectorAmount", 0.0),
+                new("TokenCollectorAmount", 50.0), 
+                new("MainCoinHolderAmount", 50.0),
+                new("FinishTimestamp", 1696005796, DisplayType.Date)
+            }
+        },
+        {9, new()
+            {
+                new("ProviderName", "DealProvider"),
+                new("Collection", 1),
+                new("LeftAmount", 0.0)
+            }
+        },
+        {10, new()
+            {
+                new("ProviderName", "DealProvider"),
+                new("Collection", 0),
+                new("LeftAmount", 50.0)
+            }
+        },
+        {11, new()
+            {
+                new("ProviderName", "DealProvider"),
+                new("Collection", 1),
+                new("LeftAmount", 50.0)
+            }
+        },
+        {12, new()
+            {
+                new("ProviderName", "RefundProvider"),
+                new("Rate", 50.0),
+                new("MainCoinAmount", 2500.0),
+                new("MainCoinCollection", 1),
+                new("SubProviderName", "DealProvider"),
+                new("Collection", 0),
+                new("LeftAmount", 50.0)
+            }
+        },
+        {13, new()
+            {
+                new("ProviderName", "DealProvider"),
+                new("Collection", 0),
+                new("LeftAmount", 50.0)
+            }
+        },
+        {14, new()
+            {
+                new("ProviderName", "RefundProvider"),
+                new("Rate", 50.0),
+                new("MainCoinAmount", 5000.0),
+                new("MainCoinCollection", 1),
+                new("SubProviderName", "DealProvider"),
+                new("Collection", 0),
+                new("LeftAmount", 100.0)
+            }
+        },
+        {15, new()
+            {
+                new("ProviderName", "DealProvider"),
+                new("Collection", 0),
+                new("LeftAmount", 100.0)
+            }
+        },
+        {16, new()
+            {
+                new("ProviderName", "CollateralProvider"),
+                new("MainCoinCollection", 1),
+                new("Collection", 0),
+                new("MainCoinCollectorAmount", 0.0),
+                new("TokenCollectorAmount", 0.0),
+                new("MainCoinHolderAmount", 0.0),
+                new("FinishTimestamp", 1695118413, DisplayType.Date)
+            }
+        },
+        {17, new()
+            {
+                new("ProviderName", "DealProvider"),
+                new("Collection", 1),
+                new("LeftAmount", 0.0)
+            }
+        },
+        {18, new()
+            {
+                new("ProviderName", "DealProvider"),
+                new("Collection", 0),
+                new("LeftAmount", 0.0)
+            }
+        },
+        {19, new()
+            {
+                new("ProviderName", "DealProvider"),
+                new("Collection", 1),
+                new("LeftAmount", 0.0)
+            }
+        },
+        {20, new()
+            {
+                new("ProviderName", "BundleProvider"),
+                new("Collection", 0),
+                new("LeftAmount", 0.000000000000025),
+                new("ProviderName_21", "DealProvider"),
+                new("LeftAmount_21", 0.0),
+                new("ProviderName_21", "LockDealProvider"),
+                new("StartTime_22", 1695007012, DisplayType.Date),
+                new("LeftAmount_22", 0.000000000000025)
+            }
+        }
     };
 }
