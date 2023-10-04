@@ -1,5 +1,6 @@
 ﻿using System.Numerics;
 using System.Text;
+using MetaDataAPI.Models.DynamoDb;
 using MetaDataAPI.Models.Response;
 
 namespace MetaDataAPI.Providers;
@@ -40,5 +41,23 @@ public class BundleProvider : Provider
     {
         for (var i = first; i <= last; i++)
             yield return i;
+    }
+
+    public override List<DynamoDbItem> DynamoDbAttributes
+    {
+        get
+        {
+            var dynamoDbAttributes = new List<DynamoDbItem>
+            {
+                new(ProviderName, new List<Erc721Attribute>
+                {
+                    new("Collection", Collection),
+                    new("LeftAmount", LeftAmount)
+                })
+            };
+            dynamoDbAttributes.AddRange(SubProviders.Select(subProvider => new DynamoDbItem(subProvider.ProviderName, subProvider.Attributes.ToList())));
+
+            return dynamoDbAttributes;
+        }
     }
 }
