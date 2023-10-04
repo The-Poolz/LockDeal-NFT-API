@@ -2,6 +2,7 @@
 using Newtonsoft.Json.Linq;
 using System.Diagnostics;
 using System.Numerics;
+using MetaDataAPI.Utils;
 
 namespace MetaDataAPI.Tests.Helpers;
 
@@ -51,13 +52,13 @@ public static class StaticResults
     {
         { 0, "This NFT represents immediate access to 0 units of the specified asset Token Synthetic (TST@0x43d...cdffc)."},
         { 1, "This NFT represents immediate access to 50 units of the specified asset Token Synthetic (TST@0x43d...cdffc)."},
-        { 2, "This NFT securely locks 0 units of the asset Token Synthetic (TST@0x43d...cdffc). Access to these assets will commence on the designated start time of 06/09/2023 13:03:46."},
-        { 3, "This NFT securely locks 50 units of the asset Token Synthetic (TST@0x43d...cdffc). Access to these assets will commence on the designated start time of 06/09/2023 13:03:46."},
-        { 4, "This NFT governs a time-locked pool containing 0/50 units of the asset Token Synthetic (TST@0x43d...cdffc). Withdrawals are permitted in a linear fashion beginning at 06/09/2023 13:11:37, culminating in full access at 06/09/2023 13:11:37."},
-        { 5, "This NFT governs a time-locked pool containing 50/50 units of the asset Token Synthetic (TST@0x43d...cdffc). Withdrawals are permitted in a linear fashion beginning at 06/09/2023 13:11:37, culminating in full access at 06/09/2023 13:11:37."},
+        { 2, $"This NFT securely locks 0 units of the asset Token Synthetic (TST@0x43d...cdffc). Access to these assets will commence on the designated start time of {TimeUtils.FromUnixTimestamp(1694005426)}."},
+        { 3, $"This NFT securely locks 50 units of the asset Token Synthetic (TST@0x43d...cdffc). Access to these assets will commence on the designated start time of {TimeUtils.FromUnixTimestamp(1694005426)}."},
+        { 4, $"This NFT governs a time-locked pool containing 0/50 units of the asset Token Synthetic (TST@0x43d...cdffc). Withdrawals are permitted in a linear fashion beginning at {TimeUtils.FromUnixTimestamp(1694005897)}, culminating in full access at {TimeUtils.FromUnixTimestamp(1694005897)}."},
+        { 5, $"This NFT governs a time-locked pool containing 50/50 units of the asset Token Synthetic (TST@0x43d...cdffc). Withdrawals are permitted in a linear fashion beginning at {TimeUtils.FromUnixTimestamp(1694005897)}, culminating in full access at {TimeUtils.FromUnixTimestamp(1694005897)}."},
         { 6, "This NFT encompasses 0 units of the asset Token Synthetic (TST@0x43d...cdffc) with an associated refund rate of 50. Post rate calculation, the refundable amount in the primary asset Main coin Synthetic (TST@0xcd1...74d21) will be 0."},
         { 7, "This NFT represents immediate access to 0 units of the specified asset Token Synthetic (TST@0x43d...cdffc)."},
-        { 8, "Exclusively utilized by project administrators, this NFT serves as a secure vault for holding refundable tokens Main coin Synthetic (TST@0xcd1...74d21), for Main Coin Main coin Synthetic (TST@0xcd1...74d21). It holds 0 for the main coin collector, 50 for the token collector, and 50 for the main coin holder, valid until 29/09/2023 16:43:16."},
+        { 8, $"Exclusively utilized by project administrators, this NFT serves as a secure vault for holding refundable tokens Main coin Synthetic (TST@0xcd1...74d21), for Main Coin Main coin Synthetic (TST@0xcd1...74d21). It holds 0 for the main coin collector, 50 for the token collector, and 50 for the main coin holder, valid until {TimeUtils.FromUnixTimestamp(1696005796)}."},
         { 9, "This NFT represents immediate access to 0 units of the specified asset Main coin Synthetic (TST@0xcd1...74d21)."},
         { 10, "This NFT represents immediate access to 50 units of the specified asset Token Synthetic (TST@0x43d...cdffc)."},
         { 11, "This NFT represents immediate access to 50 units of the specified asset Main coin Synthetic (TST@0xcd1...74d21)."},     
@@ -65,7 +66,7 @@ public static class StaticResults
         { 13, "This NFT represents immediate access to 50 units of the specified asset Token Synthetic (TST@0x43d...cdffc)."},
         { 14, "This NFT encompasses 100 units of the asset Token Synthetic (TST@0x43d...cdffc) with an associated refund rate of 50. Post rate calculation, the refundable amount in the primary asset Main coin Synthetic (TST@0xcd1...74d21) will be 5000."},
         { 15, "This NFT represents immediate access to 100 units of the specified asset Token Synthetic (TST@0x43d...cdffc)."},
-        { 16, "Exclusively utilized by project administrators, this NFT serves as a secure vault for holding refundable tokens Main coin Synthetic (TST@0xcd1...74d21), for Main Coin Main coin Synthetic (TST@0xcd1...74d21). It holds 0 for the main coin collector, 0 for the token collector, and 0 for the main coin holder, valid until 19/09/2023 10:13:33."},
+        { 16, $"Exclusively utilized by project administrators, this NFT serves as a secure vault for holding refundable tokens Main coin Synthetic (TST@0xcd1...74d21), for Main Coin Main coin Synthetic (TST@0xcd1...74d21). It holds 0 for the main coin collector, 0 for the token collector, and 0 for the main coin holder, valid until {TimeUtils.FromUnixTimestamp(1695118413)}."},
         { 17, "This NFT represents immediate access to 0 units of the specified asset Main coin Synthetic (TST@0xcd1...74d21)."},
         { 18, "This NFT represents immediate access to 0 units of the specified asset Token Synthetic (TST@0x43d...cdffc)."},
         { 19, "This NFT represents immediate access to 0 units of the specified asset Main coin Synthetic (TST@0xcd1...74d21)."},

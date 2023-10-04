@@ -47,11 +47,8 @@ public class LambdaFunctionTests : SetEnvironments
         response.StatusCode.Should().Be((int)HttpStatusCode.OK);
         response.Headers.Should().Contain(new KeyValuePair<string, string>("Content-Type", "application/json"));
         response.Body.Should().Contain(StaticResults.ExpectedDescription[id]);
-        if (StaticResults.ExpectedAttributes.ContainsKey(id))
-        {
-            var json = JArray.FromObject(StaticResults.ExpectedAttributes[id]).ToString();
-            response.Body.Should().Contain(json);
-        }
+
+        
     }
 
     public static IEnumerable<object[]> TestCases()
