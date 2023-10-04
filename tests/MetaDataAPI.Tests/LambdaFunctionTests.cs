@@ -48,7 +48,7 @@ public class LambdaFunctionTests : SetEnvironments
         }
     }
 
-    private LambdaFunction SetupLambdaFunction()
+    private static LambdaFunction SetupLambdaFunction()
     {
         var mockRpcCaller = new MockRpcCaller();
         var factory = new ProviderFactory(mockRpcCaller);
@@ -56,7 +56,7 @@ public class LambdaFunctionTests : SetEnvironments
         return new LambdaFunction(factory, dynamoDb);
     }
 
-    private APIGatewayProxyRequest CreateRequest(int id)
+    private static APIGatewayProxyRequest CreateRequest(int id)
     {
         return new APIGatewayProxyRequest
         {
@@ -64,7 +64,7 @@ public class LambdaFunctionTests : SetEnvironments
         };
     }
 
-    private void AssertResponse(int id, APIGatewayProxyResponse response)
+    private static void AssertResponse(int id, APIGatewayProxyResponse response)
     {
         response.Body.Should().Contain($"Lock Deal NFT Pool: {id}");
         response.StatusCode.Should().Be((int)HttpStatusCode.OK);
