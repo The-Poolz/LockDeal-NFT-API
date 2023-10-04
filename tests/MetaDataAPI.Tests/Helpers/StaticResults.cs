@@ -3,6 +3,7 @@ using Newtonsoft.Json.Linq;
 using System.Diagnostics;
 using System.Numerics;
 using MetaDataAPI.Utils;
+using MetaDataAPI.Models.Types;
 
 namespace MetaDataAPI.Tests.Helpers;
 
@@ -92,7 +93,7 @@ public static class StaticResults
         {2, new()
             {
                 new("ProviderName", "LockDealProvider"),
-                new("StartTime", 1694005426),
+                new("StartTime", 1694005426, DisplayType.Date),
                 new("Collection", 0),
                 new("LeftAmount", 0.0)
             }
@@ -100,7 +101,7 @@ public static class StaticResults
         {3, new()
             {
                 new("ProviderName", "LockDealProvider"),
-                new("StartTime", 1694005426),
+                new("StartTime", 1694005426, DisplayType.Date),
                 new("Collection", 0),
                 new("LeftAmount", 50.0)
             }
@@ -109,8 +110,8 @@ public static class StaticResults
             {
                 new("ProviderName", "TimedDealProvider"),
                 new("StartAmount", 50.0),
-                new("FinishTime", 1694005897),
-                new("StartTime", 1694005897),
+                new("FinishTime", 1694005897, DisplayType.Date),
+                new("StartTime", 1694005897, DisplayType.Date),
                 new("Collection", 0),
                 new("LeftAmount", 0.0)
             }
@@ -119,8 +120,8 @@ public static class StaticResults
             {
                 new("ProviderName", "TimedDealProvider"),
                 new("StartAmount", 50.0),
-                new("FinishTime", 1694005897),
-                new("StartTime", 1694005897),
+                new("FinishTime", 1694005897, DisplayType.Date),
+                new("StartTime", 1694005897, DisplayType.Date),
                 new("Collection", 0),
                 new("LeftAmount", 50.0)
             }
@@ -151,7 +152,7 @@ public static class StaticResults
                 new("MainCoinCollectorAmount", 0.0),
                 new("TokenCollectorAmount", 50.0), 
                 new("MainCoinHolderAmount", 50.0),
-                new("FinishTimestamp", 1696005796)
+                new("FinishTimestamp", 1696005796, DisplayType.Date)
             }
         },
         {9, new()
@@ -219,7 +220,7 @@ public static class StaticResults
                 new("MainCoinCollectorAmount", 0.0),
                 new("TokenCollectorAmount", 0.0),
                 new("MainCoinHolderAmount", 0.0),
-                new("FinishTimestamp", 1695118413)
+                new("FinishTimestamp", 1695118413, DisplayType.Date)
             }
         },
         {17, new()
@@ -251,7 +252,7 @@ public static class StaticResults
                 new("ProviderName_21", "DealProvider"),
                 new("LeftAmount_21", 0.0),
                 new("ProviderName_21", "LockDealProvider"),
-                new("StartTime_22", 1695007012),
+                new("StartTime_22", 1695007012, DisplayType.Date),
                 new("LeftAmount_22", 0.000000000000025)
             }
         }
