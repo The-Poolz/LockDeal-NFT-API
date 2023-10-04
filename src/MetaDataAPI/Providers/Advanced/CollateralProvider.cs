@@ -21,8 +21,6 @@ public class CollateralProvider : Provider
                 $"It holds {MainCoinCollectorAmount} for the main coin collector, {TokenCollectorAmount} for the token collector," +
                 $" and {MainCoinHolderAmount} for the main coin holder, valid until {FinishTime}.";
 
-    public override List<DynamoDbItem> DynamoDbAttributes { get; }
-
     public Erc20Token MainCoin => PoolInfo.Token;
     [Display(DisplayType.Number)]
     public BigInteger MainCoinCollection => PoolInfo.VaultId;
@@ -46,6 +44,25 @@ public class CollateralProvider : Provider
     public uint FinishTimestamp => (uint)PoolInfo.Params[1];
     internal DateTime FinishTime => TimeUtils.FromUnixTimestamp(FinishTimestamp);
     internal Dictionary<CollateralType,DealProvider> SubProvider { get; }
+
+    public override List<DynamoDbItem> DynamoDbAttributes
+    {
+        get
+        {
+            var dynamoDbAttributes = new List<DynamoDbItem>
+            {
+                new(ProviderName, new List<Erc721Attribute>
+                {
+                    new("Collection", Collection),
+                    new("LeftAmount", LeftAmount)
+                })
+            };
+            dynamoDbAttributes.AddRange(SubProvider.Select(subProvider => new DynamoDbItem(subProvider.Value.ProviderName, subProvider.Value.Attributes.Where(attr => attr.TraitType != "ProviderName").ToList())));
+
+            return dynamoDbAttributes;
+        }
+    }
+
     public CollateralProvider(BasePoolInfo basePoolInfo)
         : base(basePoolInfo)
     {
