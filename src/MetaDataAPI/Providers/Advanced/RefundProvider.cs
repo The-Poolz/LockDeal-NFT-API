@@ -20,7 +20,6 @@ public class RefundProvider : Provider
         }
     }
 
-    public override List<DynamoDbItem> DynamoDbAttributes { get; }
     public Provider SubProvider { get; }
     public CollateralProvider CollateralProvider { get; }
     [Display(DisplayType.Number)]
@@ -31,6 +30,26 @@ public class RefundProvider : Provider
     public BigInteger MainCoinCollection => CollateralProvider.MainCoinCollection;
     [Display(DisplayType.String)]
     public string SubProviderName => SubProvider.ProviderName;
+
+    public override List<DynamoDbItem> DynamoDbAttributes
+    {
+        get
+        {
+            var dynamoDbAttributes = new List<DynamoDbItem>
+            {
+                new(ProviderName, new List<Erc721Attribute>
+                {
+                    new("Rate", Rate),
+                    new("MainCoinAmount", MainCoinAmount),
+                    new("MainCoinCollection", MainCoinCollection)
+                }),
+                new(SubProvider.ProviderName, SubProvider.Attributes.Where(attr => attr.TraitType != "ProviderName").ToList())
+            };
+
+            return dynamoDbAttributes;
+        }
+    }
+
     public RefundProvider(BasePoolInfo basePoolInfo)
         : base(basePoolInfo)
     {
