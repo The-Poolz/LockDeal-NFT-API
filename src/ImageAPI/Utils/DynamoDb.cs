@@ -47,6 +47,13 @@ public class DynamoDb
                         Action = AttributeAction.PUT,
                         Value = new AttributeValue { S = base64Image }
                     }
+                },
+                {
+                    "Content_Type", new AttributeValueUpdate
+                    {
+                        Action = AttributeAction.PUT,
+                        Value = new AttributeValue { S = base64Image }
+                    }
                 }
             }
         };
