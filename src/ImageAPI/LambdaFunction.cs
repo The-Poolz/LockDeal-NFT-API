@@ -1,5 +1,10 @@
 using ImageAPI.Utils;
+using Newtonsoft.Json;
+using SixLabors.Fonts;
 using Amazon.Lambda.Core;
+using SixLabors.ImageSharp;
+using ImageAPI.ProvidersImages;
+using MetaDataAPI.Models.Response;
 using Amazon.Lambda.APIGatewayEvents;
 
 [assembly: LambdaSerializer(typeof(Amazon.Lambda.Serialization.Json.JsonSerializer))]
@@ -8,33 +13,44 @@ namespace ImageAPI;
 
 public class LambdaFunction
 {
-    private readonly ImageProcessor imageProcessor;
+    private const float fontSize = 14f;
+    private readonly DynamoDb dynamoDb;
+    private readonly Font font;
+    private readonly Image backgroundImage;
 
-    public LambdaFunction()
-        : this(new ImageProcessor())
-    { }
+    public LambdaFunction() : this(new DynamoDb()) { }
 
-    public LambdaFunction(ImageProcessor imageProcessor)
+    public LambdaFunction(DynamoDb dynamoDb)
     {
-        this.imageProcessor = imageProcessor;
+        this.dynamoDb = dynamoDb;
+        var resourcesLoader = new ResourcesLoader();
+        backgroundImage = resourcesLoader.LoadImageFromEmbeddedResources();
+        font = resourcesLoader.LoadFontFromEmbeddedResources(fontSize);
     }
 
-    public async Task<APIGatewayProxyResponse> RunAsync(APIGatewayProxyRequest input)
+    public APIGatewayProxyResponse Run(APIGatewayProxyRequest input)
     {
-        if (!int.TryParse(input.QueryStringParameters["id"], out var id))
+        if (!input.QueryStringParameters.ContainsKey("hash"))
         {
             return ResponseBuilder.WrongInput();
         }
+        var hash = input.QueryStringParameters["hash"];
+
+        var databaseItem = dynamoDb.GetItemAsync(hash)
+            .GetAwaiter()
+            .GetResult();
+        if (databaseItem.Item.Count == 0)
+        {
+            return ResponseBuilder.WrongHash();
+        }
+
+        var attributes = JsonConvert.DeserializeObject<Erc721Attribute[]>(databaseItem.Item["Data"].S)!;
 
         try
         {
-            var options = imageProcessor.CreateTextOptions(400,100);
+            var providerImage = ProviderImageFactory.Create(backgroundImage, font, attributes);
 
-            imageProcessor.DrawText(id.ToString(), options);
-
-            var base64Image = await imageProcessor.GetBase64ImageAsync();
-
-            return ResponseBuilder.ImageResponse(base64Image);
+            return providerImage.Response;
         }
         catch (Exception e)
         {

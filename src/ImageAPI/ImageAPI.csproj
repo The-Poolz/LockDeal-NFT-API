@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
@@ -11,14 +11,16 @@
     <PublishReadyToRun>true</PublishReadyToRun>
   </PropertyGroup>
   <ItemGroup>
+	  <None Remove="Resources\background.png" />
     <None Remove="Resources\LEMONMILK-Regular.otf" />
-    <None Remove="Resources\Sample-png-Image-for-Testing.png" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Resources\background.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
     <EmbeddedResource Include="Resources\LEMONMILK-Regular.otf">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </EmbeddedResource>
-    <EmbeddedResource Include="Resources\Sample-png-Image-for-Testing.png" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Amazon.Lambda.APIGatewayEvents" Version="2.6.0" />
@@ -26,5 +28,8 @@
     <PackageReference Include="Amazon.Lambda.Serialization.Json" Version="2.1.1" />
     <PackageReference Include="AWSSDK.DynamoDBv2" Version="3.7.201.8" />
     <PackageReference Include="SixLabors.ImageSharp.Drawing" Version="1.0.0-beta15" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\MetaDataAPI\MetaDataAPI.csproj" />
   </ItemGroup>
 </Project>

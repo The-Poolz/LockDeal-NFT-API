@@ -1,5 +1,9 @@
 ﻿using SixLabors.Fonts;
+using MetaDataAPI.Utils;
+using System.Globalization;
 using SixLabors.ImageSharp;
+using MetaDataAPI.Models.Types;
+using MetaDataAPI.Models.Response;
 using SixLabors.ImageSharp.Processing;
 using SixLabors.ImageSharp.Drawing.Processing;
 
@@ -7,23 +11,28 @@ namespace ImageAPI.Utils;
 
 public class ImageProcessor
 {
-    private readonly Image image;
     private readonly Font font;
+    public readonly Image Image;
 
-    public ImageProcessor()
+    public ImageProcessor(Image image, Font font)
     {
-        var resourcesLoader = new ResourcesLoader();
-        image = resourcesLoader.LoadImageFromEmbeddedResources();
-        font = resourcesLoader.LoadFontFromEmbeddedResources();
+        Image = image;
+        this.font = font;
     }
 
-    public virtual async Task<string> GetBase64ImageAsync()
+    public virtual void DrawText(Erc721Attribute attribute, TextOptions textOptions, IBrush? brush = null, IPen? pen = null)
     {
-        using var outputStream = new MemoryStream();
-        await image.SaveAsPngAsync(outputStream);
-        var imageBytes = outputStream.ToArray();
+        string text;
+        if (attribute.DisplayType == DisplayType.String)
+        {
+            text = attribute.Value.ToString()!;
+        }
+        else
+        {
+            text = attribute.DisplayType == DisplayType.Date ? TimeUtils.FromUnixTimestamp((long)attribute.Value).ToString(CultureInfo.InvariantCulture) : attribute.Value.ToString()!;
+        }
 
-        return Convert.ToBase64String(imageBytes);
+        DrawText(text, textOptions, brush, pen);
     }
 
     public virtual void DrawText(string text, TextOptions textOptions, IBrush? brush = null, IPen? pen = null)
@@ -31,17 +40,16 @@ public class ImageProcessor
         brush ??= Brushes.Solid(Color.Black);
         pen ??= Pens.Solid(Color.DarkRed, 2);
 
-        image.Mutate(x => x.DrawText(textOptions, text, brush, pen));
+        Image.Mutate(x => x.DrawText(textOptions, text, brush, pen));
     }
 
-    public virtual TextOptions CreateTextOptions(float x, float y, float wrappingLength = 100)
+    public virtual TextOptions CreateTextOptions(PointF coordinates)
     {
         return new TextOptions(font)
         {
-            Origin = new PointF(x, y),
+            Origin = coordinates,
             TabWidth = 4,
-            WrappingLength = wrappingLength,
-            HorizontalAlignment = HorizontalAlignment.Right
+            HorizontalAlignment = HorizontalAlignment.Left
         };
     }
 }
