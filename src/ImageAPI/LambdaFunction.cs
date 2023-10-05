@@ -66,7 +66,7 @@ public class LambdaFunction
         {
             var providerImage = ProviderImageFactory.Create(backgroundImage, font, attributes);
 
-            dynamoDb.UpdateItemAsync(hash, providerImage.Base64Image, databaseItem.Item["Content-Type"].S)
+            dynamoDb.UpdateItemAsync(hash, providerImage.Base64Image, providerImage.ContentType)
                 .GetAwaiter()
                 .GetResult();
 
