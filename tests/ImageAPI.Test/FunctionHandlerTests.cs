@@ -56,6 +56,18 @@ public class FunctionHandlerTests
                         {
                             S = "[{\"trait_type\":\"ProviderName\",\"value\":\"DealProvider\"},{\"trait_type\":\"Collection\",\"value\":0},{\"trait_type\":\"LeftAmount\",\"value\":50.0}]"
                         }
+                    },
+                    {
+                        "Image", new AttributeValue
+                        {
+                            S = "base64_encoded_image_data"
+                        }
+                    },
+                    {
+                        "Content-Type", new AttributeValue
+                        {
+                            S = "image/png"
+                        }
                     }
                 }
             });
