@@ -29,7 +29,7 @@ public class LambdaFunction
         font = resourcesLoader.LoadFontFromEmbeddedResources(fontSize);
     }
 
-    public APIGatewayProxyResponse Run(APIGatewayProxyRequest input)
+    public async Task<APIGatewayProxyResponse> RunAsync(APIGatewayProxyRequest input)
     {
         if (!input.QueryStringParameters.ContainsKey("hash"))
         {
@@ -37,9 +37,7 @@ public class LambdaFunction
         }
         var hash = input.QueryStringParameters["hash"];
 
-        var databaseItem = dynamoDb.GetItemAsync(hash)
-            .GetAwaiter()
-            .GetResult();
+        var databaseItem = await dynamoDb.GetItemAsync(hash);
 
         if (databaseItem.Item.Count == 0)
         {
@@ -66,9 +64,7 @@ public class LambdaFunction
         {
             var providerImage = ProviderImageFactory.Create(backgroundImage, font, attributes);
 
-            dynamoDb.UpdateItemAsync(hash, providerImage.Base64Image, databaseItem.Item["Content-Type"].S)
-                .GetAwaiter()
-                .GetResult();
+            await dynamoDb.UpdateItemAsync(hash, providerImage.Base64Image, providerImage.ContentType);
 
             return providerImage.Response;
         }

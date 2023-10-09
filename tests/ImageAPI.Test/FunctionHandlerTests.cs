@@ -27,7 +27,7 @@ public class FunctionHandlerTests
     }
 
     [Fact]
-    internal void FunctionHandler_ShouldReturnResponse_WrongInput()
+    internal async Task FunctionHandler_ShouldReturnResponse_WrongInput()
     {
         var request = new APIGatewayProxyRequest
         {
@@ -37,13 +37,13 @@ public class FunctionHandlerTests
             }
         };
 
-        var result = new LambdaFunction().Run(request);
+        var result = await new LambdaFunction().RunAsync(request);
 
         result.Should().BeEquivalentTo(ResponseBuilder.WrongInput());
     }
 
     [Fact]
-    internal void FunctionHandler_ShouldReturnResponse_ImageResponse()
+    internal async Task FunctionHandler_ShouldReturnResponse_ImageResponse()
     {
         var dynamoDb = new Mock<DynamoDb>();
         dynamoDb.Setup(x => x.GetItemAsync("0x1"))
@@ -79,7 +79,7 @@ public class FunctionHandlerTests
             }
         };
 
-        var result = new LambdaFunction(dynamoDb.Object).Run(request);
+        var result = await new LambdaFunction(dynamoDb.Object).RunAsync(request);
 
         result.Body.Should().NotBe(ValidResponse.Body);
         result.Headers.Should().BeEquivalentTo(ValidResponse.Headers);
@@ -88,7 +88,7 @@ public class FunctionHandlerTests
     }
 
     [Fact]
-    internal void FunctionHandler_ShouldReturnResponse_WrongHash()
+    internal async Task FunctionHandler_ShouldReturnResponse_WrongHash()
     {
         var dynamoDb = new Mock<DynamoDb>();
         dynamoDb.Setup(x => x.GetItemAsync(It.IsAny<string>()))
@@ -104,13 +104,13 @@ public class FunctionHandlerTests
             }
         };
 
-        var result = new LambdaFunction(dynamoDb.Object).Run(request);
+        var result = await new LambdaFunction(dynamoDb.Object).RunAsync(request);
 
         result.Should().BeEquivalentTo(ResponseBuilder.WrongHash());
     }
 
     [Fact]
-    internal void FunctionHandler_ShouldReturnResponse_GeneralError()
+    internal async Task FunctionHandler_ShouldReturnResponse_GeneralError()
     {
         var dynamoDb = new Mock<DynamoDb>();
         dynamoDb.Setup(x => x.GetItemAsync("0x1"))
@@ -134,7 +134,7 @@ public class FunctionHandlerTests
             }
         };
 
-        var result = new LambdaFunction(dynamoDb.Object).Run(request);
+        var result = await new LambdaFunction(dynamoDb.Object).RunAsync(request);
 
         result.Should().BeEquivalentTo(ResponseBuilder.GeneralError());
     }
