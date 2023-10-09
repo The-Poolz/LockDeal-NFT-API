@@ -6,6 +6,7 @@ using SixLabors.ImageSharp;
 using ImageAPI.ProvidersImages;
 using MetaDataAPI.Models.Response;
 using Amazon.Lambda.APIGatewayEvents;
+using System.Net;
 
 [assembly: LambdaSerializer(typeof(Amazon.Lambda.Serialization.Json.JsonSerializer))]
 
@@ -28,7 +29,7 @@ public class LambdaFunction
         font = resourcesLoader.LoadFontFromEmbeddedResources(fontSize);
     }
 
-    public APIGatewayProxyResponse Run(APIGatewayProxyRequest input)
+    public async Task<APIGatewayProxyResponse> RunAsync(APIGatewayProxyRequest input)
     {
         if (!input.QueryStringParameters.ContainsKey("hash"))
         {
@@ -36,12 +37,25 @@ public class LambdaFunction
         }
         var hash = input.QueryStringParameters["hash"];
 
-        var databaseItem = dynamoDb.GetItemAsync(hash)
-            .GetAwaiter()
-            .GetResult();
+        var databaseItem = await dynamoDb.GetItemAsync(hash);
+
         if (databaseItem.Item.Count == 0)
         {
             return ResponseBuilder.WrongHash();
+        }
+
+        if (databaseItem.Item.TryGetValue("Image", out var base64Image))
+        {
+            return new APIGatewayProxyResponse
+            {
+                IsBase64Encoded = true,
+                StatusCode = (int)HttpStatusCode.OK,
+                Body = base64Image.S,
+                Headers = new Dictionary<string, string>
+                {
+                    { "Content-Type",  databaseItem.Item["Content-Type"].S}
+                }
+            };
         }
 
         var attributes = JsonConvert.DeserializeObject<Erc721Attribute[]>(databaseItem.Item["Data"].S)!;
@@ -49,6 +63,8 @@ public class LambdaFunction
         try
         {
             var providerImage = ProviderImageFactory.Create(backgroundImage, font, attributes);
+
+            await dynamoDb.UpdateItemAsync(hash, providerImage.Base64Image, providerImage.ContentType);
 
             return providerImage.Response;
         }

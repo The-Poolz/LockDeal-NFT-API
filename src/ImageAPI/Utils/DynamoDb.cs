@@ -30,7 +30,7 @@ public class DynamoDb
         });
     }
 
-    public async Task UpdateItemAsync(string hash, string base64Image)
+    public async Task UpdateItemAsync(string hash, string base64Image, string contentType)
     {
         var request = new UpdateItemRequest
         {
@@ -49,10 +49,10 @@ public class DynamoDb
                     }
                 },
                 {
-                    "Content_Type", new AttributeValueUpdate
+                    "Content-Type", new AttributeValueUpdate
                     {
                         Action = AttributeAction.PUT,
-                        Value = new AttributeValue { S = base64Image }
+                        Value = new AttributeValue { S = contentType }
                     }
                 }
             }
