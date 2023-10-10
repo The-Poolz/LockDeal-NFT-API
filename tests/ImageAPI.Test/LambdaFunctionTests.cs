@@ -8,7 +8,7 @@ using Amazon.Lambda.APIGatewayEvents;
 
 namespace ImageAPI.Test;
 
-public class FunctionHandlerTests
+public class LambdaFunctionTests
 {
     public static APIGatewayProxyResponse ValidResponse => new()
     {
@@ -21,13 +21,13 @@ public class FunctionHandlerTests
         }
     };
 
-    public FunctionHandlerTests()
+    public LambdaFunctionTests()
     {
         Environment.SetEnvironmentVariable("AWS_REGION", "us-west-2");
     }
 
     [Fact]
-    internal async Task FunctionHandler_ShouldReturnResponse_WrongInput()
+    internal async Task RunAsync_ShouldReturnResponse_WrongInput()
     {
         var request = new APIGatewayProxyRequest
         {
@@ -43,7 +43,7 @@ public class FunctionHandlerTests
     }
 
     [Fact]
-    internal async Task FunctionHandler_ShouldReturnResponse_ImageResponse()
+    internal async Task RunAsync_ShouldReturnResponse_ImageResponse()
     {
         var dynamoDb = new Mock<DynamoDb>();
         dynamoDb.Setup(x => x.GetItemAsync("0x1"))
@@ -88,7 +88,7 @@ public class FunctionHandlerTests
     }
 
     [Fact]
-    internal async Task FunctionHandler_ShouldReturnResponse_WrongHash()
+    internal async Task RunAsync_ShouldReturnResponse_WrongHash()
     {
         var dynamoDb = new Mock<DynamoDb>();
         dynamoDb.Setup(x => x.GetItemAsync(It.IsAny<string>()))
@@ -110,7 +110,7 @@ public class FunctionHandlerTests
     }
 
     [Fact]
-    internal async Task FunctionHandler_ShouldReturnResponse_GeneralError()
+    internal async Task RunAsync_ShouldReturnResponse_GeneralError()
     {
         var dynamoDb = new Mock<DynamoDb>();
         dynamoDb.Setup(x => x.GetItemAsync("0x1"))
