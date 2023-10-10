@@ -76,7 +76,8 @@ public class LambdaFunctionTests : SetEnvironments
             var responseBody = JObject.Parse(response.Body);
             var expectedAttributes = JArray.FromObject(StaticResults.ExpectedAttributes[id]);
             var actualAttributes = responseBody["attributes"] as JArray;
-            actualAttributes.Should().BeEquivalentTo(expectedAttributes);
+            actualAttributes.Should().BeEquivalentTo(expectedAttributes, 
+                $"\nExpected attributes to be:\n{expectedAttributes}, \nBut we received:\n{actualAttributes}\n");
         }
     }
 
