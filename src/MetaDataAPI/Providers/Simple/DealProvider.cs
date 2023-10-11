@@ -17,7 +17,6 @@ public class DealProvider : Provider
         })
     };
 
-
     public DealProvider(BasePoolInfo basePoolInfo)
         : base(basePoolInfo) { }
 }
