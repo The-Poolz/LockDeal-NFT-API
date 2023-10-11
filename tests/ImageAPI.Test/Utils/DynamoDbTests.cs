@@ -45,9 +45,10 @@ public class DynamoDbTests
     {
         var hash = Guid.NewGuid().ToString();
         var base64Image = Guid.NewGuid().ToString();
+        var contentType = Guid.NewGuid().ToString();
         var client = new Mock<IAmazonDynamoDB>();
 
-        var testCode = async () => await new DynamoDb(client.Object).UpdateItemAsync(hash, base64Image);
+        var testCode = async () => await new DynamoDb(client.Object).UpdateItemAsync(hash, base64Image, contentType);
 
         await testCode.Should().NotThrowAsync<Exception>();
     }
