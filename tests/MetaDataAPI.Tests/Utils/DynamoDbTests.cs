@@ -5,6 +5,7 @@ using MetaDataAPI.Models.Types;
 using MetaDataAPI.Tests.Helpers;
 using MetaDataAPI.Models.Response;
 using Newtonsoft.Json;
+using MetaDataAPI.Models.DynamoDb;
 
 namespace MetaDataAPI.Tests.Utils;
 
@@ -22,15 +23,21 @@ public class DynamoDbTests
     [Fact]
     internal void PutItemAsync_AddNewItem()
     {
-        var attributes = new Erc721Attribute[]
+        var providerName = "ProviderName";
+        var attributes = new List<Erc721Attribute>
         {
             new("trait_Type", 1, DisplayType.Number)
         };
 
-        var client = MockAmazonDynamoDB.MockClient();
-        var result = new DynamoDb(client).PutItem(attributes);
+        var dynamoDbAttributes = new List<DynamoDbItem>
+        {
+            new DynamoDbItem(providerName, attributes)
+        };
 
-        var jsonAttributes = JsonConvert.SerializeObject(attributes);
+        var client = MockAmazonDynamoDB.MockClient();
+        var result = new DynamoDb(client).PutItem(dynamoDbAttributes);
+
+        var jsonAttributes = JsonConvert.SerializeObject(dynamoDbAttributes);
         var expectedHash = DynamoDb.StringToSha256(jsonAttributes);
 
         result.Should().Be(expectedHash);

@@ -1,6 +1,4 @@
 ﻿using MetaDataAPI.Models.Response;
-using Newtonsoft.Json.Linq;
-using System.Diagnostics;
 using System.Numerics;
 using MetaDataAPI.Utils;
 using MetaDataAPI.Models.Types;

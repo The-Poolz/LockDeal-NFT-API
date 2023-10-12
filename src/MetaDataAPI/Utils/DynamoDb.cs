@@ -2,8 +2,8 @@
 using Newtonsoft.Json;
 using Amazon.DynamoDBv2;
 using Amazon.DynamoDBv2.Model;
-using MetaDataAPI.Models.Response;
 using System.Security.Cryptography;
+using MetaDataAPI.Models.DynamoDb;
 
 namespace MetaDataAPI.Utils;
 
@@ -22,9 +22,9 @@ public class DynamoDb
         this.client = client;
     }
 
-    public string PutItem(IEnumerable<Erc721Attribute> attributes)
+    public string PutItem(List<DynamoDbItem> dynamoDbAttributes)
     {
-        var jsonAttributes = JsonConvert.SerializeObject(attributes);
+        var jsonAttributes = JsonConvert.SerializeObject(dynamoDbAttributes);
         var hash = StringToSha256(jsonAttributes);
 
         var putRequest = new PutItemRequest
