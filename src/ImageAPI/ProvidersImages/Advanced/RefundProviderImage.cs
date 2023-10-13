@@ -1,6 +1,6 @@
 ﻿using SixLabors.Fonts;
 using SixLabors.ImageSharp;
-using MetaDataAPI.Models.Response;
+using MetaDataAPI.Models.DynamoDb;
 
 namespace ImageAPI.ProvidersImages.Advanced;
 
@@ -18,9 +18,9 @@ public class RefundProviderImage : ProviderImage
         { "LeftAmount", new PointF(BackgroundImage.Width / 2f, BackgroundImage.Height / 7f) },
     };
 
-    public RefundProviderImage(Image backgroundImage, Font font, IEnumerable<Erc721Attribute> attributes)
+    public RefundProviderImage(Image backgroundImage, Font font, IReadOnlyList<DynamoDbItem> dynamoDbItems)
         : base(backgroundImage, font)
     {
-        Image = DrawAttributes(attributes);
+        Image = DrawAttributes(dynamoDbItems[0]);
     }
 }

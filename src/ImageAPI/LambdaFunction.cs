@@ -7,6 +7,7 @@ using ImageAPI.ProvidersImages;
 using MetaDataAPI.Models.Response;
 using Amazon.Lambda.APIGatewayEvents;
 using System.Net;
+using MetaDataAPI.Models.DynamoDb;
 
 [assembly: LambdaSerializer(typeof(Amazon.Lambda.Serialization.Json.JsonSerializer))]
 
@@ -58,7 +59,7 @@ public class LambdaFunction
             };
         }
 
-        var attributes = JsonConvert.DeserializeObject<Erc721Attribute[]>(databaseItem.Item["Data"].S)!;
+        var attributes = JsonConvert.DeserializeObject<DynamoDbItem[]>(databaseItem.Item["Data"].S)!;
 
         try
         {
