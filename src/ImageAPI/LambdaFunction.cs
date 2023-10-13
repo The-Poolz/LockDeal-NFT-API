@@ -1,13 +1,12 @@
+using System.Net;
 using ImageAPI.Utils;
 using Newtonsoft.Json;
 using SixLabors.Fonts;
 using Amazon.Lambda.Core;
 using SixLabors.ImageSharp;
 using ImageAPI.ProvidersImages;
-using MetaDataAPI.Models.Response;
-using Amazon.Lambda.APIGatewayEvents;
-using System.Net;
 using MetaDataAPI.Models.DynamoDb;
+using Amazon.Lambda.APIGatewayEvents;
 
 [assembly: LambdaSerializer(typeof(Amazon.Lambda.Serialization.Json.JsonSerializer))]
 
