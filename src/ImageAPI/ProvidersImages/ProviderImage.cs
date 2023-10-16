@@ -5,6 +5,7 @@ using SixLabors.ImageSharp;
 using MetaDataAPI.Models.Response;
 using Amazon.Lambda.APIGatewayEvents;
 using SixLabors.ImageSharp.Processing;
+using MetaDataAPI.Models.DynamoDb;
 
 namespace ImageAPI.ProvidersImages;
 
@@ -54,10 +55,10 @@ public abstract class ProviderImage
         return null;
     }
 
-    protected Image DrawAttributes(IEnumerable<Erc721Attribute> attributes)
+    protected Image DrawAttributes(DynamoDbItem dynamoDbItem)
     {
         var imageProcessor = new ImageProcessor(BackgroundImage.Clone(_ => {}), Font);
-        foreach (var attribute in attributes)
+        foreach (var attribute in dynamoDbItem.Attributes)
         {
             var coordinates = GetCoordinates(attribute.TraitType);
             if (coordinates == null)

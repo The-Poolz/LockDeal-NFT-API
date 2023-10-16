@@ -1,6 +1,6 @@
 ﻿using SixLabors.Fonts;
 using SixLabors.ImageSharp;
-using MetaDataAPI.Models.Response;
+using MetaDataAPI.Models.DynamoDb;
 
 namespace ImageAPI.ProvidersImages.Simple;
 
@@ -15,9 +15,9 @@ public class LockDealProviderImage : ProviderImage
         { "Collection", new PointF(BackgroundImage.Width / 2f, BackgroundImage.Height / 4f) }
     };
 
-    public LockDealProviderImage(Image backgroundImage, Font font, IEnumerable<Erc721Attribute> attributes)
+    public LockDealProviderImage(Image backgroundImage, Font font, IReadOnlyList<DynamoDbItem> dynamoDbItems)
         : base(backgroundImage, font)
     {
-        Image = DrawAttributes(attributes);
+        Image = DrawAttributes(dynamoDbItems[0]);
     }
 }

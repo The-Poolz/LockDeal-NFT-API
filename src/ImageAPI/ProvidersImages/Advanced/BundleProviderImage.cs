@@ -1,7 +1,6 @@
 ﻿using SixLabors.Fonts;
 using SixLabors.ImageSharp;
-using MetaDataAPI.Models.Response;
-using System.Text.RegularExpressions;
+using MetaDataAPI.Models.DynamoDb;
 using SixLabors.ImageSharp.Processing;
 using SixLabors.ImageSharp.PixelFormats;
 
@@ -20,29 +19,17 @@ public class BundleProviderImage : ProviderImage
         { "Collection", new PointF(BackgroundImage.Width / 2f, BackgroundImage.Height / 5f) }
     };
 
-    public BundleProviderImage(Image backgroundImage, Font font, IEnumerable<Erc721Attribute> attributes)
+    public BundleProviderImage(Image backgroundImage, Font font, IList<DynamoDbItem> dynamoDbItems)
         : base(backgroundImage, font)
     {
-        attributes = attributes.ToArray();
-        Image = DrawAttributes(attributes);
+        Image = DrawAttributes(dynamoDbItems[0]);
 
-        var groupedAttributes = attributes
-            .Where(attr => Regex.IsMatch(attr.TraitType, @"_(\d+)"))
-            .GroupBy(attr => Regex.Match(attr.TraitType, @"_(\d+)").Groups[1].Value)
-            .Select(group => group.Select(attr =>
-            {
-                var newTraitType = Regex.Replace(attr.TraitType, @"_\d+$", string.Empty);
-                return new Erc721Attribute(
-                    newTraitType,
-                    attr.Value,
-                    attr.DisplayType
-                );
-            }).ToArray())
-            .ToArray();
-        var bundleImages = groupedAttributes
-            .Select(includedAttributes => ProviderImageFactory.Create(backgroundImage, font, includedAttributes))
+        dynamoDbItems.Remove(dynamoDbItems[0]);
+
+        var bundleImages = dynamoDbItems.Select(dynamoDbItem => ProviderImageFactory.Create(backgroundImage, font, new[]{ dynamoDbItem }))
             .Select(providerImage => providerImage.Image)
             .ToArray();
+
         var images = new List<Image>
         {
             Image

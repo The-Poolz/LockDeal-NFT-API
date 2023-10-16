@@ -1,12 +1,12 @@
+using System.Net;
 using ImageAPI.Utils;
 using Newtonsoft.Json;
 using SixLabors.Fonts;
 using Amazon.Lambda.Core;
 using SixLabors.ImageSharp;
 using ImageAPI.ProvidersImages;
-using MetaDataAPI.Models.Response;
+using MetaDataAPI.Models.DynamoDb;
 using Amazon.Lambda.APIGatewayEvents;
-using System.Net;
 
 [assembly: LambdaSerializer(typeof(Amazon.Lambda.Serialization.Json.JsonSerializer))]
 
@@ -58,7 +58,7 @@ public class LambdaFunction
             };
         }
 
-        var attributes = JsonConvert.DeserializeObject<Erc721Attribute[]>(databaseItem.Item["Data"].S)!;
+        var attributes = JsonConvert.DeserializeObject<DynamoDbItem[]>(databaseItem.Item["Data"].S)!;
 
         try
         {
