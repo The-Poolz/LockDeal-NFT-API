@@ -46,8 +46,9 @@ public abstract class Provider
 
     private Erc721Metadata GetErc721Metadata(DynamoDb dynamoDb)
     {
+        var hash = dynamoDb.PutItem(DynamoDbAttributes);
         var name = "Lock Deal NFT Pool: " + PoolInfo.PoolId;
-        var image = @$"https://nft.poolz.finance/test/image?id={PoolInfo.PoolId}";
+        var image = @$"https://nft.poolz.finance/test/image?hash={hash}";
         return new Erc721Metadata(name, Description, image, Attributes.ToList());
     }
 }
