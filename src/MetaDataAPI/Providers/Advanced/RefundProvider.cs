@@ -23,7 +23,7 @@ public class RefundProvider : Provider
     public Provider SubProvider { get; }
     public CollateralProvider CollateralProvider { get; }
     [Display(DisplayType.Number)]
-    public decimal Rate => new ConvertWei(18).WeiToEth(PoolInfo.Params[2]);
+    public decimal Rate => new ConvertWei(21).WeiToEth(PoolInfo.Params[2]);
     [Display(DisplayType.Number)]
     public decimal MainCoinAmount => SubProvider.LeftAmount * Rate;
     [Display(DisplayType.Number)]
