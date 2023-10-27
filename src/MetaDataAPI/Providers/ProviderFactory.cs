@@ -19,9 +19,8 @@ public class ProviderFactory
     public Provider Create(BigInteger poolId) => Create(rpcCaller.GetMetadata(poolId));
     private Provider Create(string metadata) => Create(new BasePoolInfo(metadata,this));
     private Provider Create(BasePoolInfo basePoolInfo)
-    {    
-        var name = rpcCaller.GetName(basePoolInfo.ProviderAddress);
-        var objectToInstantiate = $"MetaDataAPI.Providers.{name}, MetaDataAPI";
+    {
+        var objectToInstantiate = $"MetaDataAPI.Providers.{basePoolInfo.ProviderName}, MetaDataAPI";
         var objectType = Type.GetType(objectToInstantiate);
         return (Provider)Activator.CreateInstance(objectType!, args: basePoolInfo)!;
     }

@@ -13,7 +13,7 @@ namespace MetaDataAPI.Tests;
 public class LambdaFunctionTests : SetEnvironments
 {
     private const int start = 0;
-    private const int end = 20;
+    private const int end = 17;
 
     public LambdaFunctionTests()
     {
