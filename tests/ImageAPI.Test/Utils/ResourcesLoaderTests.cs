@@ -17,7 +17,7 @@ public class ResourcesLoaderTests
         var result = resourcesLoader.LoadImageFromEmbeddedResources();
 
         Assert.NotNull(result);
-        Assert.IsType<Image<Rgba32>>(result);
+        Assert.IsType<Image<Rgb24>>(result);
     }
 
     [Fact]

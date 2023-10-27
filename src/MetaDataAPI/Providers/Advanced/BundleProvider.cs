@@ -1,45 +1,63 @@
-﻿using System.Text;
+﻿using System.Numerics;
+using System.Text;
+using MetaDataAPI.Models.DynamoDb;
 using MetaDataAPI.Models.Response;
 
 namespace MetaDataAPI.Providers;
 
 public class BundleProvider : Provider
 {
+    public BundleProvider(BasePoolInfo basePoolInfo)
+    : base(basePoolInfo)
+    {
+        SubProviders = Range(PoolInfo.PoolId + 1, LastPoolId)
+                       .Select(poolId => basePoolInfo.Factory.Create(poolId));
+    }
     public override string ProviderName => nameof(BundleProvider);
     public override string Description
     {
         get
         {
             var descriptionBuilder = new StringBuilder()
-                .AppendLine("This NFT orchestrates a series of sub-pools to enable sophisticated asset management strategies. The following are the inner pools under its governance:");
+                .AppendLine("This NFT orchestrates a series of sub-pools to enable sophisticated asset management strategies." +
+                $" The following are the inner pools under its governance that holds total {LeftAmount} {PoolInfo.Token}:");
 
             return SubProviders.Aggregate(descriptionBuilder, (sb, item) =>
-                sb.AppendLine($"- {item.PoolInfo}: {item.Description}")).ToString();
+                sb.AppendLine($"{item.PoolInfo.PoolId}: {item.ToString()}")).ToString();
         }
     }
 
-    public override IEnumerable<Erc721Attribute> ProviderAttributes
+    public override IEnumerable<Erc721Attribute> Attributes => base.Attributes.Concat(
+        SubProviders
+            .SelectMany(p => p.Attributes.Select(attr => new { p.PoolInfo.PoolId, Attribute = attr }))
+            .Where(pa => IncludeTypes.Contains(pa.Attribute.TraitType))
+            .Select(pa => pa.Attribute.IncludeUnderscoreForTraitType(pa.PoolId)));
+
+    internal static List<string> IncludeTypes = new()
+    { "LeftAmount", "StartTime", "FinishTime", "StartAmount", "ProviderName" };
+    internal BigInteger LastPoolId => PoolInfo.Params[1];
+    internal IEnumerable<Provider> SubProviders { get; }
+    internal static IEnumerable<BigInteger> Range(BigInteger first, BigInteger last)
+    {
+        for (var i = first; i <= last; i++)
+            yield return i;
+    }
+
+    public override List<DynamoDbItem> DynamoDbAttributes
     {
         get
         {
-            var result = new List<Erc721Attribute>();
-            for (var poolId = PoolInfo.PoolId + 1; poolId <= PoolInfo.Params[1]; poolId++)
+            var dynamoDbAttributes = new List<DynamoDbItem>
             {
-                var subProvider = PoolInfo.Factory.Create(poolId);
-                SubProviders.Add(subProvider);
+                new(ProviderName, new List<Erc721Attribute>
+                {
+                    new("Collection", Collection),
+                    new("LeftAmount", LeftAmount)
+                })
+            };
+            dynamoDbAttributes.AddRange(SubProviders.Select(subProvider => new DynamoDbItem(subProvider.ProviderName, subProvider.Attributes.Where(attr => attr.TraitType != "ProviderName").ToList())));
 
-                result.AddRange(subProvider.ProviderAttributes.Select(
-                    attribute => attribute.IncludeUnderscoreForTraitType(poolId)));
-            }
-            return result;
+            return dynamoDbAttributes;
         }
-    }
-
-    public List<Provider> SubProviders { get; }
-
-    public BundleProvider(BasePoolInfo basePoolInfo)
-        : base(basePoolInfo)
-    {
-        SubProviders = new List<Provider>();
     }
 }

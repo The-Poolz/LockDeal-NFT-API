@@ -1,25 +1,22 @@
-using MetaDataAPI.Utils;
-using MetaDataAPI.Models.Types;
+using MetaDataAPI.Models.DynamoDb;
 using MetaDataAPI.Models.Response;
-
 namespace MetaDataAPI.Providers;
 
 public class DealProvider : Provider
 {
+    public override string ToString() => $"immediate access to {LeftAmount}"; 
     public override string ProviderName => nameof(DealProvider);
     public override string Description =>
         $"This NFT represents immediate access to {LeftAmount} units of the specified asset {PoolInfo.Token}.";
-    public override IEnumerable<Erc721Attribute> ProviderAttributes => new Erc721Attribute[]
+    public override List<DynamoDbItem> DynamoDbAttributes => new()
     {
-        new("LeftAmount", LeftAmount, DisplayType.Number)
+        new DynamoDbItem(ProviderName, new List<Erc721Attribute>
+        {
+            new("Collection", Collection),
+            new("LeftAmount", LeftAmount)
+        })
     };
 
-    public decimal LeftAmount { get; }
-
     public DealProvider(BasePoolInfo basePoolInfo)
-        : base(basePoolInfo)
-    {
-        var converter = new ConvertWei(basePoolInfo.Token.Decimals);
-        LeftAmount = converter.WeiToEth(basePoolInfo.Params[0]);
-    }
+        : base(basePoolInfo) { }
 }

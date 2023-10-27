@@ -26,12 +26,12 @@ public class DynamoDbTests
         {
             Item = new Dictionary<string, AttributeValue>
             {
-                { "Hash", new AttributeValue { S = hash } }
+                { "HashKey", new AttributeValue { S = hash } }
             }
         };
         var client = new Mock<IAmazonDynamoDB>();
         client.Setup(x => x.GetItemAsync(
-            It.Is<GetItemRequest>(req => req.TableName == "MetaDataCache" && req.Key["Hash"].S == hash),
+            It.Is<GetItemRequest>(req => req.TableName == "MetaDataCache" && req.Key["HashKey"].S == hash),
             It.IsAny<CancellationToken>())
         ).ReturnsAsync(expected);
 
@@ -45,9 +45,10 @@ public class DynamoDbTests
     {
         var hash = Guid.NewGuid().ToString();
         var base64Image = Guid.NewGuid().ToString();
+        var contentType = Guid.NewGuid().ToString();
         var client = new Mock<IAmazonDynamoDB>();
 
-        var testCode = async () => await new DynamoDb(client.Object).UpdateItemAsync(hash, base64Image);
+        var testCode = async () => await new DynamoDb(client.Object).UpdateItemAsync(hash, base64Image, contentType);
 
         await testCode.Should().NotThrowAsync<Exception>();
     }

@@ -1,5 +1,11 @@
+using System.Net;
 using ImageAPI.Utils;
+using Newtonsoft.Json;
+using SixLabors.Fonts;
 using Amazon.Lambda.Core;
+using SixLabors.ImageSharp;
+using ImageAPI.ProvidersImages;
+using MetaDataAPI.Models.DynamoDb;
 using Amazon.Lambda.APIGatewayEvents;
 
 [assembly: LambdaSerializer(typeof(Amazon.Lambda.Serialization.Json.JsonSerializer))]
@@ -8,33 +14,59 @@ namespace ImageAPI;
 
 public class LambdaFunction
 {
-    private readonly ImageProcessor imageProcessor;
+    private const float fontSize = 14f;
+    private readonly DynamoDb dynamoDb;
+    private readonly Font font;
+    private readonly Image backgroundImage;
 
-    public LambdaFunction()
-        : this(new ImageProcessor())
-    { }
+    public LambdaFunction() : this(new DynamoDb()) { }
 
-    public LambdaFunction(ImageProcessor imageProcessor)
+    public LambdaFunction(DynamoDb dynamoDb)
     {
-        this.imageProcessor = imageProcessor;
+        this.dynamoDb = dynamoDb;
+        var resourcesLoader = new ResourcesLoader();
+        backgroundImage = resourcesLoader.LoadImageFromEmbeddedResources();
+        font = resourcesLoader.LoadFontFromEmbeddedResources(fontSize);
     }
 
     public async Task<APIGatewayProxyResponse> RunAsync(APIGatewayProxyRequest input)
     {
-        if (!int.TryParse(input.QueryStringParameters["id"], out var id))
+        if (!input.QueryStringParameters.ContainsKey("hash"))
         {
             return ResponseBuilder.WrongInput();
         }
+        var hash = input.QueryStringParameters["hash"];
+
+        var databaseItem = await dynamoDb.GetItemAsync(hash);
+
+        if (databaseItem.Item.Count == 0)
+        {
+            return ResponseBuilder.WrongHash();
+        }
+
+        if (databaseItem.Item.TryGetValue("Image", out var base64Image))
+        {
+            return new APIGatewayProxyResponse
+            {
+                IsBase64Encoded = true,
+                StatusCode = (int)HttpStatusCode.OK,
+                Body = base64Image.S,
+                Headers = new Dictionary<string, string>
+                {
+                    { "Content-Type",  databaseItem.Item["Content-Type"].S}
+                }
+            };
+        }
+
+        var attributes = JsonConvert.DeserializeObject<DynamoDbItem[]>(databaseItem.Item["Data"].S)!;
 
         try
         {
-            var options = imageProcessor.CreateTextOptions(400,100);
+            var providerImage = ProviderImageFactory.Create(backgroundImage, font, attributes);
 
-            imageProcessor.DrawText(id.ToString(), options);
+            await dynamoDb.UpdateItemAsync(hash, providerImage.Base64Image, providerImage.ContentType);
 
-            var base64Image = await imageProcessor.GetBase64ImageAsync();
-
-            return ResponseBuilder.ImageResponse(base64Image);
+            return providerImage.Response;
         }
         catch (Exception e)
         {
