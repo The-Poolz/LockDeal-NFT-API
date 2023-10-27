@@ -27,7 +27,7 @@ public static class StaticResults
         { 15, "0x00000000000000000000000000000000000000000000000000000000000000200000000000000000000000005b007f06cb9708a1e419fe936ae826c4eba21a8d00000000000000000000000000000000000000000000000000000000000000e0000000000000000000000000000000000000000000000000000000000000000f0000000000000000000000000000000000000000000000000000000000000001000000000000000000000000e63de121ca8fc1c540dbcd432d1c9d3a5cdeb94a000000000000000000000000cd1ef832eb8a5a77842c440032e03c4330974d210000000000000000000000000000000000000000000000000000000000000120000000000000000000000000000000000000000000000000000000000000000c4465616c50726f7669646572000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000010000000000000000000000000000000000000000000000000000000000000000" },
         { 16, "0x00000000000000000000000000000000000000000000000000000000000000200000000000000000000000005b007f06cb9708a1e419fe936ae826c4eba21a8d00000000000000000000000000000000000000000000000000000000000000e000000000000000000000000000000000000000000000000000000000000000100000000000000000000000000000000000000000000000000000000000000000000000000000000000000000e63de121ca8fc1c540dbcd432d1c9d3a5cdeb94a00000000000000000000000043d81a2cf49238484d6960de1df9d430c81cdffc0000000000000000000000000000000000000000000000000000000000000120000000000000000000000000000000000000000000000000000000000000000c4465616c50726f7669646572000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000010000000000000000000000000000000000000000000000000000000000000000" },
         { 17, "0x00000000000000000000000000000000000000000000000000000000000000200000000000000000000000005b007f06cb9708a1e419fe936ae826c4eba21a8d00000000000000000000000000000000000000000000000000000000000000e000000000000000000000000000000000000000000000000000000000000000110000000000000000000000000000000000000000000000000000000000000001000000000000000000000000e63de121ca8fc1c540dbcd432d1c9d3a5cdeb94a000000000000000000000000cd1ef832eb8a5a77842c440032e03c4330974d210000000000000000000000000000000000000000000000000000000000000120000000000000000000000000000000000000000000000000000000000000000c4465616c50726f7669646572000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000010000000000000000000000000000000000000000000000008ac7230489e80000" },
-        {123,"0x0000000000000000000000000000000000000000000000000000000000000020000000000000000000000000b9fd557c192939a3889080954d52c64eba8e9be30000000000000000000000000000000000000000000000000000000000000016000000000000000000000000000000000000000000000000000000000000000000000000000000000000000070decfd5e51c59ebdc8aca96bf22da6aff00b17600000000000000000000000043d81a2cf49238484d6960de1df9d430c81cdffc00000000000000000000000000000000000000000000000000000000000000c0000000000000000000000000000000000000000000000000000000000000000200000000000000000000000000000000000000000000000000000000000061a8000000000000000000000000000000000000000000000000000000006507c124" },
+        {123,"0x00000000000000000000000000000000000000000000000000000000000000200000000000000000000000005b007f06cb9708a1e419fe936ae826c4eba21a8d00000000000000000000000000000000000000000000000000000000000000e000000000000000000000000000000000000000000000000000000000000000110000000000000000000000000000000000000000000000000000000000000001000000000000000000000000e63de121ca8fc1c540dbcd432d1c9d3a5cdeb94a000000000000000000000000cd1ef832eb8a5a77842c440032e03c4330974d210000000000000000000000000000000000000000000000000000000000000120000000000000000000000000000000000000000000000000000000000000000c4465616c50726f7669646572000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000010000000000000000000000000000000000000000000000008ac7230489e80000" },
     };
 
     internal static readonly Dictionary<string, string> Names = new()
@@ -50,13 +50,13 @@ public static class StaticResults
         { 3, $"This NFT securely locks 10 units of the asset Token Synthetic (TST@0x43d...cdffc). Access to these assets will commence on the designated start time of {TimeUtils.FromUnixTimestamp(1701318745)}."},
         { 4, $"This NFT governs a time-locked pool containing 10/10 units of the asset Token Synthetic (TST@0x43d...cdffc). Withdrawals are permitted in a linear fashion beginning at {TimeUtils.FromUnixTimestamp(1698319845)}, culminating in full access at {TimeUtils.FromUnixTimestamp(1701318745)}."},
         { 5, $"This NFT governs a time-locked pool containing 1000/1000 units of the asset Token Synthetic (TST@0x43d...cdffc). Withdrawals are permitted in a linear fashion beginning at {TimeUtils.FromUnixTimestamp(1698322749)}, culminating in full access at {TimeUtils.FromUnixTimestamp(1701318745)}."},
-        { 6, "This NFT encompasses 0 units of the asset Token Synthetic (TST@0x43d...cdffc) with an associated refund rate of 50. Post rate calculation, the refundable amount in the primary asset Main coin Synthetic (TST@0xcd1...74d21) will be 0."},
+        { 6, "This NFT encompasses 100 units of the asset Token Synthetic (TST@0x43d...cdffc) with an associated refund rate of 0.000000000000000008. Post rate calculation, the refundable amount in the primary asset Token Synthetic (TST@0x43d...cdffc) will be 0.000000000000000800."},
         { 7, "This NFT represents immediate access to 100 units of the specified asset Main coin Synthetic (TST@0xcd1...74d21)."},
         { 8, $"Exclusively utilized by project administrators, this NFT serves as a secure vault for holding refundable tokens Token Synthetic (TST@0x43d...cdffc), for Main Coin Token Synthetic (TST@0x43d...cdffc). It holds 0 for the main coin collector, 0 for the token collector, and 10 for the main coin holder, valid until {TimeUtils.FromUnixTimestamp(1798325066)}."},
         { 9, "This NFT represents immediate access to 0 units of the specified asset Token Synthetic (TST@0x43d...cdffc)."},
         { 10, "This NFT represents immediate access to 0 units of the specified asset Main coin Synthetic (TST@0xcd1...74d21)."},
         { 11, "This NFT represents immediate access to 10 units of the specified asset Token Synthetic (TST@0x43d...cdffc)."},     
-        { 12, "This NFT encompasses 50 units of the asset Token Synthetic (TST@0x43d...cdffc) with an associated refund rate of 50. Post rate calculation, the refundable amount in the primary asset Main coin Synthetic (TST@0xcd1...74d21) will be 2500."},
+        { 12, "This NFT encompasses 100 units of the asset Token Synthetic (TST@0x43d...cdffc) with an associated refund rate of 0.000000000000000014. Post rate calculation, the refundable amount in the primary asset Main coin Synthetic (TST@0xcd1...74d21) will be 0.000000000000001400."},
         { 13, $"This NFT governs a time-locked pool containing 100/100 units of the asset Token Synthetic (TST@0x43d...cdffc). Withdrawals are permitted in a linear fashion beginning at {TimeUtils.FromUnixTimestamp(1698327983)}, culminating in full access at {TimeUtils.FromUnixTimestamp(1708327983)}."},
         { 14, $"Exclusively utilized by project administrators, this NFT serves as a secure vault for holding refundable tokens Main coin Synthetic (TST@0xcd1...74d21), for Main Coin Main coin Synthetic (TST@0xcd1...74d21). It holds 0 for the main coin collector, 0 for the token collector, and 10 for the main coin holder, valid until {TimeUtils.FromUnixTimestamp(1798325066)}."},
         { 15, "This NFT represents immediate access to 0 units of the specified asset Main coin Synthetic (TST@0xcd1...74d21)."},
@@ -119,12 +119,12 @@ public static class StaticResults
         {6, new()
             {
                 new("ProviderName", "RefundProvider"),
-                new("Rate", 50.0),
-                new("MainCoinAmount", 0.0),
-                new("MainCoinCollection", 1),
+                new("Rate", 0.000000000000000008),
+                new("MainCoinAmount", 0.000000000000000800),
+                new("MainCoinCollection", 0),
                 new("SubProviderName", "DealProvider"),
                 new("Collection", 0),
-                new("LeftAmount", 0.0)
+                new("LeftAmount", 100.0)
             }
         },
         {7, new()
@@ -169,12 +169,12 @@ public static class StaticResults
         {12, new()
             {
                 new("ProviderName", "RefundProvider"),
-                new("Rate", 50.0),
-                new("MainCoinAmount", 2500.0),
+                new("Rate", 0.000000000000000014),
+                new("MainCoinAmount", 0.000000000000001400),
                 new("MainCoinCollection", 1),
-                new("SubProviderName", "DealProvider"),
-                new("Collection", 0),
-                new("LeftAmount", 50.0)
+                new("SubProviderName", "TimedDealProvider"),
+                new("Collection", 1),
+                new("LeftAmount", 100.0)
             }
         },
         {13, new()
