@@ -18,7 +18,7 @@ public class ProviderFactory
         rpcCaller.GetTotalSupply(Environments.LockDealNftAddress) > poolId;
     public Provider Create(BigInteger poolId) => Create(rpcCaller.GetMetadata(poolId));
     private Provider Create(string metadata) => Create(new BasePoolInfo(metadata,this));
-    private Provider Create(BasePoolInfo basePoolInfo)
+    private static Provider Create(BasePoolInfo basePoolInfo)
     {
         var objectToInstantiate = $"MetaDataAPI.Providers.{basePoolInfo.ProviderName}, MetaDataAPI";
         var objectType = Type.GetType(objectToInstantiate);
