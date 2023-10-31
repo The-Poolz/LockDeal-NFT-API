@@ -1,4 +1,5 @@
-﻿using SixLabors.Fonts;
+﻿using ImageAPI.Utils;
+using SixLabors.Fonts;
 using SixLabors.ImageSharp;
 using MetaDataAPI.Providers;
 using MetaDataAPI.Models.DynamoDb;
@@ -10,7 +11,6 @@ namespace ImageAPI.ProvidersImages.Advanced;
 public class BundleProviderImage : ProviderImage
 {
     public override string ContentType => "image/gif";
-    public override string ProviderName => nameof(BundleProvider);
     public sealed override Image Image { get; }
     public override IDictionary<string, PointF> Coordinates => new Dictionary<string, PointF>
     {
@@ -23,8 +23,10 @@ public class BundleProviderImage : ProviderImage
     public BundleProviderImage(Image backgroundImage, Font font, IList<DynamoDbItem> dynamoDbItems)
         : base(backgroundImage, font)
     {
-        Image = DrawProviderName();
-        Image = DrawAttributes(dynamoDbItems[0]);
+        Image = Image
+            .DrawBackgroundImage(backgroundImage)
+            .DrawProviderName(font, nameof(BundleProvider))
+            .DrawAttributes(font, dynamoDbItems[0], GetCoordinates);
 
         dynamoDbItems.Remove(dynamoDbItems[0]);
 

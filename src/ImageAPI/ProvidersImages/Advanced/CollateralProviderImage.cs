@@ -1,4 +1,5 @@
-﻿using SixLabors.Fonts;
+﻿using ImageAPI.Utils;
+using SixLabors.Fonts;
 using SixLabors.ImageSharp;
 using MetaDataAPI.Providers;
 using MetaDataAPI.Models.DynamoDb;
@@ -7,8 +8,7 @@ namespace ImageAPI.ProvidersImages.Advanced;
 
 public class CollateralProviderImage : ProviderImage
 {
-    public override string ProviderName => nameof(CollateralProvider);
-    public override Image Image { get; }
+    public sealed override Image Image { get; }
     public override IDictionary<string, PointF> Coordinates => new Dictionary<string, PointF>
     {
         { "MainCoinCollection", new PointF(BackgroundImage.Width / 2f, BackgroundImage.Height / 2f) },
@@ -22,7 +22,9 @@ public class CollateralProviderImage : ProviderImage
     public CollateralProviderImage(Image backgroundImage, Font font, IReadOnlyList<DynamoDbItem> dynamoDbItems)
         : base(backgroundImage, font)
     {
-        Image = DrawProviderName();
-        Image = DrawAttributes(dynamoDbItems[0]);
+        Image = Image
+            .DrawBackgroundImage(backgroundImage)
+            .DrawProviderName(font, nameof(CollateralProvider))
+            .DrawAttributes(font, dynamoDbItems[0], GetCoordinates);
     }
 }
