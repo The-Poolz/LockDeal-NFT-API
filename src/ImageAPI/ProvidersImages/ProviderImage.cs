@@ -2,10 +2,8 @@
 using ImageAPI.Utils;
 using SixLabors.Fonts;
 using SixLabors.ImageSharp;
-using MetaDataAPI.Models.Response;
-using Amazon.Lambda.APIGatewayEvents;
-using SixLabors.ImageSharp.Processing;
 using MetaDataAPI.Models.DynamoDb;
+using Amazon.Lambda.APIGatewayEvents;
 
 namespace ImageAPI.ProvidersImages;
 
@@ -13,7 +11,7 @@ public abstract class ProviderImage
 {
     public Image BackgroundImage { get; }
     public Font Font { get; }
-    public abstract Image Image { get; }
+    public Image Image { get; protected set; }
     public abstract IDictionary<string, PointF> Coordinates { get; }
     public virtual string ContentType => "image/png";
     public string Base64Image
@@ -40,10 +38,14 @@ public abstract class ProviderImage
         }
     };
 
-    protected ProviderImage(Image backgroundImage, Font font)
+    protected ProviderImage(string providerName, Image backgroundImage, Font font, DynamoDbItem dynamoDbItem)
     {
         BackgroundImage = backgroundImage;
         Font = font;
+        Image = new ImageFactory(backgroundImage, font)
+            .DrawProviderName(providerName)
+            .DrawAttributes(dynamoDbItem, GetCoordinates)
+            .BuildImage();
     }
 
     protected PointF? GetCoordinates(string traitType)
@@ -53,20 +55,5 @@ public abstract class ProviderImage
             return coordinates;
         }
         return null;
-    }
-
-    protected Image DrawAttributes(DynamoDbItem dynamoDbItem)
-    {
-        var imageProcessor = new ImageProcessor(BackgroundImage.Clone(_ => {}), Font);
-        foreach (var attribute in dynamoDbItem.Attributes)
-        {
-            var coordinates = GetCoordinates(attribute.TraitType);
-            if (coordinates == null)
-                continue;
-
-            var options = imageProcessor.CreateTextOptions((PointF)coordinates);
-            imageProcessor.DrawText(attribute, options);
-        }
-        return imageProcessor.Image;
     }
 }
