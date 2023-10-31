@@ -1,14 +1,11 @@
-﻿using ImageAPI.Utils;
-using SixLabors.Fonts;
+﻿using SixLabors.Fonts;
 using SixLabors.ImageSharp;
-using MetaDataAPI.Providers;
 using MetaDataAPI.Models.DynamoDb;
 
 namespace ImageAPI.ProvidersImages.Advanced;
 
 public class RefundProviderImage : ProviderImage
 {
-    public sealed override Image Image { get; }
     public override IDictionary<string, PointF> Coordinates => new Dictionary<string, PointF>
     {
         { "Rate", new PointF(BackgroundImage.Width / 2f, BackgroundImage.Height / 2f) },
@@ -20,11 +17,6 @@ public class RefundProviderImage : ProviderImage
     };
 
     public RefundProviderImage(Image backgroundImage, Font font, IReadOnlyList<DynamoDbItem> dynamoDbItems)
-        : base(backgroundImage, font)
-    {
-        Image = Image
-            .DrawBackgroundImage(backgroundImage)
-            .DrawProviderName(font, nameof(RefundProvider))
-            .DrawAttributes(font, dynamoDbItems[0], GetCoordinates);
-    }
+        : base(backgroundImage, font, dynamoDbItems[0])
+    { }
 }

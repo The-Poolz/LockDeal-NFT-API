@@ -1,14 +1,11 @@
-﻿using ImageAPI.Utils;
-using SixLabors.Fonts;
+﻿using SixLabors.Fonts;
 using SixLabors.ImageSharp;
-using MetaDataAPI.Providers;
 using MetaDataAPI.Models.DynamoDb;
 
 namespace ImageAPI.ProvidersImages.Simple;
 
 public class TimedDealProviderImage : ProviderImage
 {
-    public sealed override Image Image { get; }
     public override IDictionary<string, PointF> Coordinates => new Dictionary<string, PointF>
     {
         { "LeftAmount", new PointF(BackgroundImage.Width / 2f, BackgroundImage.Height / 2f) },
@@ -18,11 +15,6 @@ public class TimedDealProviderImage : ProviderImage
     };
 
     public TimedDealProviderImage(Image backgroundImage, Font font, IReadOnlyList<DynamoDbItem> dynamoDbItems)
-        : base(backgroundImage, font)
-    {
-        Image = Image
-            .DrawBackgroundImage(backgroundImage)
-            .DrawProviderName(font, nameof(TimedDealProvider))
-            .DrawAttributes(font, dynamoDbItems[0], GetCoordinates);
-    }
+        : base(backgroundImage, font, dynamoDbItems[0])
+    { }
 }
