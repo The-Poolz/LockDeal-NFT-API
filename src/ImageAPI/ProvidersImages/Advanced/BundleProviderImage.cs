@@ -1,5 +1,6 @@
 ﻿using SixLabors.Fonts;
 using SixLabors.ImageSharp;
+using MetaDataAPI.Providers;
 using MetaDataAPI.Models.DynamoDb;
 using SixLabors.ImageSharp.Processing;
 using SixLabors.ImageSharp.PixelFormats;
@@ -18,7 +19,7 @@ public class BundleProviderImage : ProviderImage
     };
 
     public BundleProviderImage(Image backgroundImage, Font font, IList<DynamoDbItem> dynamoDbItems)
-        : base(backgroundImage, font, dynamoDbItems[0])
+        : base(nameof(BundleProvider), backgroundImage, font, dynamoDbItems[0])
     {
         dynamoDbItems.Remove(dynamoDbItems[0]);
 

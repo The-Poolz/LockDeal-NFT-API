@@ -1,10 +1,9 @@
 ﻿using System.Net;
+using ImageAPI.Utils;
 using SixLabors.Fonts;
 using SixLabors.ImageSharp;
-using Amazon.Lambda.APIGatewayEvents;
 using MetaDataAPI.Models.DynamoDb;
-using ImageAPI.Utils;
-using MetaDataAPI.Providers;
+using Amazon.Lambda.APIGatewayEvents;
 
 namespace ImageAPI.ProvidersImages;
 
@@ -39,14 +38,14 @@ public abstract class ProviderImage
         }
     };
 
-    protected ProviderImage(Image backgroundImage, Font font, DynamoDbItem dynamoDbItem)
+    protected ProviderImage(string providerName, Image backgroundImage, Font font, DynamoDbItem dynamoDbItem)
     {
         BackgroundImage = backgroundImage;
         Font = font;
-        Image = Image
-            .DrawBackgroundImage(backgroundImage)
-            .DrawProviderName(font, nameof(BundleProvider))
-            .DrawAttributes(font, dynamoDbItem, GetCoordinates);
+        Image = new ImageFactory(backgroundImage, font)
+            .DrawProviderName(providerName)
+            .DrawAttributes(dynamoDbItem, GetCoordinates)
+            .BuildImage();
     }
 
     protected PointF? GetCoordinates(string traitType)

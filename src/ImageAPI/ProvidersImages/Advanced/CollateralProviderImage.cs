@@ -1,5 +1,6 @@
 ﻿using SixLabors.Fonts;
 using SixLabors.ImageSharp;
+using MetaDataAPI.Providers;
 using MetaDataAPI.Models.DynamoDb;
 
 namespace ImageAPI.ProvidersImages.Advanced;
@@ -17,6 +18,6 @@ public class CollateralProviderImage : ProviderImage
     };
 
     public CollateralProviderImage(Image backgroundImage, Font font, IReadOnlyList<DynamoDbItem> dynamoDbItems)
-        : base(backgroundImage, font, dynamoDbItems[0])
+        : base(nameof(CollateralProvider), backgroundImage, font, dynamoDbItems[0])
     { }
 }

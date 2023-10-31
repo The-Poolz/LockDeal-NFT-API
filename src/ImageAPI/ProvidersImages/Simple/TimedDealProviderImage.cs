@@ -1,5 +1,6 @@
 ﻿using SixLabors.Fonts;
 using SixLabors.ImageSharp;
+using MetaDataAPI.Providers;
 using MetaDataAPI.Models.DynamoDb;
 
 namespace ImageAPI.ProvidersImages.Simple;
@@ -15,6 +16,6 @@ public class TimedDealProviderImage : ProviderImage
     };
 
     public TimedDealProviderImage(Image backgroundImage, Font font, IReadOnlyList<DynamoDbItem> dynamoDbItems)
-        : base(backgroundImage, font, dynamoDbItems[0])
+        : base(nameof(TimedDealProvider), backgroundImage, font, dynamoDbItems[0])
     { }
 }

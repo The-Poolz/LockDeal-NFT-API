@@ -5,22 +5,27 @@ using SixLabors.ImageSharp.Processing;
 
 namespace ImageAPI.Utils;
 
-public static class ImageExtensions
+public class ImageFactory
 {
-    public static Image DrawBackgroundImage(this Image? image, Image backgroundImage)
+    private readonly Font font;
+    private Image image;
+
+    public ImageFactory(Image backgroundImage, Font font)
     {
-        return backgroundImage.Clone(_ => { });
+        image = DrawBackgroundImage(backgroundImage);
+        this.font = font;
     }
 
-    public static Image DrawProviderName(this Image image, Font font, string providerName)
+    public ImageFactory DrawProviderName(string providerName)
     {
         var imageProcessor = new ImageProcessor(image, font);
         var options = imageProcessor.CreateTextOptions(new PointF(50, 50));
         imageProcessor.DrawText(providerName, options);
-        return imageProcessor.Image;
+        image = imageProcessor.Image;
+        return this;
     }
 
-    public static Image DrawAttributes(this Image image, Font font, DynamoDbItem dynamoDbItem, Func<string, PointF?> getCoordinates)
+    public ImageFactory DrawAttributes(DynamoDbItem dynamoDbItem, Func<string, PointF?> getCoordinates)
     {
         var imageProcessor = new ImageProcessor(image, font);
 
@@ -34,6 +39,11 @@ public static class ImageExtensions
             imageProcessor.DrawText(attribute, options);
         }
 
-        return imageProcessor.Image;
+        image = imageProcessor.Image;
+        return this;
     }
+
+    public Image BuildImage() => image;
+
+    private static Image DrawBackgroundImage(Image backgroundImage) => backgroundImage.Clone(_ => { });
 }
