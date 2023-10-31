@@ -1,15 +1,16 @@
 ﻿using SixLabors.Fonts;
 using SixLabors.ImageSharp;
+using MetaDataAPI.Providers;
 using MetaDataAPI.Models.DynamoDb;
 
 namespace ImageAPI.ProvidersImages.Advanced;
 
 public class RefundProviderImage : ProviderImage
 {
+    public override string ProviderName => nameof(RefundProvider);
     public override Image Image { get; }
     public override IDictionary<string, PointF> Coordinates => new Dictionary<string, PointF>
     {
-        { "ProviderName", new PointF(BackgroundImage.Width / 2f, 0) },
         { "Rate", new PointF(BackgroundImage.Width / 2f, BackgroundImage.Height / 2f) },
         { "MainCoinAmount", new PointF(BackgroundImage.Width / 2f, BackgroundImage.Height / 3f) },
         { "MainCoinCollection", new PointF(BackgroundImage.Width / 2f, BackgroundImage.Height / 4f) },
@@ -21,6 +22,7 @@ public class RefundProviderImage : ProviderImage
     public RefundProviderImage(Image backgroundImage, Font font, IReadOnlyList<DynamoDbItem> dynamoDbItems)
         : base(backgroundImage, font)
     {
+        Image = DrawProviderName();
         Image = DrawAttributes(dynamoDbItems[0]);
     }
 }

@@ -2,10 +2,9 @@
 using ImageAPI.Utils;
 using SixLabors.Fonts;
 using SixLabors.ImageSharp;
-using MetaDataAPI.Models.Response;
+using MetaDataAPI.Models.DynamoDb;
 using Amazon.Lambda.APIGatewayEvents;
 using SixLabors.ImageSharp.Processing;
-using MetaDataAPI.Models.DynamoDb;
 
 namespace ImageAPI.ProvidersImages;
 
@@ -13,6 +12,7 @@ public abstract class ProviderImage
 {
     public Image BackgroundImage { get; }
     public Font Font { get; }
+    public abstract string ProviderName { get; }
     public abstract Image Image { get; }
     public abstract IDictionary<string, PointF> Coordinates { get; }
     public virtual string ContentType => "image/png";
@@ -67,6 +67,16 @@ public abstract class ProviderImage
             var options = imageProcessor.CreateTextOptions((PointF)coordinates);
             imageProcessor.DrawText(attribute, options);
         }
+        return imageProcessor.Image;
+    }
+
+    protected Image DrawProviderName()
+    {
+        var imageProcessor = new ImageProcessor(BackgroundImage.Clone(_ => { }), Font);
+
+        var options = imageProcessor.CreateTextOptions(new PointF(5, 5));
+        imageProcessor.DrawText(ProviderName, options);
+
         return imageProcessor.Image;
     }
 }
