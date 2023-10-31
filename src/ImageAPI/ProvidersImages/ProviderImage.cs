@@ -1,10 +1,7 @@
 ﻿using System.Net;
-using ImageAPI.Utils;
 using SixLabors.Fonts;
 using SixLabors.ImageSharp;
-using MetaDataAPI.Models.DynamoDb;
 using Amazon.Lambda.APIGatewayEvents;
-using SixLabors.ImageSharp.Processing;
 
 namespace ImageAPI.ProvidersImages;
 
@@ -52,20 +49,5 @@ public abstract class ProviderImage
             return coordinates;
         }
         return null;
-    }
-
-    protected Image DrawAttributes(DynamoDbItem dynamoDbItem)
-    {
-        var imageProcessor = new ImageProcessor(BackgroundImage.Clone(_ => {}), Font);
-        foreach (var attribute in dynamoDbItem.Attributes)
-        {
-            var coordinates = GetCoordinates(attribute.TraitType);
-            if (coordinates == null)
-                continue;
-
-            var options = imageProcessor.CreateTextOptions((PointF)coordinates);
-            imageProcessor.DrawText(attribute, options);
-        }
-        return imageProcessor.Image;
     }
 }
