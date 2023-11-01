@@ -21,9 +21,19 @@ public abstract class ProviderImage
         get
         {
             using var outputStream = new MemoryStream();
-            Image.SaveAsPngAsync(outputStream)
-                .GetAwaiter()
-                .GetResult();
+
+            if (ContentType == "image/png")
+            {
+                Image.SaveAsPngAsync(outputStream)
+                    .GetAwaiter()
+                    .GetResult();
+            }
+            else if (ContentType == "image/gif")
+            {
+                Image.SaveAsGifAsync(outputStream)
+                    .GetAwaiter()
+                    .GetResult();
+            }
             var imageBytes = outputStream.ToArray();
 
             return Convert.ToBase64String(imageBytes);
