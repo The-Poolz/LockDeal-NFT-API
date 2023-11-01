@@ -23,7 +23,7 @@ public static class ProviderImageFactory
         { nameof(LockDealProvider), () => new LockDealProviderImage(backgroundImage.Clone(_ => {}), font, dynamoDbItems) },
         { nameof(TimedDealProvider), () => new TimedDealProviderImage(backgroundImage.Clone(_ => {}), font, dynamoDbItems) },
         { nameof(BundleProvider), () => new BundleProviderImage(backgroundImage.Clone(_ => {}), font, dynamoDbItems) },
-        { nameof(CollateralProvider), () => new CollateralProviderImage(backgroundImage.Clone(_ => {}), font, dynamoDbItems) },
-        { nameof(RefundProvider), () => new RefundProviderImage(backgroundImage.Clone(_ => {}), font, dynamoDbItems) }
+        { nameof(CollateralProvider), () => new CollateralProviderImage(backgroundImage.Clone(_ => {}), font, dynamoDbItems.ToList()) },
+        { nameof(RefundProvider), () => new RefundProviderImage(backgroundImage.Clone(_ => {}), font, dynamoDbItems.ToList()) }
     };
 }
