@@ -17,7 +17,7 @@ public class CollateralProviderImage : ProviderImage
         { "Collection", new PointF(BackgroundImage.Width / 2f, BackgroundImage.Height / 7f) },
     };
 
-    public CollateralProviderImage(Image backgroundImage, Font font, IReadOnlyList<DynamoDbItem> dynamoDbItems)
-        : base(nameof(CollateralProvider), backgroundImage, font, dynamoDbItems[0])
+    public CollateralProviderImage(Image backgroundImage, Font font, IList<DynamoDbItem> dynamoDbItems)
+        : base(nameof(CollateralProvider), backgroundImage, font, dynamoDbItems)
     { }
 }

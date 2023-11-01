@@ -17,7 +17,7 @@ public class RefundProviderImage : ProviderImage
         { "LeftAmount", new PointF(BackgroundImage.Width / 2f, BackgroundImage.Height / 7f) },
     };
 
-    public RefundProviderImage(Image backgroundImage, Font font, IReadOnlyList<DynamoDbItem> dynamoDbItems)
-        : base(nameof(RefundProvider), backgroundImage, font, dynamoDbItems[0])
+    public RefundProviderImage(Image backgroundImage, Font font, IList<DynamoDbItem> dynamoDbItems)
+        : base(nameof(RefundProvider), backgroundImage, font, dynamoDbItems)
     { }
 }
