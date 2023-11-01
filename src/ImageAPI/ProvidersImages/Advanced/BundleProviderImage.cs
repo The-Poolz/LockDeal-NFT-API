@@ -9,7 +9,6 @@ namespace ImageAPI.ProvidersImages.Advanced;
 
 public class BundleProviderImage : ProviderImage
 {
-    public override string ContentType => "image/gif";
     public override IDictionary<string, PointF> Coordinates => new Dictionary<string, PointF>
     {
         { "LeftAmount", new PointF(BackgroundImage.Width / 2f, BackgroundImage.Height / 2f) },

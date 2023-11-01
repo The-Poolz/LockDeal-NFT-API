@@ -4,8 +4,8 @@ using SixLabors.Fonts;
 using SixLabors.ImageSharp;
 using MetaDataAPI.Models.DynamoDb;
 using Amazon.Lambda.APIGatewayEvents;
-using SixLabors.ImageSharp.PixelFormats;
 using SixLabors.ImageSharp.Processing;
+using SixLabors.ImageSharp.PixelFormats;
 
 namespace ImageAPI.ProvidersImages;
 

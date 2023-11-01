@@ -11,10 +11,7 @@ public class RefundProviderImage : ProviderImage
     {
         { "Rate", new PointF(BackgroundImage.Width / 2f, BackgroundImage.Height / 2f) },
         { "MainCoinAmount", new PointF(BackgroundImage.Width / 2f, BackgroundImage.Height / 3f) },
-        { "MainCoinCollection", new PointF(BackgroundImage.Width / 2f, BackgroundImage.Height / 4f) },
-        { "SubProviderName", new PointF(BackgroundImage.Width / 2f, BackgroundImage.Height / 5f) },
-        { "Collection", new PointF(BackgroundImage.Width / 2f, BackgroundImage.Height / 6f) },
-        { "LeftAmount", new PointF(BackgroundImage.Width / 2f, BackgroundImage.Height / 7f) },
+        { "MainCoinCollection", new PointF(BackgroundImage.Width / 2f, BackgroundImage.Height / 4f) }
     };
 
     public RefundProviderImage(Image backgroundImage, Font font, IList<DynamoDbItem> dynamoDbItems)
