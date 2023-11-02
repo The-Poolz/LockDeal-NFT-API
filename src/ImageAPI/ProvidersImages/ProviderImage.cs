@@ -9,7 +9,6 @@ namespace ImageAPI.ProvidersImages;
 
 public abstract class ProviderImage
 {
-    public Font Font { get; }
     public Image BackgroundImage { get; }
     public Image Image { get; protected set; }
     public string ContentType { get; init; }
@@ -47,7 +46,7 @@ public abstract class ProviderImage
         }
     };
 
-    protected ProviderImage(string[] base64Images)
+    protected ProviderImage(IEnumerable<string> base64Images)
     {
         var images = base64Images.Select(x => Image.Load(Convert.FromBase64String(x))).ToArray();
 
@@ -58,7 +57,6 @@ public abstract class ProviderImage
     protected ProviderImage(string providerName, Image backgroundImage, Font font, DynamoDbItem dynamoDbItem)
     {
         BackgroundImage = backgroundImage;
-        Font = font;
         Image = new ImageFactory(backgroundImage, font)
             .DrawProviderName(providerName)
             .DrawAttributes(dynamoDbItem, GetCoordinates)
