@@ -9,7 +9,7 @@ namespace ImageAPI.ProvidersImages;
 
 public abstract class ProviderImage
 {
-    public Image BackgroundImage { get; }
+    public Image? BackgroundImage { get; }
     public Image Image { get; protected set; }
     public string ContentType { get; init; }
     public abstract IDictionary<string, PointF> Coordinates { get; }
@@ -67,17 +67,12 @@ public abstract class ProviderImage
     protected ProviderImage(string providerName, Image backgroundImage, Font font, IList<DynamoDbItem> dynamoDbItems)
         : this(providerName, backgroundImage, font, dynamoDbItems[0])
     {
-        dynamoDbItems.Remove(dynamoDbItems[0]);
-
-        var bundleImages = dynamoDbItems.Select(dynamoDbItem => ProviderImageFactory.Create(backgroundImage, font, new[] { dynamoDbItem }))
+        var bundleImages = dynamoDbItems.Skip(1)
+            .Select(dynamoDbItem => ProviderImageFactory.Create(backgroundImage, font, new[] { dynamoDbItem }))
             .Select(providerImage => providerImage.Image)
             .ToArray();
 
-        var images = new List<Image>
-        {
-            Image
-        };
-        images.AddRange(bundleImages);
+        var images = new List<Image> { Image }.Concat(bundleImages).ToList();
 
         Image = GifCreator.ImagesToGif(images);
         ContentType = ContentTypes.Gif;
