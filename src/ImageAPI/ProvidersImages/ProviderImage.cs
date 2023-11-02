@@ -14,28 +14,8 @@ public abstract class ProviderImage
     public Image[] Images { get; protected set; }
     public string ContentType { get; init; }
     public abstract IDictionary<string, PointF> Coordinates { get; }
-    public string Base64Image
-    {
-        get
-        {
-            using var outputStream = new MemoryStream();
-            if (ContentType == ContentTypes.Png)
-            {
-                Image.SaveAsPngAsync(outputStream)
-                    .GetAwaiter()
-                    .GetResult();
-            }
-            else if (ContentType == ContentTypes.Gif)
-            {
-                Image.SaveAsGifAsync(outputStream)
-                    .GetAwaiter()
-                    .GetResult();
-                Image.SaveAsGif(@"C:\Users\Arden\Desktop\result.gif");
-            }
-            var imageBytes = outputStream.ToArray();
-            return Convert.ToBase64String(imageBytes);
-        }
-    }
+    public string Base64Image => Base64FromImage(Image);
+    public string[] Base64Images => Images.Select(Base64FromImage).ToArray();
     public APIGatewayProxyResponse Response => new()
     {
         IsBase64Encoded = true,
@@ -75,7 +55,7 @@ public abstract class ProviderImage
             .Select(providerImage => providerImage.Image)
             .ToArray();
 
-        Images = new List<Image> { Image }.Concat(bundleImages).ToArray();
+        Images = new[] { Image }.Concat(bundleImages).ToArray();
 
         Image = GifCreator.ImagesToGif(Images);
         ContentType = ContentTypes.Gif;
@@ -88,5 +68,24 @@ public abstract class ProviderImage
             return coordinates;
         }
         return null;
+    }
+
+    private string Base64FromImage(Image image)
+    {
+        using var outputStream = new MemoryStream();
+        if (ContentType == ContentTypes.Png)
+        {
+            image.SaveAsPngAsync(outputStream)
+                .GetAwaiter()
+                .GetResult();
+        }
+        else if (ContentType == ContentTypes.Gif)
+        {
+            image.SaveAsGifAsync(outputStream)
+                .GetAwaiter()
+                .GetResult();
+        }
+        var imageBytes = outputStream.ToArray();
+        return Convert.ToBase64String(imageBytes);
     }
 }
