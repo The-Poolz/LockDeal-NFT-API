@@ -48,7 +48,7 @@ public class DynamoDbTests
         var contentType = Guid.NewGuid().ToString();
         var client = new Mock<IAmazonDynamoDB>();
 
-        var testCode = async () => await new DynamoDb(client.Object).UpdateItemAsync(hash, base64Image, contentType);
+        var testCode = async () => await new DynamoDb(client.Object).UpdateItemAsync(hash, new []{ base64Image }, contentType);
 
         await testCode.Should().NotThrowAsync<Exception>();
     }

@@ -1,9 +1,9 @@
 ﻿using Moq;
 using Xunit;
 using System.Net;
-using Amazon.DynamoDBv2.Model;
 using ImageAPI.Utils;
 using FluentAssertions;
+using Amazon.DynamoDBv2.Model;
 using Amazon.Lambda.APIGatewayEvents;
 
 namespace ImageAPI.Test;
@@ -58,9 +58,9 @@ public class LambdaFunctionTests
                         }
                     },
                     {
-                        "Image", new AttributeValue
+                        "Images", new AttributeValue
                         {
-                            S = "base64_encoded_image_data"
+                            SS = new List<string> { "base64_encoded_image_data" }
                         }
                     },
                     {
