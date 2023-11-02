@@ -5,7 +5,6 @@ using SixLabors.ImageSharp;
 using MetaDataAPI.Models.DynamoDb;
 using Amazon.Lambda.APIGatewayEvents;
 using SixLabors.ImageSharp.Processing;
-using SixLabors.ImageSharp.PixelFormats;
 
 namespace ImageAPI.ProvidersImages;
 
@@ -21,13 +20,13 @@ public abstract class ProviderImage
         get
         {
             using var outputStream = new MemoryStream();
-            if (ContentType == "image/png")
+            if (ContentType == ContentTypes.Png)
             {
                 Image.SaveAsPngAsync(outputStream)
                     .GetAwaiter()
                     .GetResult();
             }
-            else if (ContentType == "image/gif")
+            else if (ContentType == ContentTypes.Gif)
             {
                 Image.SaveAsGifAsync(outputStream)
                     .GetAwaiter()
@@ -56,7 +55,7 @@ public abstract class ProviderImage
             .DrawProviderName(providerName)
             .DrawAttributes(dynamoDbItem, GetCoordinates)
             .BuildImage();
-        ContentType = "image/png";
+        ContentType = ContentTypes.Png;
     }
 
     protected ProviderImage(string providerName, Image backgroundImage, Font font, IList<DynamoDbItem> dynamoDbItems)
@@ -82,7 +81,7 @@ public abstract class ProviderImage
         GifCreator.SlideImages(gif, images, frameDelay);
 
         Image = gif.Clone(_ => { });
-        ContentType = "image/gif";
+        ContentType = ContentTypes.Gif;
     }
 
     protected PointF? GetCoordinates(string traitType)
