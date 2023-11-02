@@ -8,7 +8,7 @@ public static class GifCreator
 {
     public const int FrameDelay = 10;
 
-    public static Image ImagesToGif(IReadOnlyList<Image> images)
+    public static Image ImagesToGif(Image[] images)
     {
         var gif = images[0].Clone(_ => { });
 

@@ -9,8 +9,9 @@ namespace ImageAPI.ProvidersImages;
 
 public abstract class ProviderImage
 {
-    public Image? BackgroundImage { get; }
+    public Image BackgroundImage { get; }
     public Image Image { get; protected set; }
+    public Image[] Images { get; protected set; }
     public string ContentType { get; init; }
     public abstract IDictionary<string, PointF> Coordinates { get; }
     public string Base64Image
@@ -46,11 +47,12 @@ public abstract class ProviderImage
         }
     };
 
-    protected ProviderImage(IEnumerable<string> base64Images)
+    protected ProviderImage(Image backgroundImage, IEnumerable<string> base64Images)
     {
-        var images = base64Images.Select(x => Image.Load(Convert.FromBase64String(x))).ToArray();
+        BackgroundImage = backgroundImage;
+        Images = base64Images.Select(x => Image.Load(Convert.FromBase64String(x))).ToArray();
 
-        Image = GifCreator.ImagesToGif(images);
+        Image = GifCreator.ImagesToGif(Images);
         ContentType = ContentTypes.Gif;
     }
 
@@ -61,6 +63,7 @@ public abstract class ProviderImage
             .DrawProviderName(providerName)
             .DrawAttributes(dynamoDbItem, GetCoordinates)
             .BuildImage();
+        Images = new[] { Image };
         ContentType = ContentTypes.Png;
     }
 
@@ -72,9 +75,9 @@ public abstract class ProviderImage
             .Select(providerImage => providerImage.Image)
             .ToArray();
 
-        var images = new List<Image> { Image }.Concat(bundleImages).ToList();
+        Images = new List<Image> { Image }.Concat(bundleImages).ToArray();
 
-        Image = GifCreator.ImagesToGif(images);
+        Image = GifCreator.ImagesToGif(Images);
         ContentType = ContentTypes.Gif;
     }
 
