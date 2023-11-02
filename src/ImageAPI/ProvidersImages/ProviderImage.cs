@@ -4,14 +4,13 @@ using SixLabors.Fonts;
 using SixLabors.ImageSharp;
 using MetaDataAPI.Models.DynamoDb;
 using Amazon.Lambda.APIGatewayEvents;
-using SixLabors.ImageSharp.Processing;
 
 namespace ImageAPI.ProvidersImages;
 
 public abstract class ProviderImage
 {
-    public Image BackgroundImage { get; }
     public Font Font { get; }
+    public Image BackgroundImage { get; }
     public Image Image { get; protected set; }
     public string ContentType { get; init; }
     public abstract IDictionary<string, PointF> Coordinates { get; }
@@ -31,6 +30,7 @@ public abstract class ProviderImage
                 Image.SaveAsGifAsync(outputStream)
                     .GetAwaiter()
                     .GetResult();
+                Image.SaveAsGif(@"C:\Users\Arden\Desktop\result.gif");
             }
             var imageBytes = outputStream.ToArray();
             return Convert.ToBase64String(imageBytes);
@@ -46,6 +46,14 @@ public abstract class ProviderImage
             { "Content-Type", ContentType }
         }
     };
+
+    protected ProviderImage(string[] base64Images)
+    {
+        var images = base64Images.Select(x => Image.Load(Convert.FromBase64String(x))).ToArray();
+
+        Image = GifCreator.ImagesToGif(images);
+        ContentType = ContentTypes.Gif;
+    }
 
     protected ProviderImage(string providerName, Image backgroundImage, Font font, DynamoDbItem dynamoDbItem)
     {
@@ -73,14 +81,7 @@ public abstract class ProviderImage
         };
         images.AddRange(bundleImages);
 
-        const int frameDelay = 10;
-        using var gif = Image.Clone(_ => { });
-        var gifMetaData = gif.Metadata.GetGifMetadata();
-        gifMetaData.RepeatCount = 0;
-
-        GifCreator.SlideImages(gif, images, frameDelay);
-
-        Image = gif.Clone(_ => { });
+        Image = GifCreator.ImagesToGif(images);
         ContentType = ContentTypes.Gif;
     }
 

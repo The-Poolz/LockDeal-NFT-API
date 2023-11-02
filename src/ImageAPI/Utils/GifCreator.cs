@@ -6,7 +6,21 @@ namespace ImageAPI.Utils;
 
 public static class GifCreator
 {
-    public static void SlideImages(Image gif, IReadOnlyList<Image> images, int frameDelay)
+    public const int FrameDelay = 10;
+
+    public static Image ImagesToGif(IReadOnlyList<Image> images)
+    {
+        var gif = images[0].Clone(_ => { });
+
+        var gifMetaData = gif.Metadata.GetGifMetadata();
+        gifMetaData.RepeatCount = 0;
+
+        SlideImages(gif, images);
+
+        return gif;
+    }
+
+    private static void SlideImages(Image gif, IReadOnlyList<Image> images)
     {
         const int slideSteps = 20;
         var stepSize = images[0].Width / slideSteps;
@@ -42,7 +56,7 @@ public static class GifCreator
                 }
 
                 var metadata = frame.Frames.RootFrame.Metadata.GetGifMetadata();
-                metadata.FrameDelay = frameDelay;
+                metadata.FrameDelay = FrameDelay;
                 gif.Frames.AddFrame(frame.Frames.RootFrame);
             }
         }
