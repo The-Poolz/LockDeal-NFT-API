@@ -14,8 +14,8 @@ public abstract class ProviderImage
     public Image[] Images { get; protected set; }
     public string ContentType { get; init; }
     public abstract IDictionary<string, PointF> Coordinates { get; }
-    public string Base64Image => Base64FromImage(Image);
-    public string[] Base64Images => Images.Select(Base64FromImage).ToArray();
+    public string Base64Image => Base64FromImage(Image, ContentTypes.Png);
+    public string[] Base64Images => Images.Select(img => Base64FromImage(img, ContentTypes.Png)).ToArray();
     public APIGatewayProxyResponse Response => new()
     {
         IsBase64Encoded = true,
@@ -70,16 +70,16 @@ public abstract class ProviderImage
         return null;
     }
 
-    private string Base64FromImage(Image image)
+    private static string Base64FromImage(Image image, string contentType)
     {
         using var outputStream = new MemoryStream();
-        if (ContentType == ContentTypes.Png)
+        if (contentType == ContentTypes.Png)
         {
             image.SaveAsPngAsync(outputStream)
                 .GetAwaiter()
                 .GetResult();
         }
-        else if (ContentType == ContentTypes.Gif)
+        else if (contentType == ContentTypes.Gif)
         {
             image.SaveAsGifAsync(outputStream)
                 .GetAwaiter()
