@@ -50,13 +50,13 @@ public static class StaticResults
         { 3, $"This NFT securely locks 10 units of the asset Token Synthetic (TST@0x43d...cdffc). Access to these assets will commence on the designated start time of {TimeUtils.FromUnixTimestamp(1701318745)}."},
         { 4, $"This NFT governs a time-locked pool containing 10/10 units of the asset Token Synthetic (TST@0x43d...cdffc). Withdrawals are permitted in a linear fashion beginning at {TimeUtils.FromUnixTimestamp(1698319845)}, culminating in full access at {TimeUtils.FromUnixTimestamp(1701318745)}."},
         { 5, $"This NFT governs a time-locked pool containing 1000/1000 units of the asset Token Synthetic (TST@0x43d...cdffc). Withdrawals are permitted in a linear fashion beginning at {TimeUtils.FromUnixTimestamp(1698322749)}, culminating in full access at {TimeUtils.FromUnixTimestamp(1701318745)}."},
-        { 6, "This NFT encompasses 100 units of the asset Token Synthetic (TST@0x43d...cdffc) with an associated refund rate of 0.000000000000000008. Post rate calculation, the refundable amount in the primary asset Token Synthetic (TST@0x43d...cdffc) will be 0.000000000000000800."},
+        { 6, "This NFT encompasses 100 units of the asset Token Synthetic (TST@0x43d...cdffc) with an associated refund rate of 0.000000000000000000008. Post rate calculation, the refundable amount in the primary asset Token Synthetic (TST@0x43d...cdffc) will be 0.000000000000000000800."},
         { 7, "This NFT represents immediate access to 100 units of the specified asset Main coin Synthetic (TST@0xcd1...74d21)."},
         { 8, $"Exclusively utilized by project administrators, this NFT serves as a secure vault for holding refundable tokens Token Synthetic (TST@0x43d...cdffc), for Main Coin Token Synthetic (TST@0x43d...cdffc). It holds 0 for the main coin collector, 0 for the token collector, and 10 for the main coin holder, valid until {TimeUtils.FromUnixTimestamp(1798325066)}."},
         { 9, "This NFT represents immediate access to 0 units of the specified asset Token Synthetic (TST@0x43d...cdffc)."},
         { 10, "This NFT represents immediate access to 0 units of the specified asset Main coin Synthetic (TST@0xcd1...74d21)."},
         { 11, "This NFT represents immediate access to 10 units of the specified asset Token Synthetic (TST@0x43d...cdffc)."},     
-        { 12, "This NFT encompasses 100 units of the asset Token Synthetic (TST@0x43d...cdffc) with an associated refund rate of 0.000000000000000014. Post rate calculation, the refundable amount in the primary asset Main coin Synthetic (TST@0xcd1...74d21) will be 0.000000000000001400."},
+        { 12, "This NFT encompasses 100 units of the asset Token Synthetic (TST@0x43d...cdffc) with an associated refund rate of 0.000000000000000000014. Post rate calculation, the refundable amount in the primary asset Main coin Synthetic (TST@0xcd1...74d21) will be 0.000000000000000001400."},
         { 13, $"This NFT governs a time-locked pool containing 100/100 units of the asset Token Synthetic (TST@0x43d...cdffc). Withdrawals are permitted in a linear fashion beginning at {TimeUtils.FromUnixTimestamp(1698327983)}, culminating in full access at {TimeUtils.FromUnixTimestamp(1708327983)}."},
         { 14, $"Exclusively utilized by project administrators, this NFT serves as a secure vault for holding refundable tokens Main coin Synthetic (TST@0xcd1...74d21), for Main Coin Main coin Synthetic (TST@0xcd1...74d21). It holds 0 for the main coin collector, 0 for the token collector, and 10 for the main coin holder, valid until {TimeUtils.FromUnixTimestamp(1798325066)}."},
         { 15, "This NFT represents immediate access to 0 units of the specified asset Main coin Synthetic (TST@0xcd1...74d21)."},
@@ -119,8 +119,8 @@ public static class StaticResults
         {6, new()
             {
                 new("ProviderName", "RefundProvider"),
-                new("Rate", 0.000000000000000008),
-                new("MainCoinAmount", 0.000000000000000800),
+                new("Rate", 0.000000000000000000008),
+                new("MainCoinAmount", 0.000000000000000000800),
                 new("MainCoinCollection", 0),
                 new("SubProviderName", "DealProvider"),
                 new("Collection", 0),
@@ -173,7 +173,7 @@ public static class StaticResults
                 new("MainCoinAmount", 0.000000000000001400),
                 new("MainCoinCollection", 1),
                 new("SubProviderName", "TimedDealProvider"),
-                new("Collection", 1),
+                new("Collection", 0),
                 new("LeftAmount", 100.0)
             }
         },
