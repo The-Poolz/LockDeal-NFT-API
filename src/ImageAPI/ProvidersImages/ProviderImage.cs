@@ -14,13 +14,12 @@ public abstract class ProviderImage
     public Image[] Images { get; protected set; }
     public string ContentType { get; init; }
     public abstract IDictionary<string, PointF> Coordinates { get; }
-    public string Base64Image => Base64FromImage(Image, ContentTypes.Png);
     public string[] Base64Images => Images.Select(img => Base64FromImage(img, ContentTypes.Png)).ToArray();
     public APIGatewayProxyResponse Response => new()
     {
         IsBase64Encoded = true,
         StatusCode = (int)HttpStatusCode.OK,
-        Body = Base64Image,
+        Body = Base64FromImage(Image, ContentType),
         Headers = new Dictionary<string, string>
         {
             { "Content-Type", ContentType }
