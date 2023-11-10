@@ -43,22 +43,16 @@ public class LambdaFunction
             return ResponseBuilder.WrongHash();
         }
 
-        if (databaseItem.Item.TryGetValue("Images", out var attributeValue))
+        if (databaseItem.Item.TryGetValue("Image", out var attributeValue))
         {
-            if (attributeValue.SS.Count > 1)
-            {
-                var providerImage = ProviderImageFactory.Create(backgroundImage, font, databaseItem.ParseAttributes());
-                return providerImage.Response;
-            }
-
             return new APIGatewayProxyResponse
             {
                 IsBase64Encoded = true,
                 StatusCode = (int)HttpStatusCode.OK,
-                Body = attributeValue.SS[0],
+                Body = attributeValue.S,
                 Headers = new Dictionary<string, string>
                 {
-                    { "Content-Type",  databaseItem.Item["Content-Type"].S }
+                    { "Content-Type",  ProviderImage.ContentType }
                 }
             };
         }
@@ -67,7 +61,7 @@ public class LambdaFunction
         {
             var providerImage = ProviderImageFactory.Create(backgroundImage, font, databaseItem.ParseAttributes());
 
-            await dynamoDb.UpdateItemAsync(hash, providerImage.Base64Images, providerImage.ContentType);
+            await dynamoDb.UpdateItemAsync(hash, providerImage.Base64Image);
 
             return providerImage.Response;
         }

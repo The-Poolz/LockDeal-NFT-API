@@ -30,7 +30,7 @@ public class DynamoDb
         });
     }
 
-    public async Task UpdateItemAsync(string hash, string[] base64Images, string contentType)
+    public async Task UpdateItemAsync(string hash, string base64Image)
     {
         var request = new UpdateItemRequest
         {
@@ -42,17 +42,10 @@ public class DynamoDb
             AttributeUpdates = new Dictionary<string, AttributeValueUpdate>
             {
                 {
-                    "Images", new AttributeValueUpdate
+                    "Image", new AttributeValueUpdate
                     {
                         Action = AttributeAction.PUT,
-                        Value = new AttributeValue { SS = base64Images.ToList() }
-                    }
-                },
-                {
-                    "Content-Type", new AttributeValueUpdate
-                    {
-                        Action = AttributeAction.PUT,
-                        Value = new AttributeValue { S = contentType }
+                        Value = new AttributeValue { S = base64Image }
                     }
                 }
             }

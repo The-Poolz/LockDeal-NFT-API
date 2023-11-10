@@ -14,6 +14,6 @@ public class CollateralProviderImage : ProviderImage
     };
 
     public CollateralProviderImage(Image backgroundImage, Font font, IList<DynamoDbItem> dynamoDbItems)
-        : base(nameof(CollateralProvider), backgroundImage, font, dynamoDbItems)
+        : base(nameof(CollateralProvider), backgroundImage, font, dynamoDbItems[0])
     { }
 }
