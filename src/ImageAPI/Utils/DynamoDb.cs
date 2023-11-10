@@ -30,7 +30,7 @@ public class DynamoDb
         });
     }
 
-    public async Task UpdateItemAsync(string hash, string base64Image)
+    public virtual async Task UpdateItemAsync(string hash, string base64Image)
     {
         var request = new UpdateItemRequest
         {
