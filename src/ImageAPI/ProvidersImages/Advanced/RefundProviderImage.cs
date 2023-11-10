@@ -15,6 +15,6 @@ public class RefundProviderImage : ProviderImage
     };
 
     public RefundProviderImage(Image backgroundImage, Font font, IList<DynamoDbItem> dynamoDbItems)
-        : base(nameof(RefundProvider), backgroundImage, font, dynamoDbItems)
+        : base(nameof(RefundProvider), backgroundImage, font, dynamoDbItems[0])
     { }
 }
