@@ -19,7 +19,7 @@ public class ImageFactory
     public ImageFactory DrawProviderName(string providerName)
     {
         var imageProcessor = new ImageProcessor(image, font);
-        var options = imageProcessor.CreateTextOptions(new PointF(50, 50));
+        var options = imageProcessor.CreateTextOptions(new PointF(image.Width - 400, 50));
         imageProcessor.DrawText(providerName, options);
         image = imageProcessor.Image;
         return this;
@@ -37,6 +37,20 @@ public class ImageFactory
 
             var options = imageProcessor.CreateTextOptions((PointF)coordinates);
             imageProcessor.DrawText(attribute, options);
+        }
+
+        image = imageProcessor.Image;
+        return this;
+    }
+
+    public ImageFactory DrawTexts(IDictionary<string, PointF> coordinatesMapping)
+    {
+        var imageProcessor = new ImageProcessor(image, font);
+
+        foreach (var mapping in coordinatesMapping)
+        {
+            var options = imageProcessor.CreateTextOptions(mapping.Value);
+            imageProcessor.DrawText(mapping.Key, options);
         }
 
         image = imageProcessor.Image;

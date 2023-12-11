@@ -13,7 +13,8 @@ public abstract class ProviderImage
     public Image BackgroundImage { get; }
     public Image Image { get; protected set; }
     public string Base64Image { get; }
-    public abstract IDictionary<string, PointF> Coordinates { get; }
+    public abstract IDictionary<string, PointF> AttributeCoordinates { get; }
+    public abstract IDictionary<string, PointF> TextCoordinates { get; }
     public APIGatewayProxyResponse Response => new()
     {
         IsBase64Encoded = true,
@@ -31,13 +32,14 @@ public abstract class ProviderImage
         Image = new ImageFactory(backgroundImage, font)
             .DrawProviderName(providerName)
             .DrawAttributes(dynamoDbItem, GetCoordinates)
+            .DrawTexts(TextCoordinates)
             .BuildImage();
         Base64Image = Base64FromImage(Image);
     }
 
     protected PointF? GetCoordinates(string traitType)
     {
-        if (Coordinates.TryGetValue(traitType, out var coordinates))
+        if (AttributeCoordinates.TryGetValue(traitType, out var coordinates))
         {
             return coordinates;
         }
@@ -51,6 +53,7 @@ public abstract class ProviderImage
             .GetAwaiter()
             .GetResult();
         var imageBytes = outputStream.ToArray();
+        image.SaveAsPng(@"C:\Users\Arden\Desktop\result.png");
         return Convert.ToBase64String(imageBytes);
     }
 }

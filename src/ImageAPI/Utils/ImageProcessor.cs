@@ -37,8 +37,8 @@ public class ImageProcessor
 
     public virtual void DrawText(string text, TextOptions textOptions, IBrush? brush = null, IPen? pen = null)
     {
-        brush ??= Brushes.Solid(Color.Black);
-        pen ??= Pens.Solid(Color.DarkRed, 2);
+        brush ??= Brushes.Solid(Color.White);
+        pen ??= Pens.Solid(Color.White, 2);
 
         Image.Mutate(x => x.DrawText(textOptions, text, brush, pen));
     }

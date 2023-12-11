@@ -6,6 +6,8 @@ using ImageAPI.Extensions;
 using SixLabors.ImageSharp;
 using ImageAPI.ProvidersImages;
 using Amazon.Lambda.APIGatewayEvents;
+using MetaDataAPI.Models.DynamoDb;
+using Newtonsoft.Json;
 
 [assembly: LambdaSerializer(typeof(Amazon.Lambda.Serialization.Json.JsonSerializer))]
 
@@ -30,38 +32,39 @@ public class LambdaFunction
 
     public async Task<APIGatewayProxyResponse> RunAsync(APIGatewayProxyRequest input)
     {
-        if (!input.QueryStringParameters.ContainsKey("hash"))
-        {
-            return ResponseBuilder.WrongInput();
-        }
-        var hash = input.QueryStringParameters["hash"];
+        //if (!input.QueryStringParameters.ContainsKey("hash"))
+        //{
+        //    return ResponseBuilder.WrongInput();
+        //}
+        //var hash = input.QueryStringParameters["hash"];
 
-        var databaseItem = await dynamoDb.GetItemAsync(hash);
+        //var databaseItem = await dynamoDb.GetItemAsync(hash);
 
-        if (databaseItem.Item.Count == 0)
-        {
-            return ResponseBuilder.WrongHash();
-        }
+        //if (databaseItem.Item.Count == 0)
+        //{
+        //    return ResponseBuilder.WrongHash();
+        //}
 
-        if (databaseItem.Item.TryGetValue("Image", out var attributeValue))
-        {
-            return new APIGatewayProxyResponse
-            {
-                IsBase64Encoded = true,
-                StatusCode = (int)HttpStatusCode.OK,
-                Body = attributeValue.S,
-                Headers = new Dictionary<string, string>
-                {
-                    { "Content-Type",  ProviderImage.ContentType }
-                }
-            };
-        }
+        //if (databaseItem.Item.TryGetValue("Image", out var attributeValue))
+        //{
+        //    return new APIGatewayProxyResponse
+        //    {
+        //        IsBase64Encoded = true,
+        //        StatusCode = (int)HttpStatusCode.OK,
+        //        Body = attributeValue.S,
+        //        Headers = new Dictionary<string, string>
+        //        {
+        //            { "Content-Type",  ProviderImage.ContentType }
+        //        }
+        //    };
+        //}
 
         try
         {
-            var providerImage = ProviderImageFactory.Create(backgroundImage, font, databaseItem.ParseAttributes());
+            var attributes = JsonConvert.DeserializeObject<DynamoDbItem[]>("[{\"ProviderName\":\"DealProvider\",\"Attributes\":[{\"trait_type\":\"Collection\",\"value\":2},{\"trait_type\":\"LeftAmount\",\"value\":13572.37461}]}]")!;
+            var providerImage = ProviderImageFactory.Create(backgroundImage, font, attributes);
 
-            await dynamoDb.UpdateItemAsync(hash, providerImage.Base64Image);
+            //await dynamoDb.UpdateItemAsync(hash, providerImage.Base64Image);
 
             return providerImage.Response;
         }
