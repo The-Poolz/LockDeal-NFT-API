@@ -1,57 +1,48 @@
 ﻿using System.Net;
-using SixLabors.Fonts;
-using ImageAPI.Processing;
 using SixLabors.ImageSharp;
+using ImageAPI.Processing.Drawing;
 using MetaDataAPI.Models.DynamoDb;
 using Amazon.Lambda.APIGatewayEvents;
-using ImageAPI.Processing.Drawing;
+using MetaDataAPI.Models.Response;
+using SixLabors.ImageSharp.Processing;
 
 namespace ImageAPI.ProvidersImages;
 
 public abstract class ProviderImage
 {
     public const string ContentType = "image/png";
+    protected readonly DynamoDbItem dynamoDbItem;
     public Image BackgroundImage { get; }
-    public Image Image { get; protected set; }
-    public string Base64Image { get; }
-    public abstract IDictionary<string, PointF> AttributeCoordinates { get; }
-    public abstract IDictionary<string, PointF> TextCoordinates { get; }
-    public abstract ToDrawing[] ToDrawing { get; }
-    public APIGatewayProxyResponse Response => new()
+
+    protected ProviderImage(Image backgroundImage, DynamoDbItem dynamoDbItem)
+    {
+        BackgroundImage = backgroundImage;
+        this.dynamoDbItem = dynamoDbItem;
+    }
+
+    public abstract IEnumerable<ToDrawing> ToDrawing();
+
+    public Image DrawOnImage()
+    {
+        var toDrawing = ToDrawing();
+        var image = BackgroundImage.Clone(_ => { });
+        return toDrawing.Aggregate(image, (current, drawing) => drawing.Draw(current));
+    }
+
+    public static APIGatewayProxyResponse GetResponse(Image image) => GetResponse(Base64FromImage(image));
+
+    public static APIGatewayProxyResponse GetResponse(string base64Image) => new()
     {
         IsBase64Encoded = true,
         StatusCode = (int)HttpStatusCode.OK,
-        Body = Base64Image,
+        Body = base64Image,
         Headers = new Dictionary<string, string>
         {
             { "Content-Type", ContentType }
         }
     };
 
-    protected ProviderImage(string providerName, Image backgroundImage, Font font, DynamoDbItem dynamoDbItem)
-    {
-        BackgroundImage = backgroundImage;
-        Image = backgroundImage;
-
-        // TODO: It is not safe to call a virtual member in a constructor
-        foreach (var drawing in ToDrawing)
-        {
-            Image = drawing.Draw(Image);
-        }
-
-        Base64Image = Base64FromImage(Image);
-    }
-
-    protected PointF? GetCoordinates(string traitType)
-    {
-        if (AttributeCoordinates.TryGetValue(traitType, out var coordinates))
-        {
-            return coordinates;
-        }
-        return null;
-    }
-
-    private static string Base64FromImage(Image image)
+    public static string Base64FromImage(Image image)
     {
         using var outputStream = new MemoryStream();
         image.SaveAsPngAsync(outputStream)
@@ -61,4 +52,10 @@ public abstract class ProviderImage
         image.SaveAsPng(@"C:\Users\Arden\Desktop\result.png");
         return Convert.ToBase64String(imageBytes);
     }
+
+    protected object GetAttributeValue(string traitType) =>
+        dynamoDbItem.Attributes.FirstOrDefault(
+            x => x.TraitType == traitType,
+            new Erc721Attribute(traitType, $"{traitType} not found.")
+        ).Value;
 }

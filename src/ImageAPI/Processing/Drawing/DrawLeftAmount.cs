@@ -4,17 +4,17 @@ using SixLabors.ImageSharp;
 
 namespace ImageAPI.Processing.Drawing;
 
-public class DrawProviderName : ToDrawing
+public class DrawLeftAmount : ToDrawing
 {
     public override string Text { get; }
     public override Font Font { get; }
     public override PointF Coordinates { get; }
 
-    public DrawProviderName(string providerName)
+    public DrawLeftAmount(object leftAmount)
     {
-        Text = providerName;
+        Text = leftAmount.ToString()!;
         // TODO: Create class which provide caching fonts by fontSize. This class get exist font or create new and save it.
-        Font = new ResourcesLoader().LoadFontFromEmbeddedResources(ProviderNameFontSize);
-        Coordinates = new PointF(ImageSize.Width - 400, 50);
+        Font = new ResourcesLoader().LoadFontFromEmbeddedResources(AttributeFontSize);
+        Coordinates = new PointF(ImageSize.Width - 400, ImageSize.Height - 290);
     }
 }

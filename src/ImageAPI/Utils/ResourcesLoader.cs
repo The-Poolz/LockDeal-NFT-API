@@ -17,7 +17,7 @@ public class ResourcesLoader
         return Image.Load(imageStream);
     }
 
-    public virtual Font LoadFontFromEmbeddedResources(float size = 24f)
+    public virtual Font LoadFontFromEmbeddedResources(float size)
     {
         using var fontStream = GetStream(FontResourceName) ??
             throw new FileNotFoundException($"Could not find the embedded resource '{FontResourceName}'. Make sure the resource exists and its 'Build Action' is set to 'Embedded Resource'.");
