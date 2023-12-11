@@ -61,7 +61,7 @@ public class LambdaFunction
 
         try
         {
-            var attributes = JsonConvert.DeserializeObject<DynamoDbItem[]>("[{\"ProviderName\":\"LockDealProvider\",\"Attributes\":[{\"display_type\":\"date\",\"trait_type\":\"StartTime\",\"value\":1699967146},{\"trait_type\":\"Collection\",\"value\":0},{\"trait_type\":\"LeftAmount\",\"value\":10000.0}]}]")!;
+            var attributes = JsonConvert.DeserializeObject<DynamoDbItem[]>("[{\"ProviderName\":\"TimedDealProvider\",\"Attributes\":[{\"trait_type\":\"StartAmount\",\"value\":484.7499339},{\"display_type\":\"date\",\"trait_type\":\"FinishTime\",\"value\":1699545629},{\"display_type\":\"date\",\"trait_type\":\"StartTime\",\"value\":1699459229},{\"trait_type\":\"Collection\",\"value\":2},{\"trait_type\":\"LeftAmount\",\"value\":484.7499339}]}]")!;
             var providerImage = ProviderImageFactory.Create(backgroundImage, font, attributes);
 
             //await dynamoDb.UpdateItemAsync(hash, providerImage.Base64Image);
