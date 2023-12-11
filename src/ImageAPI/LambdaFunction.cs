@@ -8,6 +8,7 @@ using ImageAPI.ProvidersImages;
 using Amazon.Lambda.APIGatewayEvents;
 using MetaDataAPI.Models.DynamoDb;
 using Newtonsoft.Json;
+using ImageAPI.Processing;
 
 [assembly: LambdaSerializer(typeof(Amazon.Lambda.Serialization.Json.JsonSerializer))]
 
@@ -28,6 +29,8 @@ public class LambdaFunction
         var resourcesLoader = new ResourcesLoader();
         backgroundImage = resourcesLoader.LoadImageFromEmbeddedResources();
         font = resourcesLoader.LoadFontFromEmbeddedResources(fontSize);
+
+        ImageInfo.Initialize(backgroundImage);
     }
 
     public async Task<APIGatewayProxyResponse> RunAsync(APIGatewayProxyRequest input)

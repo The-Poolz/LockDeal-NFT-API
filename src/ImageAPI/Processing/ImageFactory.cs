@@ -1,9 +1,10 @@
-﻿using SixLabors.Fonts;
+﻿using ImageAPI.Utils;
+using SixLabors.Fonts;
 using SixLabors.ImageSharp;
 using MetaDataAPI.Models.DynamoDb;
 using SixLabors.ImageSharp.Processing;
 
-namespace ImageAPI.Utils;
+namespace ImageAPI.Processing;
 
 public class ImageFactory
 {

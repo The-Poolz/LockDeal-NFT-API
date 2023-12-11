@@ -1,9 +1,10 @@
 ﻿using System.Net;
-using ImageAPI.Utils;
 using SixLabors.Fonts;
+using ImageAPI.Processing;
 using SixLabors.ImageSharp;
 using MetaDataAPI.Models.DynamoDb;
 using Amazon.Lambda.APIGatewayEvents;
+using ImageAPI.Processing.Drawing;
 
 namespace ImageAPI.ProvidersImages;
 
@@ -15,6 +16,7 @@ public abstract class ProviderImage
     public string Base64Image { get; }
     public abstract IDictionary<string, PointF> AttributeCoordinates { get; }
     public abstract IDictionary<string, PointF> TextCoordinates { get; }
+    public abstract ToDrawing[] ToDrawing { get; }
     public APIGatewayProxyResponse Response => new()
     {
         IsBase64Encoded = true,
@@ -29,11 +31,14 @@ public abstract class ProviderImage
     protected ProviderImage(string providerName, Image backgroundImage, Font font, DynamoDbItem dynamoDbItem)
     {
         BackgroundImage = backgroundImage;
-        Image = new ImageFactory(backgroundImage, font)
-            .DrawProviderName(providerName)
-            .DrawAttributes(dynamoDbItem, GetCoordinates)
-            .DrawTexts(TextCoordinates)
-            .BuildImage();
+        Image = backgroundImage;
+
+        // TODO: It is not safe to call a virtual member in a constructor
+        foreach (var drawing in ToDrawing)
+        {
+            Image = drawing.Draw(Image);
+        }
+
         Base64Image = Base64FromImage(Image);
     }
 
