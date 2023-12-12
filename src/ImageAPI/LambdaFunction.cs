@@ -6,8 +6,6 @@ using ImageAPI.Processing;
 using SixLabors.ImageSharp;
 using ImageAPI.ProvidersImages;
 using Amazon.Lambda.APIGatewayEvents;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 
 [assembly: LambdaSerializer(typeof(Amazon.Lambda.Serialization.Json.JsonSerializer))]
 
@@ -23,9 +21,7 @@ public class LambdaFunction
     public LambdaFunction(DynamoDb dynamoDb)
     {
         this.dynamoDb = dynamoDb;
-        var resourcesLoader = new ResourcesLoader();
-        backgroundImage = resourcesLoader.LoadImageFromEmbeddedResources();
-
+        backgroundImage = new ResourcesLoader().LoadImageFromEmbeddedResources();
         ImageSize.Initialize(backgroundImage);
     }
 
@@ -46,22 +42,12 @@ public class LambdaFunction
 
         if (databaseItem.Item.TryGetValue("Image", out var attributeValue))
         {
-            return new APIGatewayProxyResponse
-            {
-                IsBase64Encoded = true,
-                StatusCode = (int)HttpStatusCode.OK,
-                Body = attributeValue.S,
-                Headers = new Dictionary<string, string>
-                {
-                    { "Content-Type",  ProviderImage.ContentType }
-                }
-            };
+            return ResponseBuilder.GetResponse(HttpStatusCode.OK, attributeValue.S, ProviderImage.ContentType);
         }
 
         try
         {
             var attributes = databaseItem.ParseAttributes();
-            //var attributes = JsonConvert.DeserializeObject<DynamoDbItem[]>(input.ToString())!;
             var providerImage = ProviderImageFactory.Create(backgroundImage, attributes);
             var image = providerImage.DrawOnImage();
 
@@ -69,7 +55,7 @@ public class LambdaFunction
 
             await dynamoDb.UpdateItemAsync(hash, base64Image);
 
-            return ProviderImage.GetResponse(image);
+            return ResponseBuilder.GetResponse(HttpStatusCode.OK, base64Image, ProviderImage.ContentType);
         }
         catch (Exception e)
         {
