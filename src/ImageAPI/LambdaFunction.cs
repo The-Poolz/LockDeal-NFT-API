@@ -1,11 +1,12 @@
 using System.Net;
 using ImageAPI.Utils;
 using Amazon.Lambda.Core;
-using ImageAPI.Extensions;
 using ImageAPI.Processing;
 using SixLabors.ImageSharp;
 using ImageAPI.ProvidersImages;
 using Amazon.Lambda.APIGatewayEvents;
+using MetaDataAPI.Models.DynamoDb;
+using Newtonsoft.Json;
 
 [assembly: LambdaSerializer(typeof(Amazon.Lambda.Serialization.Json.JsonSerializer))]
 
@@ -47,7 +48,7 @@ public class LambdaFunction
 
         try
         {
-            var attributes = databaseItem.ParseAttributes();
+            var attributes = JsonConvert.DeserializeObject<DynamoDbItem[]>(databaseItem.Item["Data"].S)!;
             var providerImage = ProviderImageFactory.Create(backgroundImage, attributes);
             var image = providerImage.DrawOnImage();
 
