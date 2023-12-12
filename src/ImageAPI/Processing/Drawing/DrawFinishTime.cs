@@ -16,7 +16,7 @@ public class DrawFinishTime : ToDrawing
     {
         Text = TimeUtils.FromUnixTimestamp((long)finishTime).ToString(CultureInfo.InvariantCulture);
         // TODO: Create class which provide caching fonts by fontSize. This class get exist font or create new and save it.
-        Font = new ResourcesLoader().LoadFontFromEmbeddedResources(AttributeFontSize);
+        Font = new ResourcesLoader().LoadFontFromEmbeddedResources(DateTimeFontSize);
         Coordinates = new PointF(ImageSize.Width - 730, ImageSize.Height - 290);
     }
 }

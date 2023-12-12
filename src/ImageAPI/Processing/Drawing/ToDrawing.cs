@@ -6,7 +6,8 @@ namespace ImageAPI.Processing.Drawing;
 
 public abstract class ToDrawing
 {
-    public const float AttributeFontSize = 24f;
+    public const float AmountFontSize = 24f;
+    public const float DateTimeFontSize = 14f;
     public const float TextFontSize = 14f;
     public const float ProviderNameFontSize = 32f;
 

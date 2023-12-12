@@ -14,7 +14,7 @@ public class DrawLeftAmount : ToDrawing
     {
         Text = leftAmount.ToString()!;
         // TODO: Create class which provide caching fonts by fontSize. This class get exist font or create new and save it.
-        Font = new ResourcesLoader().LoadFontFromEmbeddedResources(AttributeFontSize);
+        Font = new ResourcesLoader().LoadFontFromEmbeddedResources(AmountFontSize);
         Coordinates = new PointF(ImageSize.Width - 400, ImageSize.Height - 290);
     }
 }
