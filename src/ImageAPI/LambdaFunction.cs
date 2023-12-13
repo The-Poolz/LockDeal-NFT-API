@@ -43,7 +43,7 @@ public class LambdaFunction
 
         if (databaseItem.Item.TryGetValue("Image", out var attributeValue))
         {
-            return ResponseBuilder.GetResponse(HttpStatusCode.OK, attributeValue.S, ProviderImage.ContentType);
+            return ResponseBuilder.GetResponse(HttpStatusCode.OK, attributeValue.S, ProviderImage.ContentType, true);
         }
 
         try
@@ -56,7 +56,7 @@ public class LambdaFunction
 
             await dynamoDb.UpdateItemAsync(hash, base64Image);
 
-            return ResponseBuilder.GetResponse(HttpStatusCode.OK, base64Image, ProviderImage.ContentType);
+            return ResponseBuilder.GetResponse(HttpStatusCode.OK, base64Image, ProviderImage.ContentType, true);
         }
         catch (Exception e)
         {
