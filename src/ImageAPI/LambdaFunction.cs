@@ -10,7 +10,7 @@ using Amazon.Lambda.APIGatewayEvents;
 
 [assembly: LambdaSerializer(typeof(Amazon.Lambda.Serialization.Json.JsonSerializer))]
 
-namespace ImageAPI;
+namespace ImageAPI; 
 
 public class LambdaFunction
 {
