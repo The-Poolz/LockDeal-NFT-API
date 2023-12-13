@@ -11,18 +11,18 @@
     <PublishReadyToRun>true</PublishReadyToRun>
   </PropertyGroup>
   <ItemGroup>
+	  <None Remove="Resources\ABCNormal.otf" />
 	  <None Remove="Resources\background.png" />
 	  <None Remove="Resources\background.svg" />
-    <None Remove="Resources\LEMONMILK-Regular.otf" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Resources\ABCNormal.otf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
     <EmbeddedResource Include="Resources\background.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\background.svg">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\LEMONMILK-Regular.otf">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </EmbeddedResource>
   </ItemGroup>

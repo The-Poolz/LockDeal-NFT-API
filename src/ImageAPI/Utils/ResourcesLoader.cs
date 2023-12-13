@@ -7,7 +7,7 @@ namespace ImageAPI.Utils;
 public class ResourcesLoader
 {
     public const string BackgroundResourceName = "ImageAPI.Resources.background.png";
-    public const string FontResourceName = "ImageAPI.Resources.LEMONMILK-Regular.otf";
+    public const string FontResourceName = "ImageAPI.Resources.ABCNormal.otf";
 
     public virtual Image LoadImageFromEmbeddedResources()
     {
