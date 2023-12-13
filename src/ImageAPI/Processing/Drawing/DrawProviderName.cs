@@ -10,11 +10,11 @@ public class DrawProviderName : ToDrawing
     public override Font Font { get; }
     public override PointF Coordinates { get; }
 
-    public DrawProviderName(string providerName)
+    public DrawProviderName(string providerName, FontStyle fontStyle = FontStyle.Regular)
     {
         Text = providerName;
         // TODO: Create class which provide caching fonts by fontSize. This class get exist font or create new and save it.
-        Font = new ResourcesLoader().LoadFontFromEmbeddedResources(ProviderNameFontSize);
+        Font = new ResourcesLoader().LoadFontFromEmbeddedResources(ProviderNameFontSize, fontStyle);
         Coordinates = new PointF(ImageSize.Width - 400, 50);
     }
 }
