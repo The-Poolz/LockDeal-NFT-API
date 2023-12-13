@@ -1,10 +1,11 @@
 using System.Net;
 using ImageAPI.Utils;
-using SixLabors.Fonts;
+using Newtonsoft.Json;
 using Amazon.Lambda.Core;
-using ImageAPI.Extensions;
+using ImageAPI.Processing;
 using SixLabors.ImageSharp;
 using ImageAPI.ProvidersImages;
+using MetaDataAPI.Models.DynamoDb;
 using Amazon.Lambda.APIGatewayEvents;
 
 [assembly: LambdaSerializer(typeof(Amazon.Lambda.Serialization.Json.JsonSerializer))]
@@ -13,9 +14,7 @@ namespace ImageAPI;
 
 public class LambdaFunction
 {
-    private const float fontSize = 14f;
     private readonly DynamoDb dynamoDb;
-    private readonly Font font;
     private readonly Image backgroundImage;
 
     public LambdaFunction() : this(new DynamoDb()) { }
@@ -23,9 +22,8 @@ public class LambdaFunction
     public LambdaFunction(DynamoDb dynamoDb)
     {
         this.dynamoDb = dynamoDb;
-        var resourcesLoader = new ResourcesLoader();
-        backgroundImage = resourcesLoader.LoadImageFromEmbeddedResources();
-        font = resourcesLoader.LoadFontFromEmbeddedResources(fontSize);
+        backgroundImage = new ResourcesLoader().LoadImageFromEmbeddedResources();
+        ImageSize.Initialize(backgroundImage);
     }
 
     public async Task<APIGatewayProxyResponse> RunAsync(APIGatewayProxyRequest input)
@@ -45,25 +43,20 @@ public class LambdaFunction
 
         if (databaseItem.Item.TryGetValue("Image", out var attributeValue))
         {
-            return new APIGatewayProxyResponse
-            {
-                IsBase64Encoded = true,
-                StatusCode = (int)HttpStatusCode.OK,
-                Body = attributeValue.S,
-                Headers = new Dictionary<string, string>
-                {
-                    { "Content-Type",  ProviderImage.ContentType }
-                }
-            };
+            return ResponseBuilder.GetResponse(HttpStatusCode.OK, attributeValue.S, ProviderImage.ContentType);
         }
 
         try
         {
-            var providerImage = ProviderImageFactory.Create(backgroundImage, font, databaseItem.ParseAttributes());
+            var attributes = JsonConvert.DeserializeObject<DynamoDbItem[]>(databaseItem.Item["Data"].S)!;
+            var providerImage = ProviderImageFactory.Create(backgroundImage, attributes);
+            var image = providerImage.DrawOnImage();
 
-            await dynamoDb.UpdateItemAsync(hash, providerImage.Base64Image);
+            var base64Image = ProviderImage.Base64FromImage(image);
 
-            return providerImage.Response;
+            await dynamoDb.UpdateItemAsync(hash, base64Image);
+
+            return ResponseBuilder.GetResponse(HttpStatusCode.OK, base64Image, ProviderImage.ContentType);
         }
         catch (Exception e)
         {

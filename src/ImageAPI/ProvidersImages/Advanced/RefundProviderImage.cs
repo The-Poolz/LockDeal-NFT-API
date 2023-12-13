@@ -1,20 +1,23 @@
-﻿using SixLabors.Fonts;
-using SixLabors.ImageSharp;
+﻿using SixLabors.ImageSharp;
 using MetaDataAPI.Providers;
 using MetaDataAPI.Models.DynamoDb;
+using ImageAPI.Processing.Drawing;
 
 namespace ImageAPI.ProvidersImages.Advanced;
 
 public class RefundProviderImage : ProviderImage
 {
-    public override IDictionary<string, PointF> Coordinates => new Dictionary<string, PointF>
-    {
-        { "Rate", new PointF(BackgroundImage.Width / 2f, BackgroundImage.Height / 2f) },
-        { "MainCoinAmount", new PointF(BackgroundImage.Width / 2f, BackgroundImage.Height / 3f) },
-        { "MainCoinCollection", new PointF(BackgroundImage.Width / 2f, BackgroundImage.Height / 4f) }
-    };
-
-    public RefundProviderImage(Image backgroundImage, Font font, IList<DynamoDbItem> dynamoDbItems)
-        : base(nameof(RefundProvider), backgroundImage, font, dynamoDbItems[0])
+    public RefundProviderImage(Image backgroundImage, IReadOnlyList<DynamoDbItem> dynamoDbItems)
+        : base(backgroundImage, dynamoDbItems[0])
     { }
+
+    public override IEnumerable<ToDrawing> ToDrawing()
+    {
+        return new ToDrawing[]
+        {
+            new DrawProviderName(nameof(RefundProvider)),
+            new DrawLeftAmount(GetAttributeValue("MainCoinAmount")),
+            new DrawText("MainCoin", BackgroundImage.Width - 400, BackgroundImage.Height - 330),
+        };
+    }
 }
