@@ -8,9 +8,9 @@ public static class ResponseBuilder
     public const string MissingHashMessage = "Missing 'hash' parameter.";
     public const string ItemNotFoundMessage = "Item by provided 'hash' not found.";
     public const string GeneralErrorMessage = "Something went wrong.";
-    public static APIGatewayProxyResponse GetResponse(HttpStatusCode statusCode, string body, string contentType) => new()
+    public static APIGatewayProxyResponse GetResponse(HttpStatusCode statusCode, string body, string contentType, bool isBase64Encoded) => new()
     {
-        IsBase64Encoded = false,
+        IsBase64Encoded = isBase64Encoded,
         StatusCode = (int)statusCode,
         Body = body,
         Headers = new Dictionary<string, string>
@@ -18,7 +18,7 @@ public static class ResponseBuilder
             { "Content-Type", contentType }
         }
     };
-    public static APIGatewayProxyResponse WrongInput() => GetResponse(HttpStatusCode.BadRequest, MissingHashMessage, "text/plain");
-    public static APIGatewayProxyResponse WrongHash() => GetResponse(HttpStatusCode.NotFound, ItemNotFoundMessage, "text/plain");
-    public static APIGatewayProxyResponse GeneralError() => GetResponse(HttpStatusCode.InternalServerError, GeneralErrorMessage, "text/plain");
+    public static APIGatewayProxyResponse WrongInput() => GetResponse(HttpStatusCode.BadRequest, MissingHashMessage, "text/plain", false);
+    public static APIGatewayProxyResponse WrongHash() => GetResponse(HttpStatusCode.NotFound, ItemNotFoundMessage, "text/plain", false);
+    public static APIGatewayProxyResponse GeneralError() => GetResponse(HttpStatusCode.InternalServerError, GeneralErrorMessage, "text/plain", false);
 }
