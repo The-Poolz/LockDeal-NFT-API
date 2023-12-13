@@ -38,7 +38,7 @@ public class ResourcesLoaderTests
     public void LoadFontFromEmbeddedResources_ShouldLoadExpectedFont()
     {
         var resourcesLoader = new ResourcesLoader();
-        var result = resourcesLoader.LoadFontFromEmbeddedResources();
+        var result = resourcesLoader.LoadFontFromEmbeddedResources(14f);
 
         Assert.NotNull(result);
         Assert.IsType<Font>(result);
@@ -49,10 +49,10 @@ public class ResourcesLoaderTests
     {
         var resourcesLoader = new Mock<ResourcesLoader>();
         resourcesLoader
-            .Setup(x => x.LoadFontFromEmbeddedResources(It.IsAny<float>()))
+            .Setup(x => x.LoadFontFromEmbeddedResources(It.IsAny<float>(), FontStyle.Regular))
             .CallBase();
 
-        var testCode = () => resourcesLoader.Object.LoadFontFromEmbeddedResources();
+        var testCode = () => resourcesLoader.Object.LoadFontFromEmbeddedResources(14f);
 
         var exception = testCode.Should().Throw<FileNotFoundException>();
         exception.WithMessage($"Could not find the embedded resource '{ResourcesLoader.FontResourceName}'. Make sure the resource exists and its 'Build Action' is set to 'Embedded Resource'.");
