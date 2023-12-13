@@ -17,14 +17,14 @@ public class ResourcesLoader
         return Image.Load(imageStream);
     }
 
-    public virtual Font LoadFontFromEmbeddedResources(float size)
+    public virtual Font LoadFontFromEmbeddedResources(float size, FontStyle fontStyle = FontStyle.Regular)
     {
         using var fontStream = GetStream(FontResourceName) ??
             throw new FileNotFoundException($"Could not find the embedded resource '{FontResourceName}'. Make sure the resource exists and its 'Build Action' is set to 'Embedded Resource'.");
 
         var fontCollection = new FontCollection();
         var fontFamily = fontCollection.Add(fontStream);
-        return new Font(fontFamily, size);
+        return new Font(fontFamily, size, fontStyle);
     }
 
     public virtual Stream? GetStream(string resourceName) =>
