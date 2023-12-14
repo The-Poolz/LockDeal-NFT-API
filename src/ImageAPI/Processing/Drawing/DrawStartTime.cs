@@ -1,6 +1,7 @@
 ﻿using MetaDataAPI.Utils;
 using SixLabors.ImageSharp;
 using System.Globalization;
+using static ImageAPI.Processing.DrawingSettings;
 
 namespace ImageAPI.Processing.Drawing;
 
@@ -15,8 +16,8 @@ public class DrawStartTime : ToDrawing
 
     public override Image Draw(Image drawOn)
     {
-        drawOn = Draw(drawOn, "Start Time", new PointF(ImageSize.Width - 1030, ImageSize.Height - 330), TextFontSize);
-        drawOn = Draw(drawOn, startTime.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture), new PointF(ImageSize.Width - 1030, ImageSize.Height - 290), DateTimeFontSize);
-        return Draw(drawOn, startTime.ToString("HH:mm:ss", CultureInfo.InvariantCulture), new PointF(ImageSize.Width - 1030, ImageSize.Height - 260), DateTimeFontSize);
+        drawOn = Draw(drawOn, "Start Time", StartTime.HeaderPosition, HeaderFontSize);
+        drawOn = Draw(drawOn, startTime.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture), StartTime.DatePosition, StartTime.FontSize);
+        return Draw(drawOn, startTime.ToString("HH:mm:ss", CultureInfo.InvariantCulture), StartTime.TimePosition, StartTime.FontSize);
     }
 }

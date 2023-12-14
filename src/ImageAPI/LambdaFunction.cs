@@ -2,7 +2,6 @@ using System.Net;
 using ImageAPI.Utils;
 using Newtonsoft.Json;
 using Amazon.Lambda.Core;
-using ImageAPI.Processing;
 using SixLabors.ImageSharp;
 using ImageAPI.ProvidersImages;
 using MetaDataAPI.Models.DynamoDb;
@@ -23,7 +22,6 @@ public class LambdaFunction
     {
         this.dynamoDb = dynamoDb;
         backgroundImage = new ResourcesLoader().LoadImageFromEmbeddedResources();
-        ImageSize.Initialize(backgroundImage);
     }
 
     public async Task<APIGatewayProxyResponse> RunAsync(APIGatewayProxyRequest input)

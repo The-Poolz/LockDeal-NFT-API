@@ -1,4 +1,5 @@
 ﻿using SixLabors.ImageSharp;
+using static ImageAPI.Processing.DrawingSettings;
 
 namespace ImageAPI.Processing.Drawing;
 
@@ -15,6 +16,6 @@ public class DrawText : ToDrawing
 
     public override Image Draw(Image drawOn)
     {
-        return Draw(drawOn, text, coordinates, TextFontSize);
+        return Draw(drawOn, text, coordinates, HeaderFontSize);
     }
 }
