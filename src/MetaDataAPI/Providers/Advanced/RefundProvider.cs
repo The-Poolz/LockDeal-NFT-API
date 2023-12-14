@@ -10,15 +10,10 @@ namespace MetaDataAPI.Providers;
 public class RefundProvider : Provider
 {
     public override string ProviderName => nameof(RefundProvider);
-    public override string Description
-    {
-        get
-        {
-            return $"This NFT encompasses {LeftAmount} units of the asset {PoolInfo.Token} " +
-                $"with an associated refund rate of {Rate}. Post rate calculation, the refundable " +
-                $"amount in the primary asset {CollateralProvider.MainCoin} will be {MainCoinAmount}.";
-        }
-    }
+    public override string Description =>
+        $"This NFT encompasses {LeftAmount} units of the asset {PoolInfo.Token} " +
+        $"with an associated refund rate of {Rate}. Post rate calculation, the refundable " +
+        $"amount in the primary asset {CollateralProvider.MainCoin} will be {MainCoinAmount}.";
 
     public Provider SubProvider { get; }
     public CollateralProvider CollateralProvider { get; }
@@ -37,13 +32,13 @@ public class RefundProvider : Provider
         {
             var dynamoDbAttributes = new List<DynamoDbItem>
             {
-                new(ProviderName, new List<Erc721Attribute>
+                new(ProviderName, PoolInfo.PoolId, new List<Erc721Attribute>
                 {
                     new("Rate", Rate),
                     new("MainCoinAmount", MainCoinAmount),
                     new("MainCoinCollection", MainCoinCollection)
                 }),
-                new(SubProvider.ProviderName, SubProvider.Attributes.Where(attr => attr.TraitType != "ProviderName").ToList())
+                new(SubProvider.ProviderName, SubProvider.PoolInfo.PoolId, SubProvider.Attributes.Where(attr => attr.TraitType != "ProviderName").ToList())
             };
 
             return dynamoDbAttributes;
