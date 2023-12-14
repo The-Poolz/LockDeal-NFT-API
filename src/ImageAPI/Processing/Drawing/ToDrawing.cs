@@ -11,25 +11,16 @@ public abstract class ToDrawing
     public const float TextFontSize = 16f;
     public const float ProviderNameFontSize = 24f;
 
-    private readonly Font font;
-    private readonly string text;
-    private readonly PointF coordinates;
+    public abstract Image Draw(Image drawOn);
 
-    protected ToDrawing(string text, PointF coordinates, float fontSize, FontStyle fontStyle = FontStyle.Regular)
+    protected static Image Draw(Image drawOn, string text, PointF coordinates, float fontSize, FontStyle fontStyle = FontStyle.Regular)
     {
-        this.text = text;
-        this.coordinates = coordinates;
-        font = LoadFont(fontSize, fontStyle);
-    }
-
-    public Image Draw(Image drawOn)
-    {
+        var font = LoadFont(fontSize, fontStyle);
         var imageProcessor = new ImageProcessor(drawOn, font);
-        var options = imageProcessor.CreateTextOptions(coordinates);
-        return imageProcessor.DrawText(text, options);
+        return imageProcessor.DrawText(text, coordinates);
     }
 
-    private static Font LoadFont(float fontSize, FontStyle fontStyle)
+    protected static Font LoadFont(float fontSize, FontStyle fontStyle)
     {
         // TODO: Create class which provide caching fonts by fontSize. This class get exist font or create new and save it.
         return new ResourcesLoader().LoadFontFromEmbeddedResources(fontSize, fontStyle);
