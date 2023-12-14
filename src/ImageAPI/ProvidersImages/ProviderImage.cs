@@ -22,7 +22,10 @@ public abstract class ProviderImage
 
     public Image DrawOnImage()
     {
-        var toDrawing = ToDrawing();
+        IReadOnlyList<ToDrawing> toDrawing = new List<ToDrawing>(ToDrawing())
+        {
+            new DrawProviderName(dynamoDbItem.ProviderName)
+        };
         var image = BackgroundImage.Clone(_ => { });
         return toDrawing.Aggregate(image, (current, drawing) => drawing.Draw(current));
     }
