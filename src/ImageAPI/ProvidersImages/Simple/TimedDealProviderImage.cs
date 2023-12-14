@@ -1,27 +1,21 @@
 ﻿using SixLabors.ImageSharp;
-using MetaDataAPI.Providers;
 using MetaDataAPI.Models.DynamoDb;
 using ImageAPI.Processing.Drawing;
 
 namespace ImageAPI.ProvidersImages.Simple;
 
-public class TimedDealProviderImage : ProviderImage
+public class TimedDealProviderImage : LockDealProviderImage
 {
     public TimedDealProviderImage(Image backgroundImage, IReadOnlyList<DynamoDbItem> dynamoDbItems)
-        : base(backgroundImage, dynamoDbItems[0])
+        : base(backgroundImage, dynamoDbItems)
     { }
 
-    public override IEnumerable<ToDrawing> ToDrawing()
+    protected override IEnumerable<ToDrawing> ToDrawing()
     {
-        return new ToDrawing[]
+        foreach (var toDrawing in base.ToDrawing())
         {
-            new DrawProviderName(nameof(TimedDealProvider)),
-            new DrawLeftAmount(GetAttributeValue("LeftAmount")),
-            new DrawText("Left Amount", BackgroundImage.Width - 400, BackgroundImage.Height - 330),
-            new DrawStartTime(GetAttributeValue("StartTime")),
-            new DrawText("Start Time", BackgroundImage.Width - 1030, BackgroundImage.Height - 330),
-            new DrawFinishTime(GetAttributeValue("FinishTime")),
-            new DrawText("Finish Time", BackgroundImage.Width - 730, BackgroundImage.Height - 330),
-        };
+            yield return toDrawing;
+        }
+        yield return new DrawFinishTime(GetAttributeValue("FinishTime"));
     }
 }
