@@ -29,7 +29,7 @@ public static class DrawingSettings
     {
         public static float FontSize => 32f;
         public static PointF DatePosition => new(48, 298);
-        public static PointF TimePosition => new(48, 310);
+        public static PointF TimePosition => new(48, 340);
         public static PointF HeaderPosition => new(48, 274);
     }
 
@@ -37,7 +37,7 @@ public static class DrawingSettings
     {
         public static float FontSize => 32f;
         public static PointF DatePosition => new(276, 298);
-        public static PointF TimePosition => new(276, 310);
+        public static PointF TimePosition => new(276, 340);
         public static PointF HeaderPosition => new(276, 274);
     }
 }
