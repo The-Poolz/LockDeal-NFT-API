@@ -11,7 +11,7 @@ public class RefundProviderImage : ProviderImage
         : base(backgroundImage, dynamoDbItems[0])
     { }
 
-    public override IEnumerable<ToDrawing> ToDrawing()
+    protected override IEnumerable<ToDrawing> ToDrawing()
     {
         return new ToDrawing[]
         {

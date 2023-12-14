@@ -18,7 +18,7 @@ public abstract class ProviderImage
         this.dynamoDbItem = dynamoDbItem;
     }
 
-    public abstract IEnumerable<ToDrawing> ToDrawing();
+    protected abstract IEnumerable<ToDrawing> ToDrawing();
 
     public Image DrawOnImage()
     {

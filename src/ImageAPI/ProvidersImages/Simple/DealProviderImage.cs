@@ -11,13 +11,10 @@ public class DealProviderImage : ProviderImage
         : base(backgroundImage, dynamoDbItems[0])
     { }
 
-    public override IEnumerable<ToDrawing> ToDrawing()
+    protected override IEnumerable<ToDrawing> ToDrawing()
     {
-        return new ToDrawing[]
-        {
-            new DrawProviderName(nameof(DealProvider)),
-            new DrawLeftAmount(GetAttributeValue("LeftAmount")),
-            new DrawText("Left Amount", BackgroundImage.Width - 400, BackgroundImage.Height - 330),
-        };
+        yield return new DrawProviderName(nameof(DealProvider));
+        yield return new DrawLeftAmount(GetAttributeValue("LeftAmount"));
+        yield return new DrawText("Left Amount", BackgroundImage.Width - 400, BackgroundImage.Height - 330);
     }
 }
