@@ -17,7 +17,7 @@ public class DealProviderImage : ProviderImage
         {
             new DrawProviderName(nameof(DealProvider)),
             new DrawLeftAmount(GetAttributeValue("LeftAmount")),
-            new DrawText("Left", BackgroundImage.Width - 400, BackgroundImage.Height - 330),
+            new DrawText("Left Amount", BackgroundImage.Width - 400, BackgroundImage.Height - 330),
         };
     }
 }
