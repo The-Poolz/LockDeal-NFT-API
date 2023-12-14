@@ -1,5 +1,4 @@
 ﻿using SixLabors.ImageSharp;
-using MetaDataAPI.Providers;
 using MetaDataAPI.Models.DynamoDb;
 using ImageAPI.Processing.Drawing;
 
@@ -11,13 +10,8 @@ public class DealProviderImage : ProviderImage
         : base(backgroundImage, dynamoDbItems[0])
     { }
 
-    public override IEnumerable<ToDrawing> ToDrawing()
+    protected override IEnumerable<ToDrawing> ToDrawing()
     {
-        return new ToDrawing[]
-        {
-            new DrawProviderName(nameof(DealProvider)),
-            new DrawLeftAmount(GetAttributeValue("LeftAmount")),
-            new DrawText("Left Amount", BackgroundImage.Width - 400, BackgroundImage.Height - 330),
-        };
+        yield return new DrawLeftAmount(GetAttributeValue("LeftAmount"));
     }
 }

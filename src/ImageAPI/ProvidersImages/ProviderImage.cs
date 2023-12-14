@@ -18,11 +18,14 @@ public abstract class ProviderImage
         this.dynamoDbItem = dynamoDbItem;
     }
 
-    public abstract IEnumerable<ToDrawing> ToDrawing();
+    protected abstract IEnumerable<ToDrawing> ToDrawing();
 
     public Image DrawOnImage()
     {
-        var toDrawing = ToDrawing();
+        IReadOnlyList<ToDrawing> toDrawing = new List<ToDrawing>(ToDrawing())
+        {
+            new DrawProviderName(dynamoDbItem.ProviderName)
+        };
         var image = BackgroundImage.Clone(_ => { });
         return toDrawing.Aggregate(image, (current, drawing) => drawing.Draw(current));
     }
