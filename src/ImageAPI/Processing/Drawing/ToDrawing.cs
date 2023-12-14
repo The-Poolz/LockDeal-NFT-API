@@ -13,7 +13,7 @@ public abstract class ToDrawing
 
     public abstract Image Draw(Image drawOn);
 
-    protected Image Draw(Image drawOn, string text, PointF coordinates, float fontSize, FontStyle fontStyle = FontStyle.Regular)
+    protected static Image Draw(Image drawOn, string text, PointF coordinates, float fontSize, FontStyle fontStyle = FontStyle.Regular)
     {
         var font = LoadFont(fontSize, fontStyle);
         var imageProcessor = new ImageProcessor(drawOn, font);
