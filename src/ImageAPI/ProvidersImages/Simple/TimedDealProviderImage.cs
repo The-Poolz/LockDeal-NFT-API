@@ -17,6 +17,5 @@ public class TimedDealProviderImage : LockDealProviderImage
             yield return toDrawing;
         }
         yield return new DrawFinishTime(GetAttributeValue("FinishTime"));
-        yield return new DrawText("Finish Time", BackgroundImage.Width - 730, BackgroundImage.Height - 330);
     }
 }

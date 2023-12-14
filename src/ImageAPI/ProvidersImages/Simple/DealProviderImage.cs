@@ -13,6 +13,5 @@ public class DealProviderImage : ProviderImage
     protected override IEnumerable<ToDrawing> ToDrawing()
     {
         yield return new DrawLeftAmount(GetAttributeValue("LeftAmount"));
-        yield return new DrawText("Left Amount", BackgroundImage.Width - 400, BackgroundImage.Height - 330);
     }
 }

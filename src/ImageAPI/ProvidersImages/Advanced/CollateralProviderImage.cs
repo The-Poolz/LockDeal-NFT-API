@@ -15,7 +15,6 @@ public class CollateralProviderImage : ProviderImage
         return new ToDrawing[]
         {
             new DrawLeftAmount(GetAttributeValue("LeftAmount")),
-            new DrawText("Left Amount", BackgroundImage.Width - 400, BackgroundImage.Height - 330),
         };
     }
 }

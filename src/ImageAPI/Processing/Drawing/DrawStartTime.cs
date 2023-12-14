@@ -15,6 +15,7 @@ public class DrawStartTime : ToDrawing
 
     public override Image Draw(Image drawOn)
     {
+        drawOn = Draw(drawOn, "Start Time", new PointF(ImageSize.Width - 1030, ImageSize.Height - 330), TextFontSize);
         drawOn = Draw(drawOn, startTime.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture), new PointF(ImageSize.Width - 1030, ImageSize.Height - 290), DateTimeFontSize);
         return Draw(drawOn, startTime.ToString("HH:mm:ss", CultureInfo.InvariantCulture), new PointF(ImageSize.Width - 1030, ImageSize.Height - 260), DateTimeFontSize);
     }

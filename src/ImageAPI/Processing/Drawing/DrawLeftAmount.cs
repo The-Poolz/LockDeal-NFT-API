@@ -13,6 +13,7 @@ public class DrawLeftAmount : ToDrawing
 
     public override Image Draw(Image drawOn)
     {
+        drawOn = Draw(drawOn, "Left Amount", new PointF(ImageSize.Width - 400, ImageSize.Height - 330), TextFontSize);
         return Draw(drawOn, leftAmount, new PointF(ImageSize.Width - 400, ImageSize.Height - 290), AmountFontSize);
     }
 }

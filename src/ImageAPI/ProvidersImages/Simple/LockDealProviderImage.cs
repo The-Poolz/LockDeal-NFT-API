@@ -17,6 +17,5 @@ public class LockDealProviderImage : DealProviderImage
             yield return toDrawing;
         }
         yield return new DrawStartTime(GetAttributeValue("StartTime"));
-        yield return new DrawText("Start Time", BackgroundImage.Width - 1030, BackgroundImage.Height - 330);
     }
 }
