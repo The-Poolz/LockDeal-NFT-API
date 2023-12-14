@@ -17,17 +17,18 @@ public class ImageProcessor
         this.font = font;
     }
 
-    public virtual Image DrawText(string text, TextOptions textOptions, IBrush? brush = null, IPen? pen = null)
+    public virtual Image DrawText(string text, PointF coordinates, IBrush? brush = null, IPen? pen = null)
     {
         brush ??= Brushes.Solid(Color.ParseHex(DefaultColorHex));
         pen ??= Pens.Solid(Color.ParseHex(DefaultColorHex), 2);
+        var textOptions = CreateTextOptions(coordinates);
 
         image.Mutate(x => x.DrawText(textOptions, text, brush, pen));
 
         return image;
     }
 
-    public virtual TextOptions CreateTextOptions(PointF coordinates)
+    private TextOptions CreateTextOptions(PointF coordinates)
     {
         return new TextOptions(font)
         {
