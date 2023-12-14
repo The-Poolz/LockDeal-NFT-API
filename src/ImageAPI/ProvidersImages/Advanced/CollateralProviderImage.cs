@@ -1,5 +1,4 @@
 ﻿using SixLabors.ImageSharp;
-using MetaDataAPI.Providers;
 using MetaDataAPI.Models.DynamoDb;
 using ImageAPI.Processing.Drawing;
 
@@ -15,7 +14,6 @@ public class CollateralProviderImage : ProviderImage
     {
         return new ToDrawing[]
         {
-            new DrawProviderName(nameof(CollateralProvider)),
             new DrawLeftAmount(GetAttributeValue("LeftAmount")),
             new DrawText("Left Amount", BackgroundImage.Width - 400, BackgroundImage.Height - 330),
         };

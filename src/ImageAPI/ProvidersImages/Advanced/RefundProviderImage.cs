@@ -1,5 +1,4 @@
 ﻿using SixLabors.ImageSharp;
-using MetaDataAPI.Providers;
 using MetaDataAPI.Models.DynamoDb;
 using ImageAPI.Processing.Drawing;
 
@@ -15,7 +14,6 @@ public class RefundProviderImage : ProviderImage
     {
         return new ToDrawing[]
         {
-            new DrawProviderName(nameof(RefundProvider)),
             new DrawLeftAmount(GetAttributeValue("MainCoinAmount")),
             new DrawText("MainCoin", BackgroundImage.Width - 400, BackgroundImage.Height - 330),
         };
