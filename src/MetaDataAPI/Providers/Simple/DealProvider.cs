@@ -1,5 +1,6 @@
 using MetaDataAPI.Models.DynamoDb;
 using MetaDataAPI.Models.Response;
+
 namespace MetaDataAPI.Providers;
 
 public class DealProvider : Provider
@@ -10,7 +11,7 @@ public class DealProvider : Provider
         $"This NFT represents immediate access to {LeftAmount} units of the specified asset {PoolInfo.Token}.";
     public override List<DynamoDbItem> DynamoDbAttributes => new()
     {
-        new DynamoDbItem(ProviderName, new List<Erc721Attribute>
+        new DynamoDbItem(ProviderName, PoolInfo.PoolId, new List<Erc721Attribute>
         {
             new("Collection", Collection),
             new("LeftAmount", LeftAmount)
