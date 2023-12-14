@@ -19,7 +19,7 @@ public class LockDealProviderImage : ProviderImage
             new DrawLeftAmount(GetAttributeValue("LeftAmount")),
             new DrawText("Left Amount", BackgroundImage.Width - 400, BackgroundImage.Height - 330),
             new DrawStartTime(GetAttributeValue("StartTime")),
-            new DrawText("Start", BackgroundImage.Width - 1030, BackgroundImage.Height - 330),
+            new DrawText("Start Time", BackgroundImage.Width - 1030, BackgroundImage.Height - 330),
         };
     }
 }
