@@ -5,6 +5,7 @@ namespace ImageAPI.Processing;
 public static class ElementPositions
 {
     public static PointF ProviderNameCoordinates => new(672, 52);
+    public static PointF PoolIdCoordinates => new(981, 52);
     public static PointF LeftAmountTextCoordinates => new(672, 274);
     public static PointF LeftAmountCoordinates => new(672, 298);
     public static PointF StartTimeTextCoordinates => new(48, 274);
