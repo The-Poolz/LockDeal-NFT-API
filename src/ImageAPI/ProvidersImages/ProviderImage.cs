@@ -24,7 +24,8 @@ public abstract class ProviderImage
     {
         IReadOnlyList<ToDrawing> toDrawing = new List<ToDrawing>(ToDrawing())
         {
-            new DrawProviderName(dynamoDbItem.ProviderName)
+            new DrawProviderName(dynamoDbItem.ProviderName),
+            new DrawPoolId(dynamoDbItem.PoolId)
         };
         var image = BackgroundImage.Clone(_ => { });
         return toDrawing.Aggregate(image, (current, drawing) => drawing.Draw(current));
