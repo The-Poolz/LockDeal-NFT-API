@@ -26,33 +26,33 @@ public class LambdaFunction
 
     public async Task<APIGatewayProxyResponse> RunAsync(APIGatewayProxyRequest input)
     {
-        if (!input.QueryStringParameters.ContainsKey("hash"))
-        {
-            return ResponseBuilder.WrongInput();
-        }
-        var hash = input.QueryStringParameters["hash"];
+        //if (!input.QueryStringParameters.ContainsKey("hash"))
+        //{
+        //    return ResponseBuilder.WrongInput();
+        //}
+        //var hash = input.QueryStringParameters["hash"];
 
-        var databaseItem = await dynamoDb.GetItemAsync(hash);
+        //var databaseItem = await dynamoDb.GetItemAsync(hash);
 
-        if (databaseItem.Item.Count == 0)
-        {
-            return ResponseBuilder.WrongHash();
-        }
+        //if (databaseItem.Item.Count == 0)
+        //{
+        //    return ResponseBuilder.WrongHash();
+        //}
 
-        if (databaseItem.Item.TryGetValue("Image", out var attributeValue))
-        {
-            return ResponseBuilder.GetResponse(HttpStatusCode.OK, attributeValue.S, ProviderImage.ContentType, true);
-        }
+        //if (databaseItem.Item.TryGetValue("Image", out var attributeValue))
+        //{
+        //    return ResponseBuilder.GetResponse(HttpStatusCode.OK, attributeValue.S, ProviderImage.ContentType, true);
+        //}
 
         try
         {
-            var attributes = JsonConvert.DeserializeObject<DynamoDbItem[]>(databaseItem.Item["Data"].S)!;
+            var attributes = JsonConvert.DeserializeObject<DynamoDbItem[]>("[{\"ProviderName\":\"TimedDealProvider\",\"Attributes\":[{\"trait_type\":\"StartAmount\",\"value\":1065.12406},{\"display_type\":\"date\",\"trait_type\":\"FinishTime\",\"value\":1699545629},{\"display_type\":\"date\",\"trait_type\":\"StartTime\",\"value\":1699459229},{\"trait_type\":\"Collection\",\"value\":2},{\"trait_type\":\"LeftAmount\",\"value\":1065.12406}]}]")!;
             var providerImage = ProviderImageFactory.Create(backgroundImage, attributes);
             var image = providerImage.DrawOnImage();
 
             var base64Image = ProviderImage.Base64FromImage(image);
 
-            await dynamoDb.UpdateItemAsync(hash, base64Image);
+            //await dynamoDb.UpdateItemAsync(hash, base64Image);
 
             return ResponseBuilder.GetResponse(HttpStatusCode.OK, base64Image, ProviderImage.ContentType, true);
         }
