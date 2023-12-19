@@ -8,19 +8,22 @@ namespace ImageAPI.Utils;
 
 public class ImageProcessor
 {
-    private const string DefaultColorHex = "#FDFDFD";
     private readonly Font font;
     private readonly Image image;
+    private readonly Color white;
+    private readonly Color black;
 
     public ImageProcessor(Image image, Font font)
     {
         this.image = image;
         this.font = font;
+        white = Color.ParseHex("#FDFDFD");
+        black = Color.ParseHex("#010013");
     }
 
     public virtual Image DrawText(string text, PointF coordinates, Color color = default)
     {
-        color = color == default ? Color.ParseHex(DefaultColorHex) : color;
+        color = color == default ? white : color;
         var textOptions = new RichTextOptions(font)
         {
             HorizontalAlignment = HorizontalAlignment.Left,
@@ -56,13 +59,13 @@ public class ImageProcessor
         var cornerRadius = (textSize.Height + heightPadding) / 2;
         var roundedRectPath = CreateRoundedRectanglePath(rectangle, cornerRadius);
 
-        image.Mutate(x => x.Fill(Color.White, roundedRectPath));
+        image.Mutate(x => x.Fill(white, roundedRectPath));
 
         textOptions.Origin = new PointF(
             rectangle.Left + (rectangle.Width / 2), 
             rectangle.Top - 2 + (rectangle.Height / 2)
         );
-        var pen = Pens.Solid(Color.Black, 2);
+        var pen = Pens.Solid(black, 2);
         image.Mutate(x => x.DrawText(textOptions, currencySymbol, pen));
 
         return image;
