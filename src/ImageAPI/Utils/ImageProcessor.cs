@@ -60,7 +60,7 @@ public class ImageProcessor
 
         image.Mutate(x => x.Fill(Color.White, roundedRectPath));
 
-        textOptions.Origin = new PointF(rectangle.Left + rectangle.Width / 2, rectangle.Top + rectangle.Height / 2);
+        textOptions.Origin = new PointF(rectangle.Left + (rectangle.Width / 2), rectangle.Top + (rectangle.Height / 2));
         image.Mutate(x => x.DrawText(textOptions, text, Color.Black));
 
         return image;
