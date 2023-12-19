@@ -26,8 +26,8 @@ public abstract class ProviderImage
         {
             new DrawProviderName(dynamoDbItem.ProviderName),
             new DrawCurrencySymbol("USD", new PointF(554, 445)),
-            new DrawPoolId(dynamoDbItem.PoolId),
             new DrawCurrencySymbol("POOLX", new PointF(554, 270)),
+            new DrawPoolId(dynamoDbItem.PoolId)
         };
         var image = BackgroundImage.Clone(_ => { });
         return toDrawing.Aggregate(image, (current, drawing) => drawing.Draw(current));
@@ -36,7 +36,7 @@ public abstract class ProviderImage
     public static string Base64FromImage(Image image)
     {
 #if DEBUG
-        image.Save(@"result.png");
+        image.SaveAsPng("result.png");
 #endif
         using var outputStream = new MemoryStream();
         image.SaveAsPngAsync(outputStream)

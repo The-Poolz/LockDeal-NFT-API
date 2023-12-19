@@ -27,7 +27,7 @@ public class ImageProcessor
             Origin = coordinates
         };
 
-        image.Mutate(x => x.DrawText(textOptions, text, color));
+        image.Mutate(x => x.DrawText(textOptions, text, Brushes.Solid(color), Pens.Solid(color, 2)));
 
         return image;
     }
@@ -37,14 +37,12 @@ public class ImageProcessor
         const int widthPadding = 20;
         const int heightPadding = 8;
 
-        var text = $"${currencySymbol}";
         var textOptions = new RichTextOptions(font)
         {
             HorizontalAlignment = HorizontalAlignment.Center,
             VerticalAlignment = VerticalAlignment.Center,
-            Origin = coordinates
         };
-        var textSize = TextMeasurer.MeasureAdvance(text, textOptions);
+        var textSize = TextMeasurer.MeasureAdvance(currencySymbol, textOptions);
 
         var rectWidth = textSize.Width + widthPadding;
         var rectHeight = textSize.Height + heightPadding;
@@ -60,8 +58,12 @@ public class ImageProcessor
 
         image.Mutate(x => x.Fill(Color.White, roundedRectPath));
 
-        textOptions.Origin = new PointF(rectangle.Left + (rectangle.Width / 2), rectangle.Top + (rectangle.Height / 2));
-        image.Mutate(x => x.DrawText(textOptions, text, Color.Black));
+        textOptions.Origin = new PointF(
+            rectangle.Left + (rectangle.Width / 2), 
+            rectangle.Top - 2 + (rectangle.Height / 2)
+        );
+        var pen = Pens.Solid(Color.Black, 2);
+        image.Mutate(x => x.DrawText(textOptions, currencySymbol, pen));
 
         return image;
     }
