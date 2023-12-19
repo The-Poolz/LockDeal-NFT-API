@@ -1,6 +1,7 @@
 ﻿using ImageAPI.Utils;
 using SixLabors.Fonts;
 using SixLabors.ImageSharp;
+using static ImageAPI.Processing.DrawingSettings;
 
 namespace ImageAPI.Processing.Drawing;
 
@@ -17,7 +18,7 @@ public abstract class ToDrawing
 
     protected static Image DrawCurrencySymbol(Image drawOn, string currencySymbol, PointF coordinates, FontStyle fontStyle = FontStyle.Regular)
     {
-        var font = LoadFont(16f, fontStyle);
+        var font = LoadFont(CurrencySymbol.FontSize, fontStyle);
         var imageProcessor = new ImageProcessor(drawOn, font);
         return imageProcessor.DrawCurrencySymbol(currencySymbol, coordinates);
     }

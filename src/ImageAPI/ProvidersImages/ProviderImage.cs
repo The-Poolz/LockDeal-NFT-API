@@ -3,6 +3,7 @@ using ImageAPI.Processing.Drawing;
 using MetaDataAPI.Models.DynamoDb;
 using MetaDataAPI.Models.Response;
 using SixLabors.ImageSharp.Processing;
+using static ImageAPI.Processing.DrawingSettings;
 
 namespace ImageAPI.ProvidersImages;
 
@@ -25,8 +26,8 @@ public abstract class ProviderImage
         IReadOnlyList<ToDrawing> toDrawing = new List<ToDrawing>(ToDrawing())
         {
             new DrawProviderName(dynamoDbItem.ProviderName),
-            new DrawCurrencySymbol("USD", new PointF(554, 445)),
-            new DrawCurrencySymbol("POOLX", new PointF(554, 270)),
+            //new DrawCurrencySymbol("USD", CurrencySymbol.RefundPosition),
+            new DrawCurrencySymbol("POOLX", CurrencySymbol.TokenPosition),
             new DrawPoolId(dynamoDbItem.PoolId)
         };
         var image = BackgroundImage.Clone(_ => { });
