@@ -1,6 +1,4 @@
-﻿using ImageAPI.Utils;
-using SixLabors.ImageSharp;
-using static ImageAPI.Processing.DrawingSettings;
+﻿using SixLabors.ImageSharp;
 
 namespace ImageAPI.Processing.Drawing;
 
@@ -17,7 +15,6 @@ public class DrawCurrencySymbol : ToDrawing
 
     public override Image Draw(Image drawOn)
     {
-        return DrawCurrencySymbol(drawOn, $"${currencySymbol}", coordinates);
-        //return Draw(drawOn, $"${currencySymbol}", new PointF(ImageSize.Width - 554, ImageSize.Height - 270), TextFontSize);
+        return DrawCurrencySymbol(drawOn, $"{currencySymbol}", coordinates);
     }
 }

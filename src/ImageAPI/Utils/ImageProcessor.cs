@@ -1,10 +1,8 @@
-﻿using System.Numerics;
-using SixLabors.Fonts;
+﻿using SixLabors.Fonts;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.Drawing;
 using SixLabors.ImageSharp.Processing;
 using SixLabors.ImageSharp.Drawing.Processing;
-using SixLabors.ImageSharp.PixelFormats;
 
 namespace ImageAPI.Utils;
 
@@ -20,60 +18,86 @@ public class ImageProcessor
         this.font = font;
     }
 
-    public virtual Image DrawText(string text, PointF coordinates, Color? color = null)
+    public virtual Image DrawText(string text, PointF coordinates, Color color = default)
     {
-        color ??= Color.ParseHex(DefaultColorHex);
-        var textOptions = CreateTextOptions(coordinates);
+        color = color == default ? Color.ParseHex(DefaultColorHex) : color;
+        var textOptions = new RichTextOptions(font)
+        {
+            HorizontalAlignment = HorizontalAlignment.Left,
+            Origin = coordinates
+        };
 
-        //image.Mutate(x => x.DrawText(text, font, color, coordinates));
+        image.Mutate(x => x.DrawText(textOptions, text, color));
 
         return image;
     }
 
     public virtual Image DrawCurrencySymbol(string currencySymbol, PointF coordinates)
     {
-        using (var image = new Image<Rgba32>(100, 100))
+        const int widthPadding = 20;
+        const int heightPadding = 8;
+
+        var text = $"${currencySymbol}";
+        var textOptions = new RichTextOptions(font)
         {
-            var rect = new Rectangle((int)coordinates.X, (int)coordinates.Y, 80, 20);
-            var radius = 10; // This value controls the radius of the rounded corners
+            HorizontalAlignment = HorizontalAlignment.Center,
+            VerticalAlignment = VerticalAlignment.Center,
+            Origin = coordinates
+        };
+        var textSize = TextMeasurer.MeasureAdvance(text, textOptions);
 
-            image.Mutate(x => x.Fill(Color.White, rect));
-            image.Mutate(x => x.Fill(Color.Black, new RoundedRect(rect, radius), new GraphicsOptions()));
+        var rectWidth = textSize.Width + widthPadding;
+        var rectHeight = textSize.Height + heightPadding;
+        var rectangle = new RectangleF(
+            coordinates.X,
+            coordinates.Y,
+            rectWidth,
+            rectHeight
+        );
 
-            image.Save("output.png");
-        }
+        var cornerRadius = (textSize.Height + heightPadding) / 2;
+        var roundedRectPath = CreateRoundedRectanglePath(rectangle, cornerRadius);
+
+        image.Mutate(x => x.Fill(Color.White, roundedRectPath));
+
+        textOptions.Origin = new PointF(rectangle.Left + rectangle.Width / 2, rectangle.Top + rectangle.Height / 2);
+        image.Mutate(x => x.DrawText(textOptions, text, Color.Black));
+
         return image;
     }
 
-    private static IPathCollection BuildCorners(int imageWidth, int imageHeight, float cornerRadius)
+    public static IPath CreateRoundedRectanglePath(RectangleF rect, float cornerRadius)
     {
-        // First create a square
-        var rect = new RectangularPolygon(-0.5f, -0.5f, cornerRadius, cornerRadius);
+        var topLeft = new PointF(rect.Left, rect.Top);
+        var topRight = new PointF(rect.Right, rect.Top);
+        var bottomRight = new PointF(rect.Right, rect.Bottom);
+        var bottomLeft = new PointF(rect.Left, rect.Bottom);
 
-        // Then cut out of the square a circle so we are left with a corner
-        IPath cornerTopLeft = rect.Clip(new EllipsePolygon(cornerRadius - 0.5f, cornerRadius - 0.5f, cornerRadius));
+        var pathBuilder = new PathBuilder();
 
-        // Corner is now a corner shape positions top left
-        // let's make 3 more positioned correctly, we can do that by translating the original around the center of the image.
+        pathBuilder.MoveTo(new PointF(topLeft.X + cornerRadius, topLeft.Y));
+        pathBuilder.LineTo(new PointF(topRight.X - cornerRadius, topRight.Y));
 
-        float rightPos = imageWidth - cornerTopLeft.Bounds.Width + 1;
-        float bottomPos = imageHeight - cornerTopLeft.Bounds.Height + 1;
+        var topRightCorner = new PointF(topRight.X - cornerRadius, topRight.Y + cornerRadius);
+        pathBuilder.AddArc(topRightCorner, cornerRadius, cornerRadius, 0, 270, 90);
 
-        // Move it across the width of the image - the width of the shape
-        IPath cornerTopRight = cornerTopLeft.RotateDegree(90).Translate(rightPos, 0);
-        IPath cornerBottomLeft = cornerTopLeft.RotateDegree(-90).Translate(0, bottomPos);
-        IPath cornerBottomRight = cornerTopLeft.RotateDegree(180).Translate(rightPos, bottomPos);
+        pathBuilder.LineTo(new PointF(bottomRight.X, bottomRight.Y - cornerRadius));
 
-        return new PathCollection(cornerTopLeft, cornerBottomLeft, cornerTopRight, cornerBottomRight);
-    }
+        var bottomRightCorner = new PointF(bottomRight.X - cornerRadius, bottomRight.Y - cornerRadius);
+        pathBuilder.AddArc(bottomRightCorner, cornerRadius, cornerRadius, 0, 0, 90);
 
-    private TextOptions CreateTextOptions(PointF coordinates)
-    {
-        return new TextOptions(font)
-        {
-            Origin = coordinates,
-            TabWidth = 4,
-            HorizontalAlignment = HorizontalAlignment.Left
-        };
+        pathBuilder.LineTo(new PointF(bottomLeft.X + cornerRadius, bottomLeft.Y));
+
+        var bottomLeftCorner = new PointF(bottomLeft.X + cornerRadius, bottomLeft.Y - cornerRadius);
+        pathBuilder.AddArc(bottomLeftCorner, cornerRadius, cornerRadius, 0, 90, 90);
+
+        pathBuilder.LineTo(new PointF(topLeft.X, topLeft.Y + cornerRadius));
+
+        var topLeftCorner = new PointF(topLeft.X + cornerRadius, topLeft.Y + cornerRadius);
+        pathBuilder.AddArc(topLeftCorner, cornerRadius, cornerRadius, 0, 180, 90);
+
+        pathBuilder.CloseFigure();
+
+        return pathBuilder.Build();
     }
 }

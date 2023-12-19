@@ -25,8 +25,9 @@ public abstract class ProviderImage
         IReadOnlyList<ToDrawing> toDrawing = new List<ToDrawing>(ToDrawing())
         {
             new DrawProviderName(dynamoDbItem.ProviderName),
-            new DrawCurrencySymbol("USD", new PointF(0, 0)),
-            new DrawPoolId(dynamoDbItem.PoolId)
+            new DrawCurrencySymbol("USD", new PointF(554, 445)),
+            new DrawPoolId(dynamoDbItem.PoolId),
+            new DrawCurrencySymbol("POOLX", new PointF(554, 270)),
         };
         var image = BackgroundImage.Clone(_ => { });
         return toDrawing.Aggregate(image, (current, drawing) => drawing.Draw(current));
@@ -34,7 +35,9 @@ public abstract class ProviderImage
 
     public static string Base64FromImage(Image image)
     {
-        image.SaveAsPng(@"C:\Users\Arden\Desktop\result.png");
+#if DEBUG
+        image.Save(@"result.png");
+#endif
         using var outputStream = new MemoryStream();
         image.SaveAsPngAsync(outputStream)
             .GetAwaiter()
