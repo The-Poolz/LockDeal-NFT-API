@@ -4,7 +4,7 @@ using SixLabors.ImageSharp.Drawing;
 using SixLabors.ImageSharp.Processing;
 using SixLabors.ImageSharp.Drawing.Processing;
 
-namespace ImageAPI.Utils;
+namespace ImageAPI.Processing;
 
 public class ImageProcessor
 {
@@ -62,8 +62,8 @@ public class ImageProcessor
         image.Mutate(x => x.Fill(white, roundedRectPath));
 
         textOptions.Origin = new PointF(
-            rectangle.Left + (rectangle.Width / 2), 
-            rectangle.Top - 2 + (rectangle.Height / 2)
+            rectangle.Left + rectangle.Width / 2,
+            rectangle.Top - 2 + rectangle.Height / 2
         );
         var pen = Pens.Solid(black, 2);
         image.Mutate(x => x.DrawText(textOptions, currencySymbol, pen));
