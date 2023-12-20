@@ -39,6 +39,7 @@ public class ImageProcessor
     {
         const int widthPadding = 20;
         const int heightPadding = 8;
+        var penWidth = 2;
 
         var textOptions = new RichTextOptions(font)
         {
@@ -55,7 +56,7 @@ public class ImageProcessor
             rectWidth,
             rectHeight
         );
-
+        
         var cornerRadius = (textSize.Height + heightPadding) / 2;
         var roundedRectPath = CreateRoundedRectanglePath(rectangle, cornerRadius);
 
@@ -63,10 +64,9 @@ public class ImageProcessor
 
         textOptions.Origin = new PointF(
             rectangle.Left + (rectangle.Width / 2),
-            rectangle.Top - 2 + (rectangle.Height / 2)
+            rectangle.Top - penWidth + (rectangle.Height / 2)
         );
-        var pen = Pens.Solid(black, 2);
-        image.Mutate(x => x.DrawText(textOptions, currencySymbol, pen));
+        image.Mutate(x => x.DrawText(textOptions, currencySymbol, Pens.Solid(black, penWidth)));
 
         return image;
     }
