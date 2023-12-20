@@ -71,7 +71,7 @@ public class ImageProcessor
         return image;
     }
 
-    public static IPath CreateRoundedRectanglePath(RectangleF rect, float cornerRadius)
+    private static IPath CreateRoundedRectanglePath(RectangleF rect, float cornerRadius)
     {
         var topLeft = new PointF(rect.Left, rect.Top);
         var topRight = new PointF(rect.Right, rect.Top);
