@@ -1,31 +1,19 @@
-﻿using ImageAPI.Utils;
-using SixLabors.Fonts;
-using SixLabors.ImageSharp;
-using static ImageAPI.Processing.DrawingSettings;
+﻿using SixLabors.ImageSharp;
+using ImageAPI.Processing.Drawing.Options;
 
 namespace ImageAPI.Processing.Drawing;
 
 public abstract class ToDrawing
 {
-    public abstract Image Draw(Image drawOn);
+    public abstract void Draw(Image drawOn);
 
-    protected static Image Draw(Image drawOn, ToDrawParameters parameters)
+    protected static void Draw(Image drawOn, DrawOptions options)
     {
-        var font = LoadFont(parameters.FontSize, parameters.FontStyle);
-        var imageProcessor = new ImageProcessor(drawOn, font);
-        return imageProcessor.DrawText(parameters.Text, parameters.Location, parameters.PenWidth);
+        drawOn.DrawText(options);
     }
 
-    protected static Image DrawCurrencySymbol(Image drawOn, string currencySymbol, PointF coordinates, FontStyle fontStyle = FontStyle.Regular)
+    protected static void DrawCurrencySymbol(Image drawOn, DrawCurrencyOptions options)
     {
-        var font = LoadFont(CurrencySymbol.FontSize, fontStyle);
-        var imageProcessor = new ImageProcessor(drawOn, font);
-        return imageProcessor.DrawCurrencySymbol($"${currencySymbol}", coordinates);
-    }
-
-    protected static Font LoadFont(float fontSize, FontStyle fontStyle)
-    {
-        // TODO: Create class which provide caching fonts by fontSize. This class get exist font or create new and save it.
-        return new ResourcesLoader().LoadFontFromEmbeddedResources(fontSize, fontStyle);
+        drawOn.DrawCurrencySymbol(options);
     }
 }

@@ -1,5 +1,4 @@
-﻿using SixLabors.Fonts;
-using System.Reflection;
+﻿using System.Reflection;
 
 namespace ImageAPI.ResourceLoaders;
 

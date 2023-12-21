@@ -1,5 +1,6 @@
-﻿using SixLabors.ImageSharp;
-using static ImageAPI.Processing.DrawingSettings;
+﻿using ImageAPI.Processing.Drawing.Options;
+using SixLabors.ImageSharp;
+using static ImageAPI.Settings.DrawingSettings;
 
 namespace ImageAPI.Processing.Drawing;
 
@@ -14,8 +15,8 @@ public class DrawText : ToDrawing
         coordinates = new PointF(x, y);
     }
 
-    public override Image Draw(Image drawOn)
+    public override void Draw(Image drawOn)
     {
-        return Draw(drawOn, new ToDrawParameters(text, coordinates, HeaderFontSize));
+        Draw(drawOn, new DrawOptions(text, coordinates, HeaderFontSize));
     }
 }

@@ -1,6 +1,6 @@
 ﻿using SixLabors.ImageSharp;
 
-namespace ImageAPI.Processing;
+namespace ImageAPI.Settings;
 
 public static class DrawingSettings
 {

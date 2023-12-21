@@ -1,6 +1,7 @@
 ﻿using System.Numerics;
+using ImageAPI.Processing.Drawing.Options;
 using SixLabors.ImageSharp;
-using static ImageAPI.Processing.DrawingSettings;
+using static ImageAPI.Settings.DrawingSettings;
 
 namespace ImageAPI.Processing.Drawing;
 
@@ -13,8 +14,8 @@ public class DrawPoolId : ToDrawing
         this.poolId = poolId;
     }
 
-    public override Image Draw(Image drawOn)
+    public override void Draw(Image drawOn)
     {
-        return Draw(drawOn, new ToDrawParameters($"#{poolId}", PoolId.Position, PoolId.FontSize));
+        Draw(drawOn, new DrawOptions($"#{poolId}", PoolId.Position, PoolId.FontSize));
     }
 }

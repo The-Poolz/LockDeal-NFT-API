@@ -2,11 +2,11 @@
 
 namespace ImageAPI.ResourceLoaders;
 
-public sealed class FontLoader : ResourceLoader<FontFamily>
+public sealed class FontFamilyLoader : ResourceLoader<FontFamily>
 {
     public override FontFamily Resource { get; }
 
-    public FontLoader()
+    public FontFamilyLoader()
         : base("ImageAPI.Resources.ABCNormal.otf")
     {
         Resource = Load();

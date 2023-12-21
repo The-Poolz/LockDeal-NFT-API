@@ -1,13 +1,12 @@
-﻿using SixLabors.ImageSharp;
-using MetaDataAPI.Models.DynamoDb;
+﻿using MetaDataAPI.Models.DynamoDb;
 using ImageAPI.Processing.Drawing;
 
 namespace ImageAPI.ProvidersImages.Simple;
 
 public class LockDealProviderImage : DealProviderImage
 {
-    public LockDealProviderImage(Image backgroundImage, IReadOnlyList<DynamoDbItem> dynamoDbItems)
-        : base(backgroundImage, dynamoDbItems)
+    public LockDealProviderImage(IReadOnlyList<DynamoDbItem> dynamoDbItems)
+        : base(dynamoDbItems)
     { }
 
     protected override IEnumerable<ToDrawing> ToDrawing()

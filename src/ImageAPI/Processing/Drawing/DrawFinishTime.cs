@@ -1,7 +1,8 @@
 ﻿using MetaDataAPI.Utils;
 using SixLabors.ImageSharp;
 using System.Globalization;
-using static ImageAPI.Processing.DrawingSettings;
+using ImageAPI.Processing.Drawing.Options;
+using static ImageAPI.Settings.DrawingSettings;
 
 namespace ImageAPI.Processing.Drawing;
 
@@ -14,10 +15,10 @@ public class DrawFinishTime : ToDrawing
         this.finishTime = TimeUtils.FromUnixTimestamp((long)finishTime);
     }
 
-    public override Image Draw(Image drawOn)
+    public override void Draw(Image drawOn)
     {
-        drawOn = Draw(drawOn, new ToDrawParameters("Finish Time", FinishTime.HeaderPosition, HeaderFontSize));
-        drawOn = Draw(drawOn, new ToDrawParameters(finishTime.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture), FinishTime.DatePosition, FinishTime.FontSize));
-        return Draw(drawOn, new ToDrawParameters(finishTime.ToString("HH:mm:ss", CultureInfo.InvariantCulture), FinishTime.TimePosition, FinishTime.FontSize));
+        Draw(drawOn, new DrawOptions("Finish Time", FinishTime.HeaderPosition, HeaderFontSize));
+        Draw(drawOn, new DrawOptions(finishTime.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture), FinishTime.DatePosition, FinishTime.FontSize));
+        Draw(drawOn, new DrawOptions(finishTime.ToString("HH:mm:ss", CultureInfo.InvariantCulture), FinishTime.TimePosition, FinishTime.FontSize));
     }
 }

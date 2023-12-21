@@ -2,7 +2,6 @@ using System.Net;
 using ImageAPI.Utils;
 using Newtonsoft.Json;
 using Amazon.Lambda.Core;
-using SixLabors.ImageSharp;
 using ImageAPI.ProvidersImages;
 using MetaDataAPI.Models.DynamoDb;
 using Amazon.Lambda.APIGatewayEvents;
@@ -14,14 +13,12 @@ namespace ImageAPI;
 public class LambdaFunction
 {
     private readonly DynamoDb dynamoDb;
-    private readonly Image backgroundImage;
 
     public LambdaFunction() : this(new DynamoDb()) { }
 
     public LambdaFunction(DynamoDb dynamoDb)
     {
         this.dynamoDb = dynamoDb;
-        backgroundImage = new ResourcesLoader().LoadImageFromEmbeddedResources();
     }
 
     public async Task<APIGatewayProxyResponse> RunAsync(APIGatewayProxyRequest input)
@@ -47,7 +44,7 @@ public class LambdaFunction
         try
         {
             var attributes = JsonConvert.DeserializeObject<DynamoDbItem[]>(databaseItem.Item["Data"].S)!;
-            var providerImage = ProviderImageFactory.Create(backgroundImage, attributes);
+            var providerImage = ProviderImageFactory.Create(attributes);
             var image = providerImage.DrawOnImage();
 
             var base64Image = ProviderImage.Base64FromImage(image);

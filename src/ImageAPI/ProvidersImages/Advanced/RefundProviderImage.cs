@@ -1,4 +1,4 @@
-﻿using SixLabors.ImageSharp;
+﻿using ImageAPI.Settings;
 using MetaDataAPI.Models.DynamoDb;
 using ImageAPI.Processing.Drawing;
 
@@ -6,8 +6,8 @@ namespace ImageAPI.ProvidersImages.Advanced;
 
 public class RefundProviderImage : ProviderImage
 {
-    public RefundProviderImage(Image backgroundImage, IReadOnlyList<DynamoDbItem> dynamoDbItems)
-        : base(backgroundImage, dynamoDbItems[0])
+    public RefundProviderImage(IReadOnlyList<DynamoDbItem> dynamoDbItems)
+        : base(dynamoDbItems[0])
     { }
 
     protected override IEnumerable<ToDrawing> ToDrawing()
@@ -15,7 +15,7 @@ public class RefundProviderImage : ProviderImage
         return new ToDrawing[]
         {
             new DrawLeftAmount(GetAttributeValue("MainCoinAmount")),
-            new DrawText("MainCoin", BackgroundImage.Width - 400, BackgroundImage.Height - 330),
+            new DrawText("MainCoin", Resources.BackgroundImage.Width - 400, Resources.BackgroundImage.Height - 330),
         };
     }
 }

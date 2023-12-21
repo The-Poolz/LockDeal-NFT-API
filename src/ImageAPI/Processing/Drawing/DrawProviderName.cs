@@ -1,6 +1,7 @@
 ﻿using SixLabors.ImageSharp;
 using System.Text.RegularExpressions;
-using static ImageAPI.Processing.DrawingSettings;
+using ImageAPI.Processing.Drawing.Options;
+using static ImageAPI.Settings.DrawingSettings;
 
 namespace ImageAPI.Processing.Drawing;
 
@@ -13,8 +14,8 @@ public class DrawProviderName : ToDrawing
         this.providerName = providerName;
     }
 
-    public override Image Draw(Image drawOn)
+    public override void Draw(Image drawOn)
     {
-        return Draw(drawOn, new ToDrawParameters(Regex.Replace(providerName, "(?<!^)([A-Z])", " $1"), ProviderName.Position, ProviderName.FontSize));
+        Draw(drawOn, new DrawOptions(Regex.Replace(providerName, "(?<!^)([A-Z])", " $1"), ProviderName.Position, ProviderName.FontSize));
     }
 }

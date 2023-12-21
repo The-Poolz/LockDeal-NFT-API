@@ -1,7 +1,8 @@
 ﻿using SixLabors.Fonts;
+using ImageAPI.Settings;
 using SixLabors.ImageSharp;
 
-namespace ImageAPI.Processing;
+namespace ImageAPI.Processing.Drawing.Options;
 
 public class DrawOptions
 {
@@ -10,6 +11,7 @@ public class DrawOptions
     public float FontSize { get; }
     public FontStyle FontStyle { get; }
     public float PenWidth { get; }
+    public Color Color { get; }
 
     public DrawOptions(string text, PointF location, float fontSize, FontStyle fontStyle = FontStyle.Regular, float penWidth = 2f, Color color = default)
     {
@@ -18,5 +20,6 @@ public class DrawOptions
         FontSize = fontSize;
         FontStyle = fontStyle;
         PenWidth = penWidth;
+        Color = color == default ? ColorPalette.White : color;
     }
 }
