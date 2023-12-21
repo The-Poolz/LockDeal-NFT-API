@@ -1,4 +1,5 @@
-﻿using SixLabors.ImageSharp;
+﻿using SixLabors.Fonts;
+using SixLabors.ImageSharp;
 using static ImageAPI.Processing.DrawingSettings;
 
 namespace ImageAPI.Processing.Drawing;
@@ -14,7 +15,7 @@ public class DrawLeftAmount : ToDrawing
 
     public override Image Draw(Image drawOn)
     {
-        drawOn = Draw(drawOn, "Left Amount", LeftAmount.HeaderPosition, HeaderFontSize);
-        return Draw(drawOn, leftAmount, LeftAmount.Position, LeftAmount.FontSize);
+        drawOn = Draw(drawOn, new ToDrawParameters("Left Amount", LeftAmount.HeaderPosition, HeaderFontSize, 2));
+        return Draw(drawOn, new ToDrawParameters(leftAmount, LeftAmount.Position, LeftAmount.FontSize, 5.5f, FontStyle.Bold));
     }
 }
