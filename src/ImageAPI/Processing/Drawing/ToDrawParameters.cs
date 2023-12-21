@@ -11,7 +11,7 @@ public class ToDrawParameters
     public float PenWidth { get; set; }
     public FontStyle FontStyle { get; set; }
 
-    public ToDrawParameters(string text, PointF location, float fontSize, float penWidth, FontStyle fontStyle = FontStyle.Regular)
+    public ToDrawParameters(string text, PointF location, float fontSize, float penWidth = 2f, FontStyle fontStyle = FontStyle.Regular)
     {
         Text = text;
         Location = location;

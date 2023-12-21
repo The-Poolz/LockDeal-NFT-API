@@ -15,6 +15,6 @@ public class DrawPoolId : ToDrawing
 
     public override Image Draw(Image drawOn)
     {
-        return Draw(drawOn, new ToDrawParameters($"#{poolId}", PoolId.Position, PoolId.FontSize, 2));
+        return Draw(drawOn, new ToDrawParameters($"#{poolId}", PoolId.Position, PoolId.FontSize));
     }
 }

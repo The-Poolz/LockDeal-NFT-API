@@ -16,8 +16,8 @@ public class DrawStartTime : ToDrawing
 
     public override Image Draw(Image drawOn)
     {
-        drawOn = Draw(drawOn, new ToDrawParameters("Start Time", StartTime.HeaderPosition, HeaderFontSize, 2));
-        drawOn = Draw(drawOn, new ToDrawParameters(startTime.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture), StartTime.DatePosition, StartTime.FontSize, 2));
-        return Draw(drawOn, new ToDrawParameters(startTime.ToString("HH:mm:ss", CultureInfo.InvariantCulture), StartTime.TimePosition, StartTime.FontSize, 2));
+        drawOn = Draw(drawOn, new ToDrawParameters("Start Time", StartTime.HeaderPosition, HeaderFontSize));
+        drawOn = Draw(drawOn, new ToDrawParameters(startTime.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture), StartTime.DatePosition, StartTime.FontSize));
+        return Draw(drawOn, new ToDrawParameters(startTime.ToString("HH:mm:ss", CultureInfo.InvariantCulture), StartTime.TimePosition, StartTime.FontSize));
     }
 }

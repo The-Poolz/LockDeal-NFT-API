@@ -16,6 +16,6 @@ public class DrawText : ToDrawing
 
     public override Image Draw(Image drawOn)
     {
-        return Draw(drawOn, new ToDrawParameters(text, coordinates, HeaderFontSize, 2));
+        return Draw(drawOn, new ToDrawParameters(text, coordinates, HeaderFontSize));
     }
 }

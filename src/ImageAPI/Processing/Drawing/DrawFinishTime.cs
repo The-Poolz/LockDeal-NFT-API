@@ -16,8 +16,8 @@ public class DrawFinishTime : ToDrawing
 
     public override Image Draw(Image drawOn)
     {
-        drawOn = Draw(drawOn, new ToDrawParameters("Finish Time", FinishTime.HeaderPosition, HeaderFontSize, 2));
-        drawOn = Draw(drawOn, new ToDrawParameters(finishTime.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture), FinishTime.DatePosition, FinishTime.FontSize, 2));
-        return Draw(drawOn, new ToDrawParameters(finishTime.ToString("HH:mm:ss", CultureInfo.InvariantCulture), FinishTime.TimePosition, FinishTime.FontSize, 2));
+        drawOn = Draw(drawOn, new ToDrawParameters("Finish Time", FinishTime.HeaderPosition, HeaderFontSize));
+        drawOn = Draw(drawOn, new ToDrawParameters(finishTime.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture), FinishTime.DatePosition, FinishTime.FontSize));
+        return Draw(drawOn, new ToDrawParameters(finishTime.ToString("HH:mm:ss", CultureInfo.InvariantCulture), FinishTime.TimePosition, FinishTime.FontSize));
     }
 }

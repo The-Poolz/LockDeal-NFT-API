@@ -15,6 +15,6 @@ public class DrawProviderName : ToDrawing
 
     public override Image Draw(Image drawOn)
     {
-        return Draw(drawOn, new ToDrawParameters(Regex.Replace(providerName, "(?<!^)([A-Z])", " $1"), ProviderName.Position, ProviderName.FontSize, 2));
+        return Draw(drawOn, new ToDrawParameters(Regex.Replace(providerName, "(?<!^)([A-Z])", " $1"), ProviderName.Position, ProviderName.FontSize));
     }
 }
