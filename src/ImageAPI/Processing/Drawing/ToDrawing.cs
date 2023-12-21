@@ -9,11 +9,18 @@ public abstract class ToDrawing
 {
     public abstract Image Draw(Image drawOn);
 
-    protected static Image Draw(Image drawOn, string text, PointF coordinates, float fontSize, FontStyle fontStyle = FontStyle.Regular)
+    protected static Image Draw(Image drawOn, ToDrawParameters parameters)
     {
-        var font = LoadFont(fontSize, fontStyle);
+        var font = LoadFont(parameters.FontSize, parameters.FontStyle);
         var imageProcessor = new ImageProcessor(drawOn, font);
-        return imageProcessor.DrawText(text, coordinates);
+        return imageProcessor.DrawText(parameters.Text, parameters.Location, parameters.PenWidth);
+    }
+
+    protected static Image DrawCurrencySymbol(Image drawOn, string currencySymbol, PointF coordinates, FontStyle fontStyle = FontStyle.Regular)
+    {
+        var font = LoadFont(CurrencySymbol.FontSize, fontStyle);
+        var imageProcessor = new ImageProcessor(drawOn, font);
+        return imageProcessor.DrawCurrencySymbol(currencySymbol, coordinates);
     }
 
     protected static Image DrawCurrencySymbol(Image drawOn, string currencySymbol, PointF coordinates, FontStyle fontStyle = FontStyle.Regular)

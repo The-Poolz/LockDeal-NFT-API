@@ -21,16 +21,16 @@ public class ImageProcessor
         black = Color.ParseHex("#010013");
     }
 
-    public virtual Image DrawText(string text, PointF coordinates, Color color = default)
+    public virtual Image DrawText(string text, PointF location, float penWidth, Color color = default)
     {
         color = color == default ? white : color;
         var textOptions = new RichTextOptions(font)
         {
             HorizontalAlignment = HorizontalAlignment.Left,
-            Origin = coordinates
+            Origin = new PointF(location.X - penWidth, location.Y - penWidth),
         };
 
-        image.Mutate(x => x.DrawText(textOptions, text, Brushes.Solid(color), Pens.Solid(color, 2)));
+        image.Mutate(x => x.DrawText(textOptions, text, Brushes.Solid(color), Pens.Solid(color, penWidth)));
 
         return image;
     }
@@ -39,7 +39,7 @@ public class ImageProcessor
     {
         const int widthPadding = 20;
         const int heightPadding = 8;
-        var penWidth = 2;
+        const int penWidth = 2;
 
         var textOptions = new RichTextOptions(font)
         {
@@ -51,8 +51,8 @@ public class ImageProcessor
         var rectWidth = textSize.Width + widthPadding;
         var rectHeight = textSize.Height + heightPadding;
         var rectangle = new RectangleF(
-            coordinates.X,
-            coordinates.Y,
+            coordinates.X - penWidth,
+            coordinates.Y - penWidth,
             rectWidth,
             rectHeight
         );
@@ -63,7 +63,7 @@ public class ImageProcessor
         image.Mutate(x => x.Fill(white, roundedRectPath));
 
         textOptions.Origin = new PointF(
-            rectangle.Left + (rectangle.Width / 2),
+            rectangle.Left - penWidth + (rectangle.Width / 2),
             rectangle.Top - penWidth + (rectangle.Height / 2)
         );
         image.Mutate(x => x.DrawText(textOptions, currencySymbol, Pens.Solid(black, penWidth)));
