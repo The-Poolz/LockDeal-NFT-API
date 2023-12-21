@@ -1,10 +1,9 @@
-﻿using SixLabors.ImageSharp;
-using ImageAPI.Processing.Drawing;
-using ImageAPI.Settings;
+﻿using ImageAPI.Settings;
+using ImageAPI.Processing;
+using SixLabors.ImageSharp;
 using MetaDataAPI.Models.DynamoDb;
 using MetaDataAPI.Models.Response;
 using SixLabors.ImageSharp.Processing;
-using static ImageAPI.Settings.DrawingSettings;
 
 namespace ImageAPI.ProvidersImages;
 
@@ -18,19 +17,19 @@ public abstract class ProviderImage
         this.dynamoDbItem = dynamoDbItem;
     }
 
-    protected abstract IEnumerable<ToDrawing> ToDrawing();
+    protected abstract IEnumerable<Action<Image>> DrawingActions();
 
     public Image DrawOnImage()
     {
-        var toDrawing = new List<ToDrawing>(ToDrawing())
+        var actions = new List<Action<Image>>(DrawingActions())
         {
-            new DrawProviderName(dynamoDbItem.ProviderName),
-            //new DrawCurrencySymbol("USD", Currency.RefundPosition),
-            new DrawCurrency("POOLX", Currency.TokenPosition),
-            new DrawPoolId(dynamoDbItem.PoolId)
+            drawOn => drawOn.DrawProviderName(dynamoDbItem.ProviderName),
+            drawOn => drawOn.DrawPoolId(dynamoDbItem.PoolId),
+            drawOn => drawOn.DrawTokenBadge("POOLX")
         };
+
         var image = Resources.BackgroundImage.Clone(_ => { });
-        toDrawing.ForEach(x => x.Draw(image));
+        actions.ForEach(action => action(image));
         return image;
     }
 

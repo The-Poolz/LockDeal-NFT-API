@@ -1,4 +1,5 @@
-﻿using ImageAPI.Processing.Drawing;
+﻿using ImageAPI.Processing;
+using SixLabors.ImageSharp;
 using MetaDataAPI.Models.DynamoDb;
 
 namespace ImageAPI.ProvidersImages.DelayVault;
@@ -9,8 +10,8 @@ public class DelayVaultProviderImage : ProviderImage
         : base(dynamoDbItems[0])
     { }
 
-    protected override IEnumerable<ToDrawing> ToDrawing()
+    protected override IEnumerable<Action<Image>> DrawingActions()
     {
-        yield return new DrawLeftAmount(GetAttributeValue("LeftAmount"));
+        yield return drawOn => drawOn.DrawLeftAmount(GetAttributeValue("LeftAmount"));
     }
 }
