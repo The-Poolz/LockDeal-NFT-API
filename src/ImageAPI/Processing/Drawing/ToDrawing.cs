@@ -20,7 +20,7 @@ public abstract class ToDrawing
     {
         var font = LoadFont(CurrencySymbol.FontSize, fontStyle);
         var imageProcessor = new ImageProcessor(drawOn, font);
-        return imageProcessor.DrawCurrencySymbol(currencySymbol, coordinates);
+        return imageProcessor.DrawCurrencySymbol($"${currencySymbol}", coordinates);
     }
 
     protected static Font LoadFont(float fontSize, FontStyle fontStyle)
