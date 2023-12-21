@@ -66,7 +66,7 @@ public class ImageProcessor
             rectangle.Left - penWidth + (rectangle.Width / 2),
             rectangle.Top - penWidth + (rectangle.Height / 2)
         );
-        image.Mutate(x => x.DrawText(textOptions, currencySymbol, Pens.Solid(black, penWidth)));
+        image.Mutate(x => x.DrawText(textOptions, $"${currencySymbol}", Pens.Solid(black, penWidth)));
 
         return image;
     }
