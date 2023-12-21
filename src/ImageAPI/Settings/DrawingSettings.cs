@@ -41,7 +41,7 @@ public static class DrawingSettings
         public static PointF HeaderPosition => new(276, 274);
     }
 
-    public struct CurrencySymbol
+    public struct Currency
     {
         public static float FontSize => 16f;
         public static PointF TokenPosition => new(554, 270);

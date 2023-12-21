@@ -25,8 +25,8 @@ public abstract class ProviderImage
         var toDrawing = new List<ToDrawing>(ToDrawing())
         {
             new DrawProviderName(dynamoDbItem.ProviderName),
-            //new DrawCurrencySymbol("USD", CurrencySymbol.RefundPosition),
-            new DrawCurrency("POOLX", CurrencySymbol.TokenPosition),
+            //new DrawCurrencySymbol("USD", Currency.RefundPosition),
+            new DrawCurrency("POOLX", Currency.TokenPosition),
             new DrawPoolId(dynamoDbItem.PoolId)
         };
         var image = Resources.BackgroundImage.Clone(_ => { });
