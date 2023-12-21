@@ -40,4 +40,11 @@ public static class DrawingSettings
         public static PointF TimePosition => new(276, 340);
         public static PointF HeaderPosition => new(276, 274);
     }
+
+    public struct CurrencySymbol
+    {
+        public static float FontSize => 16f;
+        public static PointF TokenPosition => new(554, 270);
+        public static PointF RefundPosition => new(554, 445);
+    }
 }
