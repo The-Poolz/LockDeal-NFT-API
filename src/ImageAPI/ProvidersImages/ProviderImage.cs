@@ -1,9 +1,9 @@
-﻿using SixLabors.ImageSharp;
-using ImageAPI.Processing.Drawing;
+﻿using ImageAPI.Settings;
+using ImageAPI.Processing;
+using SixLabors.ImageSharp;
 using MetaDataAPI.Models.DynamoDb;
 using MetaDataAPI.Models.Response;
 using SixLabors.ImageSharp.Processing;
-using static ImageAPI.Processing.DrawingSettings;
 
 namespace ImageAPI.ProvidersImages;
 
@@ -11,27 +11,26 @@ public abstract class ProviderImage
 {
     public const string ContentType = "image/png";
     protected readonly DynamoDbItem dynamoDbItem;
-    public Image BackgroundImage { get; }
 
-    protected ProviderImage(Image backgroundImage, DynamoDbItem dynamoDbItem)
+    protected ProviderImage(DynamoDbItem dynamoDbItem)
     {
-        BackgroundImage = backgroundImage;
         this.dynamoDbItem = dynamoDbItem;
     }
 
-    protected abstract IEnumerable<ToDrawing> ToDrawing();
+    protected abstract IEnumerable<Action<Image>> DrawingActions();
 
     public Image DrawOnImage()
     {
-        IReadOnlyList<ToDrawing> toDrawing = new List<ToDrawing>(ToDrawing())
+        var actions = new List<Action<Image>>(DrawingActions())
         {
-            new DrawProviderName(dynamoDbItem.ProviderName),
-            //new DrawCurrencySymbol("USD", CurrencySymbol.RefundPosition),
-            new DrawCurrencySymbol("POOLX", CurrencySymbol.TokenPosition),
-            new DrawPoolId(dynamoDbItem.PoolId)
+            drawOn => drawOn.DrawProviderName(dynamoDbItem.ProviderName),
+            drawOn => drawOn.DrawPoolId(dynamoDbItem.PoolId),
+            drawOn => drawOn.DrawTokenBadge("POOLX")
         };
-        var image = BackgroundImage.Clone(_ => { });
-        return toDrawing.Aggregate(image, (current, drawing) => drawing.Draw(current));
+
+        var image = Resources.BackgroundImage.Clone(_ => { });
+        actions.ForEach(action => action(image));
+        return image;
     }
 
     public static string Base64FromImage(Image image)

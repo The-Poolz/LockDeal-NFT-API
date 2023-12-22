@@ -1,4 +1,5 @@
 ﻿using SixLabors.Fonts;
+using ImageAPI.Settings;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.Drawing;
 using SixLabors.ImageSharp.Processing;
@@ -6,47 +7,30 @@ using SixLabors.ImageSharp.Drawing.Processing;
 
 namespace ImageAPI.Processing;
 
-public class ImageProcessor
+public static class BadgeDrawer
 {
-    private readonly Font font;
-    private readonly Image image;
-    private readonly Color white;
-    private readonly Color black;
-
-    public ImageProcessor(Image image, Font font)
+    public static void DrawTokenBadge(this Image drawOn, string currencyName)
     {
-        this.image = image;
-        this.font = font;
-        white = Color.ParseHex("#FDFDFD");
-        black = Color.ParseHex("#010013");
+        drawOn.DrawCurrencyBadge(currencyName, new PointF(554, 270), 16f);
     }
 
-    public virtual Image DrawText(string text, PointF location, float penWidth, Color color = default)
+    public static void DrawRefundBadge(this Image drawOn, string currencyName)
     {
-        color = color == default ? white : color;
-        var textOptions = new RichTextOptions(font)
-        {
-            HorizontalAlignment = HorizontalAlignment.Left,
-            Origin = new PointF(location.X - penWidth, location.Y - penWidth),
-        };
-
-        image.Mutate(x => x.DrawText(textOptions, text, Brushes.Solid(color), Pens.Solid(color, penWidth)));
-
-        return image;
+        drawOn.DrawCurrencyBadge(currencyName, new PointF(554, 445), 16f);
     }
 
-    public virtual Image DrawCurrencySymbol(string currencySymbol, PointF coordinates)
+    public static void DrawCurrencyBadge(this Image drawOn, string currencyName, PointF coordinates, float fontSize, float penWidth = 2f)
     {
         const int widthPadding = 20;
         const int heightPadding = 8;
-        const int penWidth = 2;
 
-        var textOptions = new RichTextOptions(font)
+        var textOptions = new RichTextOptions(Resources.Font(fontSize))
         {
             HorizontalAlignment = HorizontalAlignment.Center,
             VerticalAlignment = VerticalAlignment.Center,
         };
-        var textSize = TextMeasurer.MeasureAdvance(currencySymbol, textOptions);
+        var text = $"${currencyName}";
+        var textSize = TextMeasurer.MeasureAdvance(text, textOptions);
 
         var rectWidth = textSize.Width + widthPadding;
         var rectHeight = textSize.Height + heightPadding;
@@ -56,19 +40,17 @@ public class ImageProcessor
             rectWidth,
             rectHeight
         );
-        
+
         var cornerRadius = (textSize.Height + heightPadding) / 2;
         var roundedRectPath = CreateRoundedRectanglePath(rectangle, cornerRadius);
 
-        image.Mutate(x => x.Fill(white, roundedRectPath));
+        drawOn.Mutate(x => x.Fill(ColorPalette.White, roundedRectPath));
 
         textOptions.Origin = new PointF(
             rectangle.Left - penWidth + (rectangle.Width / 2),
             rectangle.Top - penWidth + (rectangle.Height / 2)
         );
-        image.Mutate(x => x.DrawText(textOptions, currencySymbol, Pens.Solid(black, penWidth)));
-
-        return image;
+        drawOn.Mutate(x => x.DrawText(textOptions, text, Pens.Solid(ColorPalette.Black, penWidth)));
     }
 
     private static IPath CreateRoundedRectanglePath(RectangleF rect, float cornerRadius)

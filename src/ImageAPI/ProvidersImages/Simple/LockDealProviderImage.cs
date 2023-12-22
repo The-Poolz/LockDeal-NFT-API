@@ -1,21 +1,21 @@
-﻿using SixLabors.ImageSharp;
+﻿using ImageAPI.Processing;
+using SixLabors.ImageSharp;
 using MetaDataAPI.Models.DynamoDb;
-using ImageAPI.Processing.Drawing;
 
 namespace ImageAPI.ProvidersImages.Simple;
 
 public class LockDealProviderImage : DealProviderImage
 {
-    public LockDealProviderImage(Image backgroundImage, IReadOnlyList<DynamoDbItem> dynamoDbItems)
-        : base(backgroundImage, dynamoDbItems)
+    public LockDealProviderImage(IReadOnlyList<DynamoDbItem> dynamoDbItems)
+        : base(dynamoDbItems)
     { }
 
-    protected override IEnumerable<ToDrawing> ToDrawing()
+    protected override IEnumerable<Action<Image>> DrawingActions()
     {
-        foreach (var toDrawing in base.ToDrawing())
+        foreach (var action in base.DrawingActions())
         {
-            yield return toDrawing;
+            yield return action;
         }
-        yield return new DrawStartTime(GetAttributeValue("StartTime"));
+        yield return drawOn => drawOn.DrawStartTime(GetAttributeValue("StartTime"));
     }
 }
