@@ -18,6 +18,7 @@ public class LambdaFunctionTests : SetEnvironments
     public LambdaFunctionTests()
     {
         Environment.SetEnvironmentVariable("AWS_REGION", "us-west-2");
+        Environment.SetEnvironmentVariable("NAME_OF_STAGE", "test");
     }
 
     [Fact] 
