@@ -51,13 +51,13 @@ public class CollateralProvider : Provider
         {
             var dynamoDbAttributes = new List<DynamoDbItem>
             {
-                new(ProviderName, PoolInfo.PoolId, new List<Erc721Attribute>
+                new(ProviderName, PoolInfo, new List<Erc721Attribute>
                 {
                     new("Collection", Collection),
                     new("LeftAmount", LeftAmount)
                 })
             };
-            dynamoDbAttributes.AddRange(SubProvider.Select(subProvider => new DynamoDbItem(subProvider.Value.ProviderName, subProvider.Value.PoolInfo.PoolId, subProvider.Value.Attributes.Where(attr => attr.TraitType != "ProviderName").ToList())));
+            dynamoDbAttributes.AddRange(SubProvider.Select(subProvider => new DynamoDbItem(subProvider.Value.ProviderName, subProvider.Value.PoolInfo, subProvider.Value.Attributes.Where(attr => attr.TraitType != "ProviderName").ToList())));
 
             return dynamoDbAttributes;
         }

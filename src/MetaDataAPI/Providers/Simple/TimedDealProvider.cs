@@ -22,7 +22,7 @@ public class TimedDealProvider : LockDealProvider
     public DateTime FinishDateTime => TimeUtils.FromUnixTimestamp(FinishTime);
     public override List<DynamoDbItem> DynamoDbAttributes => new()
     {
-        new DynamoDbItem(ProviderName, PoolInfo.PoolId,new List<Erc721Attribute>
+        new DynamoDbItem(ProviderName, PoolInfo,new List<Erc721Attribute>
         {
             new("StartAmount", StartAmount),
             new("FinishTime", FinishTime, DisplayType.Date),

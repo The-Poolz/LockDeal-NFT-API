@@ -25,7 +25,7 @@ public abstract class ProviderImage
         {
             drawOn => drawOn.DrawProviderName(dynamoDbItem.ProviderName),
             drawOn => drawOn.DrawPoolId(dynamoDbItem.PoolId),
-            drawOn => drawOn.DrawTokenBadge("POOLX")
+            drawOn => drawOn.DrawTokenBadge(dynamoDbItem.TokenSymbol)
         };
 
         var image = Resources.BackgroundImage.Clone(_ => { });
