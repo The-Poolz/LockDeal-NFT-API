@@ -11,9 +11,10 @@ public class RefundProviderImage : ProviderImage
         : base(dynamoDbItems[0])
     { }
 
-    protected override IEnumerable<Action<Image>> DrawingActions()
+    protected override IEnumerable<Func<Image, ImageBuilder>> DrawingActions()
     {
-        yield return drawOn => drawOn.DrawLeftAmount(GetAttributeValue("MainCoinAmount"));
-        yield return drawOn => drawOn.DrawText("MainCoin", new PointF(Resources.BackgroundImage.Width - 400, Resources.BackgroundImage.Height - 330), 16f);
+        yield return drawOn => new ImageBuilder(drawOn)
+            .DrawLeftAmount(GetAttributeValue("MainCoinAmount"))
+            .DrawText("MainCoin", new PointF(Resources.BackgroundImage.Width - 400, Resources.BackgroundImage.Height - 330), 16f);
     }
 }

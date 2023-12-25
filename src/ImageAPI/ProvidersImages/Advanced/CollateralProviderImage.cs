@@ -10,8 +10,8 @@ public class CollateralProviderImage : ProviderImage
         : base(dynamoDbItems[0])
     { }
 
-    protected override IEnumerable<Action<Image>> DrawingActions()
+    protected override IEnumerable<Func<Image, ImageBuilder>> DrawingActions()
     {
-        yield return drawOn => drawOn.DrawLeftAmount(GetAttributeValue("LeftAmount"));
+        yield return drawOn => new ImageBuilder(drawOn).DrawLeftAmount(GetAttributeValue("LeftAmount"));
     }
 }

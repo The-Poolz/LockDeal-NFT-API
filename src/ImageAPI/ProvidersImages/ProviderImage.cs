@@ -17,15 +17,16 @@ public abstract class ProviderImage
         this.dynamoDbItem = dynamoDbItem;
     }
 
-    protected abstract IEnumerable<Action<Image>> DrawingActions();
+    protected abstract IEnumerable<Func<Image, ImageBuilder>> DrawingActions();
 
     public Image DrawOnImage()
     {
-        var actions = new List<Action<Image>>(DrawingActions())
+        var actions = new List<Func<Image, ImageBuilder>>(DrawingActions())
         {
-            drawOn => drawOn.DrawProviderName(dynamoDbItem.ProviderName),
-            drawOn => drawOn.DrawPoolId(dynamoDbItem.PoolId),
-            drawOn => drawOn.DrawTokenBadge("POOLX")
+            drawOn => new ImageBuilder(drawOn)
+                .DrawProviderName(dynamoDbItem.ProviderName)
+                .DrawPoolId(dynamoDbItem.PoolId)
+                .DrawTokenBadge("POOLX")
         };
 
         var image = Resources.BackgroundImage.Clone(_ => { });

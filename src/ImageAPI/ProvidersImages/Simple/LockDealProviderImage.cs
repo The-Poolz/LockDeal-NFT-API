@@ -10,12 +10,12 @@ public class LockDealProviderImage : DealProviderImage
         : base(dynamoDbItems)
     { }
 
-    protected override IEnumerable<Action<Image>> DrawingActions()
+    protected override IEnumerable<Func<Image, ImageBuilder>> DrawingActions()
     {
         foreach (var action in base.DrawingActions())
         {
             yield return action;
         }
-        yield return drawOn => drawOn.DrawStartTime(GetAttributeValue("StartTime"));
+        yield return drawOn => new ImageBuilder(drawOn).DrawStartTime(GetAttributeValue("StartTime"));
     }
 }
