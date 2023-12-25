@@ -17,4 +17,12 @@ public class DynamoDbItem
         PoolId = poolInfo.PoolId;
         Attributes = attributes;
     }
+
+    public DynamoDbItem(string providerName, string tokenSymbol, BigInteger poolId, List<Erc721Attribute> attributes)
+    {
+        ProviderName = providerName;
+        TokenSymbol = tokenSymbol;
+        PoolId = poolId;
+        Attributes = attributes;
+    }
 }

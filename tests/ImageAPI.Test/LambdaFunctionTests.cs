@@ -5,6 +5,9 @@ using ImageAPI.Utils;
 using FluentAssertions;
 using Amazon.DynamoDBv2.Model;
 using Amazon.Lambda.APIGatewayEvents;
+using MetaDataAPI.Models.DynamoDb;
+using MetaDataAPI.Models.Response;
+using Newtonsoft.Json.Linq;
 
 namespace ImageAPI.Test;
 
@@ -77,7 +80,10 @@ public class LambdaFunctionTests
                     {
                         "Data", new AttributeValue
                         {
-                            S = "[{\"ProviderName\":\"DealProvider\",\"Attributes\":[{\"trait_type\":\"Collection\",\"value\":2},{\"trait_type\":\"LeftAmount\",\"value\":13572.37461}]}]"
+                            S = JToken.FromObject(new DynamoDbItem("DealProvider", "POOLX", 0, new()
+                            {
+                                new Erc721Attribute("LeftAmount", 13572.37461)
+                            })).ToString()
                         }
                     }
                 }
