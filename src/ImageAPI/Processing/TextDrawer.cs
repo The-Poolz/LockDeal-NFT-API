@@ -40,11 +40,21 @@ public static class TextDrawer
     public static void DrawLeftAmount(this Image drawOn, object leftAmount)
     {
         drawOn.DrawHeader("Left Amount", new PointF(672, 274));
-        drawOn.DrawText(leftAmount.ToString()!, new PointF(672, 298), 64f, FontStyle.Bold, 5.5f);
+        drawOn.DrawText(TruncateFractionalPart(leftAmount.ToString()!), new PointF(672, 298), 64f, FontStyle.Bold, 5.5f);
     }
 
     public static void DrawPoolId(this Image drawOn, BigInteger poolId)
     {
         drawOn.DrawText($"#{poolId}", new PointF(981, 52), 24f);
+    }
+
+    private static string TruncateFractionalPart(string number)
+    {
+        var dotIndex = number.IndexOf('.');
+        if (dotIndex != -1 && number.Length > dotIndex + 3)
+        {
+            return number[..(dotIndex + 3)] + "...";
+        }
+        return number;
     }
 }
