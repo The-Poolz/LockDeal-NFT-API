@@ -32,13 +32,13 @@ public class RefundProvider : Provider
         {
             var dynamoDbAttributes = new List<DynamoDbItem>
             {
-                new(ProviderName, PoolInfo.PoolId, new List<Erc721Attribute>
+                new(ProviderName, PoolInfo, new List<Erc721Attribute>
                 {
                     new("Rate", Rate),
                     new("MainCoinAmount", MainCoinAmount),
                     new("MainCoinCollection", MainCoinCollection)
                 }),
-                new(SubProvider.ProviderName, SubProvider.PoolInfo.PoolId, SubProvider.Attributes.Where(attr => attr.TraitType != "ProviderName").ToList())
+                new(SubProvider.ProviderName, SubProvider.PoolInfo, SubProvider.Attributes.Where(attr => attr.TraitType != "ProviderName").ToList())
             };
 
             return dynamoDbAttributes;

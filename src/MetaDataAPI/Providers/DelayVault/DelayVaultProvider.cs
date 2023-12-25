@@ -10,7 +10,7 @@ public class DelayVaultProvider : Provider
 
     public override List<DynamoDbItem> DynamoDbAttributes => new()
     {
-        new DynamoDbItem(ProviderName, PoolInfo.PoolId, new List<Erc721Attribute>
+        new DynamoDbItem(ProviderName, PoolInfo, new List<Erc721Attribute>
         {
             new("Collection", Collection),
             new("LeftAmount", LeftAmount)

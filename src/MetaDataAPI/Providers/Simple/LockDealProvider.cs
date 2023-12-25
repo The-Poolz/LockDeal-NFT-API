@@ -18,7 +18,7 @@ public class LockDealProvider : DealProvider
     public DateTime StartDateTime => TimeUtils.FromUnixTimestamp(StartTime);
     public override List<DynamoDbItem> DynamoDbAttributes => new()
     {
-        new DynamoDbItem(ProviderName, PoolInfo.PoolId, new List<Erc721Attribute>
+        new DynamoDbItem(ProviderName, PoolInfo, new List<Erc721Attribute>
         {
             new("StartTime", StartTime, DisplayType.Date),
             new("Collection", Collection),

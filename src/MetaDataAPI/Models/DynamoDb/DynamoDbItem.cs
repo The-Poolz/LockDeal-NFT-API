@@ -7,12 +7,14 @@ public class DynamoDbItem
 {
     public BigInteger PoolId { get; set; }
     public string ProviderName { get; set; }
+    public string TokenSymbol { get; set; }
     public List<Erc721Attribute> Attributes { get; set; }
 
-    public DynamoDbItem(string providerName, BigInteger poolId, List<Erc721Attribute> attributes)
+    public DynamoDbItem(string providerName, BasePoolInfo poolInfo, List<Erc721Attribute> attributes)
     {
         ProviderName = providerName;
-        PoolId = poolId;
+        TokenSymbol = poolInfo.Token.Symbol;
+        PoolId = poolInfo.PoolId;
         Attributes = attributes;
     }
 }
