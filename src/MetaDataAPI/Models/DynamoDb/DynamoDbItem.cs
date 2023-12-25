@@ -10,6 +10,13 @@ public class DynamoDbItem
     public string TokenSymbol { get; set; }
     public List<Erc721Attribute> Attributes { get; set; }
 
+    public DynamoDbItem()
+    {
+        ProviderName = string.Empty;
+        TokenSymbol = string.Empty;
+        Attributes = new List<Erc721Attribute>();
+    }
+
     public DynamoDbItem(string providerName, BasePoolInfo poolInfo, List<Erc721Attribute> attributes)
     {
         ProviderName = providerName;
