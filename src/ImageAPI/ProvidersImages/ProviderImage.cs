@@ -11,6 +11,7 @@ public abstract class ProviderImage
 {
     public const string ContentType = "image/png";
     protected readonly DynamoDbItem dynamoDbItem;
+    protected virtual string ProviderName => dynamoDbItem.ProviderName;
 
     protected ProviderImage(DynamoDbItem dynamoDbItem)
     {
@@ -23,7 +24,7 @@ public abstract class ProviderImage
     {
         var actions = new List<Action<Image>>(DrawingActions())
         {
-            drawOn => drawOn.DrawProviderName(dynamoDbItem.ProviderName),
+            drawOn => drawOn.DrawProviderName(ProviderName),
             drawOn => drawOn.DrawPoolId(dynamoDbItem.PoolId),
             drawOn => drawOn.DrawTokenBadge(dynamoDbItem.TokenSymbol)
         };

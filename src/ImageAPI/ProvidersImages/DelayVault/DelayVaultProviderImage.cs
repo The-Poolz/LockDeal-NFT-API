@@ -6,6 +6,8 @@ namespace ImageAPI.ProvidersImages.DelayVault;
 
 public class DelayVaultProviderImage : ProviderImage
 {
+    protected override string ProviderName => "Leader Board";
+
     public DelayVaultProviderImage(IReadOnlyList<DynamoDbItem> dynamoDbItems)
         : base(dynamoDbItems[0])
     { }
