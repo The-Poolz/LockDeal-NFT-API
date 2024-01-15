@@ -47,7 +47,7 @@ public static class StaticResults
         { 3, $"This NFT securely locks 10 units of the asset Token Synthetic (TST@0x43d...cdffc). Access to these assets will commence on the designated start time of {TimeUtils.FromUnixTimestamp(1701318745)}."},
         { 4, $"This NFT governs a time-locked pool containing 10/10 units of the asset Token Synthetic (TST@0x43d...cdffc). Withdrawals are permitted in a linear fashion beginning at {TimeUtils.FromUnixTimestamp(1698319845)}, culminating in full access at {TimeUtils.FromUnixTimestamp(1701318745)}."},
         { 5, $"This NFT governs a time-locked pool containing 1000/1000 units of the asset Token Synthetic (TST@0x43d...cdffc). Withdrawals are permitted in a linear fashion beginning at {TimeUtils.FromUnixTimestamp(1698322749)}, culminating in full access at {TimeUtils.FromUnixTimestamp(1701318745)}."},
-        { 6, "This NFT encompasses 100 units of the asset Token Synthetic (TST@0x43d...cdffc) with an associated refund rate of 0.000000000000000000008. Post rate calculation, the refundable amount in the primary asset Token Synthetic (TST@0x43d...cdffc) will be 0.000000000000000000800."},
+        { 6, "This NFT encompasses 100 units of the asset Token Synthetic (TST@0x43d...cdffc) with an associated refund rate of 0.1. Post rate calculation, the refundable amount in the primary asset Token Synthetic (TST@0x43d...cdffc) will be 100."},
         { 7, "This NFT represents immediate access to 100 units of the specified asset Main coin Synthetic (TST@0xcd1...74d21)."},
         { 8, $"Exclusively utilized by project administrators, this NFT serves as a secure vault for holding refundable tokens Token Synthetic (TST@0x43d...cdffc), for Main Coin Token Synthetic (TST@0x43d...cdffc). It holds 0 for the main coin collector, 0 for the token collector, and 10 for the main coin holder, valid until {TimeUtils.FromUnixTimestamp(1798325066)}."},
         { 9, "This NFT has been fully refunded and no longer holds any governance over assets."},
@@ -112,7 +112,6 @@ public static class StaticResults
         {6, new()
             {
                 new("ProviderName", "RefundProvider"),
-                new("Rate", 0.000000000000000000008),
                 new("MainCoinAmount", 0.000000000000000000800),
                 new("MainCoinCollection", 0),
                 new("SubProviderName", "DealProvider"),
@@ -130,6 +129,7 @@ public static class StaticResults
         {8, new()
             {
                 new("ProviderName", "CollateralProvider"),
+                new("Rate", 0.000000000000000000008),
                 new("MainCoinCollection", 0),
                 new("Collection", 1),
                 new("MainCoinCollectorAmount", 0.0),
