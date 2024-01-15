@@ -22,6 +22,10 @@ public class CollateralProvider : Provider
                 $" and {MainCoinHolderAmount} for the main coin holder, valid until {FinishTime}.";
 
     public Erc20Token MainCoin => PoolInfo.Token;
+
+    [Display(DisplayType.Number)]
+    public decimal Rate => new ConvertWei(21).WeiToEth(PoolInfo.Params[2]);
+
     [Display(DisplayType.Number)]
     public BigInteger MainCoinCollection => PoolInfo.VaultId;
 
