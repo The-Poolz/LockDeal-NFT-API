@@ -25,4 +25,5 @@ internal class MockRpcCaller : IRpcCaller
     public string GetSymbol(string address) => "TST";
 
     public BigInteger GetTotalSupply(string address) => error ? throw new Exception() : 100000;
+    public BigInteger GetCollateralId(string refundAddress, BigInteger poolId) => 8;
 }

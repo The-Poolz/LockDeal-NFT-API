@@ -14,6 +14,7 @@ public class ProviderFactory
         this.rpcCaller = rpcCaller ?? new RpcCaller();
     }
     public Erc20Token GetErc20Token(string address) => new(address, rpcCaller);
+    public BigInteger GetCollateralId(string refundAddress, BigInteger poolId) => rpcCaller.GetCollateralId(refundAddress, poolId);
     public bool IsPoolIdWithinSupplyRange(BigInteger poolId) =>
         rpcCaller.GetTotalSupply(Environments.LockDealNftAddress) > poolId;
     public Provider Create(BigInteger poolId) => Create(rpcCaller.GetMetadata(poolId));

@@ -9,4 +9,5 @@ public interface IRpcCaller
     public string GetSymbol(string address);
     public byte GetDecimals(string token);
     public BigInteger GetTotalSupply(string address);
+    public BigInteger GetCollateralId(string refundAddress, BigInteger poolId);
 }
