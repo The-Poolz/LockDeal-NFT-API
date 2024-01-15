@@ -26,4 +26,9 @@ public static class MethodSignatures
     /// Signature of 'totalSupply()' method.
     /// </summary>
     public const string TotalSupply = "0x18160ddd";
+
+    /// <summary>
+    /// Signature of 'poolIdToCollateralId(uint256)' method.
+    /// </summary>
+    public const string PoolIdToCollateralId = "0x02b10923";
 }

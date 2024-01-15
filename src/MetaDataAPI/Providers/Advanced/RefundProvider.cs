@@ -49,6 +49,7 @@ public class RefundProvider : Provider
         : base(basePoolInfo)
     {
         SubProvider = basePoolInfo.Factory.Create(PoolInfo.PoolId + 1);
-        CollateralProvider = basePoolInfo.Factory.Create<CollateralProvider>(basePoolInfo.Params[2]);
+        var collateralPoolId = new RpcCaller().GetCollateralId(basePoolInfo.ProviderAddress, basePoolInfo.PoolId);
+        CollateralProvider = basePoolInfo.Factory.Create<CollateralProvider>(collateralPoolId);
     }
 }

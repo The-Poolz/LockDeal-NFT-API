@@ -41,6 +41,13 @@ public class RpcCaller : IRpcCaller
         return new HexBigInteger(result).Value;
     }
 
+    public BigInteger GetCollateralId(string refundAddress, BigInteger poolId)
+    {
+        var param = new HexBigInteger(poolId).HexValue[2..].PadLeft(64, '0');
+        var result = GetRawData(refundAddress, MethodSignatures.PoolIdToCollateralId + param);
+        return new HexBigInteger(result).Value;
+    }
+
     private static string GetRawData(string address, string methodSignature)
     {
         var readRequest = new RpcRequest(
