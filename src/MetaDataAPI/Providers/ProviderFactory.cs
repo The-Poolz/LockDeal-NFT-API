@@ -2,25 +2,25 @@
 using MetaDataAPI.Utils;
 using MetaDataAPI.Storage;
 using MetaDataAPI.Models.Response;
+using MetaDataAPI.RPC;
 
 namespace MetaDataAPI.Providers;
 
 public class ProviderFactory
 {
-    private readonly IRpcCaller rpcCaller;
+    private readonly LockDealNFT lockDealNFT;
 
-    public ProviderFactory(IRpcCaller? rpcCaller = null)
+    public ProviderFactory(LockDealNFT? lockDealNFT = null)
     {
-        this.rpcCaller = rpcCaller ?? new RpcCaller();
+        this.lockDealNFT = lockDealNFT ?? new LockDealNFT();
     }
     public Erc20Token GetErc20Token(string address) => new(address, rpcCaller);
-    public bool IsPoolIdWithinSupplyRange(BigInteger poolId) =>
-        rpcCaller.GetTotalSupply(Environments.LockDealNftAddress) > poolId;
-    public Provider Create(BigInteger poolId) => Create(rpcCaller.GetMetadata(poolId));
-    private Provider Create(string metadata) => Create(new BasePoolInfo(metadata,this));
-    private static Provider Create(BasePoolInfo basePoolInfo)
+
+    private Provider Create(BigInteger poolId)
     {
-        var objectToInstantiate = $"MetaDataAPI.Providers.{basePoolInfo.ProviderName}, MetaDataAPI";
+        var basePoolInfo = lockDealNFT.GetFullData(poolId);
+
+        var objectToInstantiate = $"MetaDataAPI.Providers.{basePoolInfo[0].Provider}, MetaDataAPI";
         var objectType = Type.GetType(objectToInstantiate);
         return (Provider)Activator.CreateInstance(objectType!, args: basePoolInfo)!;
     }

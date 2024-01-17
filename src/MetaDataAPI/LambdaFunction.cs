@@ -5,6 +5,7 @@ using Amazon.Lambda.Core;
 using MetaDataAPI.Storage;
 using MetaDataAPI.Providers;
 using Amazon.Lambda.APIGatewayEvents;
+using MetaDataAPI.RPC;
 
 [assembly: LambdaSerializer(typeof(Amazon.Lambda.Serialization.Json.JsonSerializer))]
 
@@ -32,7 +33,9 @@ public class LambdaFunction
 
         try
         {
-            if (!providerFactory.IsPoolIdWithinSupplyRange(poolId))
+            var lockDealNFT = new LockDealNFT();
+
+            if (!lockDealNFT.IsPoolIdWithinSupplyRange(poolId))
                 return ApiResponseFactory.CreateResponse(ErrorMessages.PoolIdNotInRangeMessage, HttpStatusCode.UnprocessableEntity);
 
             var provider = providerFactory.Create(poolId);

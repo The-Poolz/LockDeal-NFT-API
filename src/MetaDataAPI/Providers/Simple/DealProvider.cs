@@ -1,11 +1,11 @@
 using MetaDataAPI.Models.DynamoDb;
 using MetaDataAPI.Models.Response;
+using MetaDataAPI.RPC.Models.PoolInfo;
 
 namespace MetaDataAPI.Providers;
 
 public class DealProvider : Provider
 {
-    public override string ToString() => $"immediate access to {LeftAmount}"; 
     public override string ProviderName => nameof(DealProvider);
     public override string Description =>
         $"This NFT represents immediate access to {LeftAmount} units of the specified asset {PoolInfo.Token}.";
@@ -14,10 +14,17 @@ public class DealProvider : Provider
         new DynamoDbItem(ProviderName, PoolInfo, new List<Erc721Attribute>
         {
             new("Collection", Collection),
-            new("LeftAmount", LeftAmount)
+            new("LeftAmount", PoolInfo.LeftAmount)
         })
     };
 
-    public DealProvider(BasePoolInfo basePoolInfo)
-        : base(basePoolInfo) { }
+    public DealPoolInfo PoolInfo { get; }
+
+    public DealProvider(List<BasePoolInfo> basePoolInfo, string rpcUrl)
+        : base(basePoolInfo)
+    {
+        PoolInfo = new DealPoolInfo(basePoolInfo[0], rpcUrl);
+    }
+
+    public override string ToString() => $"immediate access to {LeftAmount}"; 
 }

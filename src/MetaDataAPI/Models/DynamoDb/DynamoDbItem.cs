@@ -1,5 +1,6 @@
 ﻿using System.Numerics;
 using MetaDataAPI.Models.Response;
+using MetaDataAPI.RPC.Models.PoolInfo;
 
 namespace MetaDataAPI.Models.DynamoDb;
 

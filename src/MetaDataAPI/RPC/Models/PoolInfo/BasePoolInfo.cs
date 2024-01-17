@@ -11,31 +11,52 @@ public class BasePoolInfo
     public BigInteger PoolId { get; }
     public BigInteger VaultId { get; }
     public EthereumAddress Owner { get; }
-    public EthereumAddress Token { get; }
+    public EthereumAddress TokenAddress { get; }
     public List<BigInteger> Params { get; }
+    public ERC20Token Token { get; }
 
-    public BasePoolInfo(EthereumAddress provider, string name, BigInteger poolId, BigInteger vaultId, EthereumAddress owner, EthereumAddress token, List<BigInteger> parameters)
+    public BasePoolInfo(
+        EthereumAddress provider,
+        string name,
+        BigInteger poolId,
+        BigInteger vaultId,
+        EthereumAddress owner,
+        EthereumAddress tokenAddress,
+        List<BigInteger> parameters,
+        ERC20Token token
+    )
     {
         Provider = provider;
         Name = name;
         PoolId = poolId;
         VaultId = vaultId;
         Owner = owner;
-        Token = token;
+        TokenAddress = tokenAddress;
         Params = parameters;
+        Token = token;
     }
 
-    public BasePoolInfo(BasePoolInfoDTO poolInfo)
+    public BasePoolInfo(BasePoolInfo poolInfo, string rpcUrl)
     {
         Provider = poolInfo.Provider;
         Name = poolInfo.Name;
         PoolId = poolInfo.PoolId;
         VaultId = poolInfo.VaultId;
         Owner = poolInfo.Owner;
-        Token = poolInfo.Token;
+        TokenAddress = poolInfo.TokenAddress;
         Params = poolInfo.Params;
+        Token = new ERC20Token(poolInfo.TokenAddress, new ERC20Service(rpcUrl, poolInfo.TokenAddress));
     }
 
-    public virtual ERC20Token GetERC20Token(EthereumAddress tokenAddress, string rpcUrl) => new(tokenAddress, new ERC20Service(rpcUrl, tokenAddress));
-    public virtual ERC20Token GetERC20Token(EthereumAddress tokenAddress, ERC20Service erc20Service) => new(tokenAddress, erc20Service);
+    public BasePoolInfo(BasePoolInfoDTO poolInfo, string rpcUrl)
+    {
+        Provider = poolInfo.Provider;
+        Name = poolInfo.Name;
+        PoolId = poolInfo.PoolId;
+        VaultId = poolInfo.VaultId;
+        Owner = poolInfo.Owner;
+        TokenAddress = poolInfo.Token;
+        Params = poolInfo.Params;
+        Token = new ERC20Token(poolInfo.Token, new ERC20Service(rpcUrl, poolInfo.Token));
+    }
 }
