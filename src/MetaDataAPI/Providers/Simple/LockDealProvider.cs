@@ -1,4 +1,3 @@
-using MetaDataAPI.Utils;
 using MetaDataAPI.Models;
 using MetaDataAPI.Models.Types;
 using MetaDataAPI.Models.DynamoDb;
@@ -12,7 +11,7 @@ public class LockDealProvider : DealProvider
     public override string ProviderName => nameof(LockDealProvider);
     public override string Description =>
         $"This NFT securely locks {LeftAmount} units of the asset {PoolInfo.Token}. " +
-        $"Access to these assets will commence on the designated start time of {StartDateTime}.";
+        $"Access to these assets will commence on the designated start time of {PoolInfo.StartDateTime}.";
 
     [Display(DisplayType.Date)]
     public uint StartTime => PoolInfo.StartTime;
@@ -27,7 +26,7 @@ public class LockDealProvider : DealProvider
         })
     };
 
-    public LockDealPoolInfo PoolInfo { get; }
+    public override LockDealPoolInfo PoolInfo { get; }
 
     public LockDealProvider(List<BasePoolInfo> basePoolInfo, string rpcUrl)
         : base(basePoolInfo, rpcUrl)
@@ -35,5 +34,5 @@ public class LockDealProvider : DealProvider
         PoolInfo = new LockDealPoolInfo(basePoolInfo[0], rpcUrl);
     }
 
-    public override string ToString() => $"securely locks {LeftAmount} units of the asset Until {StartDateTime}";
+    public override string ToString() => $"securely locks {LeftAmount} units of the asset Until {PoolInfo.StartDateTime}";
 }

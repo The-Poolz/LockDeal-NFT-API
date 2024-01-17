@@ -1,25 +1,24 @@
-using MetaDataAPI.Utils;
-using MetaDataAPI.Models.Response;
 using MetaDataAPI.Models;
 using MetaDataAPI.Models.Types;
+using MetaDataAPI.Models.Response;
 using MetaDataAPI.Models.DynamoDb;
+using MetaDataAPI.RPC.Models.PoolInfo;
 
 namespace MetaDataAPI.Providers;
 
 public class TimedDealProvider : LockDealProvider
 {
-    public override string ToString() => $"governs a time-locked pool containing {LeftAmount}" +
-        $" beginning at {StartDateTime}, culminating in full access at {FinishDateTime}";
+    [Display(DisplayType.Number)]
+    public decimal StartAmount => PoolInfo.StartAmount;
+
+    [Display(DisplayType.Date)]
+    public uint FinishTime => PoolInfo.FinishTime;
 
     public override string ProviderName => nameof(TimedDealProvider);
     public override string Description =>
         $"This NFT governs a time-locked pool containing {LeftAmount}/{StartAmount} units of the asset {PoolInfo.Token}." +
-        $" Withdrawals are permitted in a linear fashion beginning at {StartDateTime}, culminating in full access at {FinishDateTime}.";
-    [Display(DisplayType.Number)]
-    public decimal StartAmount { get; }
-    [Display(DisplayType.Date)]
-    public uint FinishTime { get; }
-    public DateTime FinishDateTime => TimeUtils.FromUnixTimestamp(FinishTime);
+        $" Withdrawals are permitted in a linear fashion beginning at {PoolInfo.StartDateTime}, culminating in full access at {PoolInfo.FinishDateTime}.";
+
     public override List<DynamoDbItem> DynamoDbAttributes => new()
     {
         new DynamoDbItem(ProviderName, PoolInfo,new List<Erc721Attribute>
@@ -32,11 +31,14 @@ public class TimedDealProvider : LockDealProvider
         })
     };
 
-    public TimedDealProvider(BasePoolInfo basePoolInfo)
-        : base(basePoolInfo)
+    public override TimedDealPoolInfo PoolInfo { get; }
+
+    public TimedDealProvider(List<BasePoolInfo> basePoolInfo, string rpcUrl)
+        : base(basePoolInfo, rpcUrl)
     {
-        var converter = new ConvertWei(basePoolInfo.Token.Decimals);
-        FinishTime = (uint)basePoolInfo.Params[2];
-        StartAmount = converter.WeiToEth(basePoolInfo.Params[3]);
+        PoolInfo = new TimedDealPoolInfo(basePoolInfo[0], rpcUrl);
     }
+
+    public override string ToString() => $"governs a time-locked pool containing {LeftAmount}" +
+        $" beginning at {PoolInfo.StartDateTime}, culminating in full access at {PoolInfo.FinishDateTime}";
 }

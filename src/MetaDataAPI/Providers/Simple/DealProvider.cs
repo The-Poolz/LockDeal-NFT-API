@@ -18,7 +18,7 @@ public class DealProvider : Provider
         })
     };
 
-    public DealPoolInfo PoolInfo { get; }
+    public virtual DealPoolInfo PoolInfo { get; }
 
     public DealProvider(List<BasePoolInfo> basePoolInfo, string rpcUrl)
         : base(basePoolInfo)

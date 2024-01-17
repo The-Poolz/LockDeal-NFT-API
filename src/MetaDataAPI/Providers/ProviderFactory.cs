@@ -1,7 +1,4 @@
 ﻿using System.Numerics;
-using MetaDataAPI.Utils;
-using MetaDataAPI.Storage;
-using MetaDataAPI.Models.Response;
 using MetaDataAPI.RPC;
 
 namespace MetaDataAPI.Providers;
@@ -14,12 +11,10 @@ public class ProviderFactory
     {
         this.lockDealNFT = lockDealNFT ?? new LockDealNFT();
     }
-    public Erc20Token GetErc20Token(string address) => new(address, rpcCaller);
 
-    private Provider Create(BigInteger poolId)
+    public Provider Create(BigInteger poolId)
     {
         var basePoolInfo = lockDealNFT.GetFullData(poolId);
-
         var objectToInstantiate = $"MetaDataAPI.Providers.{basePoolInfo[0].Provider}, MetaDataAPI";
         var objectType = Type.GetType(objectToInstantiate);
         return (Provider)Activator.CreateInstance(objectType!, args: basePoolInfo)!;
