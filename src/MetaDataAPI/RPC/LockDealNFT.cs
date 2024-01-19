@@ -1,6 +1,7 @@
 ﻿using Nethereum.Web3;
 using System.Numerics;
 using Nethereum.Contracts;
+using MetaDataAPI.Storage;
 using MetaDataAPI.RPC.ABI;
 using MetaDataAPI.RPC.Models.DTOs;
 using MetaDataAPI.RPC.Models.PoolInfo;
@@ -13,19 +14,26 @@ public class LockDealNFT
     private readonly Contract contract;
     private readonly ERC20ContractService contractService;
 
+    public string RpcUrl { get; }
+
     public LockDealNFT()
+        : this(
+            new Web3(Environments.RpcUrl),
+            ABIProvider.GetABI(),
+            Environments.LockDealNftAddress
+        )
     {
         // TODO: Use environment variables to retrieve VersionName and ChainId.
         // Receive RpcUrl and ContractAddress from DB, by ChainId.
         // Receive ContractABI from API, by VersionName.
-
-        //var abiProvider = new ABIProvider();
+        RpcUrl = Environments.RpcUrl;
 
     }
     public LockDealNFT(IWeb3 web3, string contractABI, string contractAddress)
     {
         contract = web3.Eth.GetContract(contractABI, contractAddress);
         contractService = web3.Eth.ERC20.GetContractService(contractAddress);
+        RpcUrl = Environments.RpcUrl;
     }
 
     public virtual List<BasePoolInfo> GetFullData(BigInteger poolId)
@@ -35,7 +43,7 @@ public class LockDealNFT
             .GetAwaiter()
             .GetResult()
             .PoolInfo
-            .Select(x => new BasePoolInfo(x))
+            .Select(x => new BasePoolInfo(x, RpcUrl))
             .ToList();
     }
 

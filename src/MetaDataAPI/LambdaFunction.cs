@@ -1,11 +1,11 @@
 using System.Net;
 using System.Numerics;
+using MetaDataAPI.RPC;
 using MetaDataAPI.Utils;
 using Amazon.Lambda.Core;
 using MetaDataAPI.Storage;
 using MetaDataAPI.Providers;
 using Amazon.Lambda.APIGatewayEvents;
-using MetaDataAPI.RPC;
 
 [assembly: LambdaSerializer(typeof(Amazon.Lambda.Serialization.Json.JsonSerializer))]
 
@@ -40,7 +40,7 @@ public class LambdaFunction
 
             var provider = providerFactory.Create(poolId);
 
-            if (poolId != provider.PoolInfo.PoolId)
+            if (poolId != provider.PrimaryProviderInfo.PoolId)
                 return ApiResponseFactory.CreateResponse(ErrorMessages.InvalidResponseMessage, HttpStatusCode.Conflict);
 
             return ApiResponseFactory.CreateResponse(provider.GetJsonErc721Metadata(dynamoDb), HttpStatusCode.OK);

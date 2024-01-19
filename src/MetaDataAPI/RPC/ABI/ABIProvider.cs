@@ -1,26 +1,16 @@
 ﻿using Flurl.Http;
-using EnvironmentManager;
+using MetaDataAPI.Storage;
 using MetaDataAPI.RPC.ABI.Models;
 
 namespace MetaDataAPI.RPC.ABI;
 
-public class ABIProvider
+public static class ABIProvider
 {
-    private readonly string apiUrl;
-    private readonly string versionName;
-
-    public ABIProvider()
+    public static string GetABI()
     {
-        var envManager = new EnvManager();
-        apiUrl = envManager.GetEnvironmentValue<string>("API_TO_RETRIEVE_ABI");
-        versionName = envManager.GetEnvironmentValue<string>("VERSION_NAME");
-    }
-
-    public virtual string GetABI()
-    {
-        return $"{apiUrl}{versionName}".GetJsonAsync<APIResponse>()
+        return $"{Environments.ApiUrl}{Environments.VersionName}".GetJsonAsync<APIResponse[]>()
             .GetAwaiter()
             .GetResult()
-            .GetABI();
+            [0].GetABI();
     }
 }
