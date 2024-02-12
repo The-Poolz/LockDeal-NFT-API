@@ -1,6 +1,6 @@
 ﻿using System.Numerics;
 using Net.Web3.EthereumWallet;
-using MetaDataAPI.RPC.Models.DTOs;
+using MetaDataAPI.RPC.Models.Functions.Outputs;
 
 namespace MetaDataAPI.RPC.Models.PoolInfo;
 

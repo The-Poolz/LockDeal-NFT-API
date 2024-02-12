@@ -1,6 +1,6 @@
 ﻿using Nethereum.ABI.FunctionEncoding.Attributes;
 
-namespace MetaDataAPI.RPC.Models.DTOs;
+namespace MetaDataAPI.RPC.Models.Functions.Outputs;
 
 [FunctionOutput]
 public class GetFullDataOutputDTO : IFunctionOutputDTO

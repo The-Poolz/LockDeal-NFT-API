@@ -20,10 +20,10 @@ public class DealProvider : Provider
 
     public virtual DealPoolInfo PoolInfo { get; }
 
-    public DealProvider(List<BasePoolInfo> basePoolInfo, string rpcUrl)
-        : base(basePoolInfo)
+    public DealProvider(DealPoolInfo poolInfo)
+        : base(poolInfo)
     {
-        PoolInfo = new DealPoolInfo(basePoolInfo[0], rpcUrl);
+        PoolInfo = poolInfo;
     }
 
     public override string ToString() => $"immediate access to {LeftAmount}"; 

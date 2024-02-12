@@ -19,9 +19,9 @@ public class DelayVaultProvider : Provider
 
     public DealPoolInfo PoolInfo { get; }
 
-    public DelayVaultProvider(List<BasePoolInfo> basePoolInfo, string rpcUrl)
-        : base(basePoolInfo)
+    public DelayVaultProvider(DealPoolInfo poolInfo)
+        : base(poolInfo)
     {
-        PoolInfo = new DealPoolInfo(basePoolInfo[0], rpcUrl);
+        PoolInfo = poolInfo;
     }
 }

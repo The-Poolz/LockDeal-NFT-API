@@ -41,9 +41,9 @@ public abstract class Provider
     public bool IsFullyRefunded => Environments.LockDealNftAddress != PrimaryProviderInfo.Owner && LeftAmount == 0;
     public BasePoolInfo PrimaryProviderInfo { get; }
 
-    protected Provider(List<BasePoolInfo> basePoolInfo)
+    protected Provider(BasePoolInfo basePoolInfo)
     {
-        PrimaryProviderInfo = basePoolInfo[0];
+        PrimaryProviderInfo = basePoolInfo;
     }
 
     public string GetJsonErc721Metadata(DynamoDb dynamoDb) =>

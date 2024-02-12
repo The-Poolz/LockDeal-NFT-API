@@ -28,10 +28,10 @@ public class LockDealProvider : DealProvider
 
     public override LockDealPoolInfo PoolInfo { get; }
 
-    public LockDealProvider(List<BasePoolInfo> basePoolInfo, string rpcUrl)
-        : base(basePoolInfo, rpcUrl)
+    public LockDealProvider(LockDealPoolInfo poolInfo)
+        : base(poolInfo)
     {
-        PoolInfo = new LockDealPoolInfo(basePoolInfo[0], rpcUrl);
+        PoolInfo = poolInfo;
     }
 
     public override string ToString() => $"securely locks {LeftAmount} units of the asset Until {PoolInfo.StartDateTime}";

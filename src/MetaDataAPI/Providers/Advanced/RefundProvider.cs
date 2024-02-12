@@ -48,10 +48,11 @@ public class RefundProvider : Provider
 
     public RefundPoolInfo PoolInfo { get; }
 
-    public RefundProvider(List<BasePoolInfo> basePoolInfo, string rpcUrl)
-        : base(basePoolInfo)
+    public RefundProvider(RefundPoolInfo poolInfo)
+        : base(poolInfo)
     {
-        PoolInfo = new RefundPoolInfo(basePoolInfo[0], rpcUrl);
+        PoolInfo = poolInfo;
+
         var providerFactory = new ProviderFactory();
         SubProvider = providerFactory.Create(PoolInfo.PoolId + 1);
         CollateralProvider = providerFactory.Create<CollateralProvider>(PoolInfo.Params[2]);

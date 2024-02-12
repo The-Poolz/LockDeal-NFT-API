@@ -1,7 +1,7 @@
 ﻿using System.Numerics;
 using Nethereum.ABI.FunctionEncoding.Attributes;
 
-namespace MetaDataAPI.RPC.Models.DTOs;
+namespace MetaDataAPI.RPC.Models.Functions.Outputs;
 
 public class BasePoolInfoDTO
 {

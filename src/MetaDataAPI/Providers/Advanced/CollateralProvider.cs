@@ -72,10 +72,10 @@ public class CollateralProvider : Provider
 
     public CollateralPoolInfo PoolInfo { get; }
 
-    public CollateralProvider(List<BasePoolInfo> basePoolInfo, string rpcUrl)
-        : base(basePoolInfo)
+    public CollateralProvider(CollateralPoolInfo poolInfo, List<DealPoolInfo> subProvidersInfo)
+        : base(poolInfo)
     {
-        PoolInfo = new CollateralPoolInfo(basePoolInfo[0], rpcUrl);
+        PoolInfo = poolInfo;
 
         SubProvider = Enum.GetValues(typeof(CollateralType))
             .Cast<CollateralType>()

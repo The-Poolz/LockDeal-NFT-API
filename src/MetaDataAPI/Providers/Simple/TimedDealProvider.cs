@@ -33,10 +33,10 @@ public class TimedDealProvider : LockDealProvider
 
     public override TimedDealPoolInfo PoolInfo { get; }
 
-    public TimedDealProvider(List<BasePoolInfo> basePoolInfo, string rpcUrl)
-        : base(basePoolInfo, rpcUrl)
+    public TimedDealProvider(TimedDealPoolInfo poolInfo)
+        : base(poolInfo)
     {
-        PoolInfo = new TimedDealPoolInfo(basePoolInfo[0], rpcUrl);
+        PoolInfo = poolInfo;
     }
 
     public override string ToString() => $"governs a time-locked pool containing {LeftAmount}" +
