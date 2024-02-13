@@ -1,6 +1,6 @@
 ﻿using MetaDataAPI.Utils;
 
-namespace MetaDataAPI.Providers.PoolInfo;
+namespace MetaDataAPI.Providers.PoolsInfo;
 
 public class TimedDealPoolInfo : LockDealPoolInfo
 {
@@ -8,7 +8,7 @@ public class TimedDealPoolInfo : LockDealPoolInfo
     public DateTime FinishDateTime { get; }
     public decimal StartAmount { get; }
 
-    public TimedDealPoolInfo(BasePoolInfo poolInfo, string rpcUrl) : base(poolInfo, rpcUrl)
+    public TimedDealPoolInfo(PoolInfo poolInfo, string rpcUrl) : base(poolInfo, rpcUrl)
     {
         FinishTime = (uint)Params[2];
         FinishDateTime = TimeUtils.FromUnixTimestamp(FinishTime);

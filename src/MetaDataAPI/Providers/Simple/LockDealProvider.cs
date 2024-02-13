@@ -1,10 +1,10 @@
 using MetaDataAPI.Models;
-using MetaDataAPI.Models.Types;
 using MetaDataAPI.Models.DynamoDb;
 using MetaDataAPI.Models.Response;
-using MetaDataAPI.Providers.PoolInfo;
+using MetaDataAPI.Models.Types;
+using MetaDataAPI.Providers.PoolsInfo;
 
-namespace MetaDataAPI.Providers;
+namespace MetaDataAPI.Providers.Simple;
 
 public class LockDealProvider : DealProvider
 {

@@ -1,12 +1,12 @@
 ﻿using System.Numerics;
-using Net.Web3.EthereumWallet;
 using MetaDataAPI.RPC;
 using MetaDataAPI.RPC.Models;
 using MetaDataAPI.RPC.Models.Functions.Outputs;
+using Net.Web3.EthereumWallet;
 
-namespace MetaDataAPI.Providers.PoolInfo;
+namespace MetaDataAPI.Providers.PoolsInfo;
 
-public class BasePoolInfo
+public class PoolInfo
 {
     public EthereumAddress Provider { get; }
     public string Name { get; }
@@ -17,7 +17,7 @@ public class BasePoolInfo
     public List<BigInteger> Params { get; }
     public ERC20Token Token { get; }
 
-    public BasePoolInfo(
+    public PoolInfo(
         EthereumAddress provider,
         string name,
         BigInteger poolId,
@@ -38,7 +38,7 @@ public class BasePoolInfo
         Token = token;
     }
 
-    public BasePoolInfo(BasePoolInfo poolInfo, string rpcUrl)
+    public PoolInfo(PoolInfo poolInfo, string rpcUrl)
     {
         Provider = poolInfo.Provider;
         Name = poolInfo.Name;
@@ -50,7 +50,7 @@ public class BasePoolInfo
         Token = new ERC20Token(poolInfo.TokenAddress, new ERC20Service(rpcUrl, poolInfo.TokenAddress));
     }
 
-    public BasePoolInfo(BasePoolInfoDTO poolInfo, string rpcUrl)
+    public PoolInfo(BasePoolInfo poolInfo, string rpcUrl)
     {
         Provider = poolInfo.Provider;
         Name = poolInfo.Name;

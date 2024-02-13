@@ -1,8 +1,8 @@
 using MetaDataAPI.Models.DynamoDb;
 using MetaDataAPI.Models.Response;
-using MetaDataAPI.Providers.PoolInfo;
+using MetaDataAPI.Providers.PoolsInfo;
 
-namespace MetaDataAPI.Providers;
+namespace MetaDataAPI.Providers.Simple;
 
 public class DealProvider : Provider
 {

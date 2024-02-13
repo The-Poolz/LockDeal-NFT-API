@@ -3,6 +3,9 @@ using MetaDataAPI.Models.DynamoDb;
 using ImageAPI.ProvidersImages.Simple;
 using ImageAPI.ProvidersImages.Advanced;
 using ImageAPI.ProvidersImages.DelayVault;
+using MetaDataAPI.Providers.Advanced;
+using MetaDataAPI.Providers.DelayVault;
+using MetaDataAPI.Providers.Simple;
 
 namespace ImageAPI.ProvidersImages;
 

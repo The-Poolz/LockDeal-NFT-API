@@ -1,13 +1,14 @@
-using MetaDataAPI.Models.Types;
-using MetaDataAPI.Models.Response;
 using System.Numerics;
-using MetaDataAPI.Utils;
 using MetaDataAPI.Models;
 using MetaDataAPI.Models.DynamoDb;
+using MetaDataAPI.Models.Response;
+using MetaDataAPI.Models.Types;
+using MetaDataAPI.Providers.PoolsInfo;
+using MetaDataAPI.Providers.Simple;
 using MetaDataAPI.RPC.Models;
-using MetaDataAPI.Providers.PoolInfo;
+using MetaDataAPI.Utils;
 
-namespace MetaDataAPI.Providers;
+namespace MetaDataAPI.Providers.Advanced;
 
 public class CollateralProvider : Provider
 {

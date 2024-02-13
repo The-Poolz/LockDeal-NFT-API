@@ -7,7 +7,7 @@ using Newtonsoft.Json.Linq;
 using MetaDataAPI.Models.Types;
 using MetaDataAPI.Models.DynamoDb;
 using MetaDataAPI.Models.Response;
-using MetaDataAPI.Providers.PoolInfo;
+using MetaDataAPI.Providers.PoolsInfo;
 
 namespace MetaDataAPI.Providers;
 
@@ -39,9 +39,9 @@ public abstract class Provider
 
     public bool IsFullyWithdrawn => Environments.LockDealNftAddress == PrimaryProviderInfo.Owner;
     public bool IsFullyRefunded => Environments.LockDealNftAddress != PrimaryProviderInfo.Owner && LeftAmount == 0;
-    public BasePoolInfo PrimaryProviderInfo { get; }
+    public PoolInfo PrimaryProviderInfo { get; }
 
-    protected Provider(BasePoolInfo basePoolInfo)
+    protected Provider(PoolInfo basePoolInfo)
     {
         PrimaryProviderInfo = basePoolInfo;
     }

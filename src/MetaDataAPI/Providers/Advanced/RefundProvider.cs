@@ -1,12 +1,12 @@
-﻿using MetaDataAPI.Utils;
-using MetaDataAPI.Models.Types;
-using MetaDataAPI.Models.Response;
+﻿using System.Numerics;
 using MetaDataAPI.Models;
-using System.Numerics;
 using MetaDataAPI.Models.DynamoDb;
-using MetaDataAPI.Providers.PoolInfo;
+using MetaDataAPI.Models.Response;
+using MetaDataAPI.Models.Types;
+using MetaDataAPI.Providers.PoolsInfo;
+using MetaDataAPI.Utils;
 
-namespace MetaDataAPI.Providers;
+namespace MetaDataAPI.Providers.Advanced;
 
 public class RefundProvider : Provider
 {

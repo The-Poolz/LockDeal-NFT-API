@@ -1,12 +1,12 @@
 ﻿using MetaDataAPI.Utils;
 
-namespace MetaDataAPI.Providers.PoolInfo;
+namespace MetaDataAPI.Providers.PoolsInfo;
 
-public class RefundPoolInfo : BasePoolInfo
+public class RefundPoolInfo : PoolInfo
 {
     public decimal TokenLeftAmount { get; }
 
-    public RefundPoolInfo(BasePoolInfo poolInfo, string rpcUrl) : base(poolInfo, rpcUrl)
+    public RefundPoolInfo(PoolInfo poolInfo, string rpcUrl) : base(poolInfo, rpcUrl)
     {
         TokenLeftAmount = new ConvertWei(poolInfo.Token.Decimals).WeiToEth(Params[0]);
     }

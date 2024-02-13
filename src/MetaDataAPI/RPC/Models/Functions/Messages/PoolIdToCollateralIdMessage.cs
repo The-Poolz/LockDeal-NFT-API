@@ -1,14 +1,12 @@
 ﻿using System.Numerics;
 using Nethereum.Contracts;
-using MetaDataAPI.RPC.Models.Functions.Outputs;
 using Nethereum.ABI.FunctionEncoding.Attributes;
 
 namespace MetaDataAPI.RPC.Models.Functions.Messages;
 
-
-[Function("getFullData", typeof(GetFullDataOutput))]
-public class GetFullDataMessage : FunctionMessage
+[Function("poolIdToCollateralId", "uint256")]
+public class PoolIdToCollateralIdMessage : FunctionMessage
 {
-    [Parameter("uint256", "poolId", 1)]
+    [Parameter("uint256", "", 1)]
     public virtual BigInteger PoolId { get; set; }
 }

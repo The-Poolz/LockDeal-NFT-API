@@ -1,14 +1,14 @@
 ﻿using MetaDataAPI.Utils;
 
-namespace MetaDataAPI.Providers.PoolInfo;
+namespace MetaDataAPI.Providers.PoolsInfo;
 
-public class CollateralPoolInfo : BasePoolInfo
+public class CollateralPoolInfo : PoolInfo
 {
     public decimal LeftAmount { get; }
     public uint FinishTimestamp { get; }
     public decimal Rate { get; }
 
-    public CollateralPoolInfo(BasePoolInfo poolInfo, string rpcUrl) : base(poolInfo, rpcUrl)
+    public CollateralPoolInfo(PoolInfo poolInfo, string rpcUrl) : base(poolInfo, rpcUrl)
     {
         LeftAmount = new ConvertWei(Token.Decimals).WeiToEth(Params[0]);
         FinishTimestamp = (uint)Params[1];

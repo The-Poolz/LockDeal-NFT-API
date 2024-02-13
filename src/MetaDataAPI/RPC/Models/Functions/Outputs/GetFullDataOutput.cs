@@ -3,8 +3,8 @@
 namespace MetaDataAPI.RPC.Models.Functions.Outputs;
 
 [FunctionOutput]
-public class GetFullDataOutputDTO : IFunctionOutputDTO
+public class GetFullDataOutput : IFunctionOutputDTO
 {
     [Parameter("tuple[]", "poolInfo")]
-    public virtual List<BasePoolInfoDTO> PoolInfo { get; set; } = new List<BasePoolInfoDTO>();
+    public virtual List<BasePoolInfo> PoolInfo { get; set; } = new List<BasePoolInfo>();
 }

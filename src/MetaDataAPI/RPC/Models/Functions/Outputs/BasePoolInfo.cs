@@ -3,7 +3,7 @@ using Nethereum.ABI.FunctionEncoding.Attributes;
 
 namespace MetaDataAPI.RPC.Models.Functions.Outputs;
 
-public class BasePoolInfoDTO
+public class BasePoolInfo
 {
     [Parameter("address", "provider")]
     public virtual string Provider { get; set; } = string.Empty;
