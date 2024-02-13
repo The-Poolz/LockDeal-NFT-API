@@ -1,11 +1,14 @@
-using MetaDataAPI.Models.Types;
-using MetaDataAPI.Models.Response;
 using System.Numerics;
-using MetaDataAPI.Utils;
 using MetaDataAPI.Models;
 using MetaDataAPI.Models.DynamoDb;
+using MetaDataAPI.Models.Response;
+using MetaDataAPI.Models.Types;
+using MetaDataAPI.Providers.PoolsInfo;
+using MetaDataAPI.Providers.Simple;
+using MetaDataAPI.RPC.Models;
+using MetaDataAPI.Utils;
 
-namespace MetaDataAPI.Providers;
+namespace MetaDataAPI.Providers.Advanced;
 
 public class CollateralProvider : Provider
 {
@@ -17,11 +20,12 @@ public class CollateralProvider : Provider
         MainCoinHolder = 3
     }
     public override string Description =>
-                $"Exclusively utilized by project administrators, this NFT serves as a secure vault for holding refundable tokens {Token}, for Main Coin {MainCoin}. " +
-                $"It holds {MainCoinCollectorAmount} for the main coin collector, {TokenCollectorAmount} for the token collector," +
-                $" and {MainCoinHolderAmount} for the main coin holder, valid until {FinishTime}.";
+        $"Exclusively utilized by project administrators, this NFT serves as a secure vault for holding refundable tokens {PoolInfo.Token}, for Main Coin {MainCoin}. " +
+        $"It holds {MainCoinCollectorAmount} for the main coin collector, {TokenCollectorAmount} for the token collector," +
+        $" and {MainCoinHolderAmount} for the main coin holder, valid until {FinishTime}.";
 
-    public Erc20Token MainCoin => PoolInfo.Token;
+    public ERC20Token MainCoin => PoolInfo.Token;
+
     [Display(DisplayType.Number)]
     public BigInteger MainCoinCollection => PoolInfo.VaultId;
 
@@ -41,9 +45,13 @@ public class CollateralProvider : Provider
     public decimal MainCoinHolderAmount => SubProvider[CollateralType.MainCoinHolder].LeftAmount;
 
     [Display(DisplayType.Date)]
-    public uint FinishTimestamp => (uint)PoolInfo.Params[1];
+    public uint FinishTimestamp => PoolInfo.FinishTimestamp;
+
+    [Display(DisplayType.Number)]
+    public decimal Rate => new ConvertWei(21).WeiToEth(PoolInfo.Params[2]);
+
     internal DateTime FinishTime => TimeUtils.FromUnixTimestamp(FinishTimestamp);
-    internal Dictionary<CollateralType,DealProvider> SubProvider { get; }
+    internal Dictionary<CollateralType, DealProvider> SubProvider { get; }
 
     public override List<DynamoDbItem> DynamoDbAttributes
     {
@@ -63,13 +71,21 @@ public class CollateralProvider : Provider
         }
     }
 
-    public CollateralProvider(BasePoolInfo basePoolInfo)
-        : base(basePoolInfo)
+    public CollateralPoolInfo PoolInfo { get; }
+
+    public CollateralProvider(CollateralPoolInfo poolInfo, List<DealPoolInfo> subProvidersInfo)
+        : base(poolInfo)
     {
-        SubProvider = Enum.GetValues(typeof(CollateralType))
-                          .Cast<CollateralType>()
-                          .ToDictionary(
-                            val => val,
-                            val => basePoolInfo.Factory.Create<DealProvider>(basePoolInfo.PoolId + (int)val));
+        PoolInfo = poolInfo;
+        var subProviders = subProvidersInfo
+            .Select(x => new DealProvider(x))
+            .ToList();
+
+        SubProvider = Enum.GetValues(typeof(CollateralType)).Cast<CollateralType>()
+            .Where(type => (int)type - 1 < subProviders.Count)
+            .ToDictionary(
+                type => type,
+                type => subProviders[(int)type - 1]
+            );
     }
 }

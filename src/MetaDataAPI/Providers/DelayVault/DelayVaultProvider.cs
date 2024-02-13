@@ -1,13 +1,13 @@
 ﻿using MetaDataAPI.Models.DynamoDb;
 using MetaDataAPI.Models.Response;
+using MetaDataAPI.Providers.PoolsInfo;
 
-namespace MetaDataAPI.Providers;
+namespace MetaDataAPI.Providers.DelayVault;
 
 public class DelayVaultProvider : Provider
 {
     public override string ProviderName => nameof(DelayVaultProvider);
     public override string Description => $"The DelayVaultProvider manages the locking of {LeftAmount} tokens {PoolInfo.Token} for leaderboard purposes. While tokens are locked, users accumulate leaderboard points.";
-
     public override List<DynamoDbItem> DynamoDbAttributes => new()
     {
         new DynamoDbItem(ProviderName, PoolInfo, new List<Erc721Attribute>
@@ -17,7 +17,11 @@ public class DelayVaultProvider : Provider
         })
     };
 
-    public DelayVaultProvider(BasePoolInfo basePoolInfo)
-        : base(basePoolInfo)
-    { }
+    public DealPoolInfo PoolInfo { get; }
+
+    public DelayVaultProvider(DealPoolInfo poolInfo)
+        : base(poolInfo)
+    {
+        PoolInfo = poolInfo;
+    }
 }

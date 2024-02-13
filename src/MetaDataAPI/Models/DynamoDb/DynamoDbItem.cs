@@ -1,5 +1,6 @@
 ﻿using System.Numerics;
 using MetaDataAPI.Models.Response;
+using MetaDataAPI.Providers.PoolsInfo;
 
 namespace MetaDataAPI.Models.DynamoDb;
 
@@ -17,7 +18,7 @@ public class DynamoDbItem
         Attributes = new List<Erc721Attribute>();
     }
 
-    public DynamoDbItem(string providerName, BasePoolInfo poolInfo, List<Erc721Attribute> attributes)
+    public DynamoDbItem(string providerName, PoolInfo poolInfo, List<Erc721Attribute> attributes)
     {
         ProviderName = providerName;
         TokenSymbol = poolInfo.Token.Symbol;
