@@ -87,6 +87,5 @@ public class CollateralProvider : Provider
                 type => type,
                 type => subProviders[(int)type - 1]
             );
-
     }
 }

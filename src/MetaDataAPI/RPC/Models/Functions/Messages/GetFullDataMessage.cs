@@ -5,7 +5,6 @@ using Nethereum.ABI.FunctionEncoding.Attributes;
 
 namespace MetaDataAPI.RPC.Models.Functions.Messages;
 
-
 [Function("getFullData", typeof(GetFullDataOutput))]
 public class GetFullDataMessage : FunctionMessage
 {
