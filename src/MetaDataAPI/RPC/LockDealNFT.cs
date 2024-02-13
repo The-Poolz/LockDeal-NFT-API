@@ -1,11 +1,11 @@
 ﻿using Nethereum.Web3;
 using System.Numerics;
 using MetaDataAPI.Storage;
-using MetaDataAPI.RPC.Models.PoolInfo;
 using Nethereum.Contracts.ContractHandlers;
 using Nethereum.Contracts.Standards.ERC20;
 using MetaDataAPI.RPC.Models.Functions.Outputs;
 using MetaDataAPI.RPC.Models.Functions.Messages;
+using MetaDataAPI.Providers.PoolInfo;
 
 namespace MetaDataAPI.RPC;
 

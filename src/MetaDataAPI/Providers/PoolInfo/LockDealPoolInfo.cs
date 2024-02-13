@@ -1,6 +1,6 @@
 ﻿using MetaDataAPI.Utils;
 
-namespace MetaDataAPI.RPC.Models.PoolInfo;
+namespace MetaDataAPI.Providers.PoolInfo;
 
 public class LockDealPoolInfo : DealPoolInfo
 {

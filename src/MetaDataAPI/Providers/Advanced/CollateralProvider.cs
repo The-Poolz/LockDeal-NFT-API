@@ -4,8 +4,8 @@ using System.Numerics;
 using MetaDataAPI.Utils;
 using MetaDataAPI.Models;
 using MetaDataAPI.Models.DynamoDb;
-using MetaDataAPI.RPC.Models.PoolInfo;
 using MetaDataAPI.RPC.Models;
+using MetaDataAPI.Providers.PoolInfo;
 
 namespace MetaDataAPI.Providers;
 
@@ -76,11 +76,16 @@ public class CollateralProvider : Provider
         : base(poolInfo)
     {
         PoolInfo = poolInfo;
+        var subProviders = subProvidersInfo
+            .Select(x => new DealProvider(x))
+            .ToList();
 
-        SubProvider = Enum.GetValues(typeof(CollateralType))
-            .Cast<CollateralType>()
+        SubProvider = Enum.GetValues(typeof(CollateralType)).Cast<CollateralType>()
+            .Where(type => (int)type - 1 < subProviders.Count)
             .ToDictionary(
-                val => val,
-                val => new ProviderFactory().Create<DealProvider>(PoolInfo));
+                type => type,
+                type => subProviders[(int)type - 1]
+            );
+
     }
 }

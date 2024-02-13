@@ -1,8 +1,10 @@
 ﻿using System.Numerics;
 using Net.Web3.EthereumWallet;
+using MetaDataAPI.RPC;
+using MetaDataAPI.RPC.Models;
 using MetaDataAPI.RPC.Models.Functions.Outputs;
 
-namespace MetaDataAPI.RPC.Models.PoolInfo;
+namespace MetaDataAPI.Providers.PoolInfo;
 
 public class BasePoolInfo
 {

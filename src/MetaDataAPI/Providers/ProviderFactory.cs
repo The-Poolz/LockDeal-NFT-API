@@ -1,6 +1,6 @@
 ﻿using System.Numerics;
 using MetaDataAPI.RPC;
-using MetaDataAPI.RPC.Models.PoolInfo;
+using MetaDataAPI.Providers.PoolInfo;
 
 namespace MetaDataAPI.Providers;
 
@@ -21,15 +21,7 @@ public class ProviderFactory
         return provider;
     }
 
-    public Provider Create(BasePoolInfo poolInfo)
-    {
-        var objectToInstantiate = $"MetaDataAPI.Providers.{poolInfo.Provider}, MetaDataAPI";
-        var objectType = Type.GetType(objectToInstantiate);
-        return (Provider)Activator.CreateInstance(objectType!, new List<BasePoolInfo> { poolInfo }, lockDealNFT.RpcUrl)!;
-    }
-
     public T Create<T>(BigInteger poolId) where T : Provider => (T)Create(poolId);
-    public T Create<T>(BasePoolInfo poolInfo) where T : Provider => (T)Create(poolInfo);
 
     private Dictionary<string, Func<Provider>> Providers(List<BasePoolInfo> poolInfo) => new()
     {
@@ -40,14 +32,18 @@ public class ProviderFactory
         {
             nameof(CollateralProvider),
             () => new CollateralProvider(
-                new CollateralPoolInfo(poolInfo[0], lockDealNFT.RpcUrl),
+                new CollateralPoolInfo(poolInfo[0], lockDealNFT.RpcUrl), 
                 poolInfo.Skip(0).Select(x => new DealPoolInfo(x, lockDealNFT.RpcUrl)).ToList()
             )
         },
         {
             nameof(RefundProvider),
             () => new RefundProvider(
-                new RefundPoolInfo(poolInfo[0], lockDealNFT.RpcUrl))
-        },
+                    new RefundPoolInfo(poolInfo[0], lockDealNFT.RpcUrl),
+                    Create(poolInfo[0].PoolId + 1), 
+                    Create<CollateralProvider>(poolInfo[0].Params[2]
+                )
+            )
+        }
     };
 }

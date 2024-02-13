@@ -4,7 +4,7 @@ using MetaDataAPI.Models.Response;
 using MetaDataAPI.Models;
 using System.Numerics;
 using MetaDataAPI.Models.DynamoDb;
-using MetaDataAPI.RPC.Models.PoolInfo;
+using MetaDataAPI.Providers.PoolInfo;
 
 namespace MetaDataAPI.Providers;
 
@@ -48,13 +48,11 @@ public class RefundProvider : Provider
 
     public RefundPoolInfo PoolInfo { get; }
 
-    public RefundProvider(RefundPoolInfo poolInfo)
+    public RefundProvider(RefundPoolInfo poolInfo, Provider subProvider, CollateralProvider collateralProvider)
         : base(poolInfo)
     {
         PoolInfo = poolInfo;
-
-        var providerFactory = new ProviderFactory();
-        SubProvider = providerFactory.Create(PoolInfo.PoolId + 1);
-        CollateralProvider = providerFactory.Create<CollateralProvider>(PoolInfo.Params[2]);
+        SubProvider = subProvider;
+        CollateralProvider = collateralProvider;
     }
 }

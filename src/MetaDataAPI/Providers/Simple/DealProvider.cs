@@ -1,6 +1,6 @@
 using MetaDataAPI.Models.DynamoDb;
 using MetaDataAPI.Models.Response;
-using MetaDataAPI.RPC.Models.PoolInfo;
+using MetaDataAPI.Providers.PoolInfo;
 
 namespace MetaDataAPI.Providers;
 
