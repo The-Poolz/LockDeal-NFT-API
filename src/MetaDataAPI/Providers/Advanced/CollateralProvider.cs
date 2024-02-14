@@ -64,13 +64,18 @@ public class CollateralProvider : Provider
         }
     }
 
-    public CollateralProvider(BasePoolInfo basePoolInfo)
-        : base(basePoolInfo)
+    public CollateralProvider(List<BasePoolInfo> basePoolInfo)
+        : base(basePoolInfo[0])
     {
-        SubProvider = Enum.GetValues(typeof(CollateralType))
-                          .Cast<CollateralType>()
-                          .ToDictionary(
-                            val => val,
-                            val => basePoolInfo.Factory.Create<DealProvider>(basePoolInfo.PoolId + (int)val));
+        var subProviders = basePoolInfo.Skip(0)
+            .Select(x => new DealProvider(new List<BasePoolInfo> { x }))
+            .ToList();
+
+        SubProvider = Enum.GetValues(typeof(CollateralType)).Cast<CollateralType>()
+            .Where(type => (int)type - 1 < subProviders.Count)
+            .ToDictionary(
+                type => type,
+                type => subProviders[(int)type - 1]
+            );
     }
 }
