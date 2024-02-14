@@ -18,6 +18,6 @@ public class DealProvider : Provider
         })
     };
 
-    public DealProvider(BasePoolInfo basePoolInfo)
-        : base(basePoolInfo) { }
+    public DealProvider(List<BasePoolInfo> basePoolInfo)
+        : base(basePoolInfo[0]) { }
 }

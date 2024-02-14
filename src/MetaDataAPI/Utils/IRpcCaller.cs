@@ -1,9 +1,11 @@
-﻿using System.Numerics;
+﻿using MetaDataAPI.Models.Response;
+using System.Numerics;
 
 namespace MetaDataAPI.Utils;
 
 public interface IRpcCaller
 {
+    public List<BasePoolInfo> GetFullData(BigInteger poolId);
     public string GetMetadata(BigInteger poolId);
     public string GetName(string address);
     public string GetSymbol(string address);

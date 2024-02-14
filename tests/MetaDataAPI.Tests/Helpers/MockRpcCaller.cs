@@ -1,4 +1,5 @@
 ﻿using System.Numerics;
+using MetaDataAPI.Models.Response;
 using MetaDataAPI.Utils;
 
 namespace MetaDataAPI.Tests.Helpers;
@@ -17,6 +18,11 @@ internal class MockRpcCaller : IRpcCaller
     }
 
     public byte GetDecimals(string token) => 18;
+
+    public List<BasePoolInfo> GetFullData(BigInteger poolId)
+    {
+        throw new NotImplementedException();
+    }
 
     public string GetMetadata(BigInteger poolId) => metadata[poolId];
 

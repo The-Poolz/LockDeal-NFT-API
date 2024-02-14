@@ -1,6 +1,7 @@
 ﻿using System.Text;
 using System.Numerics;
 using System.Globalization;
+using MetaDataAPI.Models.RPC.Outputs;
 using MetaDataAPI.Providers;
 
 namespace MetaDataAPI.Models.Response;
@@ -27,6 +28,18 @@ public class BasePoolInfo
         Owner = "0x" + chunks[5][24..];
         Token = providerFactory.GetErc20Token("0x" + chunks[6][24..]);
         Params = chunks.Skip(11).Select(chunk => BigInteger.Parse(chunk, NumberStyles.AllowHexSpecifier)).ToArray();
+    }
+
+    public BasePoolInfo(BasePoolInfoDTO poolInfo, ProviderFactory providerFactory)
+    {
+        Factory = providerFactory;
+        ProviderAddress = poolInfo.Provider;
+        ProviderName = poolInfo.Name;
+        PoolId = poolInfo.PoolId;
+        VaultId = poolInfo.VaultId;
+        Owner = poolInfo.Owner;
+        Token = providerFactory.GetErc20Token(poolInfo.Token);
+        Params = poolInfo.Params.ToArray();
     }
 
     private static string RemoveHexPrefix(string hex) =>

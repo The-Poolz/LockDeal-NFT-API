@@ -13,18 +13,22 @@ public class RefundProvider : Provider
     public override string Description =>
         $"This NFT encompasses {LeftAmount} units of the asset {PoolInfo.Token} " +
         $"with an associated refund rate of {Rate}. Post rate calculation, the refundable " +
-        $"amount in the primary asset {CollateralProvider.MainCoin} will be {MainCoinAmount}.";
+        $"amount in the primary asset {MainCoin} will be {MainCoinAmount}.";
 
     public Provider SubProvider { get; }
-    public CollateralProvider CollateralProvider { get; }
+    public Erc20Token MainCoin { get; }
+
     [Display(DisplayType.Number)]
-    public decimal Rate => new ConvertWei(21).WeiToEth(PoolInfo.Params[2]);
+    public decimal Rate { get; }
+
     [Display(DisplayType.Number)]
-    public decimal MainCoinAmount => SubProvider.LeftAmount * Rate;
+    public decimal MainCoinAmount { get; }
+
     [Display(DisplayType.Number)]
-    public BigInteger MainCoinCollection => CollateralProvider.MainCoinCollection;
+    public BigInteger MainCoinCollection { get; }
+
     [Display(DisplayType.String)]
-    public string SubProviderName => SubProvider.ProviderName;
+    public string SubProviderName { get; }
 
     public override List<DynamoDbItem> DynamoDbAttributes
     {
@@ -45,10 +49,15 @@ public class RefundProvider : Provider
         }
     }
 
-    public RefundProvider(BasePoolInfo basePoolInfo)
-        : base(basePoolInfo)
+    public RefundProvider(List<BasePoolInfo> basePoolInfo)
+        : base(basePoolInfo[0])
     {
-        SubProvider = basePoolInfo.Factory.Create(PoolInfo.PoolId + 1);
-        CollateralProvider = basePoolInfo.Factory.Create<CollateralProvider>(basePoolInfo.Params[2]);
+        var collateral = basePoolInfo[2];
+        MainCoin = collateral.Token;
+        MainCoinCollection = collateral.VaultId;
+        SubProvider = ProviderFactory.Create(new List<BasePoolInfo> { basePoolInfo[1] });
+        SubProviderName = SubProvider.ProviderName;
+        Rate = new ConvertWei(21).WeiToEth(collateral.Params[2]);
+        MainCoinAmount = SubProvider.LeftAmount * Rate;
     }
 }
