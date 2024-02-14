@@ -16,11 +16,10 @@ public class ProviderFactory
     public Erc20Token GetErc20Token(string address) => new(address, rpcCaller);
     public bool IsPoolIdWithinSupplyRange(BigInteger poolId) =>
         rpcCaller.GetTotalSupply(Environments.LockDealNftAddress) > poolId;
-    public Provider Create(BigInteger poolId) => Create(rpcCaller.GetMetadata(poolId));
-    private Provider Create(string metadata) => Create(new BasePoolInfo(metadata,this));
-    private static Provider Create(BasePoolInfo basePoolInfo)
+    public Provider Create(BigInteger poolId) => Create(rpcCaller.GetFullData(poolId));
+    public static Provider Create(List<BasePoolInfo> basePoolInfo)
     {
-        var objectToInstantiate = $"MetaDataAPI.Providers.{basePoolInfo.ProviderName}, MetaDataAPI";
+        var objectToInstantiate = $"MetaDataAPI.Providers.{basePoolInfo[0].ProviderName}, MetaDataAPI";
         var objectType = Type.GetType(objectToInstantiate);
         return (Provider)Activator.CreateInstance(objectType!, args: basePoolInfo)!;
     }

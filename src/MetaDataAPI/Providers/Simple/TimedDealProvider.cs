@@ -32,11 +32,11 @@ public class TimedDealProvider : LockDealProvider
         })
     };
 
-    public TimedDealProvider(BasePoolInfo basePoolInfo)
+    public TimedDealProvider(List<BasePoolInfo> basePoolInfo)
         : base(basePoolInfo)
     {
-        var converter = new ConvertWei(basePoolInfo.Token.Decimals);
-        FinishTime = (uint)basePoolInfo.Params[2];
-        StartAmount = converter.WeiToEth(basePoolInfo.Params[3]);
+        var converter = new ConvertWei(basePoolInfo[0].Token.Decimals);
+        FinishTime = (uint)basePoolInfo[0].Params[2];
+        StartAmount = converter.WeiToEth(basePoolInfo[0].Params[3]);
     }
 }

@@ -1,9 +1,15 @@
 ﻿using System.Text;
+using Nethereum.Web3;
 using System.Numerics;
 using MetaDataAPI.Storage;
+using MetaDataAPI.Providers;
 using Nethereum.Hex.HexTypes;
+using Nethereum.Web3.Wrappers;
 using EthSmartContractIO.Models;
+using MetaDataAPI.Models.Response;
 using EthSmartContractIO.ContractIO;
+using MetaDataAPI.Models.RPC.Outputs;
+using MetaDataAPI.Models.RPC.Messages;
 using Nethereum.Hex.HexConvertors.Extensions;
 
 namespace MetaDataAPI.Utils;
@@ -11,6 +17,23 @@ namespace MetaDataAPI.Utils;
 public class RpcCaller : IRpcCaller
 {
     private static readonly ContractIO contractIO = new();
+    private readonly ContractHandlerWrapper contractHandler;
+
+    public RpcCaller(ContractHandlerWrapper? contractHandler = null)
+    {
+        this.contractHandler = contractHandler ?? new ContractHandlerWrapper(new Web3(Environments.RpcUrl).Eth.GetContractHandler(Environments.LockDealNftAddress));
+    }
+
+    public virtual List<BasePoolInfo> GetFullData(BigInteger poolId)
+    {
+        return contractHandler
+            .QueryAsync<GetFullDataMessage, GetFullDataOutput>(new GetFullDataMessage { PoolId = poolId })
+            .GetAwaiter()
+            .GetResult()
+            .PoolInfo
+            .Select(x => new BasePoolInfo(x, new ProviderFactory(this)))
+            .ToList();
+    }
 
     public string GetMetadata(BigInteger poolId)
     {
