@@ -4,6 +4,7 @@ using System.Numerics;
 using MetaDataAPI.Utils;
 using MetaDataAPI.Models;
 using MetaDataAPI.Models.DynamoDb;
+using poolz.finance.csharp.LockDealNFT.ContractDefinition;
 
 namespace MetaDataAPI.Providers;
 
@@ -21,7 +22,7 @@ public class CollateralProvider : Provider
                 $"It holds {MainCoinCollectorAmount} for the main coin collector, {TokenCollectorAmount} for the token collector," +
                 $" and {MainCoinHolderAmount} for the main coin holder, valid until {FinishTime}.";
 
-    public Erc20Token MainCoin => PoolInfo.Token;
+    public Erc20Token MainCoin => new (PoolInfo.Token);
     [Display(DisplayType.Number)]
     public BigInteger MainCoinCollection => PoolInfo.VaultId;
 

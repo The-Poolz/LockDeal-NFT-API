@@ -3,6 +3,7 @@ using MetaDataAPI.Models.Response;
 using MetaDataAPI.Models;
 using MetaDataAPI.Models.Types;
 using MetaDataAPI.Models.DynamoDb;
+using poolz.finance.csharp.LockDealNFT.ContractDefinition;
 
 namespace MetaDataAPI.Providers;
 
@@ -35,7 +36,7 @@ public class TimedDealProvider : LockDealProvider
     public TimedDealProvider(BasePoolInfo basePoolInfo)
         : base(basePoolInfo)
     {
-        var converter = new ConvertWei(basePoolInfo.Token.Decimals);
+        var converter = new ConvertWei(Token.Decimals);
         FinishTime = (uint)basePoolInfo.Params[2];
         StartAmount = converter.WeiToEth(basePoolInfo.Params[3]);
     }

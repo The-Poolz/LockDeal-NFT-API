@@ -1,5 +1,6 @@
 ﻿using MetaDataAPI.Models.DynamoDb;
 using MetaDataAPI.Models.Response;
+using poolz.finance.csharp.LockDealNFT.ContractDefinition;
 
 namespace MetaDataAPI.Providers;
 
