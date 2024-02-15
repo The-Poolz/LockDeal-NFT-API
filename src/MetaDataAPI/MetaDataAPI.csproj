@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>net6.0</TargetFramework>
+    <TargetFramework>net8.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <GenerateRuntimeConfigurationFiles>true</GenerateRuntimeConfigurationFiles>
@@ -17,6 +17,7 @@
     <PackageReference Include="AWSSDK.DynamoDBv2" Version="3.7.301.11" />
     <PackageReference Include="EthSmartContractIO" Version="1.0.0" />
     <PackageReference Include="Utils.EnvironmentManager" Version="2.0.1" />
+    <PackageReference Include="poolz.finance.csharp.contracts" Version="1.0.0" />
   </ItemGroup>
   <ItemGroup>
     <Compile Update="Providers\Advanced\CollateralProvider.cs">
