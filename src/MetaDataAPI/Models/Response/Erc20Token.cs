@@ -1,9 +1,7 @@
 ﻿using MetaDataAPI.Storage;
 using Nethereum.Contracts.Services;
-using Nethereum.JsonRpc.Client;
 using Nethereum.RPC.TransactionManagers;
 using Nethereum.Web3;
-using System.ComponentModel.DataAnnotations;
 
 namespace MetaDataAPI.Models.Response;
 
