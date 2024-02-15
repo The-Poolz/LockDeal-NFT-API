@@ -64,13 +64,18 @@ public class CollateralProvider : Provider
         }
     }
 
-    public CollateralProvider(BasePoolInfo basePoolInfo)
+    public CollateralProvider(BasePoolInfo basePoolInfo) : base([basePoolInfo])
+    {
+        //This called when its called from refund - no need for the inner data
+        SubProvider = new Dictionary<CollateralType, DealProvider>();
+    }
+    public CollateralProvider(BasePoolInfo[] basePoolInfo)
         : base(basePoolInfo)
     {
         SubProvider = Enum.GetValues(typeof(CollateralType))
                           .Cast<CollateralType>()
                           .ToDictionary(
                             val => val,
-                            val => basePoolInfo.Factory.Create<DealProvider>(basePoolInfo.PoolId + (int)val));
+                            val => new DealProvider(basePoolInfo[(int)val]));
     }
 }

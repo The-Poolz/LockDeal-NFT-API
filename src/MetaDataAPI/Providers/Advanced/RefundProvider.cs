@@ -46,10 +46,10 @@ public class RefundProvider : Provider
         }
     }
 
-    public RefundProvider(BasePoolInfo basePoolInfo)
+    public RefundProvider(BasePoolInfo[] basePoolInfo)
         : base(basePoolInfo)
     {
-        SubProvider = basePoolInfo.Factory.Create(PoolInfo.PoolId + 1);
-        CollateralProvider = basePoolInfo.Factory.Create<CollateralProvider>(basePoolInfo.Params[2]);
+        SubProvider = new RefundProvider(basePoolInfo.Skip(1).ToArray());
+        CollateralProvider = new CollateralProvider(basePoolInfo[2]);
     }
 }

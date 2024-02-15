@@ -41,11 +41,11 @@ public abstract class Provider
     public BasePoolInfo PoolInfo { get; }
     [Display(DisplayType.Number)]
     public virtual BigInteger Collection => PoolInfo.VaultId;
-    protected Provider(BasePoolInfo basePoolInfo)
+    protected Provider(BasePoolInfo[] basePoolInfo)
     {
-        PoolInfo = basePoolInfo;
+        PoolInfo = basePoolInfo.FirstOrDefault()!;
         var converter = new ConvertWei(Token.Decimals);
-        LeftAmount = converter.WeiToEth(basePoolInfo.Params[0]);
+        LeftAmount = converter.WeiToEth(PoolInfo.Params[0]);
     }
     [Display(DisplayType.Number)]
     public virtual decimal LeftAmount { get; }

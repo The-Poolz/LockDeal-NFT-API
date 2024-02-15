@@ -18,7 +18,8 @@ public class DealProvider : Provider
             new("LeftAmount", LeftAmount)
         })
     };
-
+    public DealProvider(BasePoolInfo[] basePoolInfos) 
+        : base(basePoolInfos) { }
     public DealProvider(BasePoolInfo basePoolInfo)
-        : base(basePoolInfo) { }
+        : base([basePoolInfo]) { }
 }
