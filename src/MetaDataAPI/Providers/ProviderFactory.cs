@@ -17,12 +17,13 @@ public class ProviderFactory
     }
     public Erc20Token GetErc20Token(string address) => new(address);
     public bool IsPoolIdWithinSupplyRange(BigInteger poolId) => lockDealNFTService.TotalSupplyQueryAsync().GetAwaiter().GetResult() > poolId;
-    public Provider Create(BigInteger poolId) => Create(lockDealNFTService.GetDataQueryAsync(poolId).GetAwaiter().GetResult().PoolInfo);
-    private static Provider Create(BasePoolInfo basePoolInfo)
+    public Provider Create(BigInteger poolId) =>
+        Create(lockDealNFTService.GetFullDataQueryAsync(poolId).GetAwaiter().GetResult().PoolInfo.ToArray());
+    public static Provider Create(BasePoolInfo[] basePoolInfo)
     {
-        var objectToInstantiate = $"MetaDataAPI.Providers.{basePoolInfo.Name}, MetaDataAPI";
+        var objectToInstantiate = $"MetaDataAPI.Providers.{basePoolInfo.FirstOrDefault()!.Name}, MetaDataAPI";
         var objectType = Type.GetType(objectToInstantiate);
-        return (Provider)Activator.CreateInstance(objectType!, args: basePoolInfo)!;
+        return (Provider)Activator.CreateInstance(objectType!, args: new object[] { basePoolInfo })!;
     }
     public T Create<T>(BigInteger poolId) where T : Provider => (T)Create(poolId);
 

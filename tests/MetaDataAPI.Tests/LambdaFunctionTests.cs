@@ -14,8 +14,6 @@ public class LambdaFunctionTests : SetEnvironments
     {
         Environment.SetEnvironmentVariable("AWS_REGION", "us-west-2");
         Environment.SetEnvironmentVariable("NAME_OF_STAGE", "test");
-        Environment.SetEnvironmentVariable("RPC_URL", "https://bsc-testnet.publicnode.com");
-        Environment.SetEnvironmentVariable("LOCK_DEAL_NFT_ADDRESS", "0xe42876a77108E8B3B2af53907f5e533Cba2Ce7BE");
     }
 
     [Fact] 

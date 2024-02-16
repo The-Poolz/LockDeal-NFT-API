@@ -27,9 +27,9 @@ public class LockDealProvider : DealProvider
         })
     };
 
-    public LockDealProvider(BasePoolInfo basePoolInfo)
+    public LockDealProvider(BasePoolInfo[] basePoolInfo)
         : base(basePoolInfo)
     {
-        StartTime = (uint)basePoolInfo.Params[1];
+        StartTime = (uint)basePoolInfo.FirstOrDefault()!.Params[1];
     }
 }

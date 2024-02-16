@@ -18,7 +18,7 @@ public class DelayVaultProvider : Provider
         })
     };
 
-    public DelayVaultProvider(BasePoolInfo basePoolInfo)
-        : base([basePoolInfo])
+    public DelayVaultProvider(BasePoolInfo[] basePoolInfo)
+        : base(basePoolInfo)
     { }
 }
