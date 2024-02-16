@@ -3,20 +3,14 @@ using Amazon.DynamoDBv2.Model;
 
 namespace ImageAPI.Utils;
 
-public class DynamoDb
+public class DynamoDb(IAmazonDynamoDB client)
 {
     private const string TableName = "MetaDataCache";
     private const string PrimaryKey = "HashKey";
-    private readonly IAmazonDynamoDB client;
 
     public DynamoDb()
         : this(new AmazonDynamoDBClient())
     { }
-
-    public DynamoDb(IAmazonDynamoDB client)
-    {
-        this.client = client;
-    }
 
     public virtual async Task<GetItemResponse> GetItemAsync(string hash)
     {

@@ -10,17 +10,9 @@ using Amazon.Lambda.APIGatewayEvents;
 
 namespace MetaDataAPI;
 
-public class LambdaFunction
+public class LambdaFunction(ProviderFactory providerFactory, DynamoDb dynamoDb)
 {
-    private readonly ProviderFactory providerFactory;
-    private readonly DynamoDb dynamoDb;
-
     public LambdaFunction() : this(new ProviderFactory(), new DynamoDb()) { }
-    public LambdaFunction(ProviderFactory providerFactory, DynamoDb dynamoDb)
-    {
-        this.providerFactory = providerFactory;
-        this.dynamoDb = dynamoDb;
-    }
 
     public APIGatewayProxyResponse FunctionHandler(APIGatewayProxyRequest request)
     {

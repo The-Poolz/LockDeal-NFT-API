@@ -31,7 +31,7 @@ public class DynamoDbTests
 
         var dynamoDbAttributes = new List<DynamoDbItem>
         {
-            new DynamoDbItem(providerName, "TOKEN", 1, attributes)
+            new(providerName, "TOKEN", 1, attributes)
         };
 
         var client = MockAmazonDynamoDB.MockClient();

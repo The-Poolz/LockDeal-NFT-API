@@ -34,8 +34,8 @@ public abstract class Provider
            var displayAttribute = prop.GetCustomAttribute<DisplayAttribute>();
            var propertyValue = prop.GetValue(this);
            return displayAttribute!.TryGetErc721Attribute(prop.Name, propertyValue, out var erc721Attribute)
-               ? new[] { erc721Attribute }
-               : Array.Empty<Erc721Attribute>();
+               ? [ erc721Attribute ]
+               : [];
        });
 
     public BasePoolInfo PoolInfo { get; }

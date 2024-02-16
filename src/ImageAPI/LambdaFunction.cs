@@ -10,24 +10,16 @@ using Amazon.Lambda.APIGatewayEvents;
 
 namespace ImageAPI;
 
-public class LambdaFunction
+public class LambdaFunction(DynamoDb dynamoDb)
 {
-    private readonly DynamoDb dynamoDb;
-
     public LambdaFunction() : this(new DynamoDb()) { }
-
-    public LambdaFunction(DynamoDb dynamoDb)
-    {
-        this.dynamoDb = dynamoDb;
-    }
 
     public async Task<APIGatewayProxyResponse> RunAsync(APIGatewayProxyRequest input)
     {
-        if (!input.QueryStringParameters.ContainsKey("hash"))
+        if (!input.QueryStringParameters.TryGetValue("hash", out string? hash))
         {
             return ResponseBuilder.WrongInput();
         }
-        var hash = input.QueryStringParameters["hash"];
 
         var databaseItem = await dynamoDb.GetItemAsync(hash);
 

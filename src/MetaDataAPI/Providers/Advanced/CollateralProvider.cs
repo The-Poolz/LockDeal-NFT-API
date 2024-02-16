@@ -1,10 +1,10 @@
 using MetaDataAPI.Models.Types;
-using MetaDataAPI.Models.Response;
 using System.Numerics;
 using MetaDataAPI.Utils;
 using MetaDataAPI.Models;
 using MetaDataAPI.Models.DynamoDb;
 using poolz.finance.csharp.LockDealNFT.ContractDefinition;
+using MetaDataAPI.Models.Response;
 
 namespace MetaDataAPI.Providers;
 
@@ -52,11 +52,11 @@ public class CollateralProvider : Provider
         {
             var dynamoDbAttributes = new List<DynamoDbItem>
             {
-                new(ProviderName, PoolInfo, new List<Erc721Attribute>
-                {
+                new(ProviderName, PoolInfo,
+                [
                     new("Collection", Collection),
                     new("LeftAmount", LeftAmount)
-                })
+                ])
             };
             dynamoDbAttributes.AddRange(SubProvider.Select(subProvider => new DynamoDbItem(subProvider.Value.ProviderName, subProvider.Value.PoolInfo, subProvider.Value.Attributes.Where(attr => attr.TraitType != "ProviderName").ToList())));
 
@@ -67,7 +67,7 @@ public class CollateralProvider : Provider
     public CollateralProvider(BasePoolInfo basePoolInfo) : base([basePoolInfo])
     {
         //This called when its called from refund - no need for the inner data
-        SubProvider = new Dictionary<CollateralType, DealProvider>();
+        SubProvider = [];
     }
     public CollateralProvider(BasePoolInfo[] basePoolInfo)
         : base(basePoolInfo)
