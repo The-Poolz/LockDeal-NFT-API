@@ -1,5 +1,4 @@
 ﻿using System.Numerics;
-using MetaDataAPI.Models.Response;
 using MetaDataAPI.Storage;
 using poolz.finance.csharp.LockDealNFT;
 using poolz.finance.csharp.LockDealNFT.ContractDefinition;
@@ -15,7 +14,6 @@ public class ProviderFactory
         this.lockDealNFTService = lockDealNFTService ??
             new LockDealNFTService(new Nethereum.Web3.Web3(Environments.RpcUrl), Environments.LockDealNftAddress);
     }
-    public Erc20Token GetErc20Token(string address) => new(address);
     public bool IsPoolIdWithinSupplyRange(BigInteger poolId) => lockDealNFTService.TotalSupplyQueryAsync().GetAwaiter().GetResult() > poolId;
     public Provider Create(BigInteger poolId) =>
         Create(lockDealNFTService.GetFullDataQueryAsync(poolId).GetAwaiter().GetResult().PoolInfo.ToArray());
