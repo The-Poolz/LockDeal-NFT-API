@@ -12,5 +12,5 @@ public class DynamoDbItem(string providerName, string tokenSymbol, BigInteger po
     public List<Erc721Attribute> Attributes { get; set; } = attributes;
     public DynamoDbItem(string providerName, BasePoolInfo poolInfo, List<Erc721Attribute> attributes) :
         this(providerName, new Erc20Token(poolInfo.Token).Symbol, poolInfo.PoolId, attributes) { }
-    public DynamoDbItem() : this(string.Empty, string.Empty, new(), []) { }
+    public DynamoDbItem() : this(string.Empty, string.Empty, new(), []) { } // This for for unit test
 }
