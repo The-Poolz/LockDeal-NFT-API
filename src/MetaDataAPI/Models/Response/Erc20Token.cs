@@ -7,7 +7,7 @@ namespace MetaDataAPI.Models.Response;
 
 public class Erc20Token
 {
-    private static readonly Dictionary<string, Erc20Token> Tokens = new();
+    private static readonly Dictionary<string, Erc20Token> Tokens = [];
 
     public string Name { get; internal set; }
     public string Symbol { get; internal set; }

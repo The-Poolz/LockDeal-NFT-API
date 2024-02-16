@@ -121,7 +121,7 @@ public class LambdaFunctionTests
         dynamoDb.Setup(x => x.GetItemAsync(It.IsAny<string>()))
             .ReturnsAsync(new GetItemResponse
             {
-                Item = new Dictionary<string, AttributeValue>()
+                Item = []
             });
         var request = new APIGatewayProxyRequest
         {

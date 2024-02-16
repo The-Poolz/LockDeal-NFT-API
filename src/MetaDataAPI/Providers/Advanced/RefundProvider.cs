@@ -1,6 +1,5 @@
 ﻿using MetaDataAPI.Utils;
 using MetaDataAPI.Models.Types;
-using MetaDataAPI.Models.Response;
 using MetaDataAPI.Models;
 using System.Numerics;
 using MetaDataAPI.Models.DynamoDb;
@@ -8,7 +7,7 @@ using poolz.finance.csharp.LockDealNFT.ContractDefinition;
 
 namespace MetaDataAPI.Providers;
 
-public class RefundProvider : Provider
+public class RefundProvider(BasePoolInfo[] basePoolInfo) : Provider(basePoolInfo)
 {
     public override string ProviderName => nameof(RefundProvider);
     public override string Description =>
@@ -16,8 +15,8 @@ public class RefundProvider : Provider
         $"with an associated refund rate of {Rate}. Post rate calculation, the refundable " +
         $"amount in the primary asset {CollateralProvider.MainCoin} will be {MainCoinAmount}.";
 
-    public Provider SubProvider { get; }
-    public CollateralProvider CollateralProvider { get; }
+    public Provider SubProvider { get; } = ProviderFactory.Create([basePoolInfo[1]]);
+    public CollateralProvider CollateralProvider { get; } = new CollateralProvider(basePoolInfo[2]);
     [Display(DisplayType.Number)]
     public decimal Rate => new ConvertWei(21).WeiToEth(PoolInfo.Params[2]);
     [Display(DisplayType.Number)]
@@ -33,23 +32,16 @@ public class RefundProvider : Provider
         {
             var dynamoDbAttributes = new List<DynamoDbItem>
             {
-                new(ProviderName, PoolInfo, new List<Erc721Attribute>
-                {
+                new(ProviderName, PoolInfo,
+                [
                     new("Rate", Rate),
                     new("MainCoinAmount", MainCoinAmount),
                     new("MainCoinCollection", MainCoinCollection)
-                }),
+                ]),
                 new(SubProvider.ProviderName, SubProvider.PoolInfo, SubProvider.Attributes.Where(attr => attr.TraitType != "ProviderName").ToList())
             };
 
             return dynamoDbAttributes;
         }
-    }
-
-    public RefundProvider(BasePoolInfo[] basePoolInfo)
-        : base(basePoolInfo)
-    {
-        SubProvider = ProviderFactory.Create([basePoolInfo[1]]);
-        CollateralProvider = new CollateralProvider(basePoolInfo[2]);
     }
 }

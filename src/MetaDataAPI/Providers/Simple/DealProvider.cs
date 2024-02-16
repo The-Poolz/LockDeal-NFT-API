@@ -12,11 +12,11 @@ public class DealProvider : Provider
         $"This NFT represents immediate access to {LeftAmount} units of the specified asset {PoolInfo.Token}.";
     public override List<DynamoDbItem> DynamoDbAttributes => new()
     {
-        new DynamoDbItem(ProviderName, PoolInfo, new List<Erc721Attribute>
-        {
+        new(ProviderName, PoolInfo,
+        [
             new("Collection", Collection),
             new("LeftAmount", LeftAmount)
-        })
+        ])
     };
     public DealProvider(BasePoolInfo[] basePoolInfos) 
         : base(basePoolInfos) { }

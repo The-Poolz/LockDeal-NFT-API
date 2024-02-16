@@ -5,24 +5,17 @@ using poolz.finance.csharp.LockDealNFT.ContractDefinition;
 
 namespace MetaDataAPI.Providers;
 
-public class ProviderFactory
+public class ProviderFactory(LockDealNFTService? _lockDealNFTService = null)
 {
-    private readonly LockDealNFTService lockDealNFTService;
-
-    public ProviderFactory(LockDealNFTService? lockDealNFTService = null)
-    {
-        this.lockDealNFTService = lockDealNFTService ??
+    private readonly LockDealNFTService lockDealNFTService = _lockDealNFTService ??
             new LockDealNFTService(new Nethereum.Web3.Web3(Environments.RpcUrl), Environments.LockDealNftAddress);
-    }
     public bool IsPoolIdWithinSupplyRange(BigInteger poolId) => lockDealNFTService.TotalSupplyQueryAsync().GetAwaiter().GetResult() > poolId;
     public Provider Create(BigInteger poolId) =>
-        Create(lockDealNFTService.GetFullDataQueryAsync(poolId).GetAwaiter().GetResult().PoolInfo.ToArray());
+        Create([.. lockDealNFTService.GetFullDataQueryAsync(poolId).GetAwaiter().GetResult().PoolInfo]);
     public static Provider Create(BasePoolInfo[] basePoolInfo)
-    {
-        var objectToInstantiate = $"MetaDataAPI.Providers.{basePoolInfo.FirstOrDefault()!.Name}, MetaDataAPI";
-        var objectType = Type.GetType(objectToInstantiate);
-        return (Provider)Activator.CreateInstance(objectType!, new[] { basePoolInfo })!;
-    }
-    public T Create<T>(BigInteger poolId) where T : Provider => (T)Create(poolId);
-
+        => (Provider)Activator.CreateInstance(ProviderType(basePoolInfo.FirstOrDefault()!), new[] { basePoolInfo })!;
+    internal static Type ProviderType(BasePoolInfo basePoolInfo) => Type.GetType(GetClassName(basePoolInfo)) ??
+        throw new NullReferenceException("basePoolInfo Must have value.");
+    internal static string GetClassName(string ProviderName) => $"MetaDataAPI.Providers.{ProviderName}, MetaDataAPI";
+    internal static string GetClassName(BasePoolInfo basePoolInfo) => GetClassName(basePoolInfo.Name);
 }

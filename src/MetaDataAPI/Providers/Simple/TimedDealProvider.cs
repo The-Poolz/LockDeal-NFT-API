@@ -1,5 +1,4 @@
 using MetaDataAPI.Utils;
-using MetaDataAPI.Models.Response;
 using MetaDataAPI.Models;
 using MetaDataAPI.Models.Types;
 using MetaDataAPI.Models.DynamoDb;
@@ -23,14 +22,14 @@ public class TimedDealProvider : LockDealProvider
     public DateTime FinishDateTime => TimeUtils.FromUnixTimestamp(FinishTime);
     public override List<DynamoDbItem> DynamoDbAttributes => new()
     {
-        new DynamoDbItem(ProviderName, PoolInfo,new List<Erc721Attribute>
-        {
+        new(ProviderName, PoolInfo,
+        [
             new("StartAmount", StartAmount),
             new("FinishTime", FinishTime, DisplayType.Date),
             new("StartTime", StartTime, DisplayType.Date),
             new("Collection", Collection),
             new("LeftAmount", LeftAmount)
-        })
+        ])
     };
 
     public TimedDealProvider(BasePoolInfo[] basePoolInfo)

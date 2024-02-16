@@ -4,33 +4,13 @@ using poolz.finance.csharp.LockDealNFT.ContractDefinition;
 
 namespace MetaDataAPI.Models.DynamoDb;
 
-public class DynamoDbItem
+public class DynamoDbItem(string providerName, string tokenSymbol, BigInteger poolId, List<Erc721Attribute> attributes)
 {
-    public BigInteger PoolId { get; set; }
-    public string ProviderName { get; set; }
-    public string TokenSymbol { get; set; }
-    public List<Erc721Attribute> Attributes { get; set; }
-
-    public DynamoDbItem()
-    {
-        ProviderName = string.Empty;
-        TokenSymbol = string.Empty;
-        Attributes = new List<Erc721Attribute>();
-    }
-
-    public DynamoDbItem(string providerName, BasePoolInfo poolInfo, List<Erc721Attribute> attributes)
-    {
-        ProviderName = providerName;
-        TokenSymbol = new Erc20Token(poolInfo.Token).Symbol;
-        PoolId = poolInfo.PoolId;
-        Attributes = attributes;
-    }
-
-    public DynamoDbItem(string providerName, string tokenSymbol, BigInteger poolId, List<Erc721Attribute> attributes)
-    {
-        ProviderName = providerName;
-        TokenSymbol = tokenSymbol;
-        PoolId = poolId;
-        Attributes = attributes;
-    }
+    public BigInteger PoolId { get; set; } = poolId;
+    public string ProviderName { get; set; } = providerName;
+    public string TokenSymbol { get; set; } = tokenSymbol;
+    public List<Erc721Attribute> Attributes { get; set; } = attributes;
+    public DynamoDbItem(string providerName, BasePoolInfo poolInfo, List<Erc721Attribute> attributes) :
+        this(providerName, new Erc20Token(poolInfo.Token).Symbol, poolInfo.PoolId, attributes) { }
+    public DynamoDbItem() : this(string.Empty, string.Empty, new(), []) { }
 }
