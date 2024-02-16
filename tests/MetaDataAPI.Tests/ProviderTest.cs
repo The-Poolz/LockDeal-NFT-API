@@ -14,6 +14,8 @@ public class ProviderFactoryTests : SetEnvironments
         yield return new object[] { 8789, "RefundProvider" };
         yield return new object[] { 8791, "CollateralProvider" };
         yield return new object[] { 8796, "DelayVaultProvider" };
+        yield return new object[] { 8797, "RefundProvider" };
+        yield return new object[] { 8803, "RefundProvider" };
     }
 
     [Theory]
