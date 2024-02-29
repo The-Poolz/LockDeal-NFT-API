@@ -24,5 +24,4 @@ public class ProviderFactory
         return (Provider)Activator.CreateInstance(objectType!, new[] { basePoolInfo })!;
     }
     public T Create<T>(BigInteger poolId) where T : Provider => (T)Create(poolId);
-
 }

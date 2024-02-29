@@ -64,7 +64,7 @@ public class CollateralProvider : Provider
         }
     }
 
-    public CollateralProvider(BasePoolInfo basePoolInfo) : base([basePoolInfo])
+    public CollateralProvider(BasePoolInfo basePoolInfo) : base(new[] { basePoolInfo })
     {
         //This called when its called from refund - no need for the inner data
         SubProvider = new Dictionary<CollateralType, DealProvider>();

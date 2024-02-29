@@ -21,5 +21,5 @@ public class DealProvider : Provider
     public DealProvider(BasePoolInfo[] basePoolInfos) 
         : base(basePoolInfos) { }
     public DealProvider(BasePoolInfo basePoolInfo)
-        : base([basePoolInfo]) { }
+        : base(new [] { basePoolInfo }) { }
 }

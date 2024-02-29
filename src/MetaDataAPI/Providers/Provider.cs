@@ -9,7 +9,6 @@ using MetaDataAPI.Models.DynamoDb;
 using MetaDataAPI.Storage;
 using poolz.finance.csharp.LockDealNFT.ContractDefinition;
 
-
 namespace MetaDataAPI.Providers;
 
 public abstract class Provider

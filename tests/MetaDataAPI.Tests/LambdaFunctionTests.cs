@@ -39,7 +39,6 @@ public class LambdaFunctionTests : SetEnvironments
         response.Body.Should().Contain("This NFT has been fully withdrawn");
     }
 
-
     private static LambdaFunction SetupLambdaFunction()
     {
         //var mockRpcCaller = new MockRpcCaller();

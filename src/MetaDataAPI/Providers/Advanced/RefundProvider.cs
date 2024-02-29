@@ -49,7 +49,7 @@ public class RefundProvider : Provider
     public RefundProvider(BasePoolInfo[] basePoolInfo)
         : base(basePoolInfo)
     {
-        SubProvider = ProviderFactory.Create([basePoolInfo[1]]);
+        SubProvider = ProviderFactory.Create(new[] { basePoolInfo[1] });
         CollateralProvider = new CollateralProvider(basePoolInfo[2]);
     }
 }
