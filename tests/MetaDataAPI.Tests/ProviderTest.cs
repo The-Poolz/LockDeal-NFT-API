@@ -1,4 +1,5 @@
-﻿using Xunit;
+﻿using System.Numerics;
+using Xunit;
 using MetaDataAPI.Providers;
 using MetaDataAPI.Tests.Helpers;
 
@@ -23,7 +24,7 @@ public class ProviderFactoryTests : SetEnvironments
     public void ProviderTest(int providerId, string expectedProviderName)
     {
         var factory = new ProviderFactory();
-        var result = factory.Create(new(providerId));
+        var result = factory.Create(providerId);
 
         Assert.NotNull(result);
         Assert.Equal(expectedProviderName, result.ProviderName);

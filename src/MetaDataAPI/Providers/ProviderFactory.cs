@@ -21,7 +21,7 @@ public class ProviderFactory
     {
         var objectToInstantiate = $"MetaDataAPI.Providers.{basePoolInfo.FirstOrDefault()!.Name}, MetaDataAPI";
         var objectType = Type.GetType(objectToInstantiate);
-        return (Provider)Activator.CreateInstance(objectType!, basePoolInfo)!;
+        return (Provider)Activator.CreateInstance(objectType!, new[] { basePoolInfo })!;
     }
     public T Create<T>(BigInteger poolId) where T : Provider => (T)Create(poolId);
 }
