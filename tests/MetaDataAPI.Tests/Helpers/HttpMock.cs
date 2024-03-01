@@ -2,5 +2,5 @@
 
 internal static class HttpMock
 {
-    internal static string RpcUrl => "https://localhost:5050";
+    internal static string RpcUrl => "https://localhost:8545";
 }
