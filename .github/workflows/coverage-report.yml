@@ -26,7 +26,7 @@ jobs:
       run: dotnet build --no-restore
 
     - name: Test with coverage
-      run: dotnet test --no-build --verbosity normal /p:CollectCoverage=true /p:CoverletOutputFormat=cobertura /p:CoverletOutput=./TestResults/Coverage/
+      run: dotnet test LockDeal-NFT-API.sln --no-build --verbosity normal /p:CollectCoverage=true /p:CoverletOutputFormat=cobertura /p:CoverletOutput=./TestResults/Coverage/
 
     - name: List Coverage Files
       run: ls -la ./TestResults/Coverage/
