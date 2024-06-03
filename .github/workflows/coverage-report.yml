@@ -1,4 +1,4 @@
-name: .NET Core Test Coverage
+name: .NET Core Test Coverage and Comment PR
 
 on:
   push:
@@ -28,24 +28,29 @@ jobs:
     - name: Test with coverage
       run: dotnet test LockDeal-NFT-API.sln --logger trx --collect:"XPlat Code Coverage" -- DataCollectionRunSettings.DataCollectors.DataCollector.Configuration.Format=opencover
 
-    - name: List Coverage Files
-      run: find . -name '*.opencover.xml'
-
     - name: Install ReportGenerator
       run: dotnet tool install -g dotnet-reportgenerator-globaltool
 
     - name: Generate Coverage Report
       run: reportgenerator "-reports:**/*.opencover.xml" "-targetdir:coveragereport" "-reporttypes:HtmlInline_AzurePipelines;Cobertura"
 
-    - uses: actions/upload-artifact@v4
+    - name: Upload coverage report as an artifact
+      uses: actions/upload-artifact@v4
       with:
         name: Code Coverage Report
         path: coveragereport/
+
+    - name: Prepare comment
+      id: prepare_comment
+      run: |
+        echo "## Code Coverage Results" > coverage_results.md
+        cat coveragereport/index.html >> coverage_results.md
+        echo '::set-output name=report_content::$(cat coverage_results.md)'
 
     - name: Comment PR
       uses: unsplash/comment-on-pr@v1.2.0
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
-        msg: ${{ steps.create_report.outputs.report_content }}
+        msg: ${{ steps.prepare_comment.outputs.report_content }}
         check_for_duplicate_msg: true
