@@ -29,7 +29,7 @@ jobs:
       run: dotnet tool install -g dotnet-reportgenerator-globaltool
 
     - name: Generate coverage report
-      run: reportgenerator -reports:./**/TestResults/Coverage/*.cobertura.xml -targetdir:./TestResults/Coverage/Reports -reporttypes:"HtmlInline_AzurePipelines;Cobertura"
+      run: reportgenerator -reports:${{ github.workspace }}/TestResults/Coverage/*.cobertura.xml -targetdir:${{ github.workspace }}/TestResults/Coverage/Reports -reporttypes:"HtmlInline_AzurePipelines;Cobertura"
 
     - name: Upload coverage to GitHub Artifacts
       uses: actions/upload-artifact@v4
