@@ -1,7 +1,7 @@
 ﻿using System.Numerics;
 using MetaDataAPI.Storage;
-using poolz.finance.csharp.LockDealNFT;
-using poolz.finance.csharp.LockDealNFT.ContractDefinition;
+using poolz.finance.csharp.contracts.LockDealNFT;
+using poolz.finance.csharp.contracts.LockDealNFT.ContractDefinition;
 
 namespace MetaDataAPI.Providers;
 

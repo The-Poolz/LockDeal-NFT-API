@@ -3,7 +3,7 @@ using MetaDataAPI.Models.Response;
 using MetaDataAPI.Models.Types;
 using MetaDataAPI.Models;
 using MetaDataAPI.Models.DynamoDb;
-using poolz.finance.csharp.LockDealNFT.ContractDefinition;
+using poolz.finance.csharp.contracts.LockDealNFT.ContractDefinition;
 
 namespace MetaDataAPI.Providers;
 
