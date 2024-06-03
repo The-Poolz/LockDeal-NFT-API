@@ -22,22 +22,19 @@ jobs:
     - name: Install dependencies
       run: dotnet restore
 
-    - name: Run tests and collect coverage
-      run: dotnet test --no-restore --verbosity normal /p:CollectCoverage=true /p:CoverletOutputFormat=cobertura /p:CoverletOutput=./TestResults/Coverage/
+    - name: Build
+      run: dotnet build --no-restore
 
-    - name: Run tests and collect coverage
-      run: |
-        dotnet test --no-restore --verbosity detailed /p:CollectCoverage=true /p:CoverletOutputFormat=cobertura /p:CoverletOutput=./TestResults/Coverage/
-        ls -la ./TestResults/Coverage/
+    - name: Test with coverage
+      run: dotnet test --no-build --verbosity normal /p:CollectCoverage=true /p:CoverletOutputFormat=cobertura /p:CoverletOutput=./TestResults/
 
-    - name: Install ReportGenerator tool
+    - name: Install ReportGenerator
       run: dotnet tool install -g dotnet-reportgenerator-globaltool
 
-    - name: Generate coverage report
-      run: reportgenerator -reports:${{ github.workspace }}/TestResults/Coverage/*.cobertura.xml -targetdir:${{ github.workspace }}/TestResults/Coverage/Reports -reporttypes:"HtmlInline_AzurePipelines;Cobertura"
+    - name: Generate Coverage Report
+      run: reportgenerator "-reports:./**/TestResults/coverage.cobertura.xml" "-targetdir:coveragereport" "-reporttypes:HtmlInline_AzurePipelines;Cobertura"
 
-    - name: Upload coverage to GitHub Artifacts
-      uses: actions/upload-artifact@v4
+    - uses: actions/upload-artifact@v4
       with:
-        name: coverage-report
-        path: ./TestResults/Coverage/Reports/
+        name: Code Coverage Report
+        path: coveragereport/
