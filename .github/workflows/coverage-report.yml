@@ -1,4 +1,4 @@
-name: .NET Core Test Coverage
+name: .NET Core Test Coverage and Comment PR with Markdown Report
 
 on:
   push:
@@ -8,33 +8,46 @@ on:
     types: [opened, synchronize, reopened]
 
 jobs:
-  build:
+  build-and-report:
     runs-on: ubuntu-latest
-
     steps:
     - uses: actions/checkout@v4
 
     - name: Setup .NET
       uses: actions/setup-dotnet@v4
       with:
-        dotnet-version: 6.0.x
+        dotnet-version: '6.0.x'
 
-    - name: Install dependencies
+    - name: Restore dependencies
       run: dotnet restore
 
     - name: Build
       run: dotnet build --no-restore
 
-    - name: Test with coverage
-      run: dotnet test LockDeal-NFT-API.sln --logger trx --collect:"XPlat Code Coverage" -- DataCollectionRunSettings.DataCollectors.DataCollector.Configuration.Format=opencover
+    - name: Run tests and collect coverage
+      run: dotnet test --logger trx --collect:"XPlat Code Coverage"
 
-    - name: Install ReportGenerator
-      run: dotnet tool install -g dotnet-reportgenerator-globaltool
+    - name: Generate coverage report in Markdown
+      run: reportgenerator "-reports:**/*.xml" "-targetdir:coveragereport" "-reporttypes:Markdown"
 
-    - name: Generate Coverage Report
-      run: reportgenerator "-reports:**/*.opencover.xml" "-targetdir:coveragereport" "-reporttypes:HtmlInline_AzurePipelines;Cobertura"
-
-    - uses: actions/upload-artifact@v4
+    - name: Upload Markdown coverage report
+      uses: actions/upload-artifact@v4
       with:
-        name: Code Coverage Report
-        path: coveragereport/
+        name: markdown-coverage-report
+        path: coveragereport/summary.md
+
+    - name: Post coverage report in PR comment
+      uses: actions/github-script@v5
+      with:
+        script: |
+          const fs = require('fs');
+          const path = require('path');
+          const markdownReport = fs.readFileSync(path.join('coveragereport', 'summary.md'), 'utf8');
+          github.rest.issues.createComment({
+            issue_number: context.issue.number,
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            body: markdownReport
+          })
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
