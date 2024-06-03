@@ -41,3 +41,11 @@ jobs:
       with:
         name: Code Coverage Report
         path: coveragereport/
+
+    - name: Comment PR
+      uses: unsplash/comment-on-pr@v1.2.0
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        msg: ${{ steps.create_report.outputs.report_content }}
+        check_for_duplicate_msg: true
