@@ -1,4 +1,4 @@
-name: .NET Core Test Coverage and Comment PR
+name: .NET Core Test Coverage
 
 on:
   push:
@@ -34,23 +34,7 @@ jobs:
     - name: Generate Coverage Report
       run: reportgenerator "-reports:**/*.opencover.xml" "-targetdir:coveragereport" "-reporttypes:HtmlInline_AzurePipelines;Cobertura"
 
-    - name: Upload coverage report as an artifact
-      uses: actions/upload-artifact@v4
+    - uses: actions/upload-artifact@v4
       with:
         name: Code Coverage Report
         path: coveragereport/
-
-    - name: Prepare comment
-      id: prepare_comment
-      run: |
-        echo "## Code Coverage Results" > coverage_results.md
-        cat coveragereport/index.html >> coverage_results.md
-        echo '::set-output name=report_content::$(cat coverage_results.md)'
-
-    - name: Comment PR
-      uses: unsplash/comment-on-pr@v1.2.0
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        msg: ${{ steps.prepare_comment.outputs.report_content }}
-        check_for_duplicate_msg: true
