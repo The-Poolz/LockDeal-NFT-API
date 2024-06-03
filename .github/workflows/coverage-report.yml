@@ -25,6 +25,9 @@ jobs:
     - name: Run tests and collect coverage
       run: dotnet test --no-restore --verbosity normal /p:CollectCoverage=true /p:CoverletOutputFormat=cobertura /p:CoverletOutput=./TestResults/Coverage/
 
+    - name: List coverage files
+      run: ls -R ./TestResults/Coverage/
+
     - name: Install ReportGenerator tool
       run: dotnet tool install -g dotnet-reportgenerator-globaltool
 
