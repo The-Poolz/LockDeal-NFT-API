@@ -3,6 +3,7 @@ using MetaDataAPI.Models.Response;
 using MetaDataAPI.Models.Types;
 using MetaDataAPI.Models;
 using MetaDataAPI.Models.DynamoDb;
+using poolz.finance.csharp.contracts.LockDealNFT.ContractDefinition;
 
 namespace MetaDataAPI.Providers;
 
@@ -26,9 +27,9 @@ public class LockDealProvider : DealProvider
         })
     };
 
-    public LockDealProvider(BasePoolInfo basePoolInfo)
+    public LockDealProvider(BasePoolInfo[] basePoolInfo)
         : base(basePoolInfo)
     {
-        StartTime = (uint)basePoolInfo.Params[1];
+        StartTime = (uint)basePoolInfo.FirstOrDefault()!.Params[1];
     }
 }

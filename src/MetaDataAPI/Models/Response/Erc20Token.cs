@@ -1,4 +1,7 @@
-﻿using MetaDataAPI.Utils;
+﻿using MetaDataAPI.Storage;
+using Nethereum.Contracts.Services;
+using Nethereum.RPC.TransactionManagers;
+using Nethereum.Web3;
 
 namespace MetaDataAPI.Models.Response;
 
@@ -11,9 +14,10 @@ public class Erc20Token
     public string Address { get; internal set; }
     public byte Decimals { get; internal set; }
 
-    public Erc20Token(string address, IRpcCaller? rpcCaller = null)
+    public Erc20Token(string address, Nethereum.Contracts.Standards.ERC20.ERC20ContractService? rpcCaller = null)
     {
-        rpcCaller ??= new RpcCaller();
+        var web3 = new Web3(Environments.RpcUrl);
+        rpcCaller ??= new(new EthApiContractService(web3.Client, new TransactionManager(web3.Client)), address);
         Address = address;
         if (Tokens.TryGetValue(address, out var token))
         {
@@ -23,9 +27,9 @@ public class Erc20Token
         }
         else
         {
-            Decimals = rpcCaller.GetDecimals(address);
-            Name = rpcCaller.GetName(address); 
-            Symbol = rpcCaller.GetSymbol(address); 
+            Decimals = rpcCaller.DecimalsQueryAsync().GetAwaiter().GetResult();
+            Name = rpcCaller.NameQueryAsync().GetAwaiter().GetResult(); 
+            Symbol = rpcCaller.SymbolQueryAsync().GetAwaiter().GetResult(); 
             Tokens.Add(address, this);
         }
     }

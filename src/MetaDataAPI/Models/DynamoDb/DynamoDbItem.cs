@@ -1,5 +1,6 @@
 ﻿using System.Numerics;
 using MetaDataAPI.Models.Response;
+using poolz.finance.csharp.contracts.LockDealNFT.ContractDefinition;
 
 namespace MetaDataAPI.Models.DynamoDb;
 
@@ -20,7 +21,7 @@ public class DynamoDbItem
     public DynamoDbItem(string providerName, BasePoolInfo poolInfo, List<Erc721Attribute> attributes)
     {
         ProviderName = providerName;
-        TokenSymbol = poolInfo.Token.Symbol;
+        TokenSymbol = new Erc20Token(poolInfo.Token).Symbol;
         PoolId = poolInfo.PoolId;
         Attributes = attributes;
     }

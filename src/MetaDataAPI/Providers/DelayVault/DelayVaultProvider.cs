@@ -1,5 +1,6 @@
 ﻿using MetaDataAPI.Models.DynamoDb;
 using MetaDataAPI.Models.Response;
+using poolz.finance.csharp.contracts.LockDealNFT.ContractDefinition;
 
 namespace MetaDataAPI.Providers;
 
@@ -17,7 +18,7 @@ public class DelayVaultProvider : Provider
         })
     };
 
-    public DelayVaultProvider(BasePoolInfo basePoolInfo)
+    public DelayVaultProvider(BasePoolInfo[] basePoolInfo)
         : base(basePoolInfo)
     { }
 }

@@ -4,6 +4,7 @@ using System.Numerics;
 using MetaDataAPI.Utils;
 using MetaDataAPI.Models;
 using MetaDataAPI.Models.DynamoDb;
+using poolz.finance.csharp.contracts.LockDealNFT.ContractDefinition;
 
 namespace MetaDataAPI.Providers;
 
@@ -21,7 +22,7 @@ public class CollateralProvider : Provider
                 $"It holds {MainCoinCollectorAmount} for the main coin collector, {TokenCollectorAmount} for the token collector," +
                 $" and {MainCoinHolderAmount} for the main coin holder, valid until {FinishTime}.";
 
-    public Erc20Token MainCoin => PoolInfo.Token;
+    public Erc20Token MainCoin => new (PoolInfo.Token);
     [Display(DisplayType.Number)]
     public BigInteger MainCoinCollection => PoolInfo.VaultId;
 
@@ -63,13 +64,18 @@ public class CollateralProvider : Provider
         }
     }
 
-    public CollateralProvider(BasePoolInfo basePoolInfo)
+    public CollateralProvider(BasePoolInfo basePoolInfo) : base(new[] { basePoolInfo })
+    {
+        //This called when its called from refund - no need for the inner data
+        SubProvider = new Dictionary<CollateralType, DealProvider>();
+    }
+    public CollateralProvider(BasePoolInfo[] basePoolInfo)
         : base(basePoolInfo)
     {
         SubProvider = Enum.GetValues(typeof(CollateralType))
                           .Cast<CollateralType>()
                           .ToDictionary(
                             val => val,
-                            val => basePoolInfo.Factory.Create<DealProvider>(basePoolInfo.PoolId + (int)val));
+                            val => new DealProvider(basePoolInfo[(int)val]));
     }
 }

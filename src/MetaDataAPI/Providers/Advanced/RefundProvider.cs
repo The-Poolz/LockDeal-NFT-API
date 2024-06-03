@@ -4,6 +4,7 @@ using MetaDataAPI.Models.Response;
 using MetaDataAPI.Models;
 using System.Numerics;
 using MetaDataAPI.Models.DynamoDb;
+using poolz.finance.csharp.contracts.LockDealNFT.ContractDefinition;
 
 namespace MetaDataAPI.Providers;
 
@@ -45,10 +46,10 @@ public class RefundProvider : Provider
         }
     }
 
-    public RefundProvider(BasePoolInfo basePoolInfo)
+    public RefundProvider(BasePoolInfo[] basePoolInfo)
         : base(basePoolInfo)
     {
-        SubProvider = basePoolInfo.Factory.Create(PoolInfo.PoolId + 1);
-        CollateralProvider = basePoolInfo.Factory.Create<CollateralProvider>(basePoolInfo.Params[2]);
+        SubProvider = ProviderFactory.Create(new[] { basePoolInfo[1] });
+        CollateralProvider = new CollateralProvider(basePoolInfo[2]);
     }
 }

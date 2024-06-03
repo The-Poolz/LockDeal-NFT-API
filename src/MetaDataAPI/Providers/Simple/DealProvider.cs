@@ -1,5 +1,6 @@
 using MetaDataAPI.Models.DynamoDb;
 using MetaDataAPI.Models.Response;
+using poolz.finance.csharp.contracts.LockDealNFT.ContractDefinition;
 
 namespace MetaDataAPI.Providers;
 
@@ -17,7 +18,8 @@ public class DealProvider : Provider
             new("LeftAmount", LeftAmount)
         })
     };
-
+    public DealProvider(BasePoolInfo[] basePoolInfos) 
+        : base(basePoolInfos) { }
     public DealProvider(BasePoolInfo basePoolInfo)
-        : base(basePoolInfo) { }
+        : base(new [] { basePoolInfo }) { }
 }

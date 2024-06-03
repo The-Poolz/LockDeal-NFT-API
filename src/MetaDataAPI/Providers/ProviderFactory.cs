@@ -1,28 +1,27 @@
 ﻿using System.Numerics;
-using MetaDataAPI.Utils;
 using MetaDataAPI.Storage;
-using MetaDataAPI.Models.Response;
+using poolz.finance.csharp.contracts.LockDealNFT;
+using poolz.finance.csharp.contracts.LockDealNFT.ContractDefinition;
 
 namespace MetaDataAPI.Providers;
 
 public class ProviderFactory
 {
-    private readonly IRpcCaller rpcCaller;
+    private readonly LockDealNFTService lockDealNFTService;
 
-    public ProviderFactory(IRpcCaller? rpcCaller = null)
+    public ProviderFactory(LockDealNFTService? lockDealNFTService = null)
     {
-        this.rpcCaller = rpcCaller ?? new RpcCaller();
+        this.lockDealNFTService = lockDealNFTService ??
+            new LockDealNFTService(new Nethereum.Web3.Web3(Environments.RpcUrl), Environments.LockDealNftAddress);
     }
-    public Erc20Token GetErc20Token(string address) => new(address, rpcCaller);
-    public bool IsPoolIdWithinSupplyRange(BigInteger poolId) =>
-        rpcCaller.GetTotalSupply(Environments.LockDealNftAddress) > poolId;
-    public Provider Create(BigInteger poolId) => Create(rpcCaller.GetMetadata(poolId));
-    private Provider Create(string metadata) => Create(new BasePoolInfo(metadata,this));
-    private static Provider Create(BasePoolInfo basePoolInfo)
+    public bool IsPoolIdWithinSupplyRange(BigInteger poolId) => lockDealNFTService.TotalSupplyQueryAsync().GetAwaiter().GetResult() > poolId;
+    public Provider Create(BigInteger poolId) =>
+        Create(lockDealNFTService.GetFullDataQueryAsync(poolId).GetAwaiter().GetResult().PoolInfo.ToArray());
+    public static Provider Create(BasePoolInfo[] basePoolInfo)
     {
-        var objectToInstantiate = $"MetaDataAPI.Providers.{basePoolInfo.ProviderName}, MetaDataAPI";
+        var objectToInstantiate = $"MetaDataAPI.Providers.{basePoolInfo.FirstOrDefault()!.Name}, MetaDataAPI";
         var objectType = Type.GetType(objectToInstantiate);
-        return (Provider)Activator.CreateInstance(objectType!, args: basePoolInfo)!;
+        return (Provider)Activator.CreateInstance(objectType!, new[] { basePoolInfo })!;
     }
     public T Create<T>(BigInteger poolId) where T : Provider => (T)Create(poolId);
 }

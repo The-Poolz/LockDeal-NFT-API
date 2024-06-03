@@ -7,6 +7,7 @@ using System.Numerics;
 using System.Reflection;
 using MetaDataAPI.Models.DynamoDb;
 using MetaDataAPI.Storage;
+using poolz.finance.csharp.contracts.LockDealNFT.ContractDefinition;
 
 namespace MetaDataAPI.Providers;
 
@@ -19,7 +20,7 @@ public abstract class Provider
 
     [Display(DisplayType.String)]
     public abstract string ProviderName { get; }
-    public virtual Erc20Token Token => PoolInfo.Token;
+    public virtual Erc20Token Token => new (PoolInfo.Token);
     public abstract string Description { get; }
     public abstract List<DynamoDbItem> DynamoDbAttributes { get; }
     public virtual IEnumerable<Erc721Attribute> Attributes
@@ -39,11 +40,11 @@ public abstract class Provider
     public BasePoolInfo PoolInfo { get; }
     [Display(DisplayType.Number)]
     public virtual BigInteger Collection => PoolInfo.VaultId;
-    protected Provider(BasePoolInfo basePoolInfo)
+    protected Provider(BasePoolInfo[] basePoolInfo)
     {
-        PoolInfo = basePoolInfo;
-        var converter = new ConvertWei(PoolInfo.Token.Decimals);
-        LeftAmount = converter.WeiToEth(basePoolInfo.Params[0]);
+        PoolInfo = basePoolInfo.FirstOrDefault()!;
+        var converter = new ConvertWei(Token.Decimals);
+        LeftAmount = converter.WeiToEth(PoolInfo.Params[0]);
     }
     [Display(DisplayType.Number)]
     public virtual decimal LeftAmount { get; }
