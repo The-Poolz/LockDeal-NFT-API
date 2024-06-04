@@ -8,43 +8,5 @@ on:
     types: [opened, synchronize, reopened]
 
 jobs:
-  build-and-report:
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@v4
-
-    - name: Setup .NET
-      uses: actions/setup-dotnet@v4
-      with:
-        dotnet-version: '6.0.x'
-
-    - name: Restore dependencies
-      run: dotnet restore
-
-    - name: Build
-      run: dotnet build --no-restore
-
-    - name: Install ReportGenerator
-      run: dotnet tool install -g dotnet-reportgenerator-globaltool
-
-    - name: Test and Generate Report
-      run: |
-        dotnet test --no-restore --no-build --collect:"XPlat Code Coverage"
-        reportgenerator "-reports:**/coverage.cobertura.xml;" "-targetdir:${{github.workspace}}/report" "-reporttypes:MarkdownSummaryGithub"
-
-    - name: Upload reports
-      uses: actions/upload-artifact@v2
-      if: ${{always()}}
-      with:
-        name: 'Code Coverage'
-        path: |
-          ${{github.workspace}}/report
-      
-    - name: Comments on PR with coverage report results
-      uses: marocchino/sticky-pull-request-comment@v2
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        recreate: true
-        header: Coverage Report
-        path: ${{github.workspace}}/report/SummaryGithub.md
+    build-and-test:
+        uses: The-Poolz/.net-workflows/.github/workflows/coverage-report.yml@master
