@@ -24,6 +24,9 @@ jobs:
     - name: Build
       run: dotnet build --no-restore
 
+    - name: Install ReportGenerator
+      run: dotnet tool install -g dotnet-reportgenerator-globaltool
+
     - name: Test and Generate Report
       run: |
         dotnet test --no-restore --no-build --collect:"XPlat Code Coverage"
