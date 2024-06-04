@@ -30,7 +30,7 @@ jobs:
     - name: Test and Generate Report
       run: |
         dotnet test --no-restore --no-build --collect:"XPlat Code Coverage"
-        reportgenerator "-reports:**/coverage.cobertura.xml;" "-targetdir:${{github.workspace}}/report" "-reporttypes:MarkdownSummary"
+        reportgenerator "-reports:**/coverage.cobertura.xml;" "-targetdir:${{github.workspace}}/report" "-reporttypes:MarkdownSummaryGithub"
 
     - name: Upload reports
       uses: actions/upload-artifact@v2
