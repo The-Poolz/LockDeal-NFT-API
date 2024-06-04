@@ -24,19 +24,21 @@ jobs:
     - name: Build
       run: dotnet build --no-restore
 
-    - name: Install ReportGenerator
-      run: dotnet tool install -g dotnet-reportgenerator-globaltool
-
-    - name: Test and Generate Report
-      run: |
-        dotnet test --no-restore --no-build --collect:"XPlat Code Coverage"
-        reportgenerator "-reports:**/coverage.cobertura.xml;" "-targetdir:${{github.workspace}}/report" "-reporttypes:MarkdownSummaryGithub"
+    - name: Run tests
+      run: dotnet test --no-restore --no-build --collect:"XPlat Code Coverage"
+  
+    - name: ReportGenerator
+      uses: danielpalme/ReportGenerator-GitHub-Action@5.3.5
+      with:
+        reports: cobertura.xml
+        targetdir: ${{github.workspace}}/report
+        reporttypes: MarkdownSummary
 
     - name: Upload reports
       uses: actions/upload-artifact@v2
       if: ${{always()}}
       with:
-        name: 'Code Coverage MD report'
+        name: 'Code Coverage'
         path: |
           ${{github.workspace}}/report
       
