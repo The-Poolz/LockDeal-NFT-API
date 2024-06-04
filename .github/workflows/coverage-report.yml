@@ -30,27 +30,24 @@ jobs:
     - name: Install ReportGenerator
       run: dotnet tool install -g dotnet-reportgenerator-globaltool
 
-    - name: Generate coverage report in Markdown
-      run: reportgenerator "-reports:**/*.xml" "-targetdir:coveragereport" "-reporttypes:Markdown"
+    - name: Test      
+      run: |
+        dotnet test --no-restore --no-build --collect:"XPlat Code Coverage"
+        dotnet ~/.nuget/packages/reportgenerator/4.8.9/tools/netcoreapp3.0/ReportGenerator.dll "-reports:**/coverage.cobertura.xml;" "-targetdir:${{github.workspace}}/report" "-reporttypes:Html;TextSummary"
 
-    - name: Upload Markdown coverage report
-      uses: actions/upload-artifact@v4
+    - name: Upload reports
+      uses: actions/upload-artifact@v2
+      if: ${{always()}}
       with:
-        name: markdown-coverage-report
-        path: coveragereport/summary.md
-
-    - name: Post coverage report in PR comment
-      uses: actions/github-script@v5
-      with:
-        script: |
-          const fs = require('fs');
-          const path = require('path');
-          const markdownReport = fs.readFileSync(path.join('coveragereport', 'summary.md'), 'utf8');
-          github.rest.issues.createComment({
-            issue_number: context.issue.number,
-            owner: context.repo.owner,
-            repo: context.repo.repo,
-            body: markdownReport
-          })
+        name: 'Test Run'
+        path: |
+          ${{github.workspace}}/report
+      
+    - name: Comments on PR with coverage report results
+      uses: marocchino/sticky-pull-request-comment@v2
+      if: ${{ github.event_name == 'pull_request' }}
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        header: Coverage Report
+        path: ${{github.workspace}}/report/Summary.txt
