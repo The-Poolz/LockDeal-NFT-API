@@ -1,4 +1,4 @@
-name: .NET Core Test Coverage and Comment PR with Markdown Report
+name: Build with Markdown Report
 
 on:
   push:
@@ -36,15 +36,15 @@ jobs:
       uses: actions/upload-artifact@v2
       if: ${{always()}}
       with:
-        name: 'Test Run'
+        name: 'Code Coverage MD report'
         path: |
           ${{github.workspace}}/report
       
     - name: Comments on PR with coverage report results
       uses: marocchino/sticky-pull-request-comment@v2
-      if: ${{ github.event_name == 'pull_request' }}
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
+        recreate: true
         header: Coverage Report
         path: ${{github.workspace}}/report/Summary.md
