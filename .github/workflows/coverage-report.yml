@@ -47,4 +47,4 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         header: Coverage Report
-        path: ${{github.workspace}}/report/Summary.txt
+        path: ${{github.workspace}}/report/Summary.md
