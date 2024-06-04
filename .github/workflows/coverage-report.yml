@@ -47,4 +47,4 @@ jobs:
       with:
         recreate: true
         header: Coverage Report
-        path: ${{github.workspace}}/report/Summary.md
+        path: ${{github.workspace}}/report/SummaryGithub.md
