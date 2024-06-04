@@ -30,8 +30,7 @@ jobs:
     - name: Test and Generate Report
       run: |
         dotnet test --no-restore --no-build --collect:"XPlat Code Coverage"
-        REPORT_GENERATOR_DLL=$(find ~/.nuget/packages/reportgenerator -name 'ReportGenerator.dll')
-        dotnet $REPORT_GENERATOR_DLL "-reports:**/coverage.cobertura.xml;" "-targetdir:${{github.workspace}}/report" "-reporttypes:Html;TextSummary"
+        reportgenerator "-reports:**/coverage.cobertura.xml;" "-targetdir:${{github.workspace}}/report" "-reporttypes:TextSummary"
 
     - name: Upload reports
       uses: actions/upload-artifact@v2
