@@ -15,7 +15,7 @@
     <PackageReference Include="Amazon.Lambda.Core" Version="2.2.0" />
     <PackageReference Include="Amazon.Lambda.Serialization.Json" Version="2.2.0" />
 	<PackageReference Include="AWSSDK.DynamoDBv2" Version="3.7.301.11" />
-    <PackageReference Include="Utils.EnvironmentManager" Version="3.0.0" />
+    <PackageReference Include="Utils.EnvironmentManager" Version="3.0.1" />
     <PackageReference Include="poolz.finance.csharp.contracts" Version="1.0.3" />
   </ItemGroup>
   <ItemGroup>
