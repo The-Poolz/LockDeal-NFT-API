@@ -1,8 +1,7 @@
-﻿using EnvironmentManager.Extensions;
-using MetaDataAPI.Storage;
+﻿using Nethereum.Web3;
 using Nethereum.Contracts.Services;
+using EnvironmentManager.Extensions;
 using Nethereum.RPC.TransactionManagers;
-using Nethereum.Web3;
 
 namespace MetaDataAPI.Models.Response;
 
@@ -17,7 +16,7 @@ public class Erc20Token
 
     public Erc20Token(string address, Nethereum.Contracts.Standards.ERC20.ERC20ContractService? rpcCaller = null)
     {
-        var web3 = new Web3(Environments.RPC_URL.GetEnvironmentValue());
+        var web3 = new Web3(Environments.RPC_URL.Get());
         rpcCaller ??= new(new EthApiContractService(web3.Client, new TransactionManager(web3.Client)), address);
         Address = address;
         if (Tokens.TryGetValue(address, out var token))

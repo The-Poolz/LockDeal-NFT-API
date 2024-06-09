@@ -1,4 +1,5 @@
-﻿using System.Numerics;
+﻿using Nethereum.Web3;
+using System.Numerics;
 using EnvironmentManager.Extensions;
 using poolz.finance.csharp.contracts.LockDealNFT;
 using poolz.finance.csharp.contracts.LockDealNFT.ContractDefinition;
@@ -12,7 +13,7 @@ public class ProviderFactory
     public ProviderFactory(LockDealNFTService? lockDealNFTService = null)
     {
         this.lockDealNFTService = lockDealNFTService ??
-            new LockDealNFTService(new Nethereum.Web3.Web3(Environments.RPC_URL.GetEnvironmentValue()), Environments.LOCK_DEAL_NFT_ADDRESS.GetEnvironmentValue());
+            new LockDealNFTService(new Web3(Environments.RPC_URL.Get()), Environments.LOCK_DEAL_NFT_ADDRESS.Get());
     }
     public bool IsPoolIdWithinSupplyRange(BigInteger poolId) => lockDealNFTService.TotalSupplyQueryAsync().GetAwaiter().GetResult() > poolId;
     public Provider Create(BigInteger poolId) =>
