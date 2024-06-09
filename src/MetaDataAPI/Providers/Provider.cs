@@ -1,12 +1,12 @@
-﻿using MetaDataAPI.Utils;
-using Newtonsoft.Json.Linq;
-using MetaDataAPI.Models.Response;
-using MetaDataAPI.Models.Types;
-using MetaDataAPI.Models;
-using System.Numerics;
+﻿using System.Numerics;
 using System.Reflection;
+using MetaDataAPI.Utils;
+using MetaDataAPI.Models;
+using Newtonsoft.Json.Linq;
+using MetaDataAPI.Models.Types;
 using MetaDataAPI.Models.DynamoDb;
-using MetaDataAPI.Storage;
+using MetaDataAPI.Models.Response;
+using EnvironmentManager.Extensions;
 using poolz.finance.csharp.contracts.LockDealNFT.ContractDefinition;
 
 namespace MetaDataAPI.Providers;
@@ -15,8 +15,8 @@ public abstract class Provider
 {
     public const string FullyWithdrawnDescription = "This NFT has been fully withdrawn and is no longer governing any assets.";
     public const string FullyRefundedDescription = "This NFT has been fully refunded and no longer holds any governance over assets.";
-    public bool IsFullyWithdrawn => Environments.LockDealNftAddress == PoolInfo.Owner;
-    public bool IsFullyRefunded => Environments.LockDealNftAddress != PoolInfo.Owner && LeftAmount == 0;
+    public bool IsFullyWithdrawn => Environments.LOCK_DEAL_NFT_ADDRESS.Get() == PoolInfo.Owner;
+    public bool IsFullyRefunded => Environments.LOCK_DEAL_NFT_ADDRESS.Get() != PoolInfo.Owner && LeftAmount == 0;
 
     [Display(DisplayType.String)]
     public abstract string ProviderName { get; }
@@ -62,7 +62,7 @@ public abstract class Provider
     {
         var hash = dynamoDb.PutItem(DynamoDbAttributes);
         var name = "Lock Deal NFT Pool: " + PoolInfo.PoolId;
-        var image = @$"https://nft.poolz.finance/{Environments.NameOfStage}/image?hash={hash}";
+        var image = @$"https://nft.poolz.finance/{Environments.NAME_OF_STAGE}/image?hash={hash}";
         return new Erc721Metadata(name, GetDescription(), image, Attributes.ToList());
     }
 }
