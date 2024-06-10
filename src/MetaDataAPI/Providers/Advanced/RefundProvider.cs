@@ -1,7 +1,7 @@
-﻿using MetaDataAPI.Utils;
-using MetaDataAPI.Models.Types;
-using MetaDataAPI.Models;
 using System.Numerics;
+using MetaDataAPI.Utils;
+using MetaDataAPI.Models;
+using MetaDataAPI.Models.Types;
 using poolz.finance.csharp.contracts.LockDealNFT.ContractDefinition;
 
 namespace MetaDataAPI.Providers;
@@ -15,13 +15,18 @@ public class RefundProvider : Provider
         $"amount in the primary asset {CollateralProvider.MainCoin} will be {MainCoinAmount}.";
 
     public Provider SubProvider { get; }
+
     public CollateralProvider CollateralProvider { get; }
+
     [Display(DisplayType.Number)]
     public decimal Rate => new ConvertWei(21).WeiToEth(PoolInfo.Params[2]);
+
     [Display(DisplayType.Number)]
     public decimal MainCoinAmount => SubProvider.LeftAmount * Rate;
+
     [Display(DisplayType.Number)]
     public BigInteger MainCoinCollection => CollateralProvider.MainCoinCollection;
+
     [Display(DisplayType.String)]
     public string SubProviderName => SubProvider.ProviderName;
 

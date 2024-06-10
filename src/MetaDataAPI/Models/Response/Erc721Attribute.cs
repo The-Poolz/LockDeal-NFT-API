@@ -6,12 +6,12 @@ namespace MetaDataAPI.Models.Response;
 
 public class Erc721Attribute
 {
-    [JsonProperty("display_type", NullValueHandling = NullValueHandling.Ignore)]
     [JsonConverter(typeof(StringEnumConverter))]
+    [JsonProperty("display_type", NullValueHandling = NullValueHandling.Ignore)]
     public DisplayType DisplayType { get; }
 
     [JsonProperty("trait_type")]
-    public string TraitType { get; private set; }
+    public string TraitType { get; }
 
     [JsonProperty("value")]
     public object Value { get; }
