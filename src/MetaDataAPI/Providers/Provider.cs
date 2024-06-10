@@ -12,17 +12,22 @@ namespace MetaDataAPI.Providers;
 
 public abstract class Provider
 {
-    public const string FullyWithdrawnDescription = "This NFT has been fully withdrawn and is no longer governing any assets.";
-    public const string FullyRefundedDescription = "This NFT has been fully refunded and no longer holds any governance over assets.";
-    public bool IsFullyWithdrawn => Environments.LOCK_DEAL_NFT_ADDRESS.Get() == PoolInfo.Owner;
-    public bool IsFullyRefunded => Environments.LOCK_DEAL_NFT_ADDRESS.Get() != PoolInfo.Owner && LeftAmount == 0;
-
     [Display(DisplayType.String)]
     public abstract string ProviderName { get; }
+
+    [Display(DisplayType.Number)]
+    public virtual decimal LeftAmount { get; }
+
+    [Display(DisplayType.Number)]
+    public virtual BigInteger Collection => PoolInfo.VaultId;
+
     public virtual Erc20Token Token => new (PoolInfo.Token);
+
+    public BasePoolInfo PoolInfo { get; }
+
     public abstract string Description { get; }
-    public virtual IEnumerable<Erc721Attribute> Attributes
-    => GetType()
+
+    public virtual IEnumerable<Erc721Attribute> Attributes => GetType()
        .GetProperties(BindingFlags.Public | BindingFlags.Instance)
        .SelectMany(prop =>
        {
@@ -35,23 +40,11 @@ public abstract class Provider
                : Array.Empty<Erc721Attribute>();
        });
 
-    public BasePoolInfo PoolInfo { get; }
-    [Display(DisplayType.Number)]
-    public virtual BigInteger Collection => PoolInfo.VaultId;
     protected Provider(BasePoolInfo[] basePoolInfo)
     {
         PoolInfo = basePoolInfo.FirstOrDefault()!;
         var converter = new ConvertWei(Token.Decimals);
         LeftAmount = converter.WeiToEth(PoolInfo.Params[0]);
-    }
-    [Display(DisplayType.Number)]
-    public virtual decimal LeftAmount { get; }
-
-    private string GetDescription()
-    {
-        if (IsFullyWithdrawn) return FullyWithdrawnDescription;
-        if (IsFullyRefunded) return FullyRefundedDescription;
-        return Description;
     }
 
     public string GetJsonErc721Metadata() => JToken.FromObject(GetErc721Metadata()).ToString();
@@ -61,4 +54,17 @@ public abstract class Provider
         var image = "SHORT_URL_WILL_BE_HERE";
         return new Erc721Metadata(name, GetDescription(), image, Attributes.ToList());
     }
+
+    private string GetDescription()
+    {
+        string lockDealNftAddress = Environments.LOCK_DEAL_NFT_ADDRESS.Get();
+
+        if (IsFullyWithdrawn(lockDealNftAddress)) return "This NFT has been fully withdrawn and is no longer governing any assets.";
+        if (IsFullyRefunded(lockDealNftAddress)) return "This NFT has been fully refunded and no longer holds any governance over assets.";
+
+        return Description;
+    }
+
+    private bool IsFullyWithdrawn(string nftAddress) => nftAddress == PoolInfo.Owner;
+    private bool IsFullyRefunded(string nftAddress) => nftAddress != PoolInfo.Owner && LeftAmount == 0;
 }

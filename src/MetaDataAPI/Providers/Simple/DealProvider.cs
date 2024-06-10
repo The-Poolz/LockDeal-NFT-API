@@ -10,7 +10,10 @@ public class DealProvider : Provider
         $"This NFT represents immediate access to {LeftAmount} units of the specified asset {PoolInfo.Token}.";
 
     public DealProvider(BasePoolInfo[] basePoolInfos) 
-        : base(basePoolInfos) { }
+        : base(basePoolInfos)
+    { }
+
     public DealProvider(BasePoolInfo basePoolInfo)
-        : base(new [] { basePoolInfo }) { }
+        : base(new [] { basePoolInfo })
+    { }
 }

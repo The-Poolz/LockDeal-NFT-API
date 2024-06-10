@@ -11,13 +11,17 @@ public class TimedDealProvider : LockDealProvider
         $" beginning at {StartDateTime}, culminating in full access at {FinishDateTime}";
 
     public override string ProviderName => nameof(TimedDealProvider);
+
     public override string Description =>
         $"This NFT governs a time-locked pool containing {LeftAmount}/{StartAmount} units of the asset {PoolInfo.Token}." +
         $" Withdrawals are permitted in a linear fashion beginning at {StartDateTime}, culminating in full access at {FinishDateTime}.";
+
     [Display(DisplayType.Number)]
     public decimal StartAmount { get; }
+
     [Display(DisplayType.Date)]
     public uint FinishTime { get; }
+
     public DateTime FinishDateTime => TimeUtils.FromUnixTimestamp(FinishTime);
 
     public TimedDealProvider(BasePoolInfo[] basePoolInfo)
