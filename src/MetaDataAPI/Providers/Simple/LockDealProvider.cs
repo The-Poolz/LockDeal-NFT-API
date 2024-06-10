@@ -1,8 +1,6 @@
 using MetaDataAPI.Utils;
-using MetaDataAPI.Models.Response;
 using MetaDataAPI.Models.Types;
 using MetaDataAPI.Models;
-using MetaDataAPI.Models.DynamoDb;
 using poolz.finance.csharp.contracts.LockDealNFT.ContractDefinition;
 
 namespace MetaDataAPI.Providers;
@@ -17,15 +15,6 @@ public class LockDealProvider : DealProvider
     [Display(DisplayType.Date)]
     public uint StartTime { get; }
     public DateTime StartDateTime => TimeUtils.FromUnixTimestamp(StartTime);
-    public override List<DynamoDbItem> DynamoDbAttributes => new()
-    {
-        new DynamoDbItem(ProviderName, PoolInfo, new List<Erc721Attribute>
-        {
-            new("StartTime", StartTime, DisplayType.Date),
-            new("Collection", Collection),
-            new("LeftAmount", LeftAmount)
-        })
-    };
 
     public LockDealProvider(BasePoolInfo[] basePoolInfo)
         : base(basePoolInfo)

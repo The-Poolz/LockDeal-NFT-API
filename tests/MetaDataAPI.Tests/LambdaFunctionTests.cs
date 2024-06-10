@@ -41,10 +41,8 @@ public class LambdaFunctionTests : SetEnvironments
 
     private static LambdaFunction SetupLambdaFunction()
     {
-        //var mockRpcCaller = new MockRpcCaller();
         var factory = new ProviderFactory();//need to mock this
-        var dynamoDb = new DynamoDb(MockAmazonDynamoDB.MockClient());
-        return new LambdaFunction(factory, dynamoDb);
+        return new LambdaFunction(factory);
     }
 
     private static APIGatewayProxyRequest CreateRequest(int id)

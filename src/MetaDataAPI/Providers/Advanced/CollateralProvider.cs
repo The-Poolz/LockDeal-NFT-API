@@ -3,7 +3,6 @@ using MetaDataAPI.Models.Response;
 using System.Numerics;
 using MetaDataAPI.Utils;
 using MetaDataAPI.Models;
-using MetaDataAPI.Models.DynamoDb;
 using poolz.finance.csharp.contracts.LockDealNFT.ContractDefinition;
 
 namespace MetaDataAPI.Providers;
@@ -45,24 +44,6 @@ public class CollateralProvider : Provider
     public uint FinishTimestamp => (uint)PoolInfo.Params[1];
     internal DateTime FinishTime => TimeUtils.FromUnixTimestamp(FinishTimestamp);
     internal Dictionary<CollateralType,DealProvider> SubProvider { get; }
-
-    public override List<DynamoDbItem> DynamoDbAttributes
-    {
-        get
-        {
-            var dynamoDbAttributes = new List<DynamoDbItem>
-            {
-                new(ProviderName, PoolInfo, new List<Erc721Attribute>
-                {
-                    new("Collection", Collection),
-                    new("LeftAmount", LeftAmount)
-                })
-            };
-            dynamoDbAttributes.AddRange(SubProvider.Select(subProvider => new DynamoDbItem(subProvider.Value.ProviderName, subProvider.Value.PoolInfo, subProvider.Value.Attributes.Where(attr => attr.TraitType != "ProviderName").ToList())));
-
-            return dynamoDbAttributes;
-        }
-    }
 
     public CollateralProvider(BasePoolInfo basePoolInfo) : base(new[] { basePoolInfo })
     {
