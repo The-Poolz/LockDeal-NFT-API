@@ -1,6 +1,6 @@
-﻿using MetaDataAPI.Models.Extension;
-using MetaDataAPI.Utils;
+﻿using MetaDataAPI.Utils;
 using Net.Urlify.Attributes;
+using MetaDataAPI.Models.Extension;
 
 namespace MetaDataAPI.ImageGeneration.UrlifyModels;
 
