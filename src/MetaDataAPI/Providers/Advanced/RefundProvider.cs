@@ -1,4 +1,4 @@
-﻿using System.Numerics;
+using System.Numerics;
 using MetaDataAPI.Utils;
 using MetaDataAPI.Models;
 using MetaDataAPI.Models.Types;
