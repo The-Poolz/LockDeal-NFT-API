@@ -13,13 +13,11 @@ namespace MetaDataAPI;
 public class LambdaFunction
 {
     private readonly ProviderFactory providerFactory;
-    private readonly DynamoDb dynamoDb;
 
-    public LambdaFunction() : this(new ProviderFactory(), new DynamoDb()) { }
-    public LambdaFunction(ProviderFactory providerFactory, DynamoDb dynamoDb)
+    public LambdaFunction() : this(new ProviderFactory()) { }
+    public LambdaFunction(ProviderFactory providerFactory)
     {
         this.providerFactory = providerFactory;
-        this.dynamoDb = dynamoDb;
     }
 
     public APIGatewayProxyResponse FunctionHandler(APIGatewayProxyRequest request)
@@ -40,7 +38,7 @@ public class LambdaFunction
             if (poolId != provider.PoolInfo.PoolId)
                 return ApiResponseFactory.CreateResponse(ErrorMessages.InvalidResponseMessage, HttpStatusCode.Conflict);
 
-            return ApiResponseFactory.CreateResponse(provider.GetJsonErc721Metadata(dynamoDb), HttpStatusCode.OK);
+            return ApiResponseFactory.CreateResponse(provider.GetJsonErc721Metadata(), HttpStatusCode.OK);
         }
         catch (Exception e)
         {

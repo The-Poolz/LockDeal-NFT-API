@@ -4,7 +4,6 @@ using MetaDataAPI.Utils;
 using MetaDataAPI.Models;
 using Newtonsoft.Json.Linq;
 using MetaDataAPI.Models.Types;
-using MetaDataAPI.Models.DynamoDb;
 using MetaDataAPI.Models.Response;
 using EnvironmentManager.Extensions;
 using poolz.finance.csharp.contracts.LockDealNFT.ContractDefinition;
@@ -22,7 +21,6 @@ public abstract class Provider
     public abstract string ProviderName { get; }
     public virtual Erc20Token Token => new (PoolInfo.Token);
     public abstract string Description { get; }
-    public abstract List<DynamoDbItem> DynamoDbAttributes { get; }
     public virtual IEnumerable<Erc721Attribute> Attributes
     => GetType()
        .GetProperties(BindingFlags.Public | BindingFlags.Instance)
@@ -48,8 +46,6 @@ public abstract class Provider
     }
     [Display(DisplayType.Number)]
     public virtual decimal LeftAmount { get; }
-    public string GetJsonErc721Metadata(DynamoDb dynamoDb) =>
-        JToken.FromObject(GetErc721Metadata(dynamoDb)).ToString();
 
     private string GetDescription()
     {
@@ -58,11 +54,11 @@ public abstract class Provider
         return Description;
     }
 
-    private Erc721Metadata GetErc721Metadata(DynamoDb dynamoDb)
+    public string GetJsonErc721Metadata() => JToken.FromObject(GetErc721Metadata()).ToString();
+    private Erc721Metadata GetErc721Metadata()
     {
-        var hash = dynamoDb.PutItem(DynamoDbAttributes);
         var name = "Lock Deal NFT Pool: " + PoolInfo.PoolId;
-        var image = @$"https://nft.poolz.finance/{Environments.NAME_OF_STAGE}/image?hash={hash}";
+        var image = "SHORT_URL_WILL_BE_HERE";
         return new Erc721Metadata(name, GetDescription(), image, Attributes.ToList());
     }
 }
