@@ -1,8 +1,8 @@
-﻿using MetaDataAPI.Models.Extension;
+﻿using poolz.finance.csharp.contracts.LockDealNFT.ContractDefinition;
 
 namespace MetaDataAPI.ImageGeneration.UrlifyModels.Simple;
 
 public class DealUrlifyModel : BaseUrlifyModel
 {
-    public DealUrlifyModel(PoolInfo poolInfo) : base(poolInfo) { }
+    public DealUrlifyModel(BasePoolInfo poolInfo) : base(poolInfo) { }
 }

@@ -1,4 +1,6 @@
 using System.Numerics;
+using MetaDataAPI.ImageGeneration.UrlifyModels;
+using MetaDataAPI.ImageGeneration.UrlifyModels.Advanced;
 using MetaDataAPI.Utils;
 using MetaDataAPI.Models;
 using MetaDataAPI.Models.Types;
@@ -20,6 +22,8 @@ public class CollateralProvider : Provider
         $"Exclusively utilized by project administrators, this NFT serves as a secure vault for holding refundable tokens {Token}, for Main Coin {MainCoin}. " +
         $"It holds {MainCoinCollectorAmount} for the main coin collector, {TokenCollectorAmount} for the token collector," +
         $" and {MainCoinHolderAmount} for the main coin holder, valid until {FinishTime}.";
+
+    public override BaseUrlifyModel Urlify => new CollateralUrlifyModel(PoolInfo);
 
     public Erc20Token MainCoin => new (PoolInfo.Token);
 

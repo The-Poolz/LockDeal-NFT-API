@@ -1,6 +1,6 @@
 ﻿using MetaDataAPI.Utils;
 using Net.Urlify.Attributes;
-using MetaDataAPI.Models.Extension;
+using poolz.finance.csharp.contracts.LockDealNFT.ContractDefinition;
 
 namespace MetaDataAPI.ImageGeneration.UrlifyModels.Simple;
 
@@ -9,7 +9,7 @@ public class LockDealUrlifyModel : BaseUrlifyModel
     [QueryStringProperty("Start Time", false)]
     public string StartTime { get; set; }
 
-    public LockDealUrlifyModel(PoolInfo poolInfo) : base(poolInfo)
+    public LockDealUrlifyModel(BasePoolInfo poolInfo) : base(poolInfo)
     {
         var dateTime = TimeUtils.FromUnixTimestamp((long)poolInfo.Params[1]);
         StartTime = $"{dateTime:MM/dd/yyyy} {dateTime:HH:mm:ss}";

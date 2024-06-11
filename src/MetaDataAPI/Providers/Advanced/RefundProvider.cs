@@ -1,4 +1,6 @@
 using System.Numerics;
+using MetaDataAPI.ImageGeneration.UrlifyModels;
+using MetaDataAPI.ImageGeneration.UrlifyModels.Advanced;
 using MetaDataAPI.Utils;
 using MetaDataAPI.Models;
 using MetaDataAPI.Models.Types;
@@ -13,6 +15,8 @@ public class RefundProvider : Provider
         $"This NFT encompasses {LeftAmount} units of the asset {PoolInfo.Token} " +
         $"with an associated refund rate of {Rate}. Post rate calculation, the refundable " +
         $"amount in the primary asset {CollateralProvider.MainCoin} will be {MainCoinAmount}.";
+
+    public override BaseUrlifyModel Urlify => new RefundUrlifyModel(PoolInfo);
 
     public Provider SubProvider { get; }
 

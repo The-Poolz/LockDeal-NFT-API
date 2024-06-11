@@ -4,6 +4,7 @@ using Net.Urlify.Attributes;
 using MetaDataAPI.Models.Extension;
 using EnvironmentManager.Extensions;
 using MetaDataAPI.ImageGeneration.UrlifyModels.Types;
+using poolz.finance.csharp.contracts.LockDealNFT.ContractDefinition;
 
 namespace MetaDataAPI.ImageGeneration.UrlifyModels;
 
@@ -17,6 +18,8 @@ public class BaseUrlifyModel : Urlify
 
     [QueryStringProperty("tA", false)]
     public QueryStringToken Token { get; set; }
+
+    public BaseUrlifyModel(BasePoolInfo poolInfo) : this(new PoolInfo(poolInfo)) { }
 
     public BaseUrlifyModel(PoolInfo poolInfo) : base((string)Environments.NFT_HTML_ENDPOINT.Get())
     {
