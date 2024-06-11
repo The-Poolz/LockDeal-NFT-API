@@ -2,7 +2,7 @@
 using Net.Urlify.Attributes;
 using MetaDataAPI.Models.Extension;
 
-namespace MetaDataAPI.ImageGeneration.UrlifyModels;
+namespace MetaDataAPI.ImageGeneration.UrlifyModels.Simple;
 
 public class TimedDealUrlifyModel : LockDealUrlifyModel
 {
