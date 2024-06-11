@@ -1,4 +1,4 @@
-﻿namespace MetaDataAPI.ImageGeneration;
+﻿namespace MetaDataAPI.ImageGeneration.Services;
 
 public interface IUrlShortener
 {

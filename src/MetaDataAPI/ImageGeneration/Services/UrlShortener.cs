@@ -1,7 +1,7 @@
 ﻿using TLY.ShortUrl;
 using EnvironmentManager.Extensions;
 
-namespace MetaDataAPI.ImageGeneration;
+namespace MetaDataAPI.ImageGeneration.Services;
 
 public class UrlShortener : IUrlShortener
 {
