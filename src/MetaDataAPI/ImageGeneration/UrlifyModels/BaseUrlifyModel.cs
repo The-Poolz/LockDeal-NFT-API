@@ -9,13 +9,13 @@ namespace MetaDataAPI.ImageGeneration.UrlifyModels;
 
 public class BaseUrlifyModel : Urlify
 {
-    [QueryStringProperty("name")]
+    [QueryStringProperty("name", false)]
     public string Name { get; set; }
 
-    [QueryStringProperty("id")]
+    [QueryStringProperty("id", false)]
     public BigInteger Id { get; set; }
 
-    [QueryStringProperty("tA")]
+    [QueryStringProperty("tA", false)]
     public QueryStringToken MainCoinToken { get; set; }
 
     public BaseUrlifyModel(PoolInfo poolInfo) : base((string)Environments.NFT_HTML_ENDPOINT.Get())

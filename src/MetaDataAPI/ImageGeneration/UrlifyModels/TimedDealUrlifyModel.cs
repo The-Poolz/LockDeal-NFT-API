@@ -6,11 +6,12 @@ namespace MetaDataAPI.ImageGeneration.UrlifyModels;
 
 public class TimedDealUrlifyModel : LockDealUrlifyModel
 {
-    [QueryStringProperty("Finish Time")]
+    [QueryStringProperty("Finish Time", false)]
     public string FinishTime { get; set; }
 
     public TimedDealUrlifyModel(PoolInfo poolInfo) : base(poolInfo)
     {
-        FinishTime = $"{TimeUtils.FromUnixTimestamp((long)poolInfo.Params[2]):g}";
+        var dateTime = TimeUtils.FromUnixTimestamp((long)poolInfo.Params[2]);
+        FinishTime = $"{dateTime:MM/dd/yyyy} {dateTime:HH:mm:ss}";
     }
 }

@@ -29,7 +29,7 @@ public class UrlifyModelTests
 
             var result = nftHtml.BuildUrl();
 
-            result.ToString().Should().Be("https://test.poolz.finance/nft.html?name=DealProvider&id=1234&tA=$TestTokenC|Left Amount|10000");
+            result.ToString().Should().Be("https://test.poolz.finance/nft.html?name=DealProvider&id=1234&tA=%24TestTokenC%7CLeft%20Amount%7C10000");
         }
 
         [Fact]
@@ -49,7 +49,7 @@ public class UrlifyModelTests
 
             var result = nftHtml.BuildUrl();
 
-            result.ToString().Should().Be("https://test.poolz.finance/nft.html?Start%20Time=2/16/2024 1:23 PM&name=DealProvider&id=1234&tA=$TestTokenC|Left Amount|10000");
+            result.ToString().Should().Be("https://test.poolz.finance/nft.html?Start%20Time=02%2F16%2F2024%2013%3A23%3A01&name=DealProvider&id=1234&tA=%24TestTokenC%7CLeft%20Amount%7C10000");
         }
 
         [Fact]
@@ -69,7 +69,7 @@ public class UrlifyModelTests
 
             var result = nftHtml.BuildUrl();
 
-            result.ToString().Should().Be("https://test.poolz.finance/nft.html?Finish%20Time=2/26/2024 11:23 PM&Start%20Time=2/16/2024 1:23 PM&name=DealProvider&id=1234&tA=$TestTokenC|Left Amount|10000");
+            result.ToString().Should().Be("https://test.poolz.finance/nft.html?Finish%20Time=02%2F26%2F2024%2023%3A23%3A01&Start%20Time=02%2F16%2F2024%2013%3A23%3A01&name=DealProvider&id=1234&tA=%24TestTokenC%7CLeft%20Amount%7C10000");
         }
     }
 }

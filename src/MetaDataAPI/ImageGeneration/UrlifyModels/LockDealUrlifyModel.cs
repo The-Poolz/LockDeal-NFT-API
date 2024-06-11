@@ -6,11 +6,12 @@ namespace MetaDataAPI.ImageGeneration.UrlifyModels;
 
 public class LockDealUrlifyModel : BaseUrlifyModel
 {
-    [QueryStringProperty("Start Time")]
+    [QueryStringProperty("Start Time", false)]
     public string StartTime { get; set; }
 
     public LockDealUrlifyModel(PoolInfo poolInfo) : base(poolInfo)
     {
-        StartTime = $"{TimeUtils.FromUnixTimestamp((long)poolInfo.Params[1]):g}";
+        var dateTime = TimeUtils.FromUnixTimestamp((long)poolInfo.Params[1]);
+        StartTime = $"{dateTime:MM/dd/yyyy} {dateTime:HH:mm:ss}";
     }
 }
