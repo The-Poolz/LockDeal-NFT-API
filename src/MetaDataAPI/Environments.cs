@@ -11,5 +11,7 @@ public enum Environments
     [EnvironmentVariable(isRequired: true)]
     NFT_HTML_ENDPOINT,
     [EnvironmentVariable(isRequired: true)]
-    HTML_TO_IMAGE_ENDPOINT_TEMPLATE
+    HTML_TO_IMAGE_ENDPOINT_TEMPLATE,
+    [EnvironmentVariable(isRequired: true)]
+    TLY_API_KEY
 }
