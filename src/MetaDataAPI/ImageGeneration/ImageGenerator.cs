@@ -3,7 +3,7 @@ using MetaDataAPI.ImageGeneration.UrlifyModels;
 
 namespace MetaDataAPI.ImageGeneration;
 
-public class ImageGenerator
+public class ImageGenerator : IImageGenerator
 {
     private readonly IImageRenderer renderer;
     private readonly IUrlShortener shortener;
