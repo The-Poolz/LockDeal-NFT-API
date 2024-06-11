@@ -9,5 +9,7 @@ public enum Environments
     [EnvironmentVariable(isRequired: true)]
     RPC_URL,
     [EnvironmentVariable(isRequired: true)]
-    NFT_HTML_ENDPOINT
+    NFT_HTML_ENDPOINT,
+    [EnvironmentVariable(isRequired: true)]
+    HTML_TO_IMAGE_ENDPOINT_TEMPLATE
 }
