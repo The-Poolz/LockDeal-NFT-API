@@ -49,13 +49,13 @@ public class UrlifyModelTests
             {
                 typeof(LockDealUrlifyModel),
                 new[] { "10000000000000000000000", "1708089781" },
-                "https://test.poolz.finance/nft.html?Start%20Time=02%2F16%2F2024%2013%3A23%3A01&name=Provider&id=1234&tA=%24TestTokenC%7CLeft%20Amount%7C10000"
+                "https://test.poolz.finance/nft.html?name=Provider&id=1234&tA=%24TestTokenC%7CLeft%20Amount%7C10000&Start%20Time=02%2F16%2F2024%2013%3A23%3A01"
             };
             yield return new object[]
             {
                 typeof(TimedDealUrlifyModel),
                 new[] { "10000000000000000000000", "1708089781", "1708989781" },
-                "https://test.poolz.finance/nft.html?Finish%20Time=02%2F26%2F2024%2023%3A23%3A01&Start%20Time=02%2F16%2F2024%2013%3A23%3A01&name=Provider&id=1234&tA=%24TestTokenC%7CLeft%20Amount%7C10000"
+                "https://test.poolz.finance/nft.html?name=Provider&id=1234&tA=%24TestTokenC%7CLeft%20Amount%7C10000&Start%20Time=02%2F16%2F2024%2013%3A23%3A01&Finish%20Time=02%2F26%2F2024%2023%3A23%3A01"
             };
             yield return new object[]
             {
