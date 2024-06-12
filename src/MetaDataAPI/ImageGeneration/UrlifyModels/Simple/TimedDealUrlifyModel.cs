@@ -6,7 +6,7 @@ namespace MetaDataAPI.ImageGeneration.UrlifyModels.Simple;
 
 public class TimedDealUrlifyModel : LockDealUrlifyModel
 {
-    [QueryStringProperty("Finish Time", false)]
+    [QueryStringProperty("Finish Time", order: 5)]
     public string FinishTime { get; set; }
 
     public TimedDealUrlifyModel(BasePoolInfo poolInfo) : base(poolInfo)

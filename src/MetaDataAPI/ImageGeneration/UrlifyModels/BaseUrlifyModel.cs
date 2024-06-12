@@ -10,13 +10,13 @@ namespace MetaDataAPI.ImageGeneration.UrlifyModels;
 
 public class BaseUrlifyModel : Urlify
 {
-    [QueryStringProperty("name", false)]
+    [QueryStringProperty("name", order: 1)]
     public string Name { get; set; }
 
-    [QueryStringProperty("id", false)]
+    [QueryStringProperty("id", order: 2)]
     public BigInteger Id { get; set; }
 
-    [QueryStringProperty("tA", false)]
+    [QueryStringProperty("tA", order: 3)]
     public QueryStringToken Token { get; set; }
 
     public BaseUrlifyModel(BasePoolInfo poolInfo) : this(new PoolInfo(poolInfo)) { }
