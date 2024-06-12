@@ -22,5 +22,13 @@ public class Erc20Token
         Symbol = rpcCaller.SymbolQueryAsync().GetAwaiter().GetResult();
     }
 
+    public Erc20Token(string name, string symbol, string address, byte decimals)
+    {
+        Name = name;
+        Symbol = symbol;
+        Address = address;
+        Decimals = decimals;
+    }
+
     public override string ToString() => $"{Name} ({Symbol}@{Address[..5]}...{Address[^5..]})";
 }

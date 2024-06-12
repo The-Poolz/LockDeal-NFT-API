@@ -4,7 +4,7 @@ using poolz.finance.csharp.contracts.LockDealNFT.ContractDefinition;
 
 namespace MetaDataAPI.ImageGeneration.UrlifyModels.Simple;
 
-public class LockDealUrlifyModel : BaseUrlifyModel
+public class LockDealUrlifyModel : DealUrlifyModel
 {
     [QueryStringProperty("Start Time", false)]
     public string StartTime { get; set; }
