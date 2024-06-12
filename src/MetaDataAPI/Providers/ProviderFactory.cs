@@ -12,7 +12,7 @@ public class ProviderFactory
 
     public ProviderFactory(LockDealNFTService? lockDealNFTService = null)
     {
-        this.lockDealNFTService = lockDealNFTService ??
+        this.lockDealNFTService = lockDealNFTService ?? 
             new LockDealNFTService(new Web3(Environments.RPC_URL.Get()), Environments.LOCK_DEAL_NFT_ADDRESS.Get());
     }
 

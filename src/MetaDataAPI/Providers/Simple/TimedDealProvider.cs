@@ -2,6 +2,8 @@ using MetaDataAPI.Utils;
 using MetaDataAPI.Models;
 using MetaDataAPI.Models.Types;
 using poolz.finance.csharp.contracts.LockDealNFT.ContractDefinition;
+using MetaDataAPI.ImageGeneration.UrlifyModels.Simple;
+using MetaDataAPI.ImageGeneration.UrlifyModels;
 
 namespace MetaDataAPI.Providers;
 
@@ -23,6 +25,8 @@ public class TimedDealProvider : LockDealProvider
     public uint FinishTime { get; }
 
     public DateTime FinishDateTime => TimeUtils.FromUnixTimestamp(FinishTime);
+
+    public override BaseUrlifyModel Urlify => new TimedDealUrlifyModel(PoolInfo);
 
     public TimedDealProvider(BasePoolInfo[] basePoolInfo)
         : base(basePoolInfo)

@@ -6,12 +6,16 @@ using Newtonsoft.Json.Linq;
 using MetaDataAPI.Models.Types;
 using MetaDataAPI.Models.Response;
 using EnvironmentManager.Extensions;
+using MetaDataAPI.ImageGeneration;
+using MetaDataAPI.ImageGeneration.UrlifyModels;
 using poolz.finance.csharp.contracts.LockDealNFT.ContractDefinition;
 
 namespace MetaDataAPI.Providers;
 
 public abstract class Provider
 {
+    private readonly IImageGenerator imageGenerator;
+
     [Display(DisplayType.String)]
     public abstract string ProviderName { get; }
 
@@ -26,6 +30,8 @@ public abstract class Provider
     public BasePoolInfo PoolInfo { get; }
 
     public abstract string Description { get; }
+
+    public abstract BaseUrlifyModel Urlify { get; }
 
     public virtual IEnumerable<Erc721Attribute> Attributes => GetType()
        .GetProperties(BindingFlags.Public | BindingFlags.Instance)
@@ -45,13 +51,14 @@ public abstract class Provider
         PoolInfo = basePoolInfo.FirstOrDefault()!;
         var converter = new ConvertWei(Token.Decimals);
         LeftAmount = converter.WeiToEth(PoolInfo.Params[0]);
+        imageGenerator = new ImageGenerator();
     }
 
     public string GetJsonErc721Metadata() => JToken.FromObject(GetErc721Metadata()).ToString();
     private Erc721Metadata GetErc721Metadata()
     {
         var name = "Lock Deal NFT Pool: " + PoolInfo.PoolId;
-        var image = "SHORT_URL_WILL_BE_HERE";
+        var image = imageGenerator.Generate(Urlify, Description);
         return new Erc721Metadata(name, GetDescription(), image, Attributes.ToList());
     }
 
