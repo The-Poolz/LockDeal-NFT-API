@@ -1,12 +1,12 @@
 ﻿using System.Numerics;
 using System.Reflection;
+using MetaDataAPI.Utils;
 using MetaDataAPI.Models;
 using Newtonsoft.Json.Linq;
-using MetaDataAPI.Extensions;
 using MetaDataAPI.Models.Types;
 using MetaDataAPI.Models.Response;
-using MetaDataAPI.ImageGeneration;
 using EnvironmentManager.Extensions;
+using MetaDataAPI.ImageGeneration;
 using MetaDataAPI.ImageGeneration.UrlifyModels;
 using poolz.finance.csharp.contracts.LockDealNFT.ContractDefinition;
 
@@ -49,7 +49,8 @@ public abstract class Provider
     protected Provider(BasePoolInfo[] basePoolInfo)
     {
         PoolInfo = basePoolInfo.FirstOrDefault()!;
-        LeftAmount = PoolInfo.Params[0].WeiToEth(Token.Decimals);
+        var converter = new ConvertWei(Token.Decimals);
+        LeftAmount = converter.WeiToEth(PoolInfo.Params[0]);
         imageGenerator = new ImageGenerator();
     }
 

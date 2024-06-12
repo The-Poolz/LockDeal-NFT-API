@@ -1,4 +1,3 @@
-using MetaDataAPI.Extensions;
 using MetaDataAPI.Utils;
 using MetaDataAPI.Models;
 using MetaDataAPI.Models.Types;
@@ -32,8 +31,9 @@ public class TimedDealProvider : LockDealProvider
     public TimedDealProvider(BasePoolInfo[] basePoolInfo)
         : base(basePoolInfo)
     {
+        var converter = new ConvertWei(Token.Decimals);
         var thisInfo = basePoolInfo.FirstOrDefault()!;
         FinishTime = (uint)thisInfo.Params[2];
-        StartAmount = thisInfo.Params[3].WeiToEth(Token.Decimals);
+        StartAmount = converter.WeiToEth(thisInfo.Params[3]);
     }
 }
