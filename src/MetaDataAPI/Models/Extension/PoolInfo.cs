@@ -1,5 +1,5 @@
-﻿using MetaDataAPI.Models.Response;
-using MetaDataAPI.Utils;
+﻿using MetaDataAPI.Extensions;
+using MetaDataAPI.Models.Response;
 using poolz.finance.csharp.contracts.LockDealNFT.ContractDefinition;
 
 namespace MetaDataAPI.Models.Extension;
@@ -20,7 +20,6 @@ public sealed class PoolInfo : BasePoolInfo
         Params = poolInfo.Params;
 
         Erc20Token = new Erc20Token(poolInfo.Token);
-        var converter = new ConvertWei(Erc20Token.Decimals);
-        LeftAmount = converter.WeiToEth(poolInfo.Params[0]);
+        LeftAmount = poolInfo.Params[0].WeiToEth(Erc20Token.Decimals);
     }
 }
