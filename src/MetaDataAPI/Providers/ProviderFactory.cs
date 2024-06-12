@@ -10,19 +10,15 @@ public class ProviderFactory
 {
     private readonly LockDealNFTService lockDealNFTService;
 
-    public ProviderFactory()
+    public ProviderFactory(LockDealNFTService? lockDealNFTService = null)
     {
-        lockDealNFTService = new LockDealNFTService(new Web3(Environments.RPC_URL.Get()), Environments.LOCK_DEAL_NFT_ADDRESS.Get());
-    }
-
-    public ProviderFactory(LockDealNFTService lockDealNFTService)
-    {
-        this.lockDealNFTService = lockDealNFTService;
+        this.lockDealNFTService = lockDealNFTService ?? 
+            new LockDealNFTService(new Web3(Environments.RPC_URL.Get()), Environments.LOCK_DEAL_NFT_ADDRESS.Get());
     }
 
     public bool IsPoolIdWithinSupplyRange(BigInteger poolId) => lockDealNFTService.TotalSupplyQueryAsync().GetAwaiter().GetResult() > poolId;
 
-    public virtual Provider Create(BigInteger poolId) => Create(
+    public Provider Create(BigInteger poolId) => Create(
         lockDealNFTService.GetFullDataQueryAsync(poolId)
             .GetAwaiter()
             .GetResult()

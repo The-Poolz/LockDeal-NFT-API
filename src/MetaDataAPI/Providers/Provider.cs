@@ -55,7 +55,7 @@ public abstract class Provider
     }
 
     public string GetJsonErc721Metadata() => JToken.FromObject(GetErc721Metadata()).ToString();
-    public virtual Erc721Metadata GetErc721Metadata()
+    private Erc721Metadata GetErc721Metadata()
     {
         var name = "Lock Deal NFT Pool: " + PoolInfo.PoolId;
         var image = imageGenerator.Generate(Urlify, Description);
