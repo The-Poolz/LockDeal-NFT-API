@@ -23,20 +23,20 @@ public class LambdaFunction
     public APIGatewayProxyResponse FunctionHandler(APIGatewayProxyRequest request)
     {
         if (!request.QueryStringParameters.TryGetValue("id", out var idParam))
-            return ApiResponseFactory.CreateResponse(ErrorMessages.MissingIdMessage, HttpStatusCode.BadRequest);
+            return ApiResponseFactory.MissingId();
 
         if (!BigInteger.TryParse(idParam, out var poolId))
-            return ApiResponseFactory.CreateResponse(ErrorMessages.InvalidIdMessage, HttpStatusCode.BadRequest);
+            return ApiResponseFactory.InvalidId();
 
         try
         {
             if (!providerFactory.IsPoolIdWithinSupplyRange(poolId))
-                return ApiResponseFactory.CreateResponse(ErrorMessages.PoolIdNotInRangeMessage, HttpStatusCode.UnprocessableEntity);
+                return ApiResponseFactory.PoolIdNotInRange();
 
             var provider = providerFactory.Create(poolId);
 
             if (poolId != provider.PoolInfo.PoolId)
-                return ApiResponseFactory.CreateResponse(ErrorMessages.InvalidResponseMessage, HttpStatusCode.Conflict);
+                return ApiResponseFactory.InvalidResponse();
 
             return ApiResponseFactory.CreateResponse(provider.GetJsonErc721Metadata(), HttpStatusCode.OK);
         }
@@ -44,7 +44,7 @@ public class LambdaFunction
         {
             Console.WriteLine(e.Message);
             Console.WriteLine(e.StackTrace);
-            return ApiResponseFactory.CreateResponse(ErrorMessages.FailedToCreateProviderMessage, HttpStatusCode.InternalServerError);
+            return ApiResponseFactory.FailedToCreateProvider();
         }
     }
 }
