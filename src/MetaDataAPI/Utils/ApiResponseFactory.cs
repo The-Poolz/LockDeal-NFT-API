@@ -27,7 +27,7 @@ public static class ApiResponseFactory
 
     public static APIGatewayProxyResponse FailedToCreateProvider()
     {
-        return CreateResponse("Failed to create provider", HttpStatusCode.UnprocessableEntity);
+        return CreateResponse("Failed to create provider.", HttpStatusCode.UnprocessableEntity);
     }
 
     public static APIGatewayProxyResponse CreateResponse(string body, HttpStatusCode statusCode)
