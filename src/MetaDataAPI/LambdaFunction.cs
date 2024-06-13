@@ -22,28 +22,28 @@ public class LambdaFunction
     public APIGatewayProxyResponse FunctionHandler(APIGatewayProxyRequest request)
     {
         if (!request.QueryStringParameters.TryGetValue("id", out var idParam))
-            return ApiResponseFactory.MissingId();
+            return ErrorResponses.MissingId.Create();
 
         if (!BigInteger.TryParse(idParam, out var poolId))
-            return ApiResponseFactory.InvalidId();
+            return ErrorResponses.InvalidId.Create();
 
         try
         {
             if (!providerFactory.IsPoolIdWithinSupplyRange(poolId))
-                return ApiResponseFactory.PoolIdNotInRange();
+                return ErrorResponses.PoolIdNotInRange.Create();
 
             var provider = providerFactory.Create(poolId);
 
             if (poolId != provider.PoolInfo.PoolId)
-                return ApiResponseFactory.InvalidResponse();
+                return ErrorResponses.InvalidResponse.Create();
 
-            return ApiResponseFactory.CreateResponse(provider.GetJsonErc721Metadata(), HttpStatusCode.OK);
+            return ApiResponseFactory.CreateResponse(provider.GetJsonErc721Metadata());
         }
         catch (Exception e)
         {
             Console.WriteLine(e.Message);
             Console.WriteLine(e.StackTrace);
-            return ApiResponseFactory.FailedToCreateProvider();
+            return ErrorResponses.FailedToCreateProvider.Create();
         }
     }
 }
