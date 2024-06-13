@@ -4,6 +4,7 @@ using FluentAssertions;
 using MetaDataAPI.Providers;
 using MetaDataAPI.Tests.Helpers;
 using Amazon.Lambda.APIGatewayEvents;
+using MetaDataAPI.Models.Request;
 
 namespace MetaDataAPI.Tests;
 
@@ -43,9 +44,9 @@ public class LambdaFunctionTests : SetEnvironments
         return new LambdaFunction(factory);
     }
 
-    private static APIGatewayProxyRequest CreateRequest(int id)
+    private static LambdaRequest CreateRequest(int id)
     {
-        return new APIGatewayProxyRequest
+        return new LambdaRequest
         {
             QueryStringParameters = new Dictionary<string, string> { { "id", id.ToString() } }
         };

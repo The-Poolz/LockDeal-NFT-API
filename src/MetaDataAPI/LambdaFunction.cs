@@ -1,9 +1,7 @@
-using System.Net;
-using System.Numerics;
 using MetaDataAPI.Utils;
 using Amazon.Lambda.Core;
-using MetaDataAPI.Storage;
 using MetaDataAPI.Providers;
+using MetaDataAPI.Models.Request;
 using Amazon.Lambda.APIGatewayEvents;
 
 [assembly: LambdaSerializer(typeof(Amazon.Lambda.Serialization.Json.JsonSerializer))]
@@ -20,31 +18,20 @@ public class LambdaFunction
         this.providerFactory = providerFactory;
     }
 
-    public APIGatewayProxyResponse FunctionHandler(APIGatewayProxyRequest request)
+    public APIGatewayProxyResponse FunctionHandler(LambdaRequest request)
     {
-        if (!request.QueryStringParameters.TryGetValue("id", out var idParam))
-            return ApiResponseFactory.CreateResponse(ErrorMessages.MissingIdMessage, HttpStatusCode.BadRequest);
-
-        if (!BigInteger.TryParse(idParam, out var poolId))
-            return ApiResponseFactory.CreateResponse(ErrorMessages.InvalidIdMessage, HttpStatusCode.BadRequest);
-
         try
         {
-            if (!providerFactory.IsPoolIdWithinSupplyRange(poolId))
-                return ApiResponseFactory.CreateResponse(ErrorMessages.PoolIdNotInRangeMessage, HttpStatusCode.UnprocessableEntity);
+            var error = request.PoolIdToProvider(providerFactory, out var provider);
+            if (error != null) return error.Value.Create();
 
-            var provider = providerFactory.Create(poolId);
-
-            if (poolId != provider.PoolInfo.PoolId)
-                return ApiResponseFactory.CreateResponse(ErrorMessages.InvalidResponseMessage, HttpStatusCode.Conflict);
-
-            return ApiResponseFactory.CreateResponse(provider.GetJsonErc721Metadata(), HttpStatusCode.OK);
+            return ApiResponseFactory.CreateResponse(provider!.GetJsonErc721Metadata());
         }
         catch (Exception e)
         {
             Console.WriteLine(e.Message);
             Console.WriteLine(e.StackTrace);
-            return ApiResponseFactory.CreateResponse(ErrorMessages.FailedToCreateProviderMessage, HttpStatusCode.InternalServerError);
+            return ErrorResponse.FailedToCreateProvider.Create();
         }
     }
 }
