@@ -3,7 +3,7 @@ using MetaDataAPI.Attributes;
 
 namespace MetaDataAPI.Utils;
 
-public enum ErrorResponses
+public enum ErrorResponse
 {
     [ErrorMessage(HttpStatusCode.BadRequest, "The 'id' parameter is not a valid BigInteger.")]
     InvalidId,

@@ -18,7 +18,7 @@ public static class ApiResponseFactory
         };
     }
 
-    public static APIGatewayProxyResponse Create(this ErrorResponses errorMessage)
+    public static APIGatewayProxyResponse Create(this ErrorResponse errorMessage)
     {
         var attribute = errorMessage.GetType().GetCustomAttribute<ErrorMessageAttribute>();
         return attribute == null
