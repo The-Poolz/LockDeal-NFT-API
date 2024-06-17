@@ -60,7 +60,7 @@ public class LambdaFunction
 
         var objectToInstantiate = $"MetaDataAPI.Providers.{poolInfo.Name}, MetaDataAPI";
         var objectType = Type.GetType(objectToInstantiate);
-        var provider = (AbstractProvider)Activator.CreateInstance(objectType!, new object[] { poolInfo, erc20 })!;
+        var provider = (Provider)Activator.CreateInstance(objectType!, new object[] { poolInfo, erc20 })!;
 
         var metadata = provider.Metadata(poolId);
         var serializedMetadata = JsonConvert.SerializeObject(metadata);

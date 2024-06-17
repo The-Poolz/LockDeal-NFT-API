@@ -1,7 +1,7 @@
 ﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 
-namespace MetaDataAPI.Providers.AttributesProviders.Models;
+namespace MetaDataAPI.Providers.Attributes.Models;
 
 public class Erc721Attribute
 {

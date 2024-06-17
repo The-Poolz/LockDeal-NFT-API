@@ -3,7 +3,6 @@ using System.Numerics;
 using Net.Urlify.Attributes;
 using EnvironmentManager.Extensions;
 using MetaDataAPI.Providers.PoolInformation;
-using MetaDataAPI.Providers.ImageServices.Models;
 
 namespace MetaDataAPI.Providers.Image.Models;
 

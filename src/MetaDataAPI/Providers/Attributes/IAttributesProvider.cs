@@ -1,6 +1,6 @@
-﻿using MetaDataAPI.Providers.AttributesProviders.Models;
+﻿using MetaDataAPI.Providers.Attributes.Models;
 
-namespace MetaDataAPI.Providers.AttributesProviders;
+namespace MetaDataAPI.Providers.Attributes;
 
 public interface IAttributesProvider
 {

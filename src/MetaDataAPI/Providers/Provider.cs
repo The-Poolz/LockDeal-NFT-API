@@ -1,21 +1,18 @@
-﻿using System.Numerics;
-using MetaDataAPI.Providers.Attributes.Models;
-using MetaDataAPI.Providers.PoolInformation;
-using MetaDataAPI.Providers.AttributesProviders;
-using MetaDataAPI.Providers.Description;
+﻿using MetaDataAPI.Providers.Attributes;
 using MetaDataAPI.Providers.Image;
+using MetaDataAPI.Providers.Description;
+using MetaDataAPI.Providers.PoolInformation;
+using MetaDataAPI.Providers.Attributes.Models;
 
 namespace MetaDataAPI.Providers;
 
-public abstract class AbstractProvider
+public class Provider
 {
     private readonly IDescriptionProvider descriptionProvider;
     private readonly IImageProvider imageProvider;
     private readonly IAttributesProvider attributesProvider;
 
-    protected abstract PoolInfo PoolInfo { get; }
-
-    protected AbstractProvider(
+    protected Provider(
         IImageProvider imageProvider,
         IAttributesProvider attributesProvider,
         IDescriptionProvider descriptionProvider
@@ -26,18 +23,18 @@ public abstract class AbstractProvider
         this.descriptionProvider = descriptionProvider;
     }
 
-    protected AbstractProvider()
+    protected Provider()
     {
         descriptionProvider = new DescriptionProvider();
         imageProvider = new ImageProvider();
     }
 
-    public Erc721Metadata Metadata(BigInteger poolId)
+    public Erc721Metadata Metadata(PoolInfo poolInfo)
     {
         return new Erc721Metadata(
-            name: $"Lock Deal NFT Pool: {poolId}",
-            description: descriptionProvider.Description(PoolInfo),
-            image: imageProvider.ImageUrl(PoolInfo)
+            name: $"Lock Deal NFT Pool: {poolInfo.PoolId}",
+            description: descriptionProvider.Description(poolInfo),
+            image: imageProvider.ImageUrl(poolInfo)
             //attributes: attributesProvider.Attributes()
         );
     }

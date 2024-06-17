@@ -1,4 +1,4 @@
-﻿namespace MetaDataAPI.Providers.ImageServices.Models;
+﻿namespace MetaDataAPI.Providers.Image.Models;
 
 public class QueryStringToken
 {
