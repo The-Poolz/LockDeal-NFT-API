@@ -7,7 +7,7 @@ public class UrlifyModelCreation
 
     public UrlifyModelCreation(string providerName, IEnumerable<PropertyInfo> properties)
     {
-        ClassName = providerName + "UrlifyModel";
+        ClassName = providerName.Replace("Provider", string.Empty) + "UrlifyModel";
         Properties = properties;
     }
 }

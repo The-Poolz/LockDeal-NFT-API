@@ -14,7 +14,7 @@ public class DealPoolInfo : PoolInfo
     public override dynamic DescriptionSource => this;
 
     public override UrlifyModelCreation UrlifyModelCreation => new(
-        "Deal",
+        Name,
         Enumerable.Empty<PropertyInfo>()
     );
 }
