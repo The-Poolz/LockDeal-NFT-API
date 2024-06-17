@@ -7,12 +7,10 @@ public class Erc721AttributeAttribute : Attribute
 {
     public string TraitType { get; set; }
     public DisplayType DisplayType { get; set; }
-    public Type? ConvertType { get; set; }
 
-    public Erc721AttributeAttribute(string traitType, DisplayType displayType, Type? convertType = null)
+    public Erc721AttributeAttribute(string traitType, DisplayType displayType)
     {
         TraitType = traitType;
         DisplayType = displayType;
-        ConvertType = convertType;
     }
 }

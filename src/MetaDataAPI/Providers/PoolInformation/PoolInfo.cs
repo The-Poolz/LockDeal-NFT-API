@@ -16,12 +16,16 @@ public abstract class PoolInfo : BasePoolInfo
     public Erc20Token Erc20Token { get; }
 
     [Erc721Attribute("provider name", DisplayType.String)]
-    public override string Name { get; set; }
+    public string Display_Name => Name;
 
     [Erc721Attribute("collection", DisplayType.Number)]
-    public override BigInteger PoolId { get; set; }
+    public BigInteger Display_PoolId => PoolId;
 
+    // TODO: Need to create converter for a BigDecimal type, cause in json it print like an object
+    //[JsonConverter(typeof(BigDecimalConverter))]
     [Erc721Attribute("left amount", DisplayType.Number)]
+    public string Display_LeftAmount => LeftAmount.ToString();
+
     public BigDecimal LeftAmount { get; }
 
     public abstract string DescriptionTemplate { get; }

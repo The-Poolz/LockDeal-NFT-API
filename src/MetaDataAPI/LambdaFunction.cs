@@ -1,6 +1,7 @@
 using System.Numerics;
 using Newtonsoft.Json;
 using Amazon.Lambda.Core;
+using Newtonsoft.Json.Linq;
 using MetaDataAPI.Providers;
 using MetaDataAPI.BlockchainManager;
 using Amazon.Lambda.APIGatewayEvents;
@@ -51,7 +52,7 @@ public class LambdaFunction
         var metadata = providerManager.Metadata(poolId, chainInfo);
         var serializedMetadata = JsonConvert.SerializeObject(metadata);
 
-        Console.WriteLine(serializedMetadata);
+        Console.WriteLine(JToken.FromObject(metadata));
         return new APIGatewayProxyResponse
         {
             Body = serializedMetadata
