@@ -42,15 +42,15 @@ public class ProviderManager : IProviderManager
 
     public Erc721Metadata Metadata(BigInteger poolId, ChainInfo chainInfo)
     {
-        var fullPoolInfo = FetchPoolInfo(poolId, chainInfo);
-        var poolInfo = fullPoolInfo.FirstOrDefault()!;
+        var poolsInfo = FetchPoolInfo(poolId, chainInfo);
+        var poolInfo = poolsInfo.FirstOrDefault()!;
 
         var erc20 = erc20Provider.GetErc20Token(chainInfo.RpcUrl, chainInfo.ChainId, poolInfo.Token);
 
         var typeName = poolInfo.Name.Replace("Provider", "PoolInfo");
-        var type = Type.GetType($"MetaDataAPI.Providers.{typeName}, MetaDataAPI")
+        var type = Type.GetType($"MetaDataAPI.Providers.PoolInformation.{typeName}, MetaDataAPI")
             ?? throw new InvalidOperationException($"Cannot found '{typeName}' type. Please check if this PoolInfo implemented.");
-        var providerPoolInfo = (PoolInfo)Activator.CreateInstance(type, poolInfo, erc20)!;
+        var providerPoolInfo = (PoolInfo)Activator.CreateInstance(type, poolsInfo, erc20)!;
 
         return Metadata(providerPoolInfo);
     }
@@ -65,12 +65,12 @@ public class ProviderManager : IProviderManager
         );
     }
 
-    public IEnumerable<BasePoolInfo> FetchPoolInfo(BigInteger poolId, ChainInfo chainInfo)
+    public BasePoolInfo[] FetchPoolInfo(BigInteger poolId, ChainInfo chainInfo)
     {
         return FetchPoolInfo(poolId, new LockDealNFTService(new Web3(chainInfo.RpcUrl), chainInfo.LockDealNFT));
     }
 
-    public IEnumerable<BasePoolInfo> FetchPoolInfo(BigInteger poolId, LockDealNFTService lockDealNFTService)
+    public BasePoolInfo[] FetchPoolInfo(BigInteger poolId, LockDealNFTService lockDealNFTService)
     {
         return lockDealNFTService.GetFullDataQueryAsync(poolId)
             .GetAwaiter()

@@ -7,6 +7,6 @@ public class DescriptionProvider : IDescriptionProvider
 {
     public string Description(PoolInfo poolInfo)
     {
-        return Handlebars.Compile(poolInfo.DescriptionTemplate)(poolInfo.DescriptionSource);
+        return Handlebars.Compile(poolInfo.DescriptionTemplate)(poolInfo);
     }
 }

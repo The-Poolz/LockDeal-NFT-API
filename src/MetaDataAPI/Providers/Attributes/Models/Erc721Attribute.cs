@@ -18,7 +18,7 @@ public class Erc721Attribute
     public Erc721Attribute(
         string traitType,
         object value,
-        DisplayType displayType = DisplayType.None
+        DisplayType displayType
     )
     {
         TraitType = traitType;

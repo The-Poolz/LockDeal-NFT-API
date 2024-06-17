@@ -6,15 +6,11 @@ namespace MetaDataAPI.Providers.PoolInformation;
 
 public class DealPoolInfo : PoolInfo
 {
-    public DealPoolInfo(BasePoolInfo poolInfo, Erc20Token erc20)
-        : base(poolInfo, erc20)
+    public DealPoolInfo(BasePoolInfo[] poolsInfo, Erc20Token erc20)
+        : base(poolsInfo, erc20)
     { }
 
     public override string DescriptionTemplate => "This NFT represents immediate access to {{LeftAmount}} units of the specified asset {{Erc20Token}}.";
-    public override dynamic DescriptionSource => this;
 
-    public override UrlifyModelCreation UrlifyModelCreation => new(
-        Name,
-        Enumerable.Empty<PropertyInfo>()
-    );
+    public override UrlifyModelCreation UrlifyModelCreation => new(Name, Enumerable.Empty<PropertyInfo>());
 }
