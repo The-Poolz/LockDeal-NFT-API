@@ -9,6 +9,7 @@ using Amazon.Lambda.APIGatewayEvents;
 using MetaDataAPI.BlockchainManager.Models;
 using poolz.finance.csharp.contracts.LockDealNFT;
 using poolz.finance.csharp.contracts.LockDealNFT.ContractDefinition;
+using MetaDataAPI.Providers.PoolInformation;
 
 [assembly: LambdaSerializer(typeof(Amazon.Lambda.Serialization.Json.JsonSerializer))]
 
@@ -18,12 +19,14 @@ public class LambdaFunction
 {
     private readonly IChainManager chainManager;
     private readonly IErc20Provider erc20Provider;
+    private readonly IProviderManager providerManager;
 
     public LambdaFunction()
     {
         // TODO: Implement chain manager which receive ChainInfo from DB.
         chainManager = new LocalChainManager();
         erc20Provider = new Erc20Provider();
+        providerManager = new ProviderManager();
     }
 
     public LambdaFunction(IChainManager chainManager, IErc20Provider erc20Provider)
@@ -58,11 +61,10 @@ public class LambdaFunction
 
         var erc20 = erc20Provider.GetErc20Token(chainInfo.RpcUrl, chainId, poolInfo.Token);
 
-        var objectToInstantiate = $"MetaDataAPI.Providers.{poolInfo.Name}, MetaDataAPI";
-        var objectType = Type.GetType(objectToInstantiate);
-        var provider = (Provider)Activator.CreateInstance(objectType!, new object[] { poolInfo, erc20 })!;
+        var objectType = Type.GetType($"MetaDataAPI.Providers.{poolInfo.Name}, MetaDataAPI");
+        var providerPoolInfo = (PoolInfo)Activator.CreateInstance(objectType!, poolInfo, erc20)!;
 
-        var metadata = provider.Metadata(poolId);
+        var metadata = providerManager.Metadata(providerPoolInfo);
         var serializedMetadata = JsonConvert.SerializeObject(metadata);
 
         Console.WriteLine(serializedMetadata);
