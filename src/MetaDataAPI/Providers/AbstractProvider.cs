@@ -8,9 +8,9 @@ using MetaDataAPI.Erc20Manager;
 using EnvironmentManager.Extensions;
 using MetaDataAPI.Providers.Attributes;
 using MetaDataAPI.Providers.Image.Models;
+using MetaDataAPI.BlockchainManager.Models;
 using MetaDataAPI.Providers.Attributes.Models;
 using poolz.finance.csharp.contracts.LockDealNFT.ContractDefinition;
-using MetaDataAPI.BlockchainManager.Models;
 
 namespace MetaDataAPI.Providers;
 
@@ -65,12 +65,9 @@ public abstract class AbstractProvider : Urlify
     }
 
     protected abstract string DescriptionTemplate { get; }
-    protected virtual void OnDescriptionCreating() { }
 
     private string GetDescription()
     {
-        OnDescriptionCreating();
-
         return Handlebars.Compile(DescriptionTemplate)(this);
     }
 

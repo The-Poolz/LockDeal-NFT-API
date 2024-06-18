@@ -22,10 +22,6 @@ public class RefundProvider : AbstractProvider
     [Erc721Attribute("sub provider name", DisplayType.String)]
     public string SubProviderName => SubProvider.Name;
 
-    public RefundProvider(BasePoolInfo[] poolsInfo, ChainInfo chainInfo)
-        : this(poolsInfo, chainInfo, new Erc20Provider())
-    { }
-
     public RefundProvider(BasePoolInfo[] poolsInfo, ChainInfo chainInfo, IErc20Provider erc20Provider)
         : base(poolsInfo, chainInfo, erc20Provider)
     {

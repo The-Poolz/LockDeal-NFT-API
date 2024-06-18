@@ -21,10 +21,6 @@ public class TimedDealProvider : AbstractProvider
     [Erc721Attribute("start amount", DisplayType.Number)]
     public decimal StartAmount { get; }
 
-    public TimedDealProvider(BasePoolInfo[] poolsInfo, ChainInfo chainInfo)
-        : this(poolsInfo, chainInfo, new Erc20Provider())
-    { }
-
     public TimedDealProvider(BasePoolInfo[] poolsInfo, ChainInfo chainInfo, IErc20Provider erc20Provider)
         : base(poolsInfo, chainInfo, erc20Provider)
     {

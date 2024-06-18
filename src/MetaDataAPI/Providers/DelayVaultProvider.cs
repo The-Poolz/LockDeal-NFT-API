@@ -6,10 +6,6 @@ namespace MetaDataAPI.Providers;
 
 public class DelayVaultProvider : AbstractProvider
 {
-    public DelayVaultProvider(BasePoolInfo[] poolsInfo, ChainInfo chainInfo)
-        : this(poolsInfo, chainInfo, new Erc20Provider())
-    { }
-
     public DelayVaultProvider(BasePoolInfo[] poolsInfo, ChainInfo chainInfo, IErc20Provider erc20Provider)
         : base(poolsInfo, chainInfo, erc20Provider)
     { }

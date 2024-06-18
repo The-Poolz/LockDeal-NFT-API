@@ -18,11 +18,6 @@ internal class LockDealProvider : DealProvider
     [Erc721Attribute("start time", DisplayType.Date)]
     public BigInteger StartTime { get; }
 
-    public LockDealProvider(BasePoolInfo[] poolsInfo, ChainInfo chainInfo)
-        : this(poolsInfo, chainInfo, new Erc20Provider())
-    {
-    }
-
     public LockDealProvider(BasePoolInfo[] poolsInfo, ChainInfo chainInfo, IErc20Provider erc20Provider)
         : base(poolsInfo, chainInfo, erc20Provider)
     {

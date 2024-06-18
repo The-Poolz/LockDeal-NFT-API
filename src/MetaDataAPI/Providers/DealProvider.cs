@@ -6,10 +6,6 @@ namespace MetaDataAPI.Providers;
 
 public class DealProvider : AbstractProvider
 {
-    public DealProvider(BasePoolInfo[] poolsInfo, ChainInfo chainInfo)
-        : base(poolsInfo, chainInfo)
-    { }
-
     public DealProvider(BasePoolInfo poolInfo, ChainInfo chainInfo, IErc20Provider erc20Provider)
         : this(new []{ poolInfo }, chainInfo, erc20Provider)
     { }
