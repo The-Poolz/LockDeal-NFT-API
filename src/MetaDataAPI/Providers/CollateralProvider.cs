@@ -69,6 +69,7 @@ public class CollateralProvider : AbstractProvider
             );
     }
 
+    // TODO: I think something wrong in "tokens {{Erc20Token}}, for Main Coin {MainCoin}." part of description
     protected override string DescriptionTemplate =>
         "Exclusively utilized by project administrators, this NFT serves as a secure vault for holding refundable tokens {{Erc20Token}}, for Main Coin {MainCoin}. " +
         "It holds {{MainCoinCollectorAmount}} for the main coin collector, {{TokenCollectorAmount}} for the token collector," +
