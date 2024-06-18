@@ -2,6 +2,7 @@
 using Net.Web3.EthereumWallet;
 using Net.Cache.DynamoDb.ERC20;
 using Net.Cache.DynamoDb.ERC20.Models;
+using MetaDataAPI.BlockchainManager.Models;
 
 namespace MetaDataAPI.Erc20Manager;
 
@@ -17,6 +18,11 @@ public class Erc20Provider : IErc20Provider
     public Erc20Provider(ERC20CacheProvider provider)
     {
         this.provider = provider;
+    }
+
+    public Erc20Token GetErc20Token(ChainInfo chainInfo, EthereumAddress address)
+    {
+        return GetErc20Token(chainInfo.RpcUrl, chainInfo.ChainId, address);
     }
 
     public Erc20Token GetErc20Token(string rpcUrl, BigInteger chainId, EthereumAddress address)

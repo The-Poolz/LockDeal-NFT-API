@@ -4,7 +4,7 @@ using EnvironmentManager.Extensions;
 
 namespace MetaDataAPI.Providers.Image.Models;
 
-public class NftUrlifyModel : Urlify
+public class UrlifyProvider : Urlify
 {
     [QueryStringProperty("url")]
     public string Url { get; }
@@ -12,9 +12,9 @@ public class NftUrlifyModel : Urlify
     [QueryStringProperty("selector")]
     public string Selector { get; }
 
-    public NftUrlifyModel(BaseUrlifyModel baseUrlifyModel) : base((string)Environments.HTML_TO_IMAGE_ENDPOINT.Get())
+    public UrlifyProvider(AbstractProvider provider) : base((string)Environments.HTML_TO_IMAGE_ENDPOINT.Get())
     {
-        Url = baseUrlifyModel.BuildUrl();
+        Url = provider.BuildUrl();
         Selector = ".blockmodal";
     }
 }
