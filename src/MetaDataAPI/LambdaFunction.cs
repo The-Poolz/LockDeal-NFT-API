@@ -1,15 +1,15 @@
+using Nethereum.Web3;
 using System.Numerics;
 using Newtonsoft.Json;
 using Amazon.Lambda.Core;
 using Newtonsoft.Json.Linq;
 using MetaDataAPI.Providers;
+using MetaDataAPI.Erc20Manager;
 using MetaDataAPI.BlockchainManager;
 using Amazon.Lambda.APIGatewayEvents;
 using MetaDataAPI.BlockchainManager.Models;
-using Nethereum.Web3;
 using poolz.finance.csharp.contracts.LockDealNFT.ContractDefinition;
 using poolz.finance.csharp.contracts.LockDealNFT;
-using MetaDataAPI.Erc20Manager;
 
 [assembly: LambdaSerializer(typeof(Amazon.Lambda.Serialization.Json.JsonSerializer))]
 
@@ -52,19 +52,19 @@ public class LambdaFunction
         {
             return new APIGatewayProxyResponse { Body = $"Cannot parse '{poolId}' pool ID." };
         }
+
         var chainInfo = chainManager.FetchChainInfo(chainId);
 
         var poolsInfo = FetchPoolInfo(poolId, chainInfo);
-        var poolInfo = poolsInfo.FirstOrDefault()!;
 
-        var type = Type.GetType($"MetaDataAPI.Providers.{poolInfo.Name}, MetaDataAPI")
-            ?? throw new InvalidOperationException($"Cannot found '{poolInfo.Name}' type. Please check if this Provider implemented.");
-        var provider = (AbstractProvider)Activator.CreateInstance(type, poolsInfo, chainInfo, erc20Provider)!;
+        var provider = AbstractProvider.CreateFromPoolInfo(poolsInfo, chainInfo, erc20Provider);
 
         var metadata = provider.GetErc721Metadata();
+
         var serializedMetadata = JsonConvert.SerializeObject(metadata);
 
         Console.WriteLine(JToken.FromObject(metadata));
+
         return new APIGatewayProxyResponse
         {
             Body = serializedMetadata

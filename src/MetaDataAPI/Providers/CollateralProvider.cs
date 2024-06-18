@@ -1,11 +1,12 @@
-﻿using MetaDataAPI.BlockchainManager.Models;
+﻿using Nethereum.Web3;
+using System.Numerics;
+using Net.Urlify.Attributes;
+using MetaDataAPI.Extensions;
 using MetaDataAPI.Erc20Manager;
 using MetaDataAPI.Providers.Attributes;
+using MetaDataAPI.BlockchainManager.Models;
 using MetaDataAPI.Providers.Attributes.Models;
-using Net.Urlify.Attributes;
 using poolz.finance.csharp.contracts.LockDealNFT.ContractDefinition;
-using System.Numerics;
-using MetaDataAPI.Extensions;
 
 namespace MetaDataAPI.Providers;
 
@@ -21,9 +22,10 @@ public class CollateralProvider : AbstractProvider
     public Erc20Token MainCoin { get; }
 
     public new decimal LeftAmount => base.LeftAmount;
+    public new BigInteger VaultId => base.VaultId;
 
     [Erc721Attribute("main coin collection", DisplayType.Number)]
-    public new BigInteger VaultId => PoolInfo.VaultId;
+    public BigInteger MainCoinCollection => PoolInfo.VaultId;
 
     [Erc721Attribute("collection", DisplayType.Number)]
     public BigInteger Collection => SubProvider[CollateralType.TokenCollector].PoolInfo.VaultId;
@@ -39,6 +41,9 @@ public class CollateralProvider : AbstractProvider
 
     [Erc721Attribute("finish time", DisplayType.Date)]
     public BigInteger FinishTime { get; }
+
+    [Erc721Attribute("rate", DisplayType.Number)]
+    public decimal Rate { get; }
 
     [QueryStringProperty("Finish time", order: 1)]
     public string QueryString_FinishTime => FinishTime.DateTimeStringFormat();
@@ -60,12 +65,12 @@ public class CollateralProvider : AbstractProvider
     {
         MainCoin = Erc20Token;
         FinishTime = PoolInfo.Params[1];
+        Rate = Web3.Convert.FromWei(PoolInfo.Params[2], 21);
 
-        SubProvider = Enum.GetValues(typeof(CollateralType))
-            .Cast<CollateralType>()
+        SubProvider = Enumerable.Range(1, poolsInfo.Length - 1)
             .ToDictionary(
-                val => val,
-                val => new DealProvider(poolsInfo[(int)val], chainInfo, erc20Provider)
+                i => (CollateralType)(i - 1),
+                i => new DealProvider(poolsInfo[i], chainInfo, erc20Provider)
             );
     }
 

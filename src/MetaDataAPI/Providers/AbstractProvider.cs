@@ -59,7 +59,7 @@ public abstract class AbstractProvider : Urlify
         PoolId = PoolInfo.PoolId;
         Name = PoolInfo.Name;
         VaultId = PoolInfo.VaultId;
-        LeftAmount = LeftAmount = Web3.Convert.FromWei(PoolInfo.Params[0], Erc20Token.Decimals);
+        LeftAmount = Web3.Convert.FromWei(PoolInfo.Params[0], Erc20Token.Decimals);
 
         Token = new QueryStringToken(Erc20Token.Name, "Left Amount", LeftAmount);
     }
@@ -102,5 +102,13 @@ public abstract class AbstractProvider : Urlify
             image: GetImage(),
             attributes: GetAttributes()
         );
+    }
+
+    public static AbstractProvider CreateFromPoolInfo(BasePoolInfo[] poolsInfo, ChainInfo chainInfo, IErc20Provider erc20Provider)
+    {
+        var poolInfo = poolsInfo[0];
+        var type = Type.GetType($"MetaDataAPI.Providers.{poolInfo.Name}, MetaDataAPI")
+            ?? throw new InvalidOperationException($"Cannot found '{poolInfo.Name}' type. Please check if this Provider implemented.");
+        return (AbstractProvider)Activator.CreateInstance(type, poolsInfo, chainInfo, erc20Provider)!;
     }
 }
