@@ -1,5 +1,0 @@
-@startuml
-interface IUrlShortener {
-    + Shorten(url:string, description:string) : string
-}
-@enduml

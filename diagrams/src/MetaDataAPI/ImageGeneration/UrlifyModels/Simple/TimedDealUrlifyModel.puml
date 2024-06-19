@@ -1,7 +1,0 @@
-@startuml
-class TimedDealUrlifyModel {
-    + FinishTime : string <<get>> <<set>>
-    + TimedDealUrlifyModel(poolInfo:BasePoolInfo)
-}
-LockDealUrlifyModel <|-- TimedDealUrlifyModel
-@enduml
