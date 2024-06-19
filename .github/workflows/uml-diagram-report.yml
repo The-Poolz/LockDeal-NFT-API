@@ -30,17 +30,6 @@ jobs:
       run: |
         puml-gen ./ ./diagrams/ -dir -allInOne -excludePaths **/tests
 
-    - name: Setup Node.js
-      uses: actions/setup-node@v4
-      with:
-        node-version: '14'
-
-    - name: Install puml-for-markdown
-      run: npm install -g puml-for-markdown
-
-    - name: Render puml
-      run: puml-for-markdown --puml-directory ./diagrams/
-
     - name: Commit and Push changes
       run: |
         git config --local user.email "action@github.com"
