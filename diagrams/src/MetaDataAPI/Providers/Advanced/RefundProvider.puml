@@ -1,0 +1,15 @@
+@startuml
+class RefundProvider {
+    + <<override>> ProviderName : string <<get>>
+    + <<override>> Description : string <<get>>
+    + <<override>> Urlify : BaseUrlifyModel <<get>>
+    + SubProvider : Provider <<get>>
+    + CollateralProvider : CollateralProvider <<get>>
+    + Rate : decimal <<get>>
+    + MainCoinAmount : decimal <<get>>
+    + MainCoinCollection : BigInteger <<get>>
+    + SubProviderName : string <<get>>
+    + RefundProvider(basePoolInfo:BasePoolInfo[])
+}
+Provider <|-- RefundProvider
+@enduml

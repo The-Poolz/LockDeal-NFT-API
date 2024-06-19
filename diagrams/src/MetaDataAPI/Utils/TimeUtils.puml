@@ -1,0 +1,5 @@
+@startuml
+class TimeUtils <<static>> {
+    + {static} FromUnixTimestamp(timestamp:long) : DateTime
+}
+@enduml

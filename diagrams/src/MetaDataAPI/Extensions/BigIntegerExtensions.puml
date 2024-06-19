@@ -1,0 +1,5 @@
+@startuml
+class BigIntegerExtensions <<static>> {
+    + {static} WeiToEth(value:BigInteger, decimals:byte) : decimal
+}
+@enduml

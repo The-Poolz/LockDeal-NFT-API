@@ -1,0 +1,9 @@
+@startuml
+class QueryStringToken {
+    + TokenName : string <<get>>
+    + Header : string <<get>>
+    + Value : object <<get>>
+    + QueryStringToken(tokenName:string, header:string, value:object)
+    + <<override>> ToString() : string
+}
+@enduml
