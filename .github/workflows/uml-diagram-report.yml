@@ -38,8 +38,6 @@ jobs:
     - name: Create Pull Request
       uses: peter-evans/create-pull-request@v4
       with:
-        token: ${{ secrets.GITHUB_TOKEN }}
         branch: uml-diagrams
         delete-branch: true
-        title: "Update UML Diagrams"
-        body: "This PR updates the UML diagrams."
+        title: Update UML Diagrams
