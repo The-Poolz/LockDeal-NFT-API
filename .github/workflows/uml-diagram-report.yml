@@ -1,0 +1,35 @@
+name: Generate UML Diagram
+
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Setup .NET Core
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: '6.0'
+
+    - name: Install PlantUMLClassDiagramGenerator
+      run: dotnet tool install --global PlantUmlClassDiagramGenerator
+
+    - name: Generate UML Diagram
+      run: |
+        export PATH="$PATH:/home/runner/.dotnet/tools"
+        PlantUmlClassDiagramGenerator -a -excludePaths "**/tests" -o ./diagrams
+
+    - name: Upload UML Diagrams as Artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: uml-diagrams
+        path: diagrams/
