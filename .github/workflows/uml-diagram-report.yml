@@ -35,13 +35,5 @@ jobs:
         git config --local user.name "GitHub Action"
         git add diagrams/
         git commit -m "Add generated UML diagrams" || echo "No changes to commit"
-        git pull --rebase origin uml-diagrams
-        git push origin HEAD:refs/heads/uml-diagrams
-
-    - name: Create Pull Request
-      uses: peter-evans/create-pull-request@v4
-      with:
-        branch: uml-diagrams
-        base: ${{ github.ref_name }}
-        delete-branch: true
-        title: Update UML Diagrams
+        git pull --rebase
+        git push
