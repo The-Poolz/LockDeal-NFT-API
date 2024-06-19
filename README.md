@@ -19,4 +19,4 @@ It then returns a generated NFT image with the attributes printed on it.
 
 ## Diagram
 
-<!--![Diagram Image Link](https://github.com/The-Poolz/LockDeal-NFT-API/tree/master/diagrams/include.puml)-->
+<!--![Diagram Image Link](./diagrams/include.puml)-->
