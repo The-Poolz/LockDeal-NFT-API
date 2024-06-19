@@ -17,8 +17,16 @@ jobs:
       uses: actions/checkout@v2
       with:
         fetch-depth: 0
-    - name: Embed PlantUML inside Markdown
-      uses: alessandro-marcantoni/puml-markdown@v0.1.1
+    - name: Setting up node
+      uses: actions/setup-node@v1
+      with:
+        node-version: '16'
+    - name: Add plantuml for markdown
+      run: npm i -g puml-for-markdown
+      shell: bash
+    - name: Embed plantuml in markdown
+      run: puml-for-markdown -g
+      shell: bash
       
   build:
     runs-on: ubuntu-latest
