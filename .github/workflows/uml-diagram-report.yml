@@ -25,7 +25,7 @@ jobs:
 
     - name: Generate UML Diagram
       run: |
-        puml-gen ./ ./ -dir -excludePaths **/tests
+        puml-gen ./ ./diagrams/ -dir -excludePaths **/tests
 
     - name: Upload UML Diagrams as Artifacts
       uses: actions/upload-artifact@v4
