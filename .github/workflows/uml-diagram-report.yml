@@ -31,6 +31,9 @@ jobs:
       run: |
         puml-gen ./ ./diagrams/ -dir -allInOne -excludePaths **/tests
 
+    - name: Download plantuml
+      run: pip install plantuml
+    
     - name: Write URL to file
       run: python generate_url.py
       env:
