@@ -10,7 +10,7 @@ using poolz.finance.csharp.contracts.LockDealNFT.ContractDefinition;
 
 namespace MetaDataAPI.Providers;
 
-internal class LockDealProvider : DealProvider
+public class LockDealProvider : DealProvider
 {
     [QueryStringProperty("Start time", order: 1)]
     public string QueryString_StartTime => StartTime.DateTimeStringFormat();

@@ -104,11 +104,15 @@ public abstract class AbstractProvider : Urlify
         );
     }
 
-    public static AbstractProvider CreateFromPoolInfo(BasePoolInfo[] poolsInfo, ChainInfo chainInfo, IErc20Provider erc20Provider)
+    public static AbstractProvider CreateFromPoolInfo(BasePoolInfo[] poolsInfo, ChainInfo chainInfo, IErc20Provider erc20Provider) =>
+        CreateFromPoolInfo<AbstractProvider>(poolsInfo, chainInfo, erc20Provider);
+
+    public static TProvider CreateFromPoolInfo<TProvider>(BasePoolInfo[] poolsInfo, ChainInfo chainInfo, IErc20Provider erc20Provider)
+        where TProvider : AbstractProvider
     {
         var poolInfo = poolsInfo[0];
         var type = Type.GetType($"MetaDataAPI.Providers.{poolInfo.Name}, MetaDataAPI")
             ?? throw new InvalidOperationException($"Cannot found '{poolInfo.Name}' type. Please check if this Provider implemented.");
-        return (AbstractProvider)Activator.CreateInstance(type, poolsInfo, chainInfo, erc20Provider)!;
+        return (TProvider)Activator.CreateInstance(type, poolsInfo, chainInfo, erc20Provider)!;
     }
 }

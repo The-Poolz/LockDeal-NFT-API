@@ -25,8 +25,8 @@ public class RefundProvider : AbstractProvider
     public RefundProvider(BasePoolInfo[] poolsInfo, ChainInfo chainInfo, IErc20Provider erc20Provider)
         : base(poolsInfo, chainInfo, erc20Provider)
     {
-        SubProvider = AbstractProvider.CreateFromPoolInfo(new []{ poolsInfo[1] }, chainInfo, erc20Provider);
-        CollateralProvider = new CollateralProvider(poolsInfo[2], chainInfo, erc20Provider);
+        SubProvider = CreateFromPoolInfo(new []{ poolsInfo[1] }, chainInfo, erc20Provider);
+        CollateralProvider = CreateFromPoolInfo<CollateralProvider>(new[] { poolsInfo[2] }, chainInfo, erc20Provider);
     }
 
     protected override string DescriptionTemplate =>

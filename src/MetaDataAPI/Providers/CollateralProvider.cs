@@ -20,7 +20,7 @@ internal enum CollateralType
 public class CollateralProvider : AbstractProvider
 {
     public Erc20Token MainCoin { get; }
-
+    public new Erc20Token Erc20Token { get; }
     public new decimal LeftAmount => base.LeftAmount;
     public new BigInteger VaultId => base.VaultId;
 
@@ -52,14 +52,13 @@ public class CollateralProvider : AbstractProvider
 
     public CollateralProvider(BasePoolInfo poolInfo, ChainInfo chainInfo, IErc20Provider erc20Provider)
         : this(new []{ poolInfo }, chainInfo, erc20Provider)
-    {
-        MainCoin = erc20Provider.GetErc20Token(chainInfo, poolInfo.Token);
-    }
+    { }
 
     public CollateralProvider(BasePoolInfo[] poolsInfo, ChainInfo chainInfo, IErc20Provider erc20Provider)
         : base(poolsInfo, chainInfo, erc20Provider)
     {
-        MainCoin = Erc20Token;
+        MainCoin = erc20Provider.GetErc20Token(chainInfo, poolsInfo[0].Token);
+        Erc20Token = erc20Provider.GetErc20Token(chainInfo, poolsInfo[2].Token);
         FinishTime = PoolInfo.Params[1];
         Rate = Web3.Convert.FromWei(PoolInfo.Params[2], 21);
 
@@ -70,7 +69,6 @@ public class CollateralProvider : AbstractProvider
             );
     }
 
-    // TODO: I think something wrong in "tokens {{Erc20Token}}, for Main Coin {{MainCoin}}." part of description
     protected override string DescriptionTemplate =>
         "Exclusively utilized by project administrators, this NFT serves as a secure vault for holding refundable tokens {{Erc20Token}}, for Main Coin {{MainCoin}}. " +
         "It holds {{MainCoinCollectorAmount}} for the main coin collector, {{TokenCollectorAmount}} for the token collector," +
