@@ -25,8 +25,7 @@ jobs:
 
     - name: Generate UML Diagram
       run: |
-        export PATH="$PATH:/home/runner/.dotnet/tools"
-        PlantUmlClassDiagramGenerator -a -excludePaths "**/tests" -o ./diagrams
+        puml-gen ./ ./ -dir -excludePaths **/tests
 
     - name: Upload UML Diagrams as Artifacts
       uses: actions/upload-artifact@v4
