@@ -1,9 +1,0 @@
-@startuml
-enum DisplayType {
-    None,
-    String,
-    Number,
-    Date,
-    Ignore,
-}
-@enduml

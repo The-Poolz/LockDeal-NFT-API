@@ -1,9 +1,0 @@
-@startuml
-class DisplayAttribute {
-    + DisplayType : DisplayType <<get>>
-    + DisplayName : string? <<get>>
-    + DisplayAttribute(displayType:DisplayType, displayName:string?)
-    + TryGetErc721Attribute(propertyName:string, value:object?, erc721Attribute:Erc721Attribute) : bool
-}
-Attribute <|-- DisplayAttribute
-@enduml

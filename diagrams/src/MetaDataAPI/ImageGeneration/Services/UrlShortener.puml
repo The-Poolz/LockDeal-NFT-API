@@ -1,9 +1,0 @@
-@startuml
-class UrlShortener {
-    - <<readonly>> context : TlyContext
-    + UrlShortener()
-    + UrlShortener(context:TlyContext)
-    + Shorten(url:string, description:string) : string
-}
-IUrlShortener <|-- UrlShortener
-@enduml

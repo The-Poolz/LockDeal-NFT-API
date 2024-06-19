@@ -1,6 +1,0 @@
-@startuml
-class ApiResponseFactory <<static>> {
-    + {static} CreateResponse(body:string, statusCode:HttpStatusCode) : APIGatewayProxyResponse
-    + {static} Create(errorMessage:ErrorResponse) : APIGatewayProxyResponse
-}
-@enduml

@@ -1,6 +1,0 @@
-@startuml
-class CollateralUrlifyModel {
-    + CollateralUrlifyModel(poolInfo:BasePoolInfo)
-}
-BaseUrlifyModel <|-- CollateralUrlifyModel
-@enduml
