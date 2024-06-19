@@ -40,7 +40,7 @@ jobs:
         FILE_PATH: ./diagrams/include.puml
 
     - name: Upload URL as artifact
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v4
       with:
         name: plantuml-url
         path: url.txt
