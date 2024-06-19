@@ -30,6 +30,17 @@ jobs:
       run: |
         puml-gen ./ ./diagrams/ -dir -allInOne -excludePaths **/tests
 
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '14'
+
+    - name: Install puml-for-markdown
+      run: npm install -g puml-for-markdown
+
+    - name: Render puml
+      run: puml-for-markdown --root-directory ./diagrams/
+
     - name: Commit and Push changes
       run: |
         git config --local user.email "action@github.com"
@@ -38,8 +49,3 @@ jobs:
         git commit -m "Add generated UML diagrams" || echo "No changes to commit"
         git pull --rebase origin ${{ github.head_ref }}
         git push origin HEAD:${{ github.head_ref }}
-
-    - name: Render puml
-      run: |
-        npm i -g puml-for-markdown
-        puml-for-markdown --root-directory ./diagrams/
