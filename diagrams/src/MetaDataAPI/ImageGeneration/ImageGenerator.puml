@@ -1,0 +1,10 @@
+@startuml
+class ImageGenerator {
+    - <<readonly>> renderer : IImageRenderer
+    - <<readonly>> shortener : IUrlShortener
+    + ImageGenerator()
+    + ImageGenerator(renderer:IImageRenderer, shortener:IUrlShortener)
+    + Generate(urlify:BaseUrlifyModel, description:string) : string
+}
+IImageGenerator <|-- ImageGenerator
+@enduml

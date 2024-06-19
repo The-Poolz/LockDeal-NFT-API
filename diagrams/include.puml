@@ -1,0 +1,251 @@
+@startuml
+class LambdaFunction {
+    - <<readonly>> providerFactory : ProviderFactory
+    + LambdaFunction()
+    + LambdaFunction(providerFactory:ProviderFactory)
+    + FunctionHandler(request:LambdaRequest) : APIGatewayProxyResponse
+}
+enum Environments {
+    LOCK_DEAL_NFT_ADDRESS,
+    RPC_URL,
+    NFT_HTML_ENDPOINT,
+    HTML_TO_IMAGE_ENDPOINT_TEMPLATE,
+    TLY_API_KEY,
+}
+class ErrorMessageAttribute {
+    + StatusCode : HttpStatusCode <<get>> <<set>>
+    + Description : string <<get>> <<set>>
+    + ErrorMessageAttribute(statusCode:HttpStatusCode, description:string)
+}
+Attribute <|-- ErrorMessageAttribute
+enum ErrorResponse {
+    InvalidId,
+    MissingId,
+    PoolIdNotInRange,
+    InvalidResponse,
+    FailedToCreateProvider,
+}
+class TimeUtils <<static>> {
+    + {static} FromUnixTimestamp(timestamp:long) : DateTime
+}
+class ApiResponseFactory <<static>> {
+    + {static} CreateResponse(body:string, statusCode:HttpStatusCode) : APIGatewayProxyResponse
+    + {static} Create(errorMessage:ErrorResponse) : APIGatewayProxyResponse
+}
+class DisplayAttribute {
+    + DisplayType : DisplayType <<get>>
+    + DisplayName : string? <<get>>
+    + DisplayAttribute(displayType:DisplayType, displayName:string?)
+    + TryGetErc721Attribute(propertyName:string, value:object?, erc721Attribute:Erc721Attribute) : bool
+}
+Attribute <|-- DisplayAttribute
+class BigIntegerExtensions <<static>> {
+    + {static} WeiToEth(value:BigInteger, decimals:byte) : decimal
+}
+interface IImageGenerator {
+    + Generate(urlify:BaseUrlifyModel, description:string) : string
+}
+class ImageGenerator {
+    - <<readonly>> renderer : IImageRenderer
+    - <<readonly>> shortener : IUrlShortener
+    + ImageGenerator()
+    + ImageGenerator(renderer:IImageRenderer, shortener:IUrlShortener)
+    + Generate(urlify:BaseUrlifyModel, description:string) : string
+}
+IImageGenerator <|-- ImageGenerator
+class ProviderFactory {
+    - <<readonly>> lockDealNFTService : LockDealNFTService
+    + ProviderFactory(lockDealNFTService:LockDealNFTService?)
+    + IsPoolIdWithinSupplyRange(poolId:BigInteger) : bool
+    + Create(poolId:BigInteger) : Provider
+    + {static} Create(basePoolInfo:BasePoolInfo[]) : Provider
+}
+abstract class Provider {
+    - <<readonly>> imageGenerator : IImageGenerator
+    + {abstract} ProviderName : string <<get>>
+    + <<virtual>> LeftAmount : decimal <<get>>
+    + <<virtual>> Collection : BigInteger <<get>>
+    + <<virtual>> Token : Erc20Token <<get>>
+    + PoolInfo : BasePoolInfo <<get>>
+    + {abstract} Description : string <<get>>
+    + {abstract} Urlify : BaseUrlifyModel <<get>>
+    + <<virtual>> Attributes : IEnumerable<Erc721Attribute> <<get>>
+    # Provider(basePoolInfo:BasePoolInfo[])
+    + GetJsonErc721Metadata() : string
+    - GetErc721Metadata() : Erc721Metadata
+    - GetDescription() : string
+    - IsFullyWithdrawn(nftAddress:string) : bool
+    - IsFullyRefunded(nftAddress:string) : bool
+}
+class Erc20Token {
+    + Name : string <<get>> <<internal set>>
+    + Symbol : string <<get>> <<internal set>>
+    + Address : string <<get>> <<internal set>>
+    + Decimals : byte <<get>> <<internal set>>
+    + Erc20Token(address:string, rpcCaller:Nethereum.Contracts.Standards.ERC20.ERC20ContractService?)
+    + <<override>> ToString() : string
+}
+class Erc721Attribute {
+    + DisplayType : DisplayType <<get>>
+    + TraitType : string <<get>>
+    + Value : object <<get>>
+    + Erc721Attribute(traitType:string, value:object, displayType:DisplayType)
+}
+class Erc721Metadata {
+    + Name : string <<get>>
+    + Description : string <<get>>
+    + Image : string <<get>>
+    + Attributes : IEnumerable<Erc721Attribute> <<get>>
+    + Erc721Metadata(name:string, description:string, image:string, attributes:IEnumerable<Erc721Attribute>)
+}
+class LambdaRequest {
+    - ParsePoolId(poolId:BigInteger) : ErrorResponse?
+    + PoolIdToProvider(providerFactory:ProviderFactory, provider:Provider?) : ErrorResponse?
+}
+APIGatewayProxyRequest <|-- LambdaRequest
+enum DisplayType {
+    None,
+    String,
+    Number,
+    Date,
+    Ignore,
+}
+class PoolInfo <<sealed>> {
+    + Erc20Token : Erc20Token <<get>>
+    + LeftAmount : decimal <<get>>
+    + PoolInfo(poolInfo:BasePoolInfo)
+}
+BasePoolInfo <|-- PoolInfo
+interface IUrlShortener {
+    + Shorten(url:string, description:string) : string
+}
+class UrlShortener {
+    - <<readonly>> context : TlyContext
+    + UrlShortener()
+    + UrlShortener(context:TlyContext)
+    + Shorten(url:string, description:string) : string
+}
+IUrlShortener <|-- UrlShortener
+class ImageRenderer {
+    + RenderImage(url:string) : string
+}
+IImageRenderer <|-- ImageRenderer
+interface IImageRenderer {
+    + RenderImage(url:string) : string
+}
+class BaseUrlifyModel {
+    + Name : string <<get>> <<set>>
+    + Id : BigInteger <<get>> <<set>>
+    + Token : QueryStringToken <<get>> <<set>>
+    + BaseUrlifyModel(poolInfo:BasePoolInfo)
+    + BaseUrlifyModel(poolInfo:PoolInfo)
+}
+Urlify <|-- BaseUrlifyModel
+class DelayVaultProvider {
+    + <<override>> ProviderName : string <<get>>
+    + <<override>> Description : string <<get>>
+    + <<override>> Urlify : BaseUrlifyModel <<get>>
+    + DelayVaultProvider(basePoolInfo:BasePoolInfo[])
+}
+Provider <|-- DelayVaultProvider
+class DealProvider {
+    + <<override>> ToString() : string
+    + <<override>> ProviderName : string <<get>>
+    + <<override>> Description : string <<get>>
+    + <<override>> Urlify : BaseUrlifyModel <<get>>
+    + DealProvider(basePoolInfos:BasePoolInfo[])
+    + DealProvider(basePoolInfo:BasePoolInfo)
+}
+Provider <|-- DealProvider
+class TimedDealProvider {
+    + <<override>> ToString() : string
+    + <<override>> ProviderName : string <<get>>
+    + <<override>> Description : string <<get>>
+    + StartAmount : decimal <<get>>
+    + FinishTime : uint <<get>>
+    + FinishDateTime : DateTime <<get>>
+    + <<override>> Urlify : BaseUrlifyModel <<get>>
+    + TimedDealProvider(basePoolInfo:BasePoolInfo[])
+}
+LockDealProvider <|-- TimedDealProvider
+class LockDealProvider {
+    + <<override>> ToString() : string
+    + <<override>> ProviderName : string <<get>>
+    + <<override>> Description : string <<get>>
+    + StartTime : uint <<get>>
+    + StartDateTime : DateTime <<get>>
+    + <<override>> Urlify : BaseUrlifyModel <<get>>
+    + LockDealProvider(basePoolInfo:BasePoolInfo[])
+}
+DealProvider <|-- LockDealProvider
+class CollateralProvider {
+    + <<override>> ProviderName : string <<get>>
+    + <<override>> Description : string <<get>>
+    + <<override>> Urlify : BaseUrlifyModel <<get>>
+    + MainCoin : Erc20Token <<get>>
+    + MainCoinCollection : BigInteger <<get>>
+    + <<override>> Collection : BigInteger <<get>>
+    + <<override>> LeftAmount : decimal <<get>>
+    + MainCoinCollectorAmount : decimal <<get>>
+    + TokenCollectorAmount : decimal <<get>>
+    + MainCoinHolderAmount : decimal <<get>>
+    + FinishTimestamp : uint <<get>>
+    <<internal>> FinishTime : DateTime <<get>>
+    <<internal>> SubProvider : Dictionary<CollateralType,DealProvider> <<get>>
+    + CollateralProvider(basePoolInfo:BasePoolInfo)
+    + CollateralProvider(basePoolInfo:BasePoolInfo[])
+}
+enum CollateralType {
+    MainCoinCollector= 1,
+    TokenCollector= 2,
+    MainCoinHolder= 3,
+}
+Provider <|-- CollateralProvider
+CollateralProvider +-- CollateralType
+class RefundProvider {
+    + <<override>> ProviderName : string <<get>>
+    + <<override>> Description : string <<get>>
+    + <<override>> Urlify : BaseUrlifyModel <<get>>
+    + SubProvider : Provider <<get>>
+    + CollateralProvider : CollateralProvider <<get>>
+    + Rate : decimal <<get>>
+    + MainCoinAmount : decimal <<get>>
+    + MainCoinCollection : BigInteger <<get>>
+    + SubProviderName : string <<get>>
+    + RefundProvider(basePoolInfo:BasePoolInfo[])
+}
+Provider <|-- RefundProvider
+class DelayVaultUrlifyModel {
+    + DelayVaultUrlifyModel(poolInfo:BasePoolInfo)
+}
+BaseUrlifyModel <|-- DelayVaultUrlifyModel
+class LockDealUrlifyModel {
+    + StartTime : string <<get>> <<set>>
+    + LockDealUrlifyModel(poolInfo:BasePoolInfo)
+}
+DealUrlifyModel <|-- LockDealUrlifyModel
+class DealUrlifyModel {
+    + DealUrlifyModel(poolInfo:BasePoolInfo)
+}
+BaseUrlifyModel <|-- DealUrlifyModel
+class TimedDealUrlifyModel {
+    + FinishTime : string <<get>> <<set>>
+    + TimedDealUrlifyModel(poolInfo:BasePoolInfo)
+}
+LockDealUrlifyModel <|-- TimedDealUrlifyModel
+class RefundUrlifyModel {
+    + RefundUrlifyModel(poolInfo:BasePoolInfo)
+}
+BaseUrlifyModel <|-- RefundUrlifyModel
+class CollateralUrlifyModel {
+    + CollateralUrlifyModel(poolInfo:BasePoolInfo)
+}
+BaseUrlifyModel <|-- CollateralUrlifyModel
+class QueryStringToken {
+    + TokenName : string <<get>>
+    + Header : string <<get>>
+    + Value : object <<get>>
+    + QueryStringToken(tokenName:string, header:string, value:object)
+    + <<override>> ToString() : string
+}
+@enduml
