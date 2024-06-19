@@ -23,6 +23,9 @@ jobs:
     - name: Install PlantUMLClassDiagramGenerator
       run: dotnet tool install --global PlantUmlClassDiagramGenerator
 
+    - name: Create diagrams directory
+      run: mkdir -p diagrams
+
     - name: Generate UML Diagram
       run: |
         puml-gen ./ ./diagrams/ -dir -excludePaths **/tests
