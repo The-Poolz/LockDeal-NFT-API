@@ -38,3 +38,8 @@ jobs:
         git commit -m "Add generated UML diagrams" || echo "No changes to commit"
         git pull --rebase origin ${{ github.head_ref }}
         git push origin HEAD:${{ github.head_ref }}
+
+    - name: Render puml
+      run: |
+        npm i -g puml-for-markdown
+        puml-for-markdown --root-directory ./diagrams/
