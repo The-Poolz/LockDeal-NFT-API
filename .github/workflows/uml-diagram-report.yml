@@ -9,26 +9,7 @@ on:
 
 jobs:
 
-  embed-puml-markdown:
-    runs-on: ubuntu-latest
-
-    steps:
-    - name: Check out the repo
-      uses: actions/checkout@v2
-      with:
-        fetch-depth: 0
-    - name: Setting up node
-      uses: actions/setup-node@v1
-      with:
-        node-version: '16'
-    - name: Add plantuml for markdown
-      run: npm i -g puml-for-markdown
-      shell: bash
-    - name: Embed plantuml in markdown
-      run: puml-for-markdown -g
-      shell: bash
-      
-  build:
+  uml-diagram-report:
     runs-on: ubuntu-latest
 
     steps:
@@ -50,6 +31,24 @@ jobs:
       run: |
         puml-gen ./ ./diagrams/ -dir -allInOne -excludePaths **/tests
 
+    - name: Write URL to file
+      run: python generate_url.py
+
+    - name: Upload URL as artifact
+      uses: actions/upload-artifact@v2
+      with:
+        name: plantuml-url
+        path: url.txt
+
+    - name: Comment PR with URL
+      uses: marocchino/sticky-pull-request-comment@v2
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        recreate: true
+        header: Diagram URL
+        path: ${{github.workspace}}/url.txt
+    
     - name: Commit and Push changes
       run: |
         git config --local user.email "action@github.com"
