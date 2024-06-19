@@ -19,11 +19,8 @@ public abstract class AbstractProvider : Urlify
     protected readonly IErc20Provider erc20Provider;
 
     public IEnumerable<BasePoolInfo> FullData { get; }
-
     public BasePoolInfo PoolInfo { get; }
-
     public ChainInfo ChainInfo { get; }
-
     public Erc20Token Erc20Token { get; }
 
     [QueryStringProperty("id")]
@@ -68,6 +65,12 @@ public abstract class AbstractProvider : Urlify
 
     private string GetDescription()
     {
+        var isFullyWithdrawn = ChainInfo.LockDealNFT == PoolInfo.Owner;
+        if (isFullyWithdrawn) return "This NFT has been fully withdrawn and is no longer governing any assets.";
+
+        var isFullyRefunded = ChainInfo.LockDealNFT != PoolInfo.Owner && LeftAmount == 0;
+        if (isFullyRefunded) return "This NFT has been fully refunded and no longer holds any governance over assets.";
+
         return Handlebars.Compile(DescriptionTemplate)(this);
     }
 
