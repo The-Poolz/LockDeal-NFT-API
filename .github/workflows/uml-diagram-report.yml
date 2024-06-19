@@ -23,15 +23,23 @@ jobs:
     - name: Install PlantUMLClassDiagramGenerator
       run: dotnet tool install --global PlantUmlClassDiagramGenerator
 
-    - name: Create diagrams directory
-      run: mkdir -p diagrams
-
     - name: Generate UML Diagram
       run: |
         puml-gen ./ ./diagrams/ -dir -excludePaths **/tests
 
-    - name: Upload UML Diagrams as Artifacts
-      uses: actions/upload-artifact@v4
+    - name: Commit and Push changes
+      run: |
+        git config --local user.email "action@github.com"
+        git config --local user.name "GitHub Action"
+        git add diagrams/
+        git commit -m "Add generated UML diagrams" || echo "No changes to commit"
+        git push origin HEAD:refs/heads/uml-diagrams
+
+    - name: Create Pull Request
+      uses: peter-evans/create-pull-request@v4
       with:
-        name: uml-diagrams
-        path: diagrams/
+        token: ${{ secrets.GITHUB_TOKEN }}
+        branch: uml-diagrams
+        delete-branch: true
+        title: "Update UML Diagrams"
+        body: "This PR updates the UML diagrams."
