@@ -33,6 +33,8 @@ jobs:
 
     - name: Write URL to file
       run: python generate_url.py
+      env:
+        FILE_PATH: ./diagrams/include.puml
 
     - name: Upload URL as artifact
       uses: actions/upload-artifact@v2
