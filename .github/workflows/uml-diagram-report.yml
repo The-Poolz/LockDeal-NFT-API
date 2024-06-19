@@ -28,7 +28,7 @@ jobs:
 
     - name: Generate UML Diagram
       run: |
-        puml-gen ./ ./diagrams/ -dir -excludePaths **/tests
+        puml-gen ./ ./diagrams/ -dir -allInOne -excludePaths **/tests
 
     - name: Commit and Push changes
       run: |
