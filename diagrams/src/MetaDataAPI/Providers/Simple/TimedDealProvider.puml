@@ -1,0 +1,13 @@
+@startuml
+class TimedDealProvider {
+    + <<override>> ToString() : string
+    + <<override>> ProviderName : string <<get>>
+    + <<override>> Description : string <<get>>
+    + StartAmount : decimal <<get>>
+    + FinishTime : uint <<get>>
+    + FinishDateTime : DateTime <<get>>
+    + <<override>> Urlify : BaseUrlifyModel <<get>>
+    + TimedDealProvider(basePoolInfo:BasePoolInfo[])
+}
+LockDealProvider <|-- TimedDealProvider
+@enduml

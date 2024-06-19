@@ -1,0 +1,9 @@
+@startuml
+class Erc721Metadata {
+    + Name : string <<get>>
+    + Description : string <<get>>
+    + Image : string <<get>>
+    + Attributes : IEnumerable<Erc721Attribute> <<get>>
+    + Erc721Metadata(name:string, description:string, image:string, attributes:IEnumerable<Erc721Attribute>)
+}
+@enduml
