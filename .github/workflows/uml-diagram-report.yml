@@ -30,6 +30,9 @@ jobs:
       run: |
         puml-gen ./ ./diagrams/ -dir -allInOne -excludePaths **/tests
 
+    - name: Embed PlantUML inside Markdown
+      uses: alessandro-marcantoni/puml-markdown@v0.1.1
+
     - name: Commit and Push changes
       run: |
         git config --local user.email "action@github.com"
