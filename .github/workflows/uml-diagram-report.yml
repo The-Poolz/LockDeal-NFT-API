@@ -35,7 +35,7 @@ jobs:
         git config --local user.name "GitHub Action"
         git add diagrams/
         git commit -m "Add generated UML diagrams" || echo "No changes to commit"
-        git fetch origin ${GITHUB_REF_NAME}
-        git checkout ${GITHUB_REF_NAME}
-        git pull --rebase origin ${GITHUB_REF_NAME}
-        git push origin ${GITHUB_REF_NAME}
+        git fetch origin ${{ github.event.pull_request.base.ref }}
+        git checkout ${{ github.event.pull_request.base.ref }}
+        git pull --rebase origin ${{ github.event.pull_request.base.ref }}
+        git push origin HEAD:${{ github.event.pull_request.base.ref }}
