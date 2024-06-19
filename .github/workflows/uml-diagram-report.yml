@@ -39,7 +39,7 @@ jobs:
       run: npm install -g puml-for-markdown
 
     - name: Render puml
-      run: puml-for-markdown --root-directory ./diagrams/
+      run: puml-for-markdown --puml-directory ./diagrams/
 
     - name: Commit and Push changes
       run: |
