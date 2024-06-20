@@ -1,0 +1,6 @@
+@startuml
+class ImageRenderer {
+    + RenderImage(url:string) : string
+}
+IImageRenderer <|-- ImageRenderer
+@enduml

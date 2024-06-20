@@ -1,0 +1,21 @@
+@startuml
+abstract class Provider {
+    + {abstract} ProviderName : string <<get>>
+    + <<virtual>> LeftAmount : decimal <<get>>
+    + {abstract} Description : string <<get>>
+    # Provider(basePoolInfo:BasePoolInfo[])
+    + GetJsonErc721Metadata() : string
+    - GetErc721Metadata() : Erc721Metadata
+    - GetDescription() : string
+    - IsFullyWithdrawn(nftAddress:string) : bool
+    - IsFullyRefunded(nftAddress:string) : bool
+}
+class "IEnumerable`1"<T> {
+}
+Provider --> "imageGenerator" IImageGenerator
+Provider --> "Collection" BigInteger
+Provider --> "Token" Erc20Token
+Provider --> "PoolInfo" BasePoolInfo
+Provider --> "Urlify" BaseUrlifyModel
+Provider --> "Attributes<Erc721Attribute>" "IEnumerable`1"
+@enduml

@@ -1,0 +1,28 @@
+@startuml
+class CollateralProvider {
+    + <<override>> ProviderName : string <<get>>
+    + <<override>> Description : string <<get>>
+    + <<override>> LeftAmount : decimal <<get>>
+    + MainCoinCollectorAmount : decimal <<get>>
+    + TokenCollectorAmount : decimal <<get>>
+    + MainCoinHolderAmount : decimal <<get>>
+    + FinishTimestamp : uint <<get>>
+    + CollateralProvider(basePoolInfo:BasePoolInfo)
+    + CollateralProvider(basePoolInfo:BasePoolInfo[])
+}
+enum CollateralType {
+    MainCoinCollector= 1,
+    TokenCollector= 2,
+    MainCoinHolder= 3,
+}
+class "Dictionary`2"<T1,T2> {
+}
+Provider <|-- CollateralProvider
+CollateralProvider --> "Urlify" BaseUrlifyModel
+CollateralProvider --> "MainCoin" Erc20Token
+CollateralProvider --> "MainCoinCollection" BigInteger
+CollateralProvider --> "Collection" BigInteger
+CollateralProvider --> "FinishTime" DateTime
+CollateralProvider --> "SubProvider<CollateralType,DealProvider>" "Dictionary`2"
+CollateralProvider +-- CollateralType
+@enduml

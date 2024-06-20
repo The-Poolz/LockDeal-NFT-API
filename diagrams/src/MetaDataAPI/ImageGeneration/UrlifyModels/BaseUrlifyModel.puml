@@ -1,0 +1,10 @@
+@startuml
+class BaseUrlifyModel {
+    + Name : string <<get>> <<set>>
+    + BaseUrlifyModel(poolInfo:BasePoolInfo)
+    + BaseUrlifyModel(poolInfo:PoolInfo)
+}
+Urlify <|-- BaseUrlifyModel
+BaseUrlifyModel --> "Id" BigInteger
+BaseUrlifyModel --> "Token" QueryStringToken
+@enduml

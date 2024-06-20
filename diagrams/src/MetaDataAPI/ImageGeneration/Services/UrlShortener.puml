@@ -1,0 +1,9 @@
+@startuml
+class UrlShortener {
+    + UrlShortener()
+    + UrlShortener(context:TlyContext)
+    + Shorten(url:string, description:string) : string
+}
+IUrlShortener <|-- UrlShortener
+UrlShortener --> "context" TlyContext
+@enduml

@@ -1,0 +1,10 @@
+@startuml
+class Erc20Token {
+    + Name : string <<get>> <<internal set>>
+    + Symbol : string <<get>> <<internal set>>
+    + Address : string <<get>> <<internal set>>
+    + Decimals : byte <<get>> <<internal set>>
+    + Erc20Token(address:string, rpcCaller:Nethereum.Contracts.Standards.ERC20.ERC20ContractService?)
+    + <<override>> ToString() : string
+}
+@enduml
