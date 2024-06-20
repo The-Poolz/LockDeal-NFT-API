@@ -64,7 +64,7 @@ public class CollateralProvider : AbstractProvider
 
         SubProvider = Enumerable.Range(1, poolsInfo.Length - 1)
             .ToDictionary(
-                i => (CollateralType)(i - 1),
+                i => (CollateralType)i,
                 i => new DealProvider(poolsInfo[i], chainInfo, serviceProvider)
             );
     }
