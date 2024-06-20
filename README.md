@@ -16,7 +16,3 @@ It then returns a generated NFT image with the attributes printed on it.
 
 - metadata: https://nft.poolz.finance/test/metadata?id=0
 - image: https://nft.poolz.finance/test/image?id=HASH_HERE
-
-## Diagram
-
-<!--![Diagram Image Link](./diagrams/include.puml)-->
