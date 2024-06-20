@@ -7,7 +7,8 @@ def generate_urls(directory, output_file):
     puml_server_url = os.getenv('PUML_SERVER_URL', 'https://www.plantuml.com/plantuml/svg/')
     pl = plantuml.PlantUML(url=puml_server_url)
 
-    all_links = ""
+    markdown_content = "# Diagrams\n\n<details><summary>Diagrams summary</summary>\n\n"
+    markdown_content += "|**URL**|**PATH**|\n|:---|---:|\n"
 
     # Search all .puml files in a directory and subdirectories
     for file_path in glob.glob(os.path.join(directory, '**/*.puml'), recursive=True):
@@ -15,11 +16,13 @@ def generate_urls(directory, output_file):
             diagram = file.read()
 
         url = pl.get_url(diagram)
-        all_links += f"## Diagram in {file_path}\n\n[Link to diagram]({url})\n\n"
+        markdown_content += f"|[{url}]({url})|{file_path}|\n"
+        
+    markdown_content += "\n</details>\n"
 
     # Write all links to the output file
     with open(output_file, 'w') as f:
-        f.write(all_links)
+        f.write(markdown_content)
 
 if __name__ == "__main__":
     # Getting directory path from environment variable or using default value
