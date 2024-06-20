@@ -8,15 +8,16 @@ def generate_urls(directory, output_file):
     pl = plantuml.PlantUML(url=puml_server_url)
 
     markdown_content = "# Diagrams\n\n<details><summary>Diagrams summary</summary>\n\n"
-    markdown_content += "|**URL**|**PATH**|\n|:---|---:|\n"
+    markdown_content += "|**URL**|**PATH**|\n|:---|:---|\n"
 
     # Search all .puml files in a directory and subdirectories
     for file_path in glob.glob(os.path.join(directory, '**/*.puml'), recursive=True):
+        file_name, _ = os.path.splitext(os.path.basename(file_path))
         with open(file_path, 'r') as file:
             diagram = file.read()
 
         url = pl.get_url(diagram)
-        markdown_content += f"|[{url}]({url})|{file_path}|\n"
+        markdown_content += f"|[{file_name} URL]({url})|{file_path}|\n"
         
     markdown_content += "\n</details>\n"
 
