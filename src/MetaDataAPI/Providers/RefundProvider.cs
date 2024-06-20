@@ -1,5 +1,4 @@
 ﻿using System.Numerics;
-using MetaDataAPI.Erc20Manager;
 using MetaDataAPI.Providers.Attributes;
 using MetaDataAPI.BlockchainManager.Models;
 using MetaDataAPI.Providers.Attributes.Models;
@@ -22,11 +21,11 @@ public class RefundProvider : AbstractProvider
     [Erc721Attribute("sub provider name", DisplayType.String)]
     public string SubProviderName => SubProvider.Name;
 
-    public RefundProvider(BasePoolInfo[] poolsInfo, ChainInfo chainInfo, IErc20Provider erc20Provider)
-        : base(poolsInfo, chainInfo, erc20Provider)
+    public RefundProvider(BasePoolInfo[] poolsInfo, ChainInfo chainInfo, IServiceProvider serviceProvider)
+        : base(poolsInfo, chainInfo, serviceProvider)
     {
-        SubProvider = CreateFromPoolInfo(new []{ poolsInfo[1] }, chainInfo, erc20Provider);
-        CollateralProvider = CreateFromPoolInfo<CollateralProvider>(new[] { poolsInfo[2] }, chainInfo, erc20Provider);
+        SubProvider = CreateFromPoolInfo(new []{ poolsInfo[1] }, chainInfo, serviceProvider);
+        CollateralProvider = new CollateralProvider(poolsInfo[2], chainInfo, serviceProvider);
     }
 
     protected override string DescriptionTemplate =>

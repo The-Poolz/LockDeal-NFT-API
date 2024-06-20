@@ -1,15 +1,10 @@
-using Nethereum.Web3;
 using System.Numerics;
 using Newtonsoft.Json;
 using Amazon.Lambda.Core;
 using Newtonsoft.Json.Linq;
 using MetaDataAPI.Providers;
-using MetaDataAPI.Erc20Manager;
 using MetaDataAPI.BlockchainManager;
 using Amazon.Lambda.APIGatewayEvents;
-using MetaDataAPI.BlockchainManager.Models;
-using poolz.finance.csharp.contracts.LockDealNFT.ContractDefinition;
-using poolz.finance.csharp.contracts.LockDealNFT;
 
 [assembly: LambdaSerializer(typeof(Amazon.Lambda.Serialization.Json.JsonSerializer))]
 
@@ -17,20 +12,17 @@ namespace MetaDataAPI;
 
 public class LambdaFunction
 {
+    private readonly IServiceProvider serviceProvider;
     private readonly IChainManager chainManager;
-    private readonly IErc20Provider erc20Provider;
 
-    public LambdaFunction()
-    {
-        // TODO: Implement chain manager which receive ChainInfo from DB.
-        chainManager = new LocalChainManager();
-        erc20Provider = new Erc20Provider();
-    }
+    public LambdaFunction() // TODO: Implement chain manager which receive ChainInfo from DB.
+        : this(new LocalChainManager())
+    { }
 
-    public LambdaFunction(IChainManager chainManager, IErc20Provider erc20Provider)
+    public LambdaFunction(IChainManager chainManager)
     {
+        serviceProvider = DefaultServiceProvider.Instance;
         this.chainManager = chainManager;
-        this.erc20Provider = erc20Provider;
     }
 
     public APIGatewayProxyResponse FunctionHandler(APIGatewayProxyRequest request)
@@ -55,9 +47,9 @@ public class LambdaFunction
 
         var chainInfo = chainManager.FetchChainInfo(chainId);
 
-        var poolsInfo = FetchPoolInfo(poolId, chainInfo);
+        var poolsInfo = AbstractProvider.FetchPoolInfo(poolId, chainInfo);
 
-        var provider = AbstractProvider.CreateFromPoolInfo(poolsInfo, chainInfo, erc20Provider);
+        var provider = AbstractProvider.CreateFromPoolInfo(poolsInfo, chainInfo, serviceProvider);
 
         var metadata = provider.GetErc721Metadata();
 
@@ -69,19 +61,5 @@ public class LambdaFunction
         {
             Body = serializedMetadata
         };
-    }
-
-    public BasePoolInfo[] FetchPoolInfo(BigInteger poolId, ChainInfo chainInfo)
-    {
-        return FetchPoolInfo(poolId, new LockDealNFTService(new Web3(chainInfo.RpcUrl), chainInfo.LockDealNFT));
-    }
-
-    public BasePoolInfo[] FetchPoolInfo(BigInteger poolId, LockDealNFTService lockDealNFTService)
-    {
-        return lockDealNFTService.GetFullDataQueryAsync(poolId)
-            .GetAwaiter()
-            .GetResult()
-            .PoolInfo
-            .ToArray();
     }
 }

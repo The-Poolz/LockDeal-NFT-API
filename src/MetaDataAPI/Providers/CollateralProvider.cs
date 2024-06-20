@@ -50,12 +50,12 @@ public class CollateralProvider : AbstractProvider
 
     internal Dictionary<CollateralType, DealProvider> SubProvider { get; }
 
-    public CollateralProvider(BasePoolInfo poolInfo, ChainInfo chainInfo, IErc20Provider erc20Provider)
-        : this(new []{ poolInfo }, chainInfo, erc20Provider)
+    public CollateralProvider(BasePoolInfo poolInfo, ChainInfo chainInfo, IServiceProvider serviceProvider)
+        : this(FetchPoolInfo(poolInfo.PoolId, chainInfo), chainInfo, serviceProvider)
     { }
 
-    public CollateralProvider(BasePoolInfo[] poolsInfo, ChainInfo chainInfo, IErc20Provider erc20Provider)
-        : base(poolsInfo, chainInfo, erc20Provider)
+    public CollateralProvider(BasePoolInfo[] poolsInfo, ChainInfo chainInfo, IServiceProvider serviceProvider)
+        : base(poolsInfo, chainInfo, serviceProvider)
     {
         MainCoin = erc20Provider.GetErc20Token(chainInfo, poolsInfo[0].Token);
         Erc20Token = erc20Provider.GetErc20Token(chainInfo, poolsInfo[2].Token);
@@ -65,7 +65,7 @@ public class CollateralProvider : AbstractProvider
         SubProvider = Enumerable.Range(1, poolsInfo.Length - 1)
             .ToDictionary(
                 i => (CollateralType)(i - 1),
-                i => new DealProvider(poolsInfo[i], chainInfo, erc20Provider)
+                i => new DealProvider(poolsInfo[i], chainInfo, serviceProvider)
             );
     }
 

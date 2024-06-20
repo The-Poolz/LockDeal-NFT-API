@@ -1,8 +1,6 @@
 ﻿using System.Numerics;
-using HandlebarsDotNet;
 using Net.Urlify.Attributes;
 using MetaDataAPI.Extensions;
-using MetaDataAPI.Erc20Manager;
 using MetaDataAPI.Providers.Attributes;
 using MetaDataAPI.BlockchainManager.Models;
 using MetaDataAPI.Providers.Attributes.Models;
@@ -18,8 +16,8 @@ public class LockDealProvider : DealProvider
     [Erc721Attribute("start time", DisplayType.Date)]
     public BigInteger StartTime { get; }
 
-    public LockDealProvider(BasePoolInfo[] poolsInfo, ChainInfo chainInfo, IErc20Provider erc20Provider)
-        : base(poolsInfo, chainInfo, erc20Provider)
+    public LockDealProvider(BasePoolInfo[] poolsInfo, ChainInfo chainInfo, IServiceProvider serviceProvider)
+        : base(poolsInfo, chainInfo, serviceProvider)
     {
         StartTime = PoolInfo.Params[1];
     }

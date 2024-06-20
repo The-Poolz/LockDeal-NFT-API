@@ -1,13 +1,12 @@
-﻿using MetaDataAPI.Erc20Manager;
-using MetaDataAPI.BlockchainManager.Models;
+﻿using MetaDataAPI.BlockchainManager.Models;
 using poolz.finance.csharp.contracts.LockDealNFT.ContractDefinition;
 
 namespace MetaDataAPI.Providers;
 
 public class DelayVaultProvider : AbstractProvider
 {
-    public DelayVaultProvider(BasePoolInfo[] poolsInfo, ChainInfo chainInfo, IErc20Provider erc20Provider)
-        : base(poolsInfo, chainInfo, erc20Provider)
+    public DelayVaultProvider(BasePoolInfo[] poolsInfo, ChainInfo chainInfo, IServiceProvider serviceProvider)
+        : base(poolsInfo, chainInfo, serviceProvider)
     { }
 
     protected override string DescriptionTemplate =>

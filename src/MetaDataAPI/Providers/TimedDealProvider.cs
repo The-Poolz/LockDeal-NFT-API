@@ -2,7 +2,6 @@
 using System.Numerics;
 using Net.Urlify.Attributes;
 using MetaDataAPI.Extensions;
-using MetaDataAPI.Erc20Manager;
 using MetaDataAPI.Providers.Attributes;
 using MetaDataAPI.BlockchainManager.Models;
 using MetaDataAPI.Providers.Attributes.Models;
@@ -21,8 +20,8 @@ public class TimedDealProvider : LockDealProvider
     [Erc721Attribute("start amount", DisplayType.Number)]
     public decimal StartAmount { get; }
 
-    public TimedDealProvider(BasePoolInfo[] poolsInfo, ChainInfo chainInfo, IErc20Provider erc20Provider)
-        : base(poolsInfo, chainInfo, erc20Provider)
+    public TimedDealProvider(BasePoolInfo[] poolsInfo, ChainInfo chainInfo, IServiceProvider serviceProvider)
+        : base(poolsInfo, chainInfo, serviceProvider)
     {
         FinishTime = PoolInfo.Params[2];
         StartAmount = Web3.Convert.FromWei(PoolInfo.Params[3], Erc20Token.Decimals);
