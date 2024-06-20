@@ -9,4 +9,4 @@ on:
 
 jobs:
     build-and-test:
-        uses: The-Poolz/.net-workflows/.github/workflows/uml-diagram-report.yml@master
+        uses: The-Poolz/.net-workflows/.github/workflows/uml-diagram-report.yml@v1.0.0
