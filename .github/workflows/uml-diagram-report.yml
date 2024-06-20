@@ -1,0 +1,12 @@
+name: Generate UML Diagram
+
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+jobs:
+    build-and-test:
+        uses: The-Poolz/.net-workflows/.github/workflows/uml-diagram-report.yml@master
