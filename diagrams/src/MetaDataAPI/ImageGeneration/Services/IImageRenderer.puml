@@ -1,5 +1,0 @@
-@startuml
-interface IImageRenderer {
-    + RenderImage(url:string) : string
-}
-@enduml

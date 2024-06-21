@@ -1,8 +1,0 @@
-@startuml
-class PoolInfo <<sealed>> {
-    + LeftAmount : decimal <<get>>
-    + PoolInfo(poolInfo:BasePoolInfo)
-}
-BasePoolInfo <|-- PoolInfo
-PoolInfo --> "Erc20Token" Erc20Token
-@enduml

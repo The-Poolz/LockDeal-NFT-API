@@ -1,5 +1,0 @@
-@startuml
-interface IImageGenerator {
-    + Generate(urlify:BaseUrlifyModel, description:string) : string
-}
-@enduml

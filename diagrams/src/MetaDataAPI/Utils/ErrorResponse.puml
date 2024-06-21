@@ -1,9 +1,0 @@
-@startuml
-enum ErrorResponse {
-    InvalidId,
-    MissingId,
-    PoolIdNotInRange,
-    InvalidResponse,
-    FailedToCreateProvider,
-}
-@enduml

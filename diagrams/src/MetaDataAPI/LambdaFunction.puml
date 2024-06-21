@@ -1,8 +1,0 @@
-@startuml
-class LambdaFunction {
-    + LambdaFunction()
-    + LambdaFunction(providerFactory:ProviderFactory)
-    + FunctionHandler(request:LambdaRequest) : APIGatewayProxyResponse
-}
-LambdaFunction --> "providerFactory" ProviderFactory
-@enduml

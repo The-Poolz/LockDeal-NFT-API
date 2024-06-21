@@ -1,9 +1,0 @@
-@startuml
-class ProviderFactory {
-    + ProviderFactory(lockDealNFTService:LockDealNFTService?)
-    + IsPoolIdWithinSupplyRange(poolId:BigInteger) : bool
-    + Create(poolId:BigInteger) : Provider
-    + {static} Create(basePoolInfo:BasePoolInfo[]) : Provider
-}
-ProviderFactory --> "lockDealNFTService" LockDealNFTService
-@enduml

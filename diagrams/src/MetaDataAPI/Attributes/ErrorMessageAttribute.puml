@@ -1,8 +1,0 @@
-@startuml
-class ErrorMessageAttribute {
-    + Description : string <<get>> <<set>>
-    + ErrorMessageAttribute(statusCode:HttpStatusCode, description:string)
-}
-Attribute <|-- ErrorMessageAttribute
-ErrorMessageAttribute --> "StatusCode" HttpStatusCode
-@enduml

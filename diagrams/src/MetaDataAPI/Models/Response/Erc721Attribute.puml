@@ -1,8 +1,0 @@
-@startuml
-class Erc721Attribute {
-    + TraitType : string <<get>>
-    + Value : object <<get>>
-    + Erc721Attribute(traitType:string, value:object, displayType:DisplayType)
-}
-Erc721Attribute --> "DisplayType" DisplayType
-@enduml

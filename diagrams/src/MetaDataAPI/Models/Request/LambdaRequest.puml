@@ -1,7 +1,0 @@
-@startuml
-class LambdaRequest {
-    - ParsePoolId(poolId:BigInteger) : ErrorResponse?
-    + PoolIdToProvider(providerFactory:ProviderFactory, provider:Provider?) : ErrorResponse?
-}
-APIGatewayProxyRequest <|-- LambdaRequest
-@enduml

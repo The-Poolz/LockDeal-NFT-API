@@ -1,6 +1,0 @@
-@startuml
-class DelayVaultUrlifyModel {
-    + DelayVaultUrlifyModel(poolInfo:BasePoolInfo)
-}
-BaseUrlifyModel <|-- DelayVaultUrlifyModel
-@enduml

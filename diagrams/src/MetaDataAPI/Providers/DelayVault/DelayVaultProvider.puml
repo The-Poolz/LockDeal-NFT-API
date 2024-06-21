@@ -1,9 +1,0 @@
-@startuml
-class DelayVaultProvider {
-    + <<override>> ProviderName : string <<get>>
-    + <<override>> Description : string <<get>>
-    + DelayVaultProvider(basePoolInfo:BasePoolInfo[])
-}
-Provider <|-- DelayVaultProvider
-DelayVaultProvider --> "Urlify" BaseUrlifyModel
-@enduml

@@ -1,6 +1,0 @@
-@startuml
-class RefundUrlifyModel {
-    + RefundUrlifyModel(poolInfo:BasePoolInfo)
-}
-BaseUrlifyModel <|-- RefundUrlifyModel
-@enduml

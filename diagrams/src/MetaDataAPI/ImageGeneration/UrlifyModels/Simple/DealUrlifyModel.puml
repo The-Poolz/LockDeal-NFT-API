@@ -1,6 +1,0 @@
-@startuml
-class DealUrlifyModel {
-    + DealUrlifyModel(poolInfo:BasePoolInfo)
-}
-BaseUrlifyModel <|-- DealUrlifyModel
-@enduml
