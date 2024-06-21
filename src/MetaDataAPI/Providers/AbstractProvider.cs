@@ -5,15 +5,14 @@ using System.Numerics;
 using HandlebarsDotNet;
 using System.Reflection;
 using Net.Urlify.Attributes;
-using EnvironmentManager.Extensions;
-using MetaDataAPI.Providers.Attributes;
-using MetaDataAPI.Providers.Image.Models;
-using Microsoft.Extensions.DependencyInjection;
-using poolz.finance.csharp.contracts.LockDealNFT.ContractDefinition;
-using poolz.finance.csharp.contracts.LockDealNFT;
-using MetaDataAPI.Services.ChainsInfo;
 using MetaDataAPI.Services.Erc20;
 using MetaDataAPI.Providers.Image;
+using EnvironmentManager.Extensions;
+using MetaDataAPI.Services.ChainsInfo;
+using MetaDataAPI.Providers.Attributes;
+using Microsoft.Extensions.DependencyInjection;
+using poolz.finance.csharp.contracts.LockDealNFT;
+using poolz.finance.csharp.contracts.LockDealNFT.ContractDefinition;
 
 namespace MetaDataAPI.Providers;
 

@@ -2,9 +2,8 @@
 using Net.Urlify.Attributes;
 using MetaDataAPI.Extensions;
 using MetaDataAPI.Providers.Attributes;
-using MetaDataAPI.Providers.Attributes.Models;
-using poolz.finance.csharp.contracts.LockDealNFT.ContractDefinition;
 using MetaDataAPI.Services.ChainsInfo;
+using poolz.finance.csharp.contracts.LockDealNFT.ContractDefinition;
 
 namespace MetaDataAPI.Providers;
 

@@ -3,7 +3,6 @@ using Newtonsoft.Json;
 using Amazon.Lambda.Core;
 using Newtonsoft.Json.Linq;
 using MetaDataAPI.Providers;
-using MetaDataAPI.BlockchainManager;
 using Amazon.Lambda.APIGatewayEvents;
 using MetaDataAPI.Services.ChainsInfo;
 
