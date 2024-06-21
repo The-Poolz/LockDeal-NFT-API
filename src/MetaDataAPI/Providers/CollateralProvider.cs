@@ -27,16 +27,16 @@ public class CollateralProvider : AbstractProvider
     public BigInteger MainCoinCollection => PoolInfo.VaultId;
 
     [Erc721MetadataItem("collection", DisplayType.Number)]
-    public BigInteger Collection => SubProvider[CollateralType.TokenCollector].PoolInfo.VaultId;
+    public BigInteger Collection => SubProviders[CollateralType.TokenCollector].PoolInfo.VaultId;
 
     [Erc721MetadataItem("main coin collector amount", DisplayType.Number)]
-    public decimal MainCoinCollectorAmount => SubProvider[CollateralType.MainCoinCollector].LeftAmount;
+    public decimal MainCoinCollectorAmount => SubProviders[CollateralType.MainCoinCollector].LeftAmount;
 
     [Erc721MetadataItem("token collector amount", DisplayType.Number)]
-    public decimal TokenCollectorAmount => SubProvider[CollateralType.TokenCollector].LeftAmount;
+    public decimal TokenCollectorAmount => SubProviders[CollateralType.TokenCollector].LeftAmount;
 
     [Erc721MetadataItem("main coin holder amount", DisplayType.Number)]
-    public decimal MainCoinHolderAmount => SubProvider[CollateralType.MainCoinHolder].LeftAmount;
+    public decimal MainCoinHolderAmount => SubProviders[CollateralType.MainCoinHolder].LeftAmount;
 
     [Erc721MetadataItem("finish time", DisplayType.Date)]
     public BigInteger FinishTime { get; }
@@ -47,7 +47,7 @@ public class CollateralProvider : AbstractProvider
     [QueryStringProperty("Finish time", order: 1)]
     public string QueryString_FinishTime => FinishTime.DateTimeStringFormat();
 
-    internal Dictionary<CollateralType, DealProvider> SubProvider { get; }
+    internal Dictionary<CollateralType, DealProvider> SubProviders { get; }
 
     public CollateralProvider(BasePoolInfo poolInfo, ChainInfo chainInfo, IServiceProvider serviceProvider)
         : this(FetchPoolInfo(poolInfo.PoolId, chainInfo), chainInfo, serviceProvider)
@@ -61,7 +61,7 @@ public class CollateralProvider : AbstractProvider
         FinishTime = PoolInfo.Params[1];
         Rate = Web3.Convert.FromWei(PoolInfo.Params[2], 21);
 
-        SubProvider = Enumerable.Range(1, poolsInfo.Length - 1)
+        SubProviders = Enumerable.Range(1, poolsInfo.Length - 1)
             .ToDictionary(
                 i => (CollateralType)i,
                 i => new DealProvider(poolsInfo[i], chainInfo, serviceProvider)

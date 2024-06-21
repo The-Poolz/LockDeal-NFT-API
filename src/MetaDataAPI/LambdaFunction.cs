@@ -1,15 +1,10 @@
-using System.Numerics;
-using Newtonsoft.Json;
 using Amazon.Lambda.Core;
-using Newtonsoft.Json.Linq;
-using MetaDataAPI.Providers;
-using Amazon.Lambda.APIGatewayEvents;
-using MetaDataAPI.Services.ChainsInfo;
-using MetaDataAPI.Validation;
-using MetaDataAPI.Services.Erc20;
-using Microsoft.Extensions.DependencyInjection;
 using MetaDataAPI.Request;
+using Newtonsoft.Json.Linq;
 using MetaDataAPI.Response;
+using MetaDataAPI.Providers;
+using MetaDataAPI.Services.ChainsInfo;
+using Microsoft.Extensions.DependencyInjection;
 
 [assembly: LambdaSerializer(typeof(Amazon.Lambda.Serialization.Json.JsonSerializer))]
 
@@ -32,15 +27,14 @@ public class LambdaFunction
 
     public LambdaResponse FunctionHandler(LambdaRequest request)
     {
-        var requestValidationResult = new APIGatewayProxyRequestValidator().Validate(request);
-        if (!requestValidationResult.IsValid)
+        if (request.ValidationResult != null)
         {
-            return new LambdaResponse(new ValidationError(requestValidationResult));
+            return new LambdaResponse(new ValidationError(request.ValidationResult));
         }
 
-        var chainInfo = chainManager.FetchChainInfo(request.ChainId!.Value);
+        var chainInfo = chainManager.FetchChainInfo(request.ChainId);
 
-        var poolsInfo = AbstractProvider.FetchPoolInfo(request.PoolId!.Value, chainInfo);
+        var poolsInfo = AbstractProvider.FetchPoolInfo(request.PoolId, chainInfo);
 
         var provider = AbstractProvider.CreateFromPoolInfo(poolsInfo, chainInfo, serviceProvider);
 
