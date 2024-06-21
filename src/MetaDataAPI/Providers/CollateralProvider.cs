@@ -9,15 +9,15 @@ using poolz.finance.csharp.contracts.LockDealNFT.ContractDefinition;
 
 namespace MetaDataAPI.Providers;
 
-internal enum CollateralType
-{
-    MainCoinCollector = 1,
-    TokenCollector = 2,
-    MainCoinHolder = 3
-}
-
 public class CollateralProvider : AbstractProvider
 {
+    internal enum CollateralType
+    {
+        MainCoinCollector = 1,
+        TokenCollector = 2,
+        MainCoinHolder = 3
+    }
+
     public Erc20Token MainCoin { get; }
     public new Erc20Token Erc20Token { get; }
     public new decimal LeftAmount => base.LeftAmount;
