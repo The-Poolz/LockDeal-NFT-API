@@ -1,8 +1,8 @@
 ﻿using TLY.ShortUrl;
-using EnvironmentManager.Extensions;
-using Microsoft.Extensions.DependencyInjection;
-using MetaDataAPI.Services.ChainsInfo;
 using MetaDataAPI.Services.Erc20;
+using EnvironmentManager.Extensions;
+using MetaDataAPI.Services.ChainsInfo;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace MetaDataAPI;
 

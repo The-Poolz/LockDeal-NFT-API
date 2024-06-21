@@ -5,6 +5,11 @@ using Newtonsoft.Json.Linq;
 using MetaDataAPI.Providers;
 using Amazon.Lambda.APIGatewayEvents;
 using MetaDataAPI.Services.ChainsInfo;
+using MetaDataAPI.Validation;
+using MetaDataAPI.Services.Erc20;
+using Microsoft.Extensions.DependencyInjection;
+using MetaDataAPI.Request;
+using MetaDataAPI.Response;
 
 [assembly: LambdaSerializer(typeof(Amazon.Lambda.Serialization.Json.JsonSerializer))]
 
@@ -16,50 +21,33 @@ public class LambdaFunction
     private readonly IChainManager chainManager;
 
     public LambdaFunction() // TODO: Implement chain manager which receive ChainInfo from DB.
-        : this(new LocalChainManager())
+        : this(DefaultServiceProvider.Instance)
     { }
 
-    public LambdaFunction(IChainManager chainManager)
+    public LambdaFunction(IServiceProvider serviceProvider)
     {
-        serviceProvider = DefaultServiceProvider.Instance;
-        this.chainManager = chainManager;
+        this.serviceProvider = DefaultServiceProvider.Instance;
+        chainManager = serviceProvider.GetService<IChainManager>() ?? throw new ArgumentException($"Service '{nameof(IChainManager)}' is required.");
     }
 
-    public APIGatewayProxyResponse FunctionHandler(APIGatewayProxyRequest request)
+    public LambdaResponse FunctionHandler(LambdaRequest request)
     {
-        if (!request.QueryStringParameters.TryGetValue("chainId", out var stringChainId))
+        var requestValidationResult = new APIGatewayProxyRequestValidator().Validate(request);
+        if (!requestValidationResult.IsValid)
         {
-            return new APIGatewayProxyResponse { Body = "Query string parameter 'chainId' is required." };
-        }
-        if (!BigInteger.TryParse(stringChainId, out var chainId))
-        {
-            return new APIGatewayProxyResponse { Body = $"Cannot parse '{chainId}' chain ID." };
+            return new LambdaResponse(new ValidationError(requestValidationResult));
         }
 
-        if (!request.QueryStringParameters.TryGetValue("poolId", out var stringPoolId))
-        {
-            return new APIGatewayProxyResponse { Body = "Query string parameter 'poolId' is required." };
-        }
-        if (!BigInteger.TryParse(stringPoolId, out var poolId))
-        {
-            return new APIGatewayProxyResponse { Body = $"Cannot parse '{poolId}' pool ID." };
-        }
+        var chainInfo = chainManager.FetchChainInfo(request.ChainId!.Value);
 
-        var chainInfo = chainManager.FetchChainInfo(chainId);
-
-        var poolsInfo = AbstractProvider.FetchPoolInfo(poolId, chainInfo);
+        var poolsInfo = AbstractProvider.FetchPoolInfo(request.PoolId!.Value, chainInfo);
 
         var provider = AbstractProvider.CreateFromPoolInfo(poolsInfo, chainInfo, serviceProvider);
 
         var metadata = provider.GetErc721Metadata();
 
-        var serializedMetadata = JsonConvert.SerializeObject(metadata);
-
         Console.WriteLine(JToken.FromObject(metadata));
 
-        return new APIGatewayProxyResponse
-        {
-            Body = serializedMetadata
-        };
+        return new LambdaResponse(metadata);
     }
 }
