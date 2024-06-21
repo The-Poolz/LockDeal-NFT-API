@@ -1,6 +1,4 @@
-﻿using MetaDataAPI.Providers.Attributes.Models;
-
-namespace MetaDataAPI.Providers.Attributes;
+﻿namespace MetaDataAPI.Providers.Attributes;
 
 [AttributeUsage(AttributeTargets.Property)]
 public class Erc721AttributeAttribute : Attribute

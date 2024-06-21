@@ -5,15 +5,15 @@ using System.Numerics;
 using HandlebarsDotNet;
 using System.Reflection;
 using Net.Urlify.Attributes;
-using MetaDataAPI.Erc20Manager;
 using EnvironmentManager.Extensions;
 using MetaDataAPI.Providers.Attributes;
 using MetaDataAPI.Providers.Image.Models;
-using MetaDataAPI.BlockchainManager.Models;
-using MetaDataAPI.Providers.Attributes.Models;
 using Microsoft.Extensions.DependencyInjection;
 using poolz.finance.csharp.contracts.LockDealNFT.ContractDefinition;
 using poolz.finance.csharp.contracts.LockDealNFT;
+using MetaDataAPI.Services.ChainsInfo;
+using MetaDataAPI.Services.Erc20;
+using MetaDataAPI.Providers.Image;
 
 namespace MetaDataAPI.Providers;
 
@@ -91,7 +91,7 @@ public abstract class AbstractProvider : Urlify
 
     private IEnumerable<Erc721Attribute> GetAttributes()
     {
-        return this.GetType().GetProperties()
+        return GetType().GetProperties()
             .Select(property => new { Property = property, Attribute = property.GetCustomAttribute<Erc721AttributeAttribute>() })
             .Where(x => x.Attribute != null)
             .Select(x => new

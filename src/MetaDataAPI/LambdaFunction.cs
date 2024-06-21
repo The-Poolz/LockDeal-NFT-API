@@ -5,6 +5,7 @@ using Newtonsoft.Json.Linq;
 using MetaDataAPI.Providers;
 using MetaDataAPI.BlockchainManager;
 using Amazon.Lambda.APIGatewayEvents;
+using MetaDataAPI.Services.ChainsInfo;
 
 [assembly: LambdaSerializer(typeof(Amazon.Lambda.Serialization.Json.JsonSerializer))]
 

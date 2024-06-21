@@ -1,7 +1,7 @@
 ﻿using System.Numerics;
 using Net.Web3.EthereumWallet;
 
-namespace MetaDataAPI.BlockchainManager.Models;
+namespace MetaDataAPI.Services.ChainsInfo;
 
 public class ChainInfo
 {

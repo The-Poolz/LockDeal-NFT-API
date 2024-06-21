@@ -2,7 +2,7 @@
 using Net.Urlify.Attributes;
 using EnvironmentManager.Extensions;
 
-namespace MetaDataAPI.Providers.Image.Models;
+namespace MetaDataAPI.Providers.Image;
 
 public class UrlifyProvider : Urlify
 {

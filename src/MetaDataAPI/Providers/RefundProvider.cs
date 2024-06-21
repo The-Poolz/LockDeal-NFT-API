@@ -1,8 +1,8 @@
 ﻿using System.Numerics;
 using MetaDataAPI.Providers.Attributes;
-using MetaDataAPI.BlockchainManager.Models;
 using MetaDataAPI.Providers.Attributes.Models;
 using poolz.finance.csharp.contracts.LockDealNFT.ContractDefinition;
+using MetaDataAPI.Services.ChainsInfo;
 
 namespace MetaDataAPI.Providers;
 

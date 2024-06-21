@@ -1,6 +1,6 @@
 ﻿using System.Runtime.Serialization;
 
-namespace MetaDataAPI.Providers.Attributes.Models;
+namespace MetaDataAPI.Providers.Attributes;
 
 public enum DisplayType
 {

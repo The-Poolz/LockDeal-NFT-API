@@ -1,4 +1,4 @@
-﻿using MetaDataAPI.BlockchainManager.Models;
+﻿using MetaDataAPI.Services.ChainsInfo;
 using poolz.finance.csharp.contracts.LockDealNFT.ContractDefinition;
 
 namespace MetaDataAPI.Providers;

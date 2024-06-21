@@ -1,7 +1,7 @@
 ﻿using Net.Cache.DynamoDb.ERC20.Models;
 using Net.Web3.EthereumWallet.Extensions;
 
-namespace MetaDataAPI.Erc20Manager;
+namespace MetaDataAPI.Services.Erc20;
 
 public class Erc20Token
 {

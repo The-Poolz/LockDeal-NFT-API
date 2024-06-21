@@ -1,7 +1,6 @@
 ﻿using System.Numerics;
-using MetaDataAPI.BlockchainManager.Models;
 
-namespace MetaDataAPI.BlockchainManager;
+namespace MetaDataAPI.Services.ChainsInfo;
 
 public class LocalChainManager : IChainManager
 {

@@ -2,11 +2,11 @@
 using System.Numerics;
 using Net.Urlify.Attributes;
 using MetaDataAPI.Extensions;
-using MetaDataAPI.Erc20Manager;
 using MetaDataAPI.Providers.Attributes;
-using MetaDataAPI.BlockchainManager.Models;
 using MetaDataAPI.Providers.Attributes.Models;
 using poolz.finance.csharp.contracts.LockDealNFT.ContractDefinition;
+using MetaDataAPI.Services.ChainsInfo;
+using MetaDataAPI.Services.Erc20;
 
 namespace MetaDataAPI.Providers;
 

@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 
-namespace MetaDataAPI.Providers.Attributes.Models;
+namespace MetaDataAPI.Providers.Attributes;
 
 public class Erc721Metadata
 {

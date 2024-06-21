@@ -2,9 +2,9 @@
 using Net.Web3.EthereumWallet;
 using Net.Cache.DynamoDb.ERC20;
 using Net.Cache.DynamoDb.ERC20.Models;
-using MetaDataAPI.BlockchainManager.Models;
+using MetaDataAPI.Services.ChainsInfo;
 
-namespace MetaDataAPI.Erc20Manager;
+namespace MetaDataAPI.Services.Erc20;
 
 public class Erc20Provider : IErc20Provider
 {
