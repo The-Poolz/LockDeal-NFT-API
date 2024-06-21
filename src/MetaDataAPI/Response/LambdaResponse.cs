@@ -1,21 +1,11 @@
 ﻿using System.Net;
-using Newtonsoft.Json;
 using Amazon.Lambda.APIGatewayEvents;
-using MetaDataAPI.Providers.Attributes;
 
 namespace MetaDataAPI.Response;
 
-public class LambdaResponse : APIGatewayProxyResponse
+public abstract class LambdaResponse : APIGatewayProxyResponse
 {
-    public LambdaResponse(ErrorResponse error)
-        : this(error.ErrorMessage, error.StatusCode)
-    { }
-
-    public LambdaResponse(Erc721Metadata metadata)
-        : this(JsonConvert.SerializeObject(metadata), HttpStatusCode.OK)
-    { }
-
-    private LambdaResponse(string body, HttpStatusCode statusCode)
+    protected LambdaResponse(string body, HttpStatusCode statusCode)
     {
         StatusCode = (int)statusCode;
         Body = body;

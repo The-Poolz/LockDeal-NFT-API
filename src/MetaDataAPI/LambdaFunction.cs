@@ -25,23 +25,28 @@ public class LambdaFunction
         chainManager = serviceProvider.GetService<IChainManager>() ?? throw new ArgumentException($"Service '{nameof(IChainManager)}' is required.");
     }
 
-    public LambdaResponse FunctionHandler(LambdaRequest request)
+    public LambdaResponse FunctionHandler(LambdaRequest request, ILambdaLogger logger)
     {
-        if (request.ValidationResult != null)
+        try
         {
-            return new LambdaResponse(new ValidationError(request.ValidationResult));
+            if (request.ValidationResult != null) return new ValidationErrorResponse(request.ValidationResult);
+
+            var chainInfo = chainManager.FetchChainInfo(request.ChainId);
+
+            var poolsInfo = AbstractProvider.FetchPoolInfo(request.PoolId, chainInfo);
+
+            var provider = AbstractProvider.CreateFromPoolInfo(poolsInfo, chainInfo, serviceProvider);
+
+            var metadata = provider.GetErc721Metadata();
+
+            Console.WriteLine(JToken.FromObject(metadata));
+
+            return new SuccessResponse(metadata);
         }
-
-        var chainInfo = chainManager.FetchChainInfo(request.ChainId);
-
-        var poolsInfo = AbstractProvider.FetchPoolInfo(request.PoolId, chainInfo);
-
-        var provider = AbstractProvider.CreateFromPoolInfo(poolsInfo, chainInfo, serviceProvider);
-
-        var metadata = provider.GetErc721Metadata();
-
-        Console.WriteLine(JToken.FromObject(metadata));
-
-        return new LambdaResponse(metadata);
+        catch (Exception exception)
+        {
+            logger.LogError(exception.ToString());
+            return new GeneralErrorResponse();
+        }
     }
 }
