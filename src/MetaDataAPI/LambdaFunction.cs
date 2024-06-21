@@ -29,9 +29,15 @@ public class LambdaFunction
     {
         try
         {
-            if (request.ValidationResult != null) return new ValidationErrorResponse(request.ValidationResult);
+            if (request.ValidationResult != null)
+            {
+                return new ValidationErrorResponse(request.ValidationResult);
+            }
 
-            var chainInfo = chainManager.FetchChainInfo(request.ChainId);
+            if (!chainManager.TryFetchChainInfo(request.ChainId, out var chainInfo))
+            {
+                return new ChainNotSupportedResponse(request.ChainId);
+            }
 
             var poolsInfo = AbstractProvider.FetchPoolInfo(request.PoolId, chainInfo);
 

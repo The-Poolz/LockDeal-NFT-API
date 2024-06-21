@@ -1,8 +1,9 @@
 ﻿using System.Numerics;
+using System.Diagnostics.CodeAnalysis;
 
 namespace MetaDataAPI.Services.ChainsInfo;
 
 public interface IChainManager
 {
-    public ChainInfo FetchChainInfo(BigInteger chainId);
+    public bool TryFetchChainInfo(BigInteger chainId, [MaybeNullWhen(false)] out ChainInfo chainInfo);
 }
