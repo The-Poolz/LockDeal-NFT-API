@@ -23,25 +23,25 @@ public class CollateralProvider : AbstractProvider
     public new decimal LeftAmount => base.LeftAmount;
     public new BigInteger VaultId => base.VaultId;
 
-    [Erc721Attribute("main coin collection", DisplayType.Number)]
+    [Erc721MetadataItem("main coin collection", DisplayType.Number)]
     public BigInteger MainCoinCollection => PoolInfo.VaultId;
 
-    [Erc721Attribute("collection", DisplayType.Number)]
+    [Erc721MetadataItem("collection", DisplayType.Number)]
     public BigInteger Collection => SubProvider[CollateralType.TokenCollector].PoolInfo.VaultId;
 
-    [Erc721Attribute("main coin collector amount", DisplayType.Number)]
+    [Erc721MetadataItem("main coin collector amount", DisplayType.Number)]
     public decimal MainCoinCollectorAmount => SubProvider[CollateralType.MainCoinCollector].LeftAmount;
 
-    [Erc721Attribute("token collector amount", DisplayType.Number)]
+    [Erc721MetadataItem("token collector amount", DisplayType.Number)]
     public decimal TokenCollectorAmount => SubProvider[CollateralType.TokenCollector].LeftAmount;
 
-    [Erc721Attribute("main coin holder amount", DisplayType.Number)]
+    [Erc721MetadataItem("main coin holder amount", DisplayType.Number)]
     public decimal MainCoinHolderAmount => SubProvider[CollateralType.MainCoinHolder].LeftAmount;
 
-    [Erc721Attribute("finish time", DisplayType.Date)]
+    [Erc721MetadataItem("finish time", DisplayType.Date)]
     public BigInteger FinishTime { get; }
 
-    [Erc721Attribute("rate", DisplayType.Number)]
+    [Erc721MetadataItem("rate", DisplayType.Number)]
     public decimal Rate { get; }
 
     [QueryStringProperty("Finish time", order: 1)]

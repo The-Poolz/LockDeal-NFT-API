@@ -32,10 +32,10 @@ public abstract class AbstractProvider : Urlify
     [QueryStringProperty("name")]
     public string Name { get; }
 
-    [Erc721Attribute("collection", DisplayType.Number)]
+    [Erc721MetadataItem("collection", DisplayType.Number)]
     public virtual BigInteger VaultId { get; }
 
-    [Erc721Attribute("left amount", DisplayType.Number)]
+    [Erc721MetadataItem("left amount", DisplayType.Number)]
     public decimal LeftAmount { get; }
 
     [QueryStringProperty("tA")]
@@ -88,18 +88,18 @@ public abstract class AbstractProvider : Urlify
             .ShortUrl;
     }
 
-    private IEnumerable<Erc721Attribute> GetAttributes()
+    private IEnumerable<Erc721MetadataItem> GetAttributes()
     {
         return GetType().GetProperties()
-            .Select(property => new { Property = property, Attribute = property.GetCustomAttribute<Erc721AttributeAttribute>() })
+            .Select(property => new { Property = property, Attribute = property.GetCustomAttribute<Erc721MetadataItemAttribute>() })
             .Where(x => x.Attribute != null)
             .Select(x => new
             {
                 x.Property,
                 Attribute = x.Attribute!,
-                Value = x.Property.GetValue(this) ?? throw new InvalidOperationException($"Cannot process Erc721Attribute property '{x.Property.Name}' with nullable value.")
+                Value = x.Property.GetValue(this) ?? throw new InvalidOperationException($"Cannot process Erc721MetadataItem property '{x.Property.Name}' with nullable value.")
             })
-            .Select(x => new Erc721Attribute(x.Attribute.TraitType, x.Value, x.Attribute.DisplayType));
+            .Select(x => new Erc721MetadataItem(x.Attribute.TraitType, x.Value, x.Attribute.DisplayType));
     }
 
     public Erc721Metadata GetErc721Metadata()

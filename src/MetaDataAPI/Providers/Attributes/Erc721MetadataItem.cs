@@ -3,7 +3,7 @@ using Newtonsoft.Json.Converters;
 
 namespace MetaDataAPI.Providers.Attributes;
 
-public class Erc721Attribute
+public class Erc721MetadataItem
 {
     [JsonConverter(typeof(StringEnumConverter))]
     [JsonProperty("display_type", NullValueHandling = NullValueHandling.Ignore)]
@@ -15,7 +15,7 @@ public class Erc721Attribute
     [JsonProperty("value")]
     public object Value { get; set; }
 
-    public Erc721Attribute(
+    public Erc721MetadataItem(
         string traitType,
         object value,
         DisplayType displayType

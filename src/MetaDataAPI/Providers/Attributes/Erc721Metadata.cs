@@ -14,9 +14,9 @@ public class Erc721Metadata
     public string Image { get; set; }
 
     [JsonProperty("attributes")]
-    public IEnumerable<Erc721Attribute> Attributes { get; set; }
+    public IEnumerable<Erc721MetadataItem> Attributes { get; set; }
 
-    public Erc721Metadata(string name, string description, string image, IEnumerable<Erc721Attribute> attributes)
+    public Erc721Metadata(string name, string description, string image, IEnumerable<Erc721MetadataItem> attributes)
     {
         Name = name;
         Description = description;

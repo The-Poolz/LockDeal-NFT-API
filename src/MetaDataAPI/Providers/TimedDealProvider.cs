@@ -13,10 +13,10 @@ public class TimedDealProvider : LockDealProvider
     [QueryStringProperty("Finish time", order: 1)]
     public string QueryString_FinishTime => FinishTime.DateTimeStringFormat();
 
-    [Erc721Attribute("finish time", DisplayType.Date)]
+    [Erc721MetadataItem("finish time", DisplayType.Date)]
     public BigInteger FinishTime { get; }
 
-    [Erc721Attribute("start amount", DisplayType.Number)]
+    [Erc721MetadataItem("start amount", DisplayType.Number)]
     public decimal StartAmount { get; }
 
     public TimedDealProvider(BasePoolInfo[] poolsInfo, ChainInfo chainInfo, IServiceProvider serviceProvider)

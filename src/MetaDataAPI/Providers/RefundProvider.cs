@@ -11,13 +11,13 @@ public class RefundProvider : AbstractProvider
 
     public CollateralProvider CollateralProvider { get; }
 
-    [Erc721Attribute("main coin amount", DisplayType.Number)]
+    [Erc721MetadataItem("main coin amount", DisplayType.Number)]
     public decimal MainCoinAmount => SubProvider.LeftAmount * CollateralProvider.Rate;
 
-    [Erc721Attribute("main coin collection", DisplayType.Number)]
+    [Erc721MetadataItem("main coin collection", DisplayType.Number)]
     public BigInteger MainCoinCollection => CollateralProvider.MainCoinCollection;
 
-    [Erc721Attribute("sub provider name", DisplayType.String)]
+    [Erc721MetadataItem("sub provider name", DisplayType.String)]
     public string SubProviderName => SubProvider.Name;
 
     public RefundProvider(BasePoolInfo[] poolsInfo, ChainInfo chainInfo, IServiceProvider serviceProvider)

@@ -12,7 +12,7 @@ public class LockDealProvider : DealProvider
     [QueryStringProperty("Start time", order: 1)]
     public string QueryString_StartTime => StartTime.DateTimeStringFormat();
 
-    [Erc721Attribute("start time", DisplayType.Date)]
+    [Erc721MetadataItem("start time", DisplayType.Date)]
     public BigInteger StartTime { get; }
 
     public LockDealProvider(BasePoolInfo[] poolsInfo, ChainInfo chainInfo, IServiceProvider serviceProvider)
