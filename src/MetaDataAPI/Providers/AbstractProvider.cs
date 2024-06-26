@@ -30,6 +30,7 @@ public abstract class AbstractProvider : Urlify
     public BigInteger PoolId { get; }
 
     [QueryStringProperty("name")]
+    [Erc721MetadataItem("provider name", DisplayType.String)]
     public string Name { get; }
 
     [Erc721MetadataItem("collection", DisplayType.Number)]

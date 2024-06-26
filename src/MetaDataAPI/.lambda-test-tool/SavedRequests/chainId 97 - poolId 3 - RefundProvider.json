@@ -1,0 +1,7 @@
+{
+  "Description": "simple RefundProvider",
+  "queryStringParameters": {
+    "poolId": 3,
+    "chainId": 97
+  }
+}

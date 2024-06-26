@@ -1,0 +1,7 @@
+{
+  "Description": "simple CollateralProvider",
+  "queryStringParameters": {
+    "poolId": 5,
+    "chainId": 97
+  }
+}

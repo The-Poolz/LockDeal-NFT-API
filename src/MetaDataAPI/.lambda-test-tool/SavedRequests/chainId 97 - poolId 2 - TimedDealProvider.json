@@ -1,0 +1,7 @@
+{
+  "Description": "simple TimedDealProvider",
+  "queryStringParameters": {
+    "poolId": 2,
+    "chainId": 97
+  }
+}
