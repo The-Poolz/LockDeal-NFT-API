@@ -8,7 +8,7 @@ namespace MetaDataAPI;
 
 public static class DefaultServiceProvider
 {
-    private static readonly Lazy<IServiceProvider> lazyInstance = new(() =>
+    private static readonly Lazy<IServiceProvider> LazyInstance = new(() =>
     {
         var serviceCollection = new ServiceCollection();
 
@@ -19,5 +19,5 @@ public static class DefaultServiceProvider
         return serviceCollection.BuildServiceProvider();
     });
 
-    public static IServiceProvider Instance => lazyInstance.Value;
+    public static IServiceProvider Instance => LazyInstance.Value;
 }

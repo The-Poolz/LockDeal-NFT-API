@@ -18,8 +18,8 @@ namespace MetaDataAPI.Providers;
 
 public abstract class AbstractProvider : Urlify
 {
-    protected readonly IErc20Provider erc20Provider;
-    protected readonly ITlyContext tlyContext;
+    protected readonly IErc20Provider Erc20Provider;
+    protected readonly ITlyContext TlyContext;
 
     public IEnumerable<BasePoolInfo> FullData { get; }
     public BasePoolInfo PoolInfo { get; }
@@ -49,14 +49,14 @@ public abstract class AbstractProvider : Urlify
     protected AbstractProvider(BasePoolInfo[] poolsInfo, ChainInfo chainInfo, IServiceProvider serviceProvider)
         : base((string)Environments.NFT_HTML_ENDPOINT.Get())
     {
-        erc20Provider = serviceProvider.GetService<IErc20Provider>() ?? throw new ArgumentException($"Service '{nameof(IErc20Provider)}' is required.");
-        tlyContext = serviceProvider.GetService<ITlyContext>() ?? throw new ArgumentException($"Service '{nameof(ITlyContext)}' is required.");
+        Erc20Provider = serviceProvider.GetRequiredService<IErc20Provider>() ?? throw new ArgumentException($"Service '{nameof(IErc20Provider)}' is required.");
+        TlyContext = serviceProvider.GetRequiredService<ITlyContext>() ?? throw new ArgumentException($"Service '{nameof(ITlyContext)}' is required.");
 
         FullData = poolsInfo;
         PoolInfo = poolsInfo[0];
         ChainInfo = chainInfo;
 
-        Erc20Token = erc20Provider.GetErc20Token(chainInfo, PoolInfo.Token);
+        Erc20Token = Erc20Provider.GetErc20Token(chainInfo, PoolInfo.Token);
 
         PoolId = PoolInfo.PoolId;
         Name = PoolInfo.Name;
@@ -83,7 +83,7 @@ public abstract class AbstractProvider : Urlify
     {
         var url = new UrlifyProvider(this).BuildUrl();
         var description = $"ChainId: {ChainInfo.ChainId}, PoolId: {PoolId}, ProviderName: {Name}, VaultId: {VaultId}";
-        return tlyContext.GetShortUrlAsync(url, description)
+        return TlyContext.GetShortUrlAsync(url, description)
             .GetAwaiter()
             .GetResult()
             .ShortUrl;

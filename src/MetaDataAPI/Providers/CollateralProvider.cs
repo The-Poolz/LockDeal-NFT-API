@@ -56,8 +56,8 @@ public class CollateralProvider : AbstractProvider
     public CollateralProvider(BasePoolInfo[] poolsInfo, ChainInfo chainInfo, IServiceProvider serviceProvider)
         : base(poolsInfo, chainInfo, serviceProvider)
     {
-        MainCoin = erc20Provider.GetErc20Token(chainInfo, poolsInfo[0].Token);
-        Erc20Token = erc20Provider.GetErc20Token(chainInfo, poolsInfo[2].Token);
+        MainCoin = Erc20Provider.GetErc20Token(chainInfo, poolsInfo[0].Token);
+        Erc20Token = Erc20Provider.GetErc20Token(chainInfo, poolsInfo[2].Token);
         FinishTime = PoolInfo.Params[1];
         Rate = Web3.Convert.FromWei(PoolInfo.Params[2], 21);
 

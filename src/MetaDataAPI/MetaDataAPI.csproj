@@ -21,6 +21,6 @@
 	<PackageReference Include="Net.Urlify" Version="1.0.1" />
 	<PackageReference Include="TLY.ShortUrl" Version="1.0.1" />
     <PackageReference Include="Utils.EnvironmentManager" Version="3.0.4" />
-    <PackageReference Include="poolz.finance.csharp.contracts" Version="1.0.3" />
+    <PackageReference Include="poolz.finance.csharp.contracts" Version="1.0.4" />
   </ItemGroup>
 </Project>

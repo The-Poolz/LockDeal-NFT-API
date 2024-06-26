@@ -22,7 +22,7 @@ public class LambdaFunction
     public LambdaFunction(IServiceProvider serviceProvider)
     {
         _serviceProvider = DefaultServiceProvider.Instance;
-        _chainManager = serviceProvider.GetService<IChainManager>() ?? throw new ArgumentException($"Service '{nameof(IChainManager)}' is required.");
+        _chainManager = serviceProvider.GetRequiredService<IChainManager>();
     }
 
     public LambdaResponse FunctionHandler(LambdaRequest request, ILambdaContext lambdaContext)
