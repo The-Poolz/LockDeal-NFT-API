@@ -1,10 +1,13 @@
+using Nethereum.Web3;
 using Amazon.Lambda.Core;
 using MetaDataAPI.Request;
 using Newtonsoft.Json.Linq;
 using MetaDataAPI.Response;
 using MetaDataAPI.Providers;
+using MetaDataAPI.Extensions;
 using MetaDataAPI.Services.ChainsInfo;
 using Microsoft.Extensions.DependencyInjection;
+using poolz.finance.csharp.contracts.LockDealNFT;
 
 [assembly: LambdaSerializer(typeof(Amazon.Lambda.Serialization.Json.JsonSerializer))]
 
@@ -14,6 +17,7 @@ public class LambdaFunction
 {
     private readonly IServiceProvider _serviceProvider;
     private readonly IChainManager _chainManager;
+    private readonly ILockDealNFTService _lockDealNft;
 
     public LambdaFunction()
         : this(DefaultServiceProvider.Instance)
@@ -23,6 +27,7 @@ public class LambdaFunction
     {
         _serviceProvider = DefaultServiceProvider.Instance;
         _chainManager = serviceProvider.GetRequiredService<IChainManager>();
+        _lockDealNft = serviceProvider.GetRequiredService<ILockDealNFTService>();
     }
 
     public LambdaResponse FunctionHandler(LambdaRequest request, ILambdaContext lambdaContext)
@@ -39,7 +44,8 @@ public class LambdaFunction
                 return new ChainNotSupportedResponse(request.ChainId);
             }
 
-            var poolsInfo = AbstractProvider.FetchPoolInfo(request.PoolId, chainInfo);
+            _lockDealNft.Initialize(new Web3(chainInfo.RpcUrl), chainInfo.LockDealNFT);
+            var poolsInfo = _lockDealNft.FetchPoolInfo(request.PoolId);
 
             var provider = AbstractProvider.CreateFromPoolInfo(poolsInfo, chainInfo, _serviceProvider);
 

@@ -18,6 +18,7 @@ namespace MetaDataAPI.Providers;
 
 public abstract class AbstractProvider : Urlify
 {
+    protected readonly ILockDealNFTService LockDealNft;
     protected readonly IErc20Provider Erc20Provider;
     protected readonly ITlyContext TlyContext;
 
@@ -49,8 +50,9 @@ public abstract class AbstractProvider : Urlify
     protected AbstractProvider(BasePoolInfo[] poolsInfo, ChainInfo chainInfo, IServiceProvider serviceProvider)
         : base((string)Environments.NFT_HTML_ENDPOINT.Get())
     {
-        Erc20Provider = serviceProvider.GetRequiredService<IErc20Provider>() ?? throw new ArgumentException($"Service '{nameof(IErc20Provider)}' is required.");
-        TlyContext = serviceProvider.GetRequiredService<ITlyContext>() ?? throw new ArgumentException($"Service '{nameof(ITlyContext)}' is required.");
+        Erc20Provider = serviceProvider.GetRequiredService<IErc20Provider>();
+        TlyContext = serviceProvider.GetRequiredService<ITlyContext>();
+        LockDealNft = serviceProvider.GetRequiredService<ILockDealNFTService>();
 
         FullData = poolsInfo;
         PoolInfo = poolsInfo[0];
@@ -123,19 +125,5 @@ public abstract class AbstractProvider : Urlify
         var type = Type.GetType($"MetaDataAPI.Providers.{poolInfo.Name}, MetaDataAPI")
             ?? throw new InvalidOperationException($"Cannot found '{poolInfo.Name}' type. Please check if this Provider implemented.");
         return (TProvider)Activator.CreateInstance(type, poolsInfo, chainInfo, serviceProvider)!;
-    }
-
-    public static BasePoolInfo[] FetchPoolInfo(BigInteger poolId, ChainInfo chainInfo)
-    {
-        return FetchPoolInfo(poolId, new LockDealNFTService(new Web3(chainInfo.RpcUrl), chainInfo.LockDealNFT));
-    }
-
-    public static BasePoolInfo[] FetchPoolInfo(BigInteger poolId, LockDealNFTService lockDealNFTService)
-    {
-        return lockDealNFTService.GetFullDataQueryAsync(poolId)
-            .GetAwaiter()
-            .GetResult()
-            .PoolInfo
-            .ToArray();
     }
 }
