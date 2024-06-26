@@ -7,7 +7,7 @@ public class ChainNotSupportedResponse : LambdaResponse
 {
     public ChainNotSupportedResponse(BigInteger chainId)
         : base(
-            body: $"ChainID {chainId} is not supported.",
+            body: $"Chain ID {chainId} is not supported.",
             statusCode: HttpStatusCode.NotImplemented
         )
     { }

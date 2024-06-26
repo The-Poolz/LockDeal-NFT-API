@@ -45,6 +45,11 @@ public class LambdaFunction
             }
 
             _lockDealNft.Initialize(new Web3(chainInfo.RpcUrl), chainInfo.LockDealNFT);
+            if (!_lockDealNft.IsPoolIdInSupplyRange(request.PoolId))
+            {
+                return new PoolIdNotInSupplyRangeResponse(request.PoolId);
+            }
+
             var poolsInfo = _lockDealNft.FetchPoolInfo(request.PoolId);
 
             var provider = AbstractProvider.CreateFromPoolInfo(poolsInfo, chainInfo, _serviceProvider);
