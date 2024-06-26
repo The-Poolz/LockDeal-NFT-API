@@ -7,16 +7,16 @@ namespace MetaDataAPI.Request;
 
 public class LambdaRequest : APIGatewayProxyRequest
 {
-    public ValidationResult? ValidationResult { get; }
-
-    public LambdaRequest(APIGatewayProxyRequest request)
+    public ValidationResult? ValidationResult
     {
-        var validationResult = new LambdaRequestValidator().Validate(this);
-        ValidationResult = validationResult.IsValid ? null : validationResult;
-        ChainId = validationResult.IsValid ? BigInteger.Parse(request.QueryStringParameters["chainId"]) : -1;
-        PoolId = validationResult.IsValid ? BigInteger.Parse(request.QueryStringParameters["poolId"]) : -1;
+        get {
+            var validationResult = new LambdaRequestValidator().Validate(this);
+            ChainId = validationResult.IsValid ? BigInteger.Parse(QueryStringParameters["chainId"]) : -1;
+            PoolId = validationResult.IsValid ? BigInteger.Parse(QueryStringParameters["poolId"]) : -1;
+            return validationResult.IsValid ? null : validationResult;
+        }
     }
 
-    public BigInteger ChainId { get; }
-    public BigInteger PoolId { get; }
+    public BigInteger PoolId { get; private set; } = -1;
+    public BigInteger ChainId { get; private set; } = -1;
 }

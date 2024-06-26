@@ -12,20 +12,20 @@ namespace MetaDataAPI;
 
 public class LambdaFunction
 {
-    private readonly IServiceProvider serviceProvider;
-    private readonly IChainManager chainManager;
+    private readonly IServiceProvider _serviceProvider;
+    private readonly IChainManager _chainManager;
 
-    public LambdaFunction() // TODO: Implement chain manager which receive ChainInfo from DB.
+    public LambdaFunction()
         : this(DefaultServiceProvider.Instance)
     { }
 
     public LambdaFunction(IServiceProvider serviceProvider)
     {
-        this.serviceProvider = DefaultServiceProvider.Instance;
-        chainManager = serviceProvider.GetService<IChainManager>() ?? throw new ArgumentException($"Service '{nameof(IChainManager)}' is required.");
+        _serviceProvider = DefaultServiceProvider.Instance;
+        _chainManager = serviceProvider.GetService<IChainManager>() ?? throw new ArgumentException($"Service '{nameof(IChainManager)}' is required.");
     }
 
-    public LambdaResponse FunctionHandler(LambdaRequest request, ILambdaLogger logger)
+    public LambdaResponse FunctionHandler(LambdaRequest request, ILambdaContext lambdaContext)
     {
         try
         {
@@ -34,24 +34,24 @@ public class LambdaFunction
                 return new ValidationErrorResponse(request.ValidationResult);
             }
 
-            if (!chainManager.TryFetchChainInfo(request.ChainId, out var chainInfo))
+            if (!_chainManager.TryFetchChainInfo(request.ChainId, out var chainInfo))
             {
                 return new ChainNotSupportedResponse(request.ChainId);
             }
 
             var poolsInfo = AbstractProvider.FetchPoolInfo(request.PoolId, chainInfo);
 
-            var provider = AbstractProvider.CreateFromPoolInfo(poolsInfo, chainInfo, serviceProvider);
+            var provider = AbstractProvider.CreateFromPoolInfo(poolsInfo, chainInfo, _serviceProvider);
 
             var metadata = provider.GetErc721Metadata();
 
-            Console.WriteLine(JToken.FromObject(metadata));
+            Console.WriteLine(JToken.FromObject(metadata)); // TODO: Remove before merge PR
 
             return new SuccessResponse(metadata);
         }
         catch (Exception exception)
         {
-            logger.LogError(exception.ToString());
+            lambdaContext.Logger.LogError(exception.ToString());
             return new GeneralErrorResponse();
         }
     }

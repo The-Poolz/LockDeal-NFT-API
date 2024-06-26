@@ -3,6 +3,7 @@ using System.Diagnostics.CodeAnalysis;
 
 namespace MetaDataAPI.Services.ChainsInfo;
 
+// TODO: Implement chain manager which receive ChainInfo from DB.
 public class LocalChainManager : IChainManager
 {
     private readonly IDictionary<BigInteger, ChainInfo> localChainInfo = new Dictionary<BigInteger, ChainInfo>
