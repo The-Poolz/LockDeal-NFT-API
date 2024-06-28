@@ -29,9 +29,9 @@ public class LockDealNftServiceExtensionsTests
 
         public static IEnumerable<object[]> TestData()
         {
-            yield return new object[] { 5, 10, true };
-            yield return new object[] { 10, 10, false };
-            yield return new object[] { 15, 10, false };
+            yield return new object[] { new BigInteger(5), new BigInteger(10), true };
+            yield return new object[] { new BigInteger(10), new BigInteger(10), false };
+            yield return new object[] { new BigInteger(15), new BigInteger(10), false };
         }
     }
 
