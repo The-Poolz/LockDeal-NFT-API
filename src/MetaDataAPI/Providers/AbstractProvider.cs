@@ -41,7 +41,7 @@ public abstract class AbstractProvider : Urlify
     public decimal LeftAmount { get; }
 
     [QueryStringProperty("tA")]
-    public QueryStringToken Token { get; set; }
+    public QueryStringToken Token { get; }
 
     protected AbstractProvider(BasePoolInfo[] poolsInfo, ChainInfo chainInfo)
         : this(poolsInfo, chainInfo, DefaultServiceProvider.Instance)
@@ -100,7 +100,7 @@ public abstract class AbstractProvider : Urlify
             {
                 x.Property,
                 Attribute = x.Attribute!,
-                Value = x.Property.GetValue(this) ?? throw new InvalidOperationException($"Cannot process Erc721MetadataItem property '{x.Property.Name}' with nullable value.")
+                Value = x.Property.GetValue(this) ?? throw new InvalidOperationException($"Cannot process {nameof(Erc721MetadataItem)} property '{x.Property.Name}' with nullable value.")
             })
             .Select(x => new Erc721MetadataItem(x.Attribute.TraitType, x.Value, x.Attribute.DisplayType));
     }
