@@ -6,6 +6,10 @@ on:
       - master
   pull_request:
     types: [opened, synchronize, reopened]
+env:
+  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  GITHUB_PACKAGE_USER_NAME: ${{ github.actor }}
+  GITHUB_PACKAGE_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
 jobs:
     build-and-test:
