@@ -1,7 +1,6 @@
 using Nethereum.Web3;
 using Amazon.Lambda.Core;
 using MetaDataAPI.Request;
-using Newtonsoft.Json.Linq;
 using MetaDataAPI.Response;
 using MetaDataAPI.Providers;
 using MetaDataAPI.Extensions;
@@ -39,7 +38,7 @@ public class LambdaFunction
                 return new ValidationErrorResponse(request.ValidationResult);
             }
 
-            if (!_chainManager.TryFetchChainInfo(request.ChainId, out var chainInfo))
+            if (!_chainManager.TryFetchChainInfo((long)request.ChainId, out var chainInfo))
             {
                 return new ChainNotSupportedResponse(request.ChainId);
             }
@@ -55,8 +54,6 @@ public class LambdaFunction
             var provider = AbstractProvider.CreateFromPoolInfo(poolsInfo, chainInfo, _serviceProvider);
 
             var metadata = provider.GetErc721Metadata();
-
-            Console.WriteLine(JToken.FromObject(metadata)); // TODO: Remove before merge PR
 
             return new SuccessResponse(metadata);
         }
