@@ -5,10 +5,18 @@ namespace MetaDataAPI.Services.Erc20;
 
 public class Erc20Token
 {
-    public string Name { get; set; }
-    public string Symbol { get; set; }
-    public string Address { get; set; }
-    public byte Decimals { get; set; }
+    public string Name { get; }
+    public string Symbol { get; }
+    public string Address { get; }
+    public byte Decimals { get; }
+
+    public Erc20Token(string name, string symbol, string address, byte decimals)
+    {
+        Name = name;
+        Symbol = symbol;
+        Address = address;
+        Decimals = decimals;
+    }
 
     public Erc20Token(ERC20DynamoDbTable cacheErc20)
     {
