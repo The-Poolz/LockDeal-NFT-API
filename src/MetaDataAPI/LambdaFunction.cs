@@ -56,8 +56,6 @@ public class LambdaFunction
 
             var metadata = provider.GetErc721Metadata();
 
-            Console.WriteLine(JToken.FromObject(metadata)); // TODO: Remove before merge PR
-
             return new SuccessResponse(metadata);
         }
         catch (Exception exception)
