@@ -13,7 +13,7 @@ public static class DefaultServiceProvider
     {
         var serviceCollection = new ServiceCollection();
 
-        serviceCollection.AddSingleton<IChainManager, LocalChainManager>(_ => new LocalChainManager());
+        serviceCollection.AddSingleton<IChainManager, DbChainManager>(_ => new DbChainManager());
         serviceCollection.AddSingleton<IErc20Provider, Erc20Provider>(_ => new Erc20Provider());
         serviceCollection.AddSingleton<ITlyContext, TlyContext>(_ => new TlyContext(Environments.TLY_API_KEY.Get()));
         serviceCollection.AddSingleton<ILockDealNFTService, LockDealNFTService>(_ => new LockDealNFTService());

@@ -1,7 +1,6 @@
 using Nethereum.Web3;
 using Amazon.Lambda.Core;
 using MetaDataAPI.Request;
-using Newtonsoft.Json.Linq;
 using MetaDataAPI.Response;
 using MetaDataAPI.Providers;
 using MetaDataAPI.Extensions;
