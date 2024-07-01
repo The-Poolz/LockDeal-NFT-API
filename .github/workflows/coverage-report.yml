@@ -1,7 +1,11 @@
 name: Coverage Report
 
 on:
-  workflow_call:
+  push:
+    branches:
+      - master
+  pull_request:
+    types: [opened, synchronize, reopened]
 env:
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   GITHUB_PACKAGE_USER_NAME: ${{ github.actor }}
