@@ -1,7 +1,7 @@
 ﻿using CovalentDb;
-using System.Numerics;
 using CovalentDb.Types;
-using Net.Web3.EthereumWallet;
+using System.Diagnostics.CodeAnalysis;
+using ConfiguredSqlConnection.Extensions;
 
 namespace MetaDataAPI.Services.ChainsInfo;
 
@@ -9,38 +9,25 @@ public class DbChainManager : IChainManager
 {
     private readonly CovalentContext _context;
 
-    public DbChainManager() : this(new CovalentContext()) { }
+    public DbChainManager()
+        : this(new DbContextFactory<CovalentContext>().Create(ContextOption.Staging, "Prod"))
+    { }
 
     public DbChainManager(CovalentContext context)
     {
         _context = context;
     }
 
-    public bool TryFetchChainInfo(BigInteger chainId, out ChainInfo chainInfo)
+    public bool TryFetchChainInfo(long chainId, [NotNullWhen(true)] out ChainInfo? chainInfo)
     {
-        chainInfo = new ChainInfo(-1, string.Empty, EthereumAddress.ZeroAddress);
+        chainInfo = _context.DownloaderSettings
+            .Where(ds => ds.ChainId == chainId && ds.ResponseType == ResponseType.LDNFTContractApproved)
+            .Join(_context.Chains,
+                ds => ds.ChainId,
+                c => c.ChainId,
+                (ds, c) => new ChainInfo(chainId, c.RpcConnection, ds.ContractAddress))
+            .FirstOrDefault();
 
-        var address = GetContractAddress(chainId);
-        if (string.IsNullOrEmpty(address)) return false;
-
-        var rpcUrl = GetRpcConnection(chainId);
-        if (string.IsNullOrEmpty(rpcUrl)) return false;
-
-        chainInfo = new ChainInfo(chainId, rpcUrl, address);
-        return true;
-    }
-
-    private string? GetContractAddress(BigInteger chainId)
-    {
-        return _context.DownloaderSettings
-            .FirstOrDefault(x => x.ChainId == chainId && x.ResponseType == ResponseType.LDNFTContractApproved)
-            ?.ContractAddress;
-    }
-
-    private string? GetRpcConnection(BigInteger chainId)
-    {
-        return _context.Chains
-            .FirstOrDefault(x => x.ChainId == chainId)
-            ?.RpcConnection;
+        return chainInfo != null;
     }
 }

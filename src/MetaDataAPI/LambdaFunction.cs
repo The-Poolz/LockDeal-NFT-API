@@ -38,7 +38,7 @@ public class LambdaFunction
                 return new ValidationErrorResponse(request.ValidationResult);
             }
 
-            if (!_chainManager.TryFetchChainInfo(request.ChainId, out var chainInfo))
+            if (!_chainManager.TryFetchChainInfo((long)request.ChainId, out var chainInfo))
             {
                 return new ChainNotSupportedResponse(request.ChainId);
             }
