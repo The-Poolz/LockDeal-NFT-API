@@ -5,6 +5,7 @@ using System.Numerics;
 using HandlebarsDotNet;
 using System.Reflection;
 using Net.Urlify.Attributes;
+using Net.Cryptography.SHA256;
 using MetaDataAPI.Services.Erc20;
 using MetaDataAPI.Providers.Image;
 using EnvironmentManager.Extensions;
@@ -84,8 +85,18 @@ public abstract class AbstractProvider : Urlify
     private string GetImage()
     {
         var url = new UrlifyProvider(this).BuildUrl();
-        var description = $"ChainId: {ChainInfo.ChainId}, PoolId: {PoolId}, ProviderName: {Name}, VaultId: {VaultId}";
-        return TlyContext.GetShortUrlAsync(url, description)
+
+        var hash = $"{ChainInfo.ChainId}-{PoolId}-{VaultId}-{PoolInfo.Params}".ToSha256();
+        var description = $"ChainId: {ChainInfo.ChainId}, PoolId: {PoolId}, Hash: {hash}";
+
+        var shortUrl = TlyContext.SearchShortUrlAsync(description)
+            .GetAwaiter()
+            .GetResult()
+            .Data
+            .FirstOrDefault()
+            ?.ShortUrl;
+        
+        return shortUrl ?? TlyContext.CreateShortUrlAsync(url, description)
             .GetAwaiter()
             .GetResult()
             .ShortUrl;
