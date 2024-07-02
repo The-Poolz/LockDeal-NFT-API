@@ -11,6 +11,7 @@ using EnvironmentManager.Extensions;
 using MetaDataAPI.Services.ChainsInfo;
 using MetaDataAPI.Providers.Attributes;
 using Microsoft.Extensions.DependencyInjection;
+using Net.Cryptography.SHA256;
 using poolz.finance.csharp.contracts.LockDealNFT;
 using poolz.finance.csharp.contracts.LockDealNFT.ContractDefinition;
 
@@ -84,8 +85,20 @@ public abstract class AbstractProvider : Urlify
     private string GetImage()
     {
         var url = new UrlifyProvider(this).BuildUrl();
-        var description = $"ChainId: {ChainInfo.ChainId}, PoolId: {PoolId}, ProviderName: {Name}, VaultId: {VaultId}";
-        return TlyContext.GetShortUrlAsync(url, description)
+
+        var hash = $"{ChainInfo.ChainId}-{PoolId}-{VaultId}-{PoolInfo.Params}".ToSha256();
+        var description = $"ChainId: {ChainInfo.ChainId}, PoolId: {PoolId}, Hash: {hash}";
+
+        var shortUrl = TlyContext.SearchShortUrlAsync(description)
+            .GetAwaiter()
+            .GetResult()
+            .Data
+            .FirstOrDefault()
+            ?.ShortUrl;
+        
+        if (shortUrl != null) return shortUrl;
+
+        return TlyContext.CreateShortUrlAsync(url, description)
             .GetAwaiter()
             .GetResult()
             .ShortUrl;
