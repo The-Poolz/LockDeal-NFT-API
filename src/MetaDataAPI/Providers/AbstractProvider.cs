@@ -96,9 +96,7 @@ public abstract class AbstractProvider : Urlify
             .FirstOrDefault()
             ?.ShortUrl;
         
-        if (shortUrl != null) return shortUrl;
-
-        return TlyContext.CreateShortUrlAsync(url, description)
+        return shortUrl ?? TlyContext.CreateShortUrlAsync(url, description)
             .GetAwaiter()
             .GetResult()
             .ShortUrl;
