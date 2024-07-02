@@ -5,13 +5,13 @@ using System.Numerics;
 using HandlebarsDotNet;
 using System.Reflection;
 using Net.Urlify.Attributes;
+using Net.Cryptography.SHA256;
 using MetaDataAPI.Services.Erc20;
 using MetaDataAPI.Providers.Image;
 using EnvironmentManager.Extensions;
 using MetaDataAPI.Services.ChainsInfo;
 using MetaDataAPI.Providers.Attributes;
 using Microsoft.Extensions.DependencyInjection;
-using Net.Cryptography.SHA256;
 using poolz.finance.csharp.contracts.LockDealNFT;
 using poolz.finance.csharp.contracts.LockDealNFT.ContractDefinition;
 
