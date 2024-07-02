@@ -1,0 +1,7 @@
+{
+  "Description": "simple DealProvider",
+  "queryStringParameters": {
+    "poolId": 8,
+    "chainId": 97
+  }
+}

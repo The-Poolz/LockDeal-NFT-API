@@ -1,0 +1,7 @@
+{
+  "Description": "simple LockDealProvider",
+  "queryStringParameters": {
+    "poolId": 1,
+    "chainId": 97
+  }
+}

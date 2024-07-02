@@ -1,0 +1,7 @@
+{
+  "Description": "fully refunded DealProvider",
+  "queryStringParameters": {
+    "poolId": 6,
+    "chainId": 97
+  }
+}

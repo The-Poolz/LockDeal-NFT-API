@@ -1,0 +1,7 @@
+{
+  "Description": "fully withdrawn DealProvider",
+  "queryStringParameters": {
+    "poolId": 0,
+    "chainId": 97
+  }
+}
