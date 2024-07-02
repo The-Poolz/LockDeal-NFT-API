@@ -24,4 +24,9 @@
     <PackageReference Include="Utils.EnvironmentManager" Version="3.0.4" />
     <PackageReference Include="poolz.finance.csharp.contracts" Version="1.0.4" />
   </ItemGroup>
+	<ItemGroup>
+	  <None Update="appsettings.json">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	</ItemGroup>
 </Project>
