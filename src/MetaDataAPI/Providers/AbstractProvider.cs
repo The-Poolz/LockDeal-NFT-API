@@ -87,7 +87,7 @@ public abstract class AbstractProvider : Urlify
         var url = new UrlifyProvider(this).BuildUrl();
 
         var hash = $"{ChainInfo.ChainId}-{PoolId}-{VaultId}-{PoolInfo.Params}".ToSha256();
-        var description = $"ChainId: {ChainInfo.ChainId}, PoolId: {PoolId}, Hash: {hash}";
+        var description = $"chainId: {ChainInfo.ChainId}, PoolId: {PoolId}, Hash: {hash}";
 
         var shortUrl = TlyContext.SearchShortUrlAsync(description)
             .GetAwaiter()
