@@ -1,11 +1,9 @@
 ﻿using Net.Urlify;
-using TLY.ShortUrl;
 using Nethereum.Web3;
 using System.Numerics;
 using HandlebarsDotNet;
 using System.Reflection;
 using Net.Urlify.Attributes;
-using Net.Cryptography.SHA256;
 using MetaDataAPI.Services.Erc20;
 using MetaDataAPI.Providers.Image;
 using EnvironmentManager.Extensions;
@@ -21,7 +19,6 @@ public abstract class AbstractProvider : Urlify
 {
     protected readonly ILockDealNFTService LockDealNft;
     protected readonly IErc20Provider Erc20Provider;
-    protected readonly ITlyContext TlyContext;
 
     public IEnumerable<BasePoolInfo> FullData { get; }
     public BasePoolInfo PoolInfo { get; }
@@ -52,7 +49,6 @@ public abstract class AbstractProvider : Urlify
         : base((string)Environments.NFT_HTML_ENDPOINT.Get())
     {
         Erc20Provider = serviceProvider.GetRequiredService<IErc20Provider>();
-        TlyContext = serviceProvider.GetRequiredService<ITlyContext>();
         LockDealNft = serviceProvider.GetRequiredService<ILockDealNFTService>();
 
         FullData = poolsInfo;
@@ -84,22 +80,7 @@ public abstract class AbstractProvider : Urlify
 
     private string GetImage()
     {
-        var url = new UrlifyProvider(this).BuildUrl();
-
-        var hash = $"{ChainInfo.ChainId}-{PoolId}-{VaultId}-{PoolInfo.Params}".ToSha256();
-        var description = $"ChainId: {ChainInfo.ChainId}, PoolId: {PoolId}, Hash: {hash}";
-
-        var shortUrl = TlyContext.SearchShortUrlAsync(description)
-            .GetAwaiter()
-            .GetResult()
-            .Data
-            .FirstOrDefault()
-            ?.ShortUrl;
-        
-        return shortUrl ?? TlyContext.CreateShortUrlAsync(url, description)
-            .GetAwaiter()
-            .GetResult()
-            .ShortUrl;
+        return new UrlifyProvider(this).BuildUrl();
     }
 
     private IEnumerable<Erc721MetadataItem> GetAttributes()
