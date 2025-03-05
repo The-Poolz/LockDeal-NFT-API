@@ -22,8 +22,7 @@ public class ImageService : IImageService
 
     public string GetImage(AbstractProvider provider)
     {
-        var hashSource = CalculateImageHashSource(provider);
-        var hash = hashSource.ToSha256();
+        var hash = CalculateImageHash(provider);
 
         var filter = new Dictionary<string, object>
         {
@@ -40,22 +39,10 @@ public class ImageService : IImageService
 
     public string UploadImage(AbstractProvider provider)
     {
-        var hashSource = CalculateImageHashSource(provider);
-        var hash = hashSource.ToSha256();
-
+        var hash = CalculateImageHash(provider);
+        var imageUrl = new UrlifyProvider(provider).BuildUrl();
         var response = _client.Pinning.PinFileToIpfsAsync(content => {
-            var imageBytes = new UrlifyProvider(provider)
-                .BuildUrl()
-                .GetBytesAsync()
-                .GetAwaiter()
-                .GetResult();
-            var fileContent = new StreamContent(new MemoryStream(imageBytes)) {
-                Headers = {
-                    ContentType = new MediaTypeHeaderValue("image/jpeg")
-                }
-            };
-
-            content.AddPinataFile(fileContent, $"{hash}.jpg");
+            content.AddFile(hash, imageUrl, fileName: $"{hash}.jpg");
         }).GetAwaiter().GetResult();
 
         if (!response.IsSuccess) LambdaLogger.Log($"Error occured while trying upload image: {response.Error}");
@@ -63,8 +50,8 @@ public class ImageService : IImageService
         return response.IpfsHash; 
     }
 
-    private static string CalculateImageHashSource(AbstractProvider provider) =>
+    private static string CalculateImageHash(AbstractProvider provider) =>
         new StringBuilder($"{provider.ChainInfo.ChainId}-{provider.PoolId}-")
             .AppendJoin('-', provider.PoolInfo.Params)
-            .ToString();
+            .ToString().ToSha256();
 }
