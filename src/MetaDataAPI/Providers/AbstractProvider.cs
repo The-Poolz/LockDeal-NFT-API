@@ -82,9 +82,7 @@ public abstract class AbstractProvider : Urlify
     private string GetImage()
     {
         var service = new ImageService();
-        var image = service.GetImage(this);
-
-        return new UrlifyProvider(this).BuildUrl();
+        return service.GetImage(this);
     }
 
     private IEnumerable<Erc721MetadataItem> GetAttributes()

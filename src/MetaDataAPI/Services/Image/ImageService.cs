@@ -34,14 +34,8 @@ public class ImageService : IImageService
 
         if (!response.IsSuccess) LambdaLogger.Log($"Error occured while trying to receive image: {response.Error}");
 
-        if (response.Count > 0)
-        {
-            return response.Rows[0].IpfsPinHash;
-        }
-        else
-        {
-            return UploadImage(provider);
-        }
+        var ipfsPinHash = response.Count > 0 ? response.Rows[0].IpfsPinHash : UploadImage(provider);
+        return $"ipfs://{ipfsPinHash}";
     }
 
     public string UploadImage(AbstractProvider provider)
