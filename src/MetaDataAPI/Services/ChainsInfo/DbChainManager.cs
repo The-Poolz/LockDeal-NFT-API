@@ -10,7 +10,7 @@ public class DbChainManager : IChainManager
     private readonly CovalentContext _context;
 
     public DbChainManager()
-        : this(new DbContextFactory<CovalentContext>().Create(ContextOption.Staging, "DownloaderStage"))
+        : this(new DbContextFactory<CovalentContext>().Create(ContextOption.Prod))
     { }
 
     public DbChainManager(CovalentContext context)
