@@ -7,5 +7,9 @@ public enum Environments
     [EnvironmentVariable(isRequired: true)]
     NFT_HTML_ENDPOINT,
     [EnvironmentVariable(isRequired: true)]
-    HTML_TO_IMAGE_ENDPOINT
+    HTML_TO_IMAGE_ENDPOINT,
+    [EnvironmentVariable(isRequired: true)]
+    PINATA_API_KEY,
+    [EnvironmentVariable(isRequired: true)]
+    PINATA_API_SECRET
 }
