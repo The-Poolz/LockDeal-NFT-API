@@ -5,6 +5,7 @@ using HandlebarsDotNet;
 using System.Reflection;
 using Net.Urlify.Attributes;
 using MetaDataAPI.Services.Erc20;
+using MetaDataAPI.Services.Image;
 using MetaDataAPI.Providers.Image;
 using EnvironmentManager.Extensions;
 using MetaDataAPI.Services.ChainsInfo;
@@ -80,7 +81,7 @@ public abstract class AbstractProvider : Urlify
 
     private string GetImage()
     {
-        return new UrlifyProvider(this).BuildUrl();
+        return new ImageService().GetImageAsync(this).GetAwaiter().GetResult();
     }
 
     private IEnumerable<Erc721MetadataItem> GetAttributes()
