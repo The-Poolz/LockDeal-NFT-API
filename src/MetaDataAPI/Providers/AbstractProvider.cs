@@ -5,11 +5,11 @@ using HandlebarsDotNet;
 using System.Reflection;
 using Net.Urlify.Attributes;
 using MetaDataAPI.Services.Erc20;
+using MetaDataAPI.Services.Image;
 using MetaDataAPI.Providers.Image;
 using EnvironmentManager.Extensions;
 using MetaDataAPI.Services.ChainsInfo;
 using MetaDataAPI.Providers.Attributes;
-using MetaDataAPI.Services.Image;
 using Microsoft.Extensions.DependencyInjection;
 using poolz.finance.csharp.contracts.LockDealNFT;
 using poolz.finance.csharp.contracts.LockDealNFT.ContractDefinition;
@@ -81,8 +81,7 @@ public abstract class AbstractProvider : Urlify
 
     private string GetImage()
     {
-        var service = new ImageService();
-        return service.GetImage(this);
+        return new ImageService().GetImageAsync(this).GetAwaiter().GetResult();
     }
 
     private IEnumerable<Erc721MetadataItem> GetAttributes()
