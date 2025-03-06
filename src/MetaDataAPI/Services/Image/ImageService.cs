@@ -39,16 +39,16 @@ public class ImageService
     private async Task<string> UploadImageAsync(AbstractProvider provider)
     {
         var hash = CalculateImageHash(provider);
-        var response = await _client.Pinning.PinFileToIpfsAsync(async content =>
+        var imageBytes = await new UrlifyProvider(provider)
+            .BuildUrl()
+            .GetBytesAsync();
+        var fileContent = new StreamContent(new MemoryStream(imageBytes)) {
+            Headers = {
+                ContentType = new MediaTypeHeaderValue("image/jpeg")
+            }
+        };
+        var response = await _client.PinFileToIpfsAsync(content =>
         {
-            var imageBytes = await new UrlifyProvider(provider)
-                .BuildUrl()
-                .GetBytesAsync();
-            var fileContent = new StreamContent(new MemoryStream(imageBytes)) {
-                Headers = {
-                    ContentType = new MediaTypeHeaderValue("image/jpeg")
-                }
-            };
             content.AddPinataFile(fileContent, $"{hash}.jpg");
         });
 
