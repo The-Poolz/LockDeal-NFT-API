@@ -12,5 +12,49 @@ env:
   GITHUB_PACKAGE_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
 jobs:
-    build-and-test:
-        uses: The-Poolz/.net-workflows/.github/workflows/uml-diagram-report.yml@v1.0.2
+
+  uml-diagram-report:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+        ref: ${{ github.head_ref }}
+
+    - name: Checkout solidity workflows repository
+      uses: actions/checkout@v4
+      with:
+        repository: The-Poolz/.net-workflows
+        ref: master
+        path: .net-workflows
+  
+    - name: Setup .NET Core
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: '8.0.x'
+
+    - name: Install PlantUMLClassDiagramGenerator
+      run: dotnet tool install --global PlantUmlClassDiagramGenerator
+
+    - name: Generate UML Diagram
+      run: |
+        puml-gen ./ ./diagrams/ -dir -allInOne -createAssociation -excludePaths **/tests
+
+    - name: Download plantuml
+      run: pip install plantuml
+
+    - name: Write URL to file
+      run: python .net-workflows/generate-uml-diagram-report.py
+      env:
+        FILE_PATH: ./diagrams/
+
+    - name: Comment PR with URL
+      uses: marocchino/sticky-pull-request-comment@v2
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        recreate: true
+        header: Diagram URL
+        path: ${{github.workspace}}/uml-diagram-report.txt
