@@ -10,7 +10,7 @@ namespace MetaDataAPI.Providers;
 
 public class TimedDealProvider : LockDealProvider
 {
-    [QueryStringProperty("Finish time", order: 1)]
+    [QueryStringProperty("Finish time", order: 2)]
     public string QueryString_FinishTime => FinishTime.DateTimeStringFormat();
 
     [Erc721MetadataItem("finish time", DisplayType.Date)]
