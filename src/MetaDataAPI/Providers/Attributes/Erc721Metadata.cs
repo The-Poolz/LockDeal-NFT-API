@@ -1,26 +1,22 @@
 ﻿using Newtonsoft.Json;
+using EnvironmentManager.Extensions;
 
 namespace MetaDataAPI.Providers.Attributes;
 
-public class Erc721Metadata
+public class Erc721Metadata(string name, string description, string image, IEnumerable<Erc721MetadataItem> attributes)
 {
+    [JsonProperty("external_url")]
+    public string ExternalUrl { get; set; } = Environments.EXTERNAL_URL.Get();
+
     [JsonProperty("name")]
-    public string Name { get; set; }
+    public string Name { get; set; } = name;
 
     [JsonProperty("description")]
-    public string Description { get; set; }
+    public string Description { get; set; } = description;
 
     [JsonProperty("image")]
-    public string Image { get; set; }
+    public string Image { get; set; } = image;
 
     [JsonProperty("attributes")]
-    public IEnumerable<Erc721MetadataItem> Attributes { get; set; }
-
-    public Erc721Metadata(string name, string description, string image, IEnumerable<Erc721MetadataItem> attributes)
-    {
-        Name = name;
-        Description = description;
-        Image = image;
-        Attributes = attributes;
-    }
+    public IEnumerable<Erc721MetadataItem> Attributes { get; set; } = attributes;
 }
