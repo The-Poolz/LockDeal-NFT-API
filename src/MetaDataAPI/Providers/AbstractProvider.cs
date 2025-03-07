@@ -21,6 +21,8 @@ public abstract class AbstractProvider : Urlify
     protected readonly ILockDealNFTService LockDealNft;
     protected readonly IErc20Provider Erc20Provider;
 
+    private Erc721Metadata? _cachedErc721Metadata;
+
     public IEnumerable<BasePoolInfo> FullData { get; }
     public BasePoolInfo PoolInfo { get; }
     public ChainInfo ChainInfo { get; }
@@ -100,7 +102,7 @@ public abstract class AbstractProvider : Urlify
 
     public Erc721Metadata GetErc721Metadata()
     {
-        return new Erc721Metadata(
+        return _cachedErc721Metadata ??= new Erc721Metadata(
             name: $"Lock Deal NFT Pool: {PoolId}",
             description: GetDescription(),
             image: GetImage(),
