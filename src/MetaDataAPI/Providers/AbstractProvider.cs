@@ -49,7 +49,7 @@ public abstract class AbstractProvider : Urlify
     { }
 
     protected AbstractProvider(BasePoolInfo[] poolsInfo, ChainInfo chainInfo, IServiceProvider serviceProvider)
-        : base((string)Environments.NFT_HTML_ENDPOINT.Get())
+        : base(Environments.NFT_HTML_ENDPOINT.Get())
     {
         Erc20Provider = serviceProvider.GetRequiredService<IErc20Provider>();
         LockDealNft = serviceProvider.GetRequiredService<ILockDealNFTService>();
