@@ -1,5 +1,4 @@
 ﻿using System.Numerics;
-using Net.Urlify.Attributes;
 using MetaDataAPI.Extensions;
 using MetaDataAPI.Providers.Attributes;
 using MetaDataAPI.Services.ChainsInfo;
@@ -9,7 +8,6 @@ namespace MetaDataAPI.Providers;
 
 public class LockDealProvider : DealProvider
 {
-    [QueryStringProperty("Start time", order: 1)]
     public string QueryString_StartTime => StartTime.DateTimeStringFormat();
 
     [Erc721MetadataItem("start time", DisplayType.Date)]

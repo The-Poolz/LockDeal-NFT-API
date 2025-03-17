@@ -1,6 +1,5 @@
 ﻿using Nethereum.Web3;
 using System.Numerics;
-using Net.Urlify.Attributes;
 using MetaDataAPI.Extensions;
 using MetaDataAPI.Services.ChainsInfo;
 using MetaDataAPI.Providers.Attributes;
@@ -10,7 +9,6 @@ namespace MetaDataAPI.Providers;
 
 public class TimedDealProvider : LockDealProvider
 {
-    [QueryStringProperty("Finish time", order: 2)]
     public string QueryString_FinishTime => FinishTime.DateTimeStringFormat();
 
     [Erc721MetadataItem("finish time", DisplayType.Date)]

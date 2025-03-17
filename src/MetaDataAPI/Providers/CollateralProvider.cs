@@ -1,6 +1,5 @@
 ﻿using Nethereum.Web3;
 using System.Numerics;
-using Net.Urlify.Attributes;
 using MetaDataAPI.Extensions;
 using MetaDataAPI.Services.Erc20;
 using MetaDataAPI.Services.ChainsInfo;
@@ -44,7 +43,6 @@ public class CollateralProvider : AbstractProvider
     [Erc721MetadataItem("rate", DisplayType.Number)]
     public decimal Rate { get; }
 
-    [QueryStringProperty("Finish time", order: 1)]
     public string QueryString_FinishTime => FinishTime.DateTimeStringFormat();
 
     internal Dictionary<CollateralType, DealProvider> SubProviders { get; }

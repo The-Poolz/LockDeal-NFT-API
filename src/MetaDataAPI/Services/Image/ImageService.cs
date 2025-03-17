@@ -1,11 +1,9 @@
-﻿using Flurl.Http;
-using System.Text;
+﻿using System.Text;
 using Pinata.Client;
 using Amazon.Lambda.Core;
 using MetaDataAPI.Providers;
 using Net.Cryptography.SHA256;
 using System.Net.Http.Headers;
-using MetaDataAPI.Providers.Image;
 using EnvironmentManager.Extensions;
 
 namespace MetaDataAPI.Services.Image;
@@ -39,9 +37,7 @@ public class ImageService
     private async Task<string> UploadImageAsync(AbstractProvider provider)
     {
         var hash = CalculateImageHash(provider);
-        var imageBytes = await new UrlifyProvider(provider)
-            .BuildUrl()
-            .GetBytesAsync();
+        var imageBytes = await ImageGenerator.GenerateImageAsync(provider);
         var fileContent = new StreamContent(new MemoryStream(imageBytes)) {
             Headers = {
                 ContentType = new MediaTypeHeaderValue("image/jpeg")

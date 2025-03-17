@@ -1,5 +1,4 @@
 ﻿using System.Numerics;
-using Net.Urlify.Attributes;
 using MetaDataAPI.Providers.Image;
 using MetaDataAPI.Services.ChainsInfo;
 using MetaDataAPI.Providers.Attributes;
@@ -21,7 +20,6 @@ public class RefundProvider : AbstractProvider
     [Erc721MetadataItem("sub provider name", DisplayType.String)]
     public string SubProviderName => SubProvider.Name;
 
-    [QueryStringProperty("tB")]
     public QueryStringToken QueryString_MainCoin { get; }
 
     public RefundProvider(BasePoolInfo[] poolsInfo, ChainInfo chainInfo, IServiceProvider serviceProvider)

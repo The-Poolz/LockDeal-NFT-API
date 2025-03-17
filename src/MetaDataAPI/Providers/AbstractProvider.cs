@@ -1,9 +1,7 @@
-﻿using Net.Urlify;
-using Nethereum.Web3;
+﻿using Nethereum.Web3;
 using System.Numerics;
 using HandlebarsDotNet;
 using System.Reflection;
-using Net.Urlify.Attributes;
 using MetaDataAPI.Services.Erc20;
 using MetaDataAPI.Services.Image;
 using MetaDataAPI.Providers.Image;
@@ -16,7 +14,7 @@ using poolz.finance.csharp.contracts.LockDealNFT.ContractDefinition;
 
 namespace MetaDataAPI.Providers;
 
-public abstract class AbstractProvider : Urlify
+public abstract class AbstractProvider
 {
     protected readonly ILockDealNFTService LockDealNft;
     protected readonly IErc20Provider Erc20Provider;
@@ -26,10 +24,8 @@ public abstract class AbstractProvider : Urlify
     public ChainInfo ChainInfo { get; }
     public Erc20Token Erc20Token { get; }
 
-    [QueryStringProperty("id")]
     public BigInteger PoolId { get; }
 
-    [QueryStringProperty("name")]
     [Erc721MetadataItem("provider name", DisplayType.String)]
     public string Name { get; }
 
@@ -39,7 +35,6 @@ public abstract class AbstractProvider : Urlify
     [Erc721MetadataItem("left amount", DisplayType.Number)]
     public decimal LeftAmount { get; }
 
-    [QueryStringProperty("tA")]
     public QueryStringToken Token { get; }
 
     protected AbstractProvider(BasePoolInfo[] poolsInfo, ChainInfo chainInfo)
@@ -47,7 +42,6 @@ public abstract class AbstractProvider : Urlify
     { }
 
     protected AbstractProvider(BasePoolInfo[] poolsInfo, ChainInfo chainInfo, IServiceProvider serviceProvider)
-        : base(Environments.NFT_HTML_ENDPOINT.Get())
     {
         Erc20Provider = serviceProvider.GetRequiredService<IErc20Provider>();
         LockDealNft = serviceProvider.GetRequiredService<ILockDealNFTService>();
