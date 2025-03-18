@@ -17,12 +17,21 @@ public static class ImageGenerator
         await using var browser = await Puppeteer.LaunchAsync(new LaunchOptions { Headless = true });
         await using var page = await browser.NewPageAsync();
         await page.SetContentAsync(html);
+        var element = await page.QuerySelectorAsync("div.blockmodal");
 
         var hash = ImageService.CalculateImageHash(provider);
-        await page.ScreenshotAsync($"{hash}.jpg", new ScreenshotOptions { Type = ScreenshotType.Jpeg, Quality = 100 });
+        await element.ScreenshotAsync($"{hash}.jpg", new ElementScreenshotOptions
+        {
+            Type = ScreenshotType.Jpeg,
+            Quality = 100
+        });
 
 
-        var stream = await page.ScreenshotStreamAsync(new ScreenshotOptions { Type = ScreenshotType.Jpeg, Quality = 100 });
+        var stream = await element.ScreenshotStreamAsync(new ElementScreenshotOptions
+        {
+            Type = ScreenshotType.Jpeg,
+            Quality = 100
+        });
         await browser.CloseAsync();
         return stream;
     }
