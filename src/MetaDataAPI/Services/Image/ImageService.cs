@@ -37,8 +37,8 @@ public class ImageService
     private async Task<string> UploadImageAsync(AbstractProvider provider)
     {
         var hash = CalculateImageHash(provider);
-        var imageBytes = await ImageGenerator.GenerateImageAsync(provider);
-        var fileContent = new StreamContent(new MemoryStream(imageBytes)) {
+        var stream = await ImageGenerator.GenerateImageAsync(provider);
+        var fileContent = new StreamContent(stream) {
             Headers = {
                 ContentType = new MediaTypeHeaderValue("image/jpeg")
             }
@@ -53,7 +53,7 @@ public class ImageService
         return response.IpfsHash; 
     }
 
-    private static string CalculateImageHash(AbstractProvider provider) =>
+    public static string CalculateImageHash(AbstractProvider provider) =>
         new StringBuilder($"{provider.ChainInfo.ChainId}-{provider.PoolId}-")
             .AppendJoin('-', provider.PoolInfo.Params)
             .ToString()
