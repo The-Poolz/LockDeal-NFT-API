@@ -34,8 +34,9 @@ public abstract class AbstractProvider
 
     [Erc721MetadataItem("left amount", DisplayType.Number)]
     public decimal LeftAmount { get; }
-
-    public QueryStringToken Token { get; }
+    
+    [HandlebarsToken(order: 1)]
+    public HandlebarsToken Token { get; }
 
     protected AbstractProvider(BasePoolInfo[] poolsInfo, ChainInfo chainInfo)
         : this(poolsInfo, chainInfo, DefaultServiceProvider.Instance)
@@ -57,7 +58,7 @@ public abstract class AbstractProvider
         VaultId = PoolInfo.VaultId;
         LeftAmount = Web3.Convert.FromWei(PoolInfo.Params[0], Erc20Token.Decimals);
 
-        Token = new QueryStringToken(Erc20Token.Name, "Left Amount", LeftAmount);
+        Token = new HandlebarsToken(Erc20Token.Name, LeftAmount, "Left Amount");
     }
 
     protected abstract string DescriptionTemplate { get; }

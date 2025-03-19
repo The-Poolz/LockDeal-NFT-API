@@ -20,7 +20,8 @@ public class RefundProvider : AbstractProvider
     [Erc721MetadataItem("sub provider name", DisplayType.String)]
     public string SubProviderName => SubProvider.Name;
 
-    public QueryStringToken QueryString_MainCoin { get; }
+    [HandlebarsToken(order: 2)]
+    public HandlebarsToken MainCoin { get; }
 
     public RefundProvider(BasePoolInfo[] poolsInfo, ChainInfo chainInfo, IServiceProvider serviceProvider)
         : base(poolsInfo, chainInfo, serviceProvider)
@@ -28,7 +29,7 @@ public class RefundProvider : AbstractProvider
         SubProvider = CreateFromPoolInfo(new []{ poolsInfo[1] }, chainInfo, serviceProvider);
         CollateralProvider = new CollateralProvider(poolsInfo[2], chainInfo, serviceProvider);
 
-        QueryString_MainCoin = new QueryStringToken(CollateralProvider.MainCoin.Name, $"Or refund of {CollateralProvider.MainCoin.Name}", MainCoinAmount);
+        MainCoin = new HandlebarsToken(CollateralProvider.MainCoin.Name, MainCoinAmount, $"Or refund of {CollateralProvider.MainCoin.Name}");
     }
 
     protected override string DescriptionTemplate =>

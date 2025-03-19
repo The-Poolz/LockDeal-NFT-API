@@ -11,6 +11,7 @@ public static class ImageGenerator
         var handlebars = Handlebars.Create();
         handlebars.Configuration.AliasProviders.Add(new AttributeMemberAliasProvider());
         handlebars.Configuration.AliasProviders.Add(new AttributeMemberLabelProvider());
+        handlebars.Configuration.AliasProviders.Add(new AttributeMemberTokenProvider());
 
         var source = await File.ReadAllTextAsync("./Services/Image/Image.html");
         var temple = handlebars.Compile(source);
