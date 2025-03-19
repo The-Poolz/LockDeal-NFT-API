@@ -9,14 +9,10 @@ namespace MetaDataAPI.Services.Image;
 
 public class AttributeMemberTokenProvider : IMemberAliasProvider
 {
-    public bool TryGetMemberByAlias(object? instance, Type targetType, ChainSegment? memberAlias, [MaybeNullWhen(false)] out object value)
+    public bool TryGetMemberByAlias(object instance, Type targetType, ChainSegment memberAlias, [MaybeNullWhen(false)] out object value)
     {
         value = null;
-        if (instance == null || memberAlias == null || string.IsNullOrEmpty(memberAlias.TrimmedValue))
-            return false;
-
         var alias = memberAlias.TrimmedValue;
-
         if (!alias.StartsWith("TokenName-") && !alias.StartsWith("TokenLabel-") && !alias.StartsWith("TokenValue-"))
             return false;
 
