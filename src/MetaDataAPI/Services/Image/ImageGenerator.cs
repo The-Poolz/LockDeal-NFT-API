@@ -17,8 +17,6 @@ public static class ImageGenerator
         var temple = handlebars.Compile(source);
         var html = temple(provider);
 
-
-        //TODO: Instead of downloading everytime browser let's reuse downloaded
         await new BrowserFetcher().DownloadAsync();
         await using var browser = await Puppeteer.LaunchAsync(new LaunchOptions
         {
@@ -28,13 +26,14 @@ public static class ImageGenerator
         await page.SetContentAsync(html);
         var element = await page.QuerySelectorAsync("div.blockmodal");
 
+#if DEBUG
         var hash = ImageService.CalculateImageHash(provider);
         await element.ScreenshotAsync($"{hash}.jpg", new ElementScreenshotOptions
         {
             Type = ScreenshotType.Jpeg,
             Quality = 100
         });
-
+#endif
 
         var stream = await element.ScreenshotStreamAsync(new ElementScreenshotOptions
         {
