@@ -34,7 +34,7 @@ public abstract class AbstractProvider
 
     [Erc721MetadataItem("left amount", DisplayType.Number)]
     public decimal LeftAmount { get; }
-    
+
     [HandlebarsToken(order: 1)]
     public HandlebarsToken Token { get; }
 
