@@ -32,24 +32,23 @@ public class AttributeMemberTokenProvider : IMemberAliasProvider
                 return attr != null && attr.Order == order;
             });
 
-        if (property == null)
+        if (property == null || property.GetValue(instance) is not HandlebarsToken token)
             return false;
 
-        if (alias.StartsWith("TokenName-") && property.GetValue(instance) is HandlebarsToken token1)
+        switch (alias)
         {
-            value = token1.TokenName;
-            return true;
+            case var _ when alias.StartsWith("TokenName-"):
+                value = token.TokenName;
+                break;
+            case var _ when alias.StartsWith("TokenLabel-"):
+                value = token.Label;
+                break;
+            case var _ when alias.StartsWith("TokenValue-"):
+                value = token.Value;
+                break;
+            default:
+                return false;
         }
-        if (alias.StartsWith("TokenLabel-") && property.GetValue(instance) is HandlebarsToken token2)
-        {
-            value = token2.Label;
-            return true;
-        }
-        if (alias.StartsWith("TokenValue-") && property.GetValue(instance) is HandlebarsToken token3)
-        {
-            value = token3.Value;
-            return true;
-        }
-        return false;
+        return true;
     }
 }
