@@ -8,13 +8,21 @@ public static class ImageGenerator
 {
     public static async Task<Stream> GenerateImageAsync(AbstractProvider provider)
     {
+        var handlebars = Handlebars.Create();
+        handlebars.Configuration.AliasProviders.Add(new AttributeMemberAliasProvider());
+        handlebars.Configuration.AliasProviders.Add(new AttributeMemberLabelProvider());
+
         var source = await File.ReadAllTextAsync("./Services/Image/Image.html");
-        var temple = Handlebars.Compile(source);
+        var temple = handlebars.Compile(source);
         var html = temple(provider);
 
 
+        //TODO: Instead of downloading everytime browser let's reuse downloaded
         await new BrowserFetcher().DownloadAsync();
-        await using var browser = await Puppeteer.LaunchAsync(new LaunchOptions { Headless = true });
+        await using var browser = await Puppeteer.LaunchAsync(new LaunchOptions
+        {
+            Headless = true
+        });
         await using var page = await browser.NewPageAsync();
         await page.SetContentAsync(html);
         var element = await page.QuerySelectorAsync("div.blockmodal");

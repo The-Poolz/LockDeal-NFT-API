@@ -9,7 +9,8 @@ namespace MetaDataAPI.Providers;
 
 public class TimedDealProvider : LockDealProvider
 {
-    public string QueryString_FinishTime => FinishTime.DateTimeStringFormat();
+    [HandlebarsLabel("Finish time", order: 2)]
+    public string Label_FinishTime => FinishTime.DateTimeStringFormat();
 
     [Erc721MetadataItem("finish time", DisplayType.Date)]
     public BigInteger FinishTime { get; }

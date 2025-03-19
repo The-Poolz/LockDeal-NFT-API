@@ -43,7 +43,8 @@ public class CollateralProvider : AbstractProvider
     [Erc721MetadataItem("rate", DisplayType.Number)]
     public decimal Rate { get; }
 
-    public string QueryString_FinishTime => FinishTime.DateTimeStringFormat();
+    [HandlebarsLabel("Finish time", order: 1)]
+    public string Label_FinishTime => FinishTime.DateTimeStringFormat();
 
     internal Dictionary<CollateralType, DealProvider> SubProviders { get; }
 

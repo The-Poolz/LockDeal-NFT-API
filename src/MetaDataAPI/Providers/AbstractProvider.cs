@@ -5,7 +5,6 @@ using System.Reflection;
 using MetaDataAPI.Services.Erc20;
 using MetaDataAPI.Services.Image;
 using MetaDataAPI.Providers.Image;
-using EnvironmentManager.Extensions;
 using MetaDataAPI.Services.ChainsInfo;
 using MetaDataAPI.Providers.Attributes;
 using Microsoft.Extensions.DependencyInjection;
@@ -26,6 +25,7 @@ public abstract class AbstractProvider
 
     public BigInteger PoolId { get; }
 
+    [HandlebarsAlias("ProviderName")]
     [Erc721MetadataItem("provider name", DisplayType.String)]
     public string Name { get; }
 

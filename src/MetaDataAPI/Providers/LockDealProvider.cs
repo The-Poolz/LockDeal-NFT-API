@@ -8,7 +8,8 @@ namespace MetaDataAPI.Providers;
 
 public class LockDealProvider : DealProvider
 {
-    public string QueryString_StartTime => StartTime.DateTimeStringFormat();
+    [HandlebarsLabel("Start time", order: 1)]
+    public string Label_StartTime => StartTime.DateTimeStringFormat();
 
     [Erc721MetadataItem("start time", DisplayType.Date)]
     public BigInteger StartTime { get; }
