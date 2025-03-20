@@ -1,5 +1,4 @@
 ﻿using System.Numerics;
-using MetaDataAPI.Providers.Image;
 using MetaDataAPI.Services.ChainsInfo;
 using MetaDataAPI.Providers.Attributes;
 using MetaDataAPI.Services.Image.Handlebar;
@@ -21,17 +20,19 @@ public class RefundProvider : AbstractProvider
     [Erc721MetadataItem("sub provider name", DisplayType.String)]
     public string SubProviderName => SubProvider.Name;
 
-    [HandlebarsMember(order: 2)]
-    public HandlebarsToken MainCoin { get; }
-
     public RefundProvider(BasePoolInfo[] poolsInfo, ChainInfo chainInfo, IServiceProvider serviceProvider)
         : base(poolsInfo, chainInfo, serviceProvider)
     {
         SubProvider = CreateFromPoolInfo(new []{ poolsInfo[1] }, chainInfo, serviceProvider);
         CollateralProvider = new CollateralProvider(poolsInfo[2], chainInfo, serviceProvider);
-
-        MainCoin = new HandlebarsToken(CollateralProvider.MainCoin.Name, MainCoinAmount, $"Or refund of {CollateralProvider.MainCoin.Name}");
     }
+
+    public override HandlebarsImageSource ImageSource => new(
+        PoolId,
+        Name,
+        new HandlebarsToken(Erc20Token.Name, "Left Amount", LeftAmount),
+        new HandlebarsToken(CollateralProvider.MainCoin.Name, $"Or refund of {CollateralProvider.MainCoin.Name}", MainCoinAmount)
+    );
 
     protected override string DescriptionTemplate =>
         "This NFT encompasses {{LeftAmount}} units of the asset {{Erc20Token}} " +

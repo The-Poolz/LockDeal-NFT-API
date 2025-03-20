@@ -1,7 +1,6 @@
 ﻿using PuppeteerSharp;
 using HandlebarsDotNet;
 using MetaDataAPI.Providers;
-using MetaDataAPI.Services.Image.Handlebar;
 
 namespace MetaDataAPI.Services.Image;
 
@@ -9,12 +8,9 @@ public static class ImageGenerator
 {
     public static async Task<Stream> GenerateImageAsync(AbstractProvider provider)
     {
-        var handlebars = Handlebars.Create();
-        handlebars.Configuration.AliasProviders.Add(new UnifiedMemberAliasProvider());
-
         var source = await File.ReadAllTextAsync("./Services/Image/Image.html");
-        var temple = handlebars.Compile(source);
-        var html = temple(provider);
+        var temple = Handlebars.Compile(source);
+        var html = temple(provider.ImageSource);
 
         await new BrowserFetcher().DownloadAsync();
         await using var browser = await Puppeteer.LaunchAsync(new LaunchOptions

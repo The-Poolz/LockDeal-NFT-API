@@ -4,7 +4,6 @@ using HandlebarsDotNet;
 using System.Reflection;
 using MetaDataAPI.Services.Erc20;
 using MetaDataAPI.Services.Image;
-using MetaDataAPI.Providers.Image;
 using MetaDataAPI.Services.ChainsInfo;
 using MetaDataAPI.Providers.Attributes;
 using MetaDataAPI.Services.Image.Handlebar;
@@ -26,7 +25,6 @@ public abstract class AbstractProvider
 
     public BigInteger PoolId { get; }
 
-    [HandlebarsMember("ProviderName")]
     [Erc721MetadataItem("provider name", DisplayType.String)]
     public string Name { get; }
 
@@ -35,9 +33,6 @@ public abstract class AbstractProvider
 
     [Erc721MetadataItem("left amount", DisplayType.Number)]
     public decimal LeftAmount { get; }
-
-    [HandlebarsMember(order: 1)]
-    public HandlebarsToken Token { get; }
 
     protected AbstractProvider(BasePoolInfo[] poolsInfo, ChainInfo chainInfo)
         : this(poolsInfo, chainInfo, DefaultServiceProvider.Instance)
@@ -58,8 +53,6 @@ public abstract class AbstractProvider
         Name = PoolInfo.Name;
         VaultId = PoolInfo.VaultId;
         LeftAmount = Web3.Convert.FromWei(PoolInfo.Params[0], Erc20Token.Decimals);
-
-        Token = new HandlebarsToken(Erc20Token.Name, LeftAmount, "Left Amount");
     }
 
     protected abstract string DescriptionTemplate { get; }
@@ -74,6 +67,8 @@ public abstract class AbstractProvider
 
         return Handlebars.Compile(DescriptionTemplate)(this);
     }
+
+    public abstract HandlebarsImageSource ImageSource { get; }
 
     private string GetImage()
     {

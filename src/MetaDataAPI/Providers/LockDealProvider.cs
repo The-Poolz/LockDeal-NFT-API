@@ -9,9 +9,6 @@ namespace MetaDataAPI.Providers;
 
 public class LockDealProvider : DealProvider
 {
-    [HandlebarsMember("Start time", order: 1)]
-    public string Label_StartTime => StartTime.DateTimeStringFormat();
-
     [Erc721MetadataItem("start time", DisplayType.Date)]
     public BigInteger StartTime { get; }
 
@@ -20,6 +17,12 @@ public class LockDealProvider : DealProvider
     {
         StartTime = PoolInfo.Params[1];
     }
+    public override HandlebarsImageSource ImageSource => new(
+        PoolId,
+        Name,
+        new HandlebarsToken(Erc20Token.Name, "Left Amount", LeftAmount),
+        firstLabel: new HandlebarsLabel("Start time", StartTime.DateTimeStringFormat())
+    );
 
     protected override string DescriptionTemplate =>
         "This NFT securely locks {{LeftAmount}} units of the asset {{Erc20Token}}. " +

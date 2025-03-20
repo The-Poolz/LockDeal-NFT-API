@@ -44,9 +44,6 @@ public class CollateralProvider : AbstractProvider
     [Erc721MetadataItem("rate", DisplayType.Number)]
     public decimal Rate { get; }
 
-    [HandlebarsMember("Finish time", order: 1)]
-    public string Label_FinishTime => FinishTime.DateTimeStringFormat();
-
     internal Dictionary<CollateralType, DealProvider> SubProviders { get; }
 
     public CollateralProvider(BasePoolInfo poolInfo, ChainInfo chainInfo, IServiceProvider serviceProvider)
@@ -67,6 +64,13 @@ public class CollateralProvider : AbstractProvider
                 i => new DealProvider(poolsInfo[i], chainInfo, serviceProvider)
             );
     }
+
+    public override HandlebarsImageSource ImageSource => new(
+        PoolId,
+        Name,
+        new HandlebarsToken(Erc20Token.Name, "Left Amount", LeftAmount),
+        firstLabel: new HandlebarsLabel("Finish time", FinishTime.DateTimeStringFormat())
+    );
 
     protected override string DescriptionTemplate =>
         "Exclusively utilized by project administrators, this NFT serves as a secure vault for holding refundable tokens {{Erc20Token}}, for Main Coin {{MainCoin}}. " +
