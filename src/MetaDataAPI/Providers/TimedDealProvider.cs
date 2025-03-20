@@ -3,13 +3,14 @@ using System.Numerics;
 using MetaDataAPI.Extensions;
 using MetaDataAPI.Services.ChainsInfo;
 using MetaDataAPI.Providers.Attributes;
+using MetaDataAPI.Services.Image.Handlebar;
 using poolz.finance.csharp.contracts.LockDealNFT.ContractDefinition;
 
 namespace MetaDataAPI.Providers;
 
 public class TimedDealProvider : LockDealProvider
 {
-    [HandlebarsLabel("Finish time", order: 2)]
+    [HandlebarsMember("Finish time", order: 2)]
     public string Label_FinishTime => FinishTime.DateTimeStringFormat();
 
     [Erc721MetadataItem("finish time", DisplayType.Date)]

@@ -1,10 +1,9 @@
-﻿using System.Reflection;
-using HandlebarsDotNet;
+﻿using HandlebarsDotNet;
+using System.Reflection;
 using HandlebarsDotNet.PathStructure;
 using System.Diagnostics.CodeAnalysis;
-using MetaDataAPI.Providers.Attributes;
 
-namespace MetaDataAPI.Services.Image;
+namespace MetaDataAPI.Services.Image.Handlebar;
 
 public class AttributeMemberAliasProvider : IMemberAliasProvider
 {
@@ -14,7 +13,7 @@ public class AttributeMemberAliasProvider : IMemberAliasProvider
             .GetProperties(BindingFlags.Public | BindingFlags.Instance)
             .FirstOrDefault(prop =>
             {
-                var aliasAttr = prop.GetCustomAttribute<HandlebarsAliasAttribute>();
+                var aliasAttr = prop.GetCustomAttribute<HandlebarsMemberAttribute>();
                 return aliasAttr != null && aliasAttr.Alias == memberAlias.TrimmedValue;
             });
 

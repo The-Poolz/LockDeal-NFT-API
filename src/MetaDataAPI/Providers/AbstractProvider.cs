@@ -7,6 +7,7 @@ using MetaDataAPI.Services.Image;
 using MetaDataAPI.Providers.Image;
 using MetaDataAPI.Services.ChainsInfo;
 using MetaDataAPI.Providers.Attributes;
+using MetaDataAPI.Services.Image.Handlebar;
 using Microsoft.Extensions.DependencyInjection;
 using poolz.finance.csharp.contracts.LockDealNFT;
 using poolz.finance.csharp.contracts.LockDealNFT.ContractDefinition;
@@ -25,7 +26,7 @@ public abstract class AbstractProvider
 
     public BigInteger PoolId { get; }
 
-    [HandlebarsAlias("ProviderName")]
+    [HandlebarsMember("ProviderName")]
     [Erc721MetadataItem("provider name", DisplayType.String)]
     public string Name { get; }
 
@@ -35,7 +36,7 @@ public abstract class AbstractProvider
     [Erc721MetadataItem("left amount", DisplayType.Number)]
     public decimal LeftAmount { get; }
 
-    [HandlebarsToken(order: 1)]
+    [HandlebarsMember(order: 1)]
     public HandlebarsToken Token { get; }
 
     protected AbstractProvider(BasePoolInfo[] poolsInfo, ChainInfo chainInfo)

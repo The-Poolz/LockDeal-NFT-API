@@ -3,9 +3,8 @@ using System.Reflection;
 using MetaDataAPI.Providers.Image;
 using HandlebarsDotNet.PathStructure;
 using System.Diagnostics.CodeAnalysis;
-using MetaDataAPI.Providers.Attributes;
 
-namespace MetaDataAPI.Services.Image;
+namespace MetaDataAPI.Services.Image.Handlebar;
 
 public class AttributeMemberTokenProvider : IMemberAliasProvider
 {
@@ -24,27 +23,22 @@ public class AttributeMemberTokenProvider : IMemberAliasProvider
             .GetProperties(BindingFlags.Public | BindingFlags.Instance)
             .FirstOrDefault(p =>
             {
-                var attr = p.GetCustomAttribute<HandlebarsTokenAttribute>();
+                var attr = p.GetCustomAttribute<HandlebarsMemberAttribute>();
                 return attr != null && attr.Order == order;
             });
 
         if (property == null || property.GetValue(instance) is not HandlebarsToken token)
             return false;
 
-        switch (alias)
-        {
-            case var _ when alias.StartsWith("TokenName-"):
-                value = token.TokenName;
-                break;
-            case var _ when alias.StartsWith("TokenLabel-"):
-                value = token.Label;
-                break;
-            case var _ when alias.StartsWith("TokenValue-"):
-                value = token.Value;
-                break;
-            default:
-                return false;
-        }
+        if (alias.StartsWith("TokenName-"))
+            value = token.TokenName;
+        else if (alias.StartsWith("TokenLabel-"))
+            value = token.Label;
+        else if (alias.StartsWith("TokenValue-"))
+            value = token.Value;
+        else
+            return false;
+
         return true;
     }
 }

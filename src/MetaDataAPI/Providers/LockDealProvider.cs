@@ -1,14 +1,15 @@
 ﻿using System.Numerics;
 using MetaDataAPI.Extensions;
-using MetaDataAPI.Providers.Attributes;
 using MetaDataAPI.Services.ChainsInfo;
+using MetaDataAPI.Providers.Attributes;
+using MetaDataAPI.Services.Image.Handlebar;
 using poolz.finance.csharp.contracts.LockDealNFT.ContractDefinition;
 
 namespace MetaDataAPI.Providers;
 
 public class LockDealProvider : DealProvider
 {
-    [HandlebarsLabel("Start time", order: 1)]
+    [HandlebarsMember("Start time", order: 1)]
     public string Label_StartTime => StartTime.DateTimeStringFormat();
 
     [Erc721MetadataItem("start time", DisplayType.Date)]

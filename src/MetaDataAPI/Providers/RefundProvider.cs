@@ -2,6 +2,7 @@
 using MetaDataAPI.Providers.Image;
 using MetaDataAPI.Services.ChainsInfo;
 using MetaDataAPI.Providers.Attributes;
+using MetaDataAPI.Services.Image.Handlebar;
 using poolz.finance.csharp.contracts.LockDealNFT.ContractDefinition;
 
 namespace MetaDataAPI.Providers;
@@ -20,7 +21,7 @@ public class RefundProvider : AbstractProvider
     [Erc721MetadataItem("sub provider name", DisplayType.String)]
     public string SubProviderName => SubProvider.Name;
 
-    [HandlebarsToken(order: 2)]
+    [HandlebarsMember(order: 2)]
     public HandlebarsToken MainCoin { get; }
 
     public RefundProvider(BasePoolInfo[] poolsInfo, ChainInfo chainInfo, IServiceProvider serviceProvider)

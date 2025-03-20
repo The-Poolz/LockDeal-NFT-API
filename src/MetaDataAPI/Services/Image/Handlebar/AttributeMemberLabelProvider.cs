@@ -2,9 +2,8 @@
 using System.Reflection;
 using HandlebarsDotNet.PathStructure;
 using System.Diagnostics.CodeAnalysis;
-using MetaDataAPI.Providers.Attributes;
 
-namespace MetaDataAPI.Services.Image;
+namespace MetaDataAPI.Services.Image.Handlebar;
 
 public class AttributeMemberLabelProvider : IMemberAliasProvider
 {
@@ -23,18 +22,18 @@ public class AttributeMemberLabelProvider : IMemberAliasProvider
             .GetProperties(BindingFlags.Public | BindingFlags.Instance)
             .FirstOrDefault(p =>
             {
-                var attr = p.GetCustomAttribute<HandlebarsLabelAttribute>();
+                var attr = p.GetCustomAttribute<HandlebarsMemberAttribute>();
                 return attr != null && attr.Order == order;
             });
 
         if (property == null)
             return false;
 
-        var labelAttr = property.GetCustomAttribute<HandlebarsLabelAttribute>()!;
+        var labelAttr = property.GetCustomAttribute<HandlebarsMemberAttribute>()!;
 
         if (alias.StartsWith("LabelName-"))
         {
-            value = labelAttr.LabelName;
+            value = labelAttr.LabelName!;
             return true;
         }
 

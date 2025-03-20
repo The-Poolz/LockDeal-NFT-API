@@ -4,6 +4,7 @@ using MetaDataAPI.Extensions;
 using MetaDataAPI.Services.Erc20;
 using MetaDataAPI.Services.ChainsInfo;
 using MetaDataAPI.Providers.Attributes;
+using MetaDataAPI.Services.Image.Handlebar;
 using poolz.finance.csharp.contracts.LockDealNFT.ContractDefinition;
 
 namespace MetaDataAPI.Providers;
@@ -43,7 +44,7 @@ public class CollateralProvider : AbstractProvider
     [Erc721MetadataItem("rate", DisplayType.Number)]
     public decimal Rate { get; }
 
-    [HandlebarsLabel("Finish time", order: 1)]
+    [HandlebarsMember("Finish time", order: 1)]
     public string Label_FinishTime => FinishTime.DateTimeStringFormat();
 
     internal Dictionary<CollateralType, DealProvider> SubProviders { get; }
