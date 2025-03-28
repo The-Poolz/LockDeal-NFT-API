@@ -10,7 +10,7 @@ public static class ImageGenerator
     {
         var source = await File.ReadAllTextAsync("./Services/Image/Image.html");
         var temple = Handlebars.Compile(source);
-        var html = temple(provider.ImageSource);
+        var html = temple(provider);
 
         await new BrowserFetcher().DownloadAsync();
         await using var browser = await Puppeteer.LaunchAsync(new LaunchOptions

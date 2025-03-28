@@ -6,7 +6,6 @@ using MetaDataAPI.Services.Erc20;
 using MetaDataAPI.Services.Image;
 using MetaDataAPI.Services.ChainsInfo;
 using MetaDataAPI.Providers.Attributes;
-using MetaDataAPI.Services.Image.Handlebar;
 using Microsoft.Extensions.DependencyInjection;
 using poolz.finance.csharp.contracts.LockDealNFT;
 using poolz.finance.csharp.contracts.LockDealNFT.ContractDefinition;
@@ -67,8 +66,6 @@ public abstract class AbstractProvider
 
         return Handlebars.Compile(DescriptionTemplate)(this);
     }
-
-    public abstract HandlebarsImageSource ImageSource { get; }
 
     private string GetImage()
     {

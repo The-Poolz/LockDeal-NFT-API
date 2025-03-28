@@ -191,24 +191,24 @@
                       fill="#FDFDFD" />
             </svg>
         </div>
-        <div class="mark-deal f24">{{ProviderName}}</div>
+        <div class="mark-deal f24">{{Name}}</div>
         <div class="serial-number f24">#<span>{{PoolId}}</span></div>
 
         <div class="start-time">
-            <span>{{FirstLabelName}}</span>
-            <span class="h4">{{FirstLabelValue}}</span>
+            <span>{{StringLabel_StartTime}}</span>
+            <span class="h4">{{String_StartTime}}</span>
         </div>
         <div class="finish-time">
-            <span>{{SecondLabelName}}</span>
-            <span class="h4">{{SecondLabelValue}}</span>
+            <span>{{StringLabel_FinishTime}}</span>
+            <span class="h4">{{String_FinishTime}}</span>
         </div>
 
         <div class="left-amount">
             <div>
-                <span id="tA-token">{{FirstTokenName}}</span>
-                <span>{{FirstTokenLabel}}</span>
+                <span id="tA-token">{{Erc20Token.Name}}</span>
+                <span>Left Amount</span>
             </div>
-            <h1>{{FirstTokenValue}}</h1>
+            <h1>{{LeftAmount}}</h1>
         </div>
         <div style="padding-top: 20px">
             <span>{{ThirdLabelName}}</span>
@@ -221,10 +221,10 @@
 
         <div class="refund-amount">
             <div>
-                <span id="tB-token">{{SecondTokenName}}</span>
-                <span>{{SecondTokenLabel}}</span>
+                <span id="tB-token">{{CollateralProvider.MainCoin.Name}}</span>
+                <span>{{String_RefundLabel}}</span>
             </div>
-            <h1>{{SecondTokenValue}}</h1>
+            <h1>{{String_MainCoinAmount}}</h1>
         </div>
     </div>
 </body>

@@ -1,7 +1,7 @@
 ﻿using System.Numerics;
+using System.Globalization;
 using MetaDataAPI.Services.ChainsInfo;
 using MetaDataAPI.Providers.Attributes;
-using MetaDataAPI.Services.Image.Handlebar;
 using poolz.finance.csharp.contracts.LockDealNFT.ContractDefinition;
 
 namespace MetaDataAPI.Providers;
@@ -20,19 +20,15 @@ public class RefundProvider : AbstractProvider
     [Erc721MetadataItem("sub provider name", DisplayType.String)]
     public string SubProviderName => SubProvider.Name;
 
+    public string String_MainCoinAmount => MainCoinAmount.ToString(CultureInfo.InvariantCulture);
+    public string String_RefundLabel => $"Or refund of {CollateralProvider.MainCoin.Name}";
+
     public RefundProvider(BasePoolInfo[] poolsInfo, ChainInfo chainInfo, IServiceProvider serviceProvider)
         : base(poolsInfo, chainInfo, serviceProvider)
     {
         SubProvider = CreateFromPoolInfo(new []{ poolsInfo[1] }, chainInfo, serviceProvider);
         CollateralProvider = new CollateralProvider(poolsInfo[2], chainInfo, serviceProvider);
     }
-
-    public override HandlebarsImageSource ImageSource => new(
-        PoolId,
-        Name,
-        new HandlebarsToken(Erc20Token.Name, "Left Amount", LeftAmount),
-        new HandlebarsToken(CollateralProvider.MainCoin.Name, $"Or refund of {CollateralProvider.MainCoin.Name}", MainCoinAmount)
-    );
 
     protected override string DescriptionTemplate =>
         "This NFT encompasses {{LeftAmount}} units of the asset {{Erc20Token}} " +
