@@ -1,6 +1,5 @@
 ﻿using Nethereum.Web3;
 using System.Numerics;
-using Net.Urlify.Attributes;
 using MetaDataAPI.Extensions;
 using MetaDataAPI.Services.ChainsInfo;
 using MetaDataAPI.Providers.Attributes;
@@ -10,11 +9,11 @@ namespace MetaDataAPI.Providers;
 
 public class TimedDealProvider : LockDealProvider
 {
-    [QueryStringProperty("Finish time", order: 2)]
-    public string QueryString_FinishTime => FinishTime.DateTimeStringFormat();
-
     [Erc721MetadataItem("finish time", DisplayType.Date)]
     public BigInteger FinishTime { get; }
+
+    public string String_FinishTime => FinishTime.DateTimeStringFormat();
+    public string StringLabel_FinishTime => "Finish time";
 
     [Erc721MetadataItem("start amount", DisplayType.Number)]
     public decimal StartAmount { get; }
@@ -28,5 +27,5 @@ public class TimedDealProvider : LockDealProvider
 
     protected override string DescriptionTemplate =>
         "This NFT governs a time-locked pool containing {{LeftAmount}}/{{StartAmount}} units of the asset {{Erc20Token}}." +
-        " Withdrawals are permitted in a linear fashion beginning at {{QueryString_StartTime}}, culminating in full access at {{QueryString_FinishTime}}.";
+        " Withdrawals are permitted in a linear fashion beginning at {{String_StartTime}}, culminating in full access at {{String_FinishTime}}.";
 }

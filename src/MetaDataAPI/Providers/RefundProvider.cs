@@ -1,6 +1,5 @@
 ﻿using System.Numerics;
-using Net.Urlify.Attributes;
-using MetaDataAPI.Providers.Image;
+using System.Globalization;
 using MetaDataAPI.Services.ChainsInfo;
 using MetaDataAPI.Providers.Attributes;
 using poolz.finance.csharp.contracts.LockDealNFT.ContractDefinition;
@@ -21,16 +20,14 @@ public class RefundProvider : AbstractProvider
     [Erc721MetadataItem("sub provider name", DisplayType.String)]
     public string SubProviderName => SubProvider.Name;
 
-    [QueryStringProperty("tB")]
-    public QueryStringToken QueryString_MainCoin { get; }
+    public string String_MainCoinAmount => MainCoinAmount.ToString(CultureInfo.InvariantCulture);
+    public string String_RefundLabel => $"Or refund of {CollateralProvider.MainCoin.Name}";
 
     public RefundProvider(BasePoolInfo[] poolsInfo, ChainInfo chainInfo, IServiceProvider serviceProvider)
         : base(poolsInfo, chainInfo, serviceProvider)
     {
         SubProvider = CreateFromPoolInfo(new []{ poolsInfo[1] }, chainInfo, serviceProvider);
         CollateralProvider = new CollateralProvider(poolsInfo[2], chainInfo, serviceProvider);
-
-        QueryString_MainCoin = new QueryStringToken(CollateralProvider.MainCoin.Name, $"Or refund of {CollateralProvider.MainCoin.Name}", MainCoinAmount);
     }
 
     protected override string DescriptionTemplate =>
