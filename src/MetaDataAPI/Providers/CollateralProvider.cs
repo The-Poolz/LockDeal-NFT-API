@@ -1,6 +1,5 @@
 ﻿using Nethereum.Web3;
 using System.Numerics;
-using Net.Urlify.Attributes;
 using MetaDataAPI.Extensions;
 using MetaDataAPI.Services.Erc20;
 using MetaDataAPI.Services.ChainsInfo;
@@ -41,11 +40,11 @@ public class CollateralProvider : AbstractProvider
     [Erc721MetadataItem("finish time", DisplayType.Date)]
     public BigInteger FinishTime { get; }
 
+    public string String_FinishTime => FinishTime.DateTimeStringFormat();
+    public string StringLabel_FinishTime => "Finish time";
+
     [Erc721MetadataItem("rate", DisplayType.Number)]
     public decimal Rate { get; }
-
-    [QueryStringProperty("Finish time", order: 1)]
-    public string QueryString_FinishTime => FinishTime.DateTimeStringFormat();
 
     internal Dictionary<CollateralType, DealProvider> SubProviders { get; }
 
@@ -71,5 +70,5 @@ public class CollateralProvider : AbstractProvider
     protected override string DescriptionTemplate =>
         "Exclusively utilized by project administrators, this NFT serves as a secure vault for holding refundable tokens {{Erc20Token}}, for Main Coin {{MainCoin}}. " +
         "It holds {{MainCoinCollectorAmount}} for the main coin collector, {{TokenCollectorAmount}} for the token collector," +
-        " and {{MainCoinHolderAmount}} for the main coin holder, valid until {{QueryString_FinishTime}}.";
+        " and {{MainCoinHolderAmount}} for the main coin holder, valid until {{String_FinishTime}}.";
 }
