@@ -1,6 +1,8 @@
 ﻿using PuppeteerSharp;
 using HandlebarsDotNet;
 using MetaDataAPI.Providers;
+using Microsoft.Extensions.Logging;
+using HeadlessChromium.Puppeteer.Lambda.Dotnet;
 
 namespace MetaDataAPI.Services.Image;
 
@@ -12,11 +14,16 @@ public static class ImageGenerator
         var temple = Handlebars.Compile(source);
         var html = temple(provider);
 
+#if DEBUG
         await new BrowserFetcher().DownloadAsync();
         await using var browser = await Puppeteer.LaunchAsync(new LaunchOptions
         {
             Headless = true
         });
+#else
+        var browserLauncher = new HeadlessChromiumPuppeteerLauncher(new LoggerFactory());
+        await using var browser = await browserLauncher.LaunchAsync();
+#endif
         await using var page = await browser.NewPageAsync();
         await page.SetContentAsync(html);
         var element = await page.QuerySelectorAsync("div.blockmodal");
