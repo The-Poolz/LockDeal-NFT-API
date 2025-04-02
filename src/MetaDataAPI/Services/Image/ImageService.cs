@@ -5,6 +5,7 @@ using MetaDataAPI.Providers;
 using Net.Cryptography.SHA256;
 using System.Net.Http.Headers;
 using EnvironmentManager.Extensions;
+using MetaDataAPI.Services.Image.Models;
 
 namespace MetaDataAPI.Services.Image;
 
@@ -43,10 +44,12 @@ public class ImageService
                 ContentType = new MediaTypeHeaderValue("image/jpeg")
             }
         };
+
+        var imageMetadata = new ImageWithMetadata(provider);
         var response = await _client.PinFileToIpfsAsync(content =>
         {
             content.AddPinataFile(fileContent, $"{hash}.jpg");
-        });
+        }, imageMetadata);
 
         if (!response.IsSuccess) LambdaLogger.Log($"Error occured while trying upload image: {response.Error}");
 
