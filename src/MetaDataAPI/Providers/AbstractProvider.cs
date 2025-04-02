@@ -17,7 +17,8 @@ public abstract class AbstractProvider
     protected readonly ILockDealNFTService LockDealNft;
     protected readonly IErc20Provider Erc20Provider;
 
-    private Erc721Metadata? _cachedErc721Metadata;
+    private string? _cachedDescription;
+    private IEnumerable<Erc721MetadataItem>? _cachedAttributes;
 
     public IEnumerable<BasePoolInfo> FullData { get; }
     public BasePoolInfo PoolInfo { get; }
@@ -58,7 +59,9 @@ public abstract class AbstractProvider
 
     protected abstract string DescriptionTemplate { get; }
 
-    private string GetDescription()
+    public string MetadataName => $"Lock Deal NFT Pool: {PoolId}";
+
+    public string GetDescription()
     {
         var isFullyWithdrawn = ChainInfo.LockDealNFT == PoolInfo.Owner;
         if (isFullyWithdrawn) return "This NFT has been fully withdrawn and is no longer governing any assets.";
@@ -66,7 +69,7 @@ public abstract class AbstractProvider
         var isFullyRefunded = ChainInfo.LockDealNFT != PoolInfo.Owner && LeftAmount == 0;
         if (isFullyRefunded) return "This NFT has been fully refunded and no longer holds any governance over assets.";
 
-        return Handlebars.Compile(DescriptionTemplate)(this);
+        return _cachedDescription ??= Handlebars.Compile(DescriptionTemplate)(this);
     }
 
     private string GetImage()
@@ -74,9 +77,9 @@ public abstract class AbstractProvider
         return new ImageService().GetImageAsync(this).GetAwaiter().GetResult();
     }
 
-    private IEnumerable<Erc721MetadataItem> GetAttributes()
+    public IEnumerable<Erc721MetadataItem> GetAttributes()
     {
-        return GetType().GetProperties()
+        return _cachedAttributes ??= GetType().GetProperties()
             .Select(property => new { Property = property, Attribute = property.GetCustomAttribute<Erc721MetadataItemAttribute>() })
             .Where(x => x.Attribute != null)
             .Select(x => new
@@ -90,8 +93,8 @@ public abstract class AbstractProvider
 
     public Erc721Metadata GetErc721Metadata()
     {
-        return _cachedErc721Metadata ??= new Erc721Metadata(
-            name: $"Lock Deal NFT Pool: {PoolId}",
+        return new Erc721Metadata(
+            name: MetadataName,
             description: GetDescription(),
             image: GetImage(),
             attributes: GetAttributes()

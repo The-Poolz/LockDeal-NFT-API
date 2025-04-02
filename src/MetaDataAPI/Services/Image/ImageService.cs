@@ -45,10 +45,11 @@ public class ImageService
             }
         };
 
+        var imageMetadata = new ImageWithMetadata(provider);
         var response = await _client.PinFileToIpfsAsync(content =>
         {
             content.AddPinataFile(fileContent, $"{hash}.jpg");
-        }, new ImageWithMetadata(provider.GetErc721Metadata()));
+        }, imageMetadata);
 
         if (!response.IsSuccess) LambdaLogger.Log($"Error occured while trying upload image: {response.Error}");
 
