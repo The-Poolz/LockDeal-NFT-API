@@ -1,0 +1,7 @@
+{
+  "Description": "DispenserProvider",
+  "queryStringParameters": {
+    "poolId": 10719,
+    "chainId": 97
+  }
+}
