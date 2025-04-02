@@ -6,5 +6,5 @@ namespace MetaDataAPI.Providers;
 public class DispenserProvider(BasePoolInfo[] poolsInfo, ChainInfo chainInfo, IServiceProvider serviceProvider)
     : AbstractProvider(poolsInfo, chainInfo, serviceProvider)
 {
-    protected override string DescriptionTemplate => "DESCRIPTION_HERE, {{LeftAmount}}";
+    protected override string DescriptionTemplate => "The DispenserProvider manages the locking of {{LeftAmount}} tokens {{Erc20Token}} for distribution purposes.";
 }
