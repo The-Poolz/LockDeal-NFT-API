@@ -12,22 +12,13 @@ using poolz.finance.csharp.contracts.LockDealNFT;
 
 namespace MetaDataAPI;
 
-public class LambdaFunction
+public class LambdaFunction(IServiceProvider serviceProvider)
 {
-    private readonly IServiceProvider _serviceProvider;
-    private readonly IChainManager _chainManager;
-    private readonly ILockDealNFTService _lockDealNft;
+    private readonly IServiceProvider _serviceProvider = DefaultServiceProvider.Instance;
+    private readonly IChainManager _chainManager = serviceProvider.GetRequiredService<IChainManager>();
+    private readonly ILockDealNFTService _lockDealNft = serviceProvider.GetRequiredService<ILockDealNFTService>();
 
-    public LambdaFunction()
-        : this(DefaultServiceProvider.Instance)
-    { }
-
-    public LambdaFunction(IServiceProvider serviceProvider)
-    {
-        _serviceProvider = DefaultServiceProvider.Instance;
-        _chainManager = serviceProvider.GetRequiredService<IChainManager>();
-        _lockDealNft = serviceProvider.GetRequiredService<ILockDealNFTService>();
-    }
+    public LambdaFunction() : this(DefaultServiceProvider.Instance) { }
 
     public LambdaResponse FunctionHandler(LambdaRequest request, ILambdaContext lambdaContext)
     {

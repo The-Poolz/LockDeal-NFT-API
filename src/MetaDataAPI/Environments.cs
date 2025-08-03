@@ -9,5 +9,7 @@ public enum Environments
     [EnvironmentVariable(isRequired: true)]
     PINATA_API_SECRET,
     [EnvironmentVariable(isRequired: true)]
-    EXTERNAL_URL
+    EXTERNAL_URL,
+    [EnvironmentVariable(isRequired: true)]
+    GRAPHQL_STRAPI_URL
 }
