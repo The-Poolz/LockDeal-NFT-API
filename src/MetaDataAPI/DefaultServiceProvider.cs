@@ -1,4 +1,5 @@
 ﻿using MetaDataAPI.Services.Erc20;
+using MetaDataAPI.Services.Strapi;
 using MetaDataAPI.Services.ChainsInfo;
 using Microsoft.Extensions.DependencyInjection;
 using poolz.finance.csharp.contracts.LockDealNFT;
@@ -11,7 +12,8 @@ public static class DefaultServiceProvider
     {
         var serviceCollection = new ServiceCollection();
 
-        serviceCollection.AddSingleton<IChainManager, DbChainManager>(_ => new DbChainManager());
+        serviceCollection.AddSingleton<IStrapiClient, StrapiClient>(_ => new StrapiClient());
+        serviceCollection.AddSingleton<IChainManager, StrapiChainManager>(x => new StrapiChainManager(x.GetRequiredService<IStrapiClient>()));
         serviceCollection.AddSingleton<IErc20Provider, Erc20Provider>(_ => new Erc20Provider());
         serviceCollection.AddSingleton<ILockDealNFTService, LockDealNFTService>(_ => new LockDealNFTService());
 
