@@ -15,5 +15,5 @@ public class InvestProvider : AbstractProvider
         MaxInvestAmount = UnitConversion.Convert.FromWei(poolsInfo[0].Params[0], Erc20Token.Decimals).ToString(CultureInfo.InvariantCulture);
     }
 
-    protected override string DescriptionTemplate => "This NFT enables the holder to invest up to {MaxInvestAmount} tokens of {Erc20Token.Symbol}.";
+    protected override string DescriptionTemplate => "This NFT enables the holder to invest up to {{MaxInvestAmount}} tokens of {{Erc20Token.Symbol}}.";
 }
