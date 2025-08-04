@@ -6,7 +6,7 @@ namespace MetaDataAPI.Providers;
 public class InvestProvider(BasePoolInfo[] poolsInfo, ChainInfo chainInfo, IServiceProvider serviceProvider)
     : AbstractProvider(poolsInfo, chainInfo, serviceProvider)
 {
-    public string MaxInvestAmount { get; } = poolsInfo[0].Params[0].ToString();
+    public string WeiMaxInvestAmount { get; } = poolsInfo[0].Params[0].ToString();
 
     protected override string DescriptionTemplate => "DESCRIPTION HERE";
 }
