@@ -2,6 +2,7 @@
 using System.Numerics;
 using HandlebarsDotNet;
 using System.Reflection;
+using System.Globalization;
 using MetaDataAPI.Services.Erc20;
 using MetaDataAPI.Services.Image;
 using MetaDataAPI.Services.ChainsInfo;
@@ -35,6 +36,7 @@ public abstract class AbstractProvider
 
     [Erc721MetadataItem("left amount", DisplayType.Number)]
     public decimal LeftAmount { get; }
+    public string String_LeftAmount => LeftAmount.ToString(CultureInfo.InvariantCulture);
 
     protected AbstractProvider(BasePoolInfo[] poolsInfo, ChainInfo chainInfo)
         : this(poolsInfo, chainInfo, DefaultServiceProvider.Instance)
