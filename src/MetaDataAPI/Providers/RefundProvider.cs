@@ -17,7 +17,7 @@ public class RefundProvider : AbstractProvider
     [Erc721MetadataItem("main coin collection", DisplayType.Number)]
     public BigInteger MainCoinCollection => CollateralProvider.MainCoinCollection;
 
-    [Erc721MetadataItem("sub provider name", DisplayType.String)]
+    [Erc721MetadataItem("sub provider name")]
     public string SubProviderName => SubProvider.Name;
 
     public string String_MainCoinAmount => MainCoinAmount.ToString(CultureInfo.InvariantCulture);

@@ -4,7 +4,12 @@
 public class Erc721MetadataItemAttribute : Attribute
 {
     public string TraitType { get; set; }
-    public DisplayType DisplayType { get; set; }
+    public DisplayType? DisplayType { get; set; }
+
+    public Erc721MetadataItemAttribute(string traitType)
+    {
+        TraitType = traitType;
+    }
 
     public Erc721MetadataItemAttribute(string traitType, DisplayType displayType)
     {

@@ -28,7 +28,7 @@ public abstract class AbstractProvider
 
     public BigInteger PoolId { get; }
 
-    [Erc721MetadataItem("provider name", DisplayType.String)]
+    [Erc721MetadataItem("provider name")]
     public string Name { get; }
 
     [Erc721MetadataItem("collection", DisplayType.Number)]
@@ -90,7 +90,7 @@ public abstract class AbstractProvider
                 Attribute = x.Attribute!,
                 Value = x.Property.GetValue(this) ?? throw new InvalidOperationException($"Cannot process {nameof(Erc721MetadataItem)} property '{x.Property.Name}' with nullable value.")
             })
-            .Select(x => new Erc721MetadataItem(x.Attribute.TraitType, x.Value, x.Attribute.DisplayType));
+            .Select(x => new Erc721MetadataItem(x.Value, x.Attribute.TraitType, x.Attribute.DisplayType));
     }
 
     public Erc721Metadata GetErc721Metadata()
