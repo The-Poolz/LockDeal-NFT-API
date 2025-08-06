@@ -3,26 +3,15 @@ using Newtonsoft.Json.Converters;
 
 namespace MetaDataAPI.Providers.Attributes;
 
-public class Erc721MetadataItem
+public class Erc721MetadataItem(object value, string traitType, DisplayType? displayType)
 {
-    [JsonConverter(typeof(StringEnumConverter))]
-    [JsonProperty("display_type", NullValueHandling = NullValueHandling.Ignore)]
-    public DisplayType DisplayType { get; set; }
+    [JsonProperty("value")]
+    public object Value { get; set; } = value;
 
     [JsonProperty("trait_type")]
-    public string TraitType { get; set; }
+    public string TraitType { get; set; } = traitType;
 
-    [JsonProperty("value")]
-    public object Value { get; set; }
-
-    public Erc721MetadataItem(
-        string traitType,
-        object value,
-        DisplayType displayType
-    )
-    {
-        TraitType = traitType;
-        Value = value;
-        DisplayType = displayType;
-    }
+    [JsonConverter(typeof(StringEnumConverter))]
+    [JsonProperty("display_type", NullValueHandling = NullValueHandling.Ignore)]
+    public DisplayType? DisplayType { get; set; } = displayType;
 }
