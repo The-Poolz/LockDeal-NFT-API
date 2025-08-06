@@ -17,6 +17,9 @@ public class Erc721Metadata(string name, string description, string image, IEnum
     [JsonProperty("image")]
     public string Image { get; set; } = image;
 
+    [JsonProperty("type")]
+    public string Type { get; set; } = "image/jpeg";
+
     [JsonProperty("attributes")]
     public IEnumerable<Erc721MetadataItem> Attributes { get; set; } = attributes;
 }
