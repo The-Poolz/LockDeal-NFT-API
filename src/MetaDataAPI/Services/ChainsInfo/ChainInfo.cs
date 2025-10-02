@@ -1,18 +1,10 @@
-﻿using System.Numerics;
-using Net.Web3.EthereumWallet;
+﻿using Net.Web3.EthereumWallet;
 
 namespace MetaDataAPI.Services.ChainsInfo;
 
-public class ChainInfo
+public class ChainInfo(long chainId, string rpcUrl, EthereumAddress lockDealNft)
 {
-    public BigInteger ChainId { get; set; }
-    public string RpcUrl { get; set; }
-    public EthereumAddress LockDealNFT { get; set; }
-
-    public ChainInfo(BigInteger chainId, string rpcUrl, EthereumAddress lockDealNft)
-    {
-        ChainId = chainId;
-        RpcUrl = rpcUrl;
-        LockDealNFT = lockDealNft;
-    }
+    public long ChainId { get; set; } = chainId;
+    public string RpcUrl { get; set; } = rpcUrl;
+    public EthereumAddress LockDealNFT { get; set; } = lockDealNft;
 }
