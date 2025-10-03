@@ -39,7 +39,7 @@ public class Erc20ProviderTests
         internal void ShouldReceiveExpectedErc20FromDynamoDb()
         {
             Environment.SetEnvironmentVariable("AWS_REGION", "us-east-1");
-            const string rpcUrl = "https://www.google.com";
+            Environment.SetEnvironmentVariable(nameof(Environments.BASE_URL_OF_RPC), "https://www.google.com");
             const int chainId = 97;
             const string address = EthereumAddress.ZeroAddress;
 
@@ -51,7 +51,7 @@ public class Erc20ProviderTests
             var provider = new Erc20Provider(cacheProvider.Object);
 
             var result = provider.GetErc20Token(
-                new ChainInfo(chainId, rpcUrl, EthereumAddress.ZeroAddress),
+                new ChainInfo(chainId, EthereumAddress.ZeroAddress),
                 EthereumAddress.ZeroAddress
             );
 
