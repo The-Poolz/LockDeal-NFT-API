@@ -34,7 +34,7 @@ public class LambdaFunction(IServiceProvider serviceProvider)
                 return new ChainNotSupportedResponse(request.ChainId);
             }
 
-            _lockDealNft.Initialize(new Web3(chainInfo.RpcUrl), chainInfo.LockDealNFT);
+            _lockDealNft.Initialize(new Web3(request.ChainId.ToRpcUrl()), chainInfo.LockDealNFT);
             if (!_lockDealNft.IsPoolIdInSupplyRange(request.PoolId))
             {
                 return new PoolIdNotInSupplyRangeResponse(request.PoolId);

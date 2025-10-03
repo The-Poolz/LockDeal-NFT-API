@@ -65,7 +65,6 @@ public class StrapiClient(IGraphQLClient graphQlClient) : IStrapiClient
 
         var query = new QueryQueryBuilder()
             .WithContractsOnChains(new ContractsOnChainQueryBuilder()
-                    .WithRpc()
                     .WithContracts(new ComponentContractOnChainContractOnChainQueryBuilder()
                             .WithContractVersion(new ContractQueryBuilder()
                                 .WithNameVersion()
@@ -92,7 +91,6 @@ public class StrapiClient(IGraphQLClient graphQlClient) : IStrapiClient
 
         return contractOnChain == null || lockDealNFT == null ? null : new ChainInfo(
             chainId,
-            contractOnChain.Rpc,
             lockDealNFT
         );
     }
