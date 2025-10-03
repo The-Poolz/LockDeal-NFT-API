@@ -1,5 +1,4 @@
-﻿using System.Numerics;
-using MetaDataAPI.Validation;
+﻿using MetaDataAPI.Validation;
 using FluentValidation.Results;
 using Amazon.Lambda.APIGatewayEvents;
 
@@ -11,12 +10,12 @@ public class LambdaRequest : APIGatewayProxyRequest
     {
         get {
             var validationResult = new LambdaRequestValidator().Validate(this);
-            ChainId = validationResult.IsValid ? BigInteger.Parse(QueryStringParameters["chainId"]) : -1;
-            PoolId = validationResult.IsValid ? BigInteger.Parse(QueryStringParameters["poolId"]) : -1;
+            ChainId = validationResult.IsValid ? long.Parse(QueryStringParameters["chainId"]) : 0;
+            PoolId = validationResult.IsValid ? long.Parse(QueryStringParameters["poolId"]) : 0;
             return validationResult.IsValid ? null : validationResult;
         }
     }
 
-    public BigInteger PoolId { get; private set; } = -1;
-    public BigInteger ChainId { get; private set; } = -1;
+    public long PoolId { get; private set; }
+    public long ChainId { get; private set; }
 }

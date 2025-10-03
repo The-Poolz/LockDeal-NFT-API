@@ -3,12 +3,7 @@ using FluentValidation.Results;
 
 namespace MetaDataAPI.Response;
 
-public class ValidationErrorResponse : LambdaResponse
-{
-    public ValidationErrorResponse(ValidationResult validationResult)
-        : base(
-            body: validationResult.ToString($"{Environment.NewLine}"),
-            statusCode: HttpStatusCode.BadRequest
-        )
-    { }
-}
+public class ValidationErrorResponse(ValidationResult validationResult) : LambdaResponse(
+    body: validationResult.ToString($"{Environment.NewLine}"),
+    statusCode: HttpStatusCode.BadRequest
+);

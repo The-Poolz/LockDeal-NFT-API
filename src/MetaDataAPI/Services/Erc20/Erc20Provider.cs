@@ -1,4 +1,3 @@
-﻿using System.Numerics;
 using MetaDataAPI.Extensions;
 using Net.Web3.EthereumWallet;
 using Net.Cache.DynamoDb.ERC20;
@@ -18,11 +17,11 @@ public class Erc20Provider(ERC20CacheProvider provider) : IErc20Provider
         return GetErc20Token(chainInfo.ChainId.ToRpcUrl(), chainInfo.ChainId, address);
     }
 
-    public Erc20Token GetErc20Token(string rpcUrl, BigInteger chainId, EthereumAddress address)
+    public Erc20Token GetErc20Token(string rpcUrl, long chainId, EthereumAddress address)
     {
         var cache = provider.GetOrAdd(
             new GetCacheRequest(
-                chainId: (long)chainId, //TODO: Check for potential overflow or data loss when upcasting BigInteger to Int64
+                chainId: chainId,
                 address,
                 rpcUrl,
                 false

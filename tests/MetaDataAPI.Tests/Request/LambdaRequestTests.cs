@@ -11,8 +11,8 @@ public class LambdaRequestTests
     [MemberData(nameof(TestData))]
     internal void ShouldSetPropertiesAndReturnValidationResult(
         Dictionary<string, string> queryStringParameters,
-        BigInteger expectedChainId,
-        BigInteger expectedPoolId,
+        long expectedChainId,
+        long expectedPoolId,
         bool isValid,
         string errorMessage
     )
@@ -50,40 +50,40 @@ public class LambdaRequestTests
         yield return new object[]
         {
             new Dictionary<string, string> { { "chainId", "invalid" }, { "poolId", "2" } },
-            new BigInteger(-1),
-            new BigInteger(-1),
+            0,
+            0,
             false,
-            "Query string parameter 'chainId' must be a valid BigInteger."
+            "Query string parameter 'chainId' must be a valid Int64."
         };
         yield return new object[]
         {
             new Dictionary<string, string> { { "chainId", "1" }, { "poolId", "invalid" } },
-            new BigInteger(-1),
-            new BigInteger(-1),
+            0,
+            0,
             false,
-            "Query string parameter 'poolId' must be a valid BigInteger."
+            "Query string parameter 'poolId' must be a valid Int64."
         };
         yield return new object[]
         {
             new Dictionary<string, string> { { "chainId", "1" } },
-            new BigInteger(-1),
-            new BigInteger(-1),
+            0,
+            0,
             false,
             "Query string parameter 'poolId' is required."
         };
         yield return new object[]
         {
             new Dictionary<string, string>(),
-            new BigInteger(-1),
-            new BigInteger(-1),
+            0,
+            0,
             false,
             "Query string parameter 'chainId' is required."
         };
         yield return new object[]
         {
             null!,
-            new BigInteger(-1),
-            new BigInteger(-1),
+            0,
+            0,
             false,
             "Query string parameters are required."
         };
