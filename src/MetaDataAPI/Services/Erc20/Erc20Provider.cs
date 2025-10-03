@@ -1,3 +1,4 @@
+using MetaDataAPI.Extensions;
 using Net.Web3.EthereumWallet;
 using Net.Cache.DynamoDb.ERC20;
 using Net.Cache.DynamoDb.ERC20.Models;
