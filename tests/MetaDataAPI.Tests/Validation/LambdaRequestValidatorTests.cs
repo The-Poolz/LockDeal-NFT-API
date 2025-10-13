@@ -44,7 +44,7 @@ public class LambdaRequestValidatorTests
             var result = _validator.TestValidate(_request);
 
             result.ShouldHaveValidationErrorFor(r => r.QueryStringParameters)
-                .WithErrorMessage("Query string parameter 'chainId' must be a valid BigInteger.");
+                .WithErrorMessage("Query string parameter 'chainId' must be a valid Int64.");
         }
 
         [Fact]
@@ -73,7 +73,7 @@ public class LambdaRequestValidatorTests
             var result = _validator.TestValidate(_request);
 
             result.ShouldHaveValidationErrorFor(r => r.QueryStringParameters)
-                .WithErrorMessage("Query string parameter 'poolId' must be a valid BigInteger.");
+                .WithErrorMessage("Query string parameter 'poolId' must be a valid Int64.");
         }
 
         [Fact]

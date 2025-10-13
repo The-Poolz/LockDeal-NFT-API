@@ -15,7 +15,7 @@ public class LockDealNftServiceExtensionsTests
     {
         [Theory]
         [MemberData(nameof(TestData))]
-        internal void ShouldReturnExpectedResult(BigInteger poolId, BigInteger totalSupply, bool expectedResult)
+        internal void ShouldReturnExpectedResult(long poolId, BigInteger totalSupply, bool expectedResult)
         {
             var lockDealNft = new Mock<ILockDealNFTService>();
             lockDealNft
@@ -29,9 +29,9 @@ public class LockDealNftServiceExtensionsTests
 
         public static IEnumerable<object[]> TestData()
         {
-            yield return new object[] { new BigInteger(5), new BigInteger(10), true };
-            yield return new object[] { new BigInteger(10), new BigInteger(10), false };
-            yield return new object[] { new BigInteger(15), new BigInteger(10), false };
+            yield return new object[] { 5, new BigInteger(10), true };
+            yield return new object[] { 10, new BigInteger(10), false };
+            yield return new object[] { 15, new BigInteger(10), false };
         }
     }
 
@@ -41,7 +41,7 @@ public class LockDealNftServiceExtensionsTests
 
         [Theory]
         [MemberData(nameof(TestData))]
-        internal void FromLockDealNFTService_ShouldReturnExpectedPoolInfo(BigInteger poolId, GetFullDataOutputDTO fullData, BasePoolInfo[] expectedPoolInfo)
+        internal void FromLockDealNFTService_ShouldReturnExpectedPoolInfo(long poolId, GetFullDataOutputDTO fullData, BasePoolInfo[] expectedPoolInfo)
         {
             _lockDealNft
                 .Setup(x => x.GetFullDataQueryAsync(poolId, It.IsAny<BlockParameter>()))
@@ -54,7 +54,7 @@ public class LockDealNftServiceExtensionsTests
 
         [Theory]
         [MemberData(nameof(TestData))]
-        internal void FromServiceProvider_ShouldReturnExpectedPoolInfo(BigInteger poolId, GetFullDataOutputDTO fullData, BasePoolInfo[] expectedPoolInfo)
+        internal void FromServiceProvider_ShouldReturnExpectedPoolInfo(long poolId, GetFullDataOutputDTO fullData, BasePoolInfo[] expectedPoolInfo)
         {
             _lockDealNft
                 .Setup(x => x.GetFullDataQueryAsync(poolId, It.IsAny<BlockParameter>()))

@@ -49,7 +49,7 @@ public class CollateralProvider : AbstractProvider
     internal Dictionary<CollateralType, DealProvider> SubProviders { get; }
 
     public CollateralProvider(BasePoolInfo poolInfo, ChainInfo chainInfo, IServiceProvider serviceProvider)
-        : this(serviceProvider.FetchPoolInfo(poolInfo.PoolId), chainInfo, serviceProvider)
+        : this(serviceProvider.FetchPoolInfo((long)poolInfo.PoolId), chainInfo, serviceProvider)
     { }
 
     public CollateralProvider(BasePoolInfo[] poolsInfo, ChainInfo chainInfo, IServiceProvider serviceProvider)
