@@ -11,19 +11,18 @@
     <PublishReadyToRun>true</PublishReadyToRun>
   </PropertyGroup>
 	<ItemGroup>
-    <PackageReference Include="Amazon.Lambda.APIGatewayEvents" Version="2.7.0" />
-    <PackageReference Include="Amazon.Lambda.Core" Version="2.2.0" />
-    <PackageReference Include="Amazon.Lambda.Serialization.Json" Version="2.2.0" />
-    <PackageReference Include="CovalentDB" Version="2.0.24" />
+    <PackageReference Include="Amazon.Lambda.APIGatewayEvents" Version="2.7.1" />
+    <PackageReference Include="Amazon.Lambda.Core" Version="2.7.1" />
+    <PackageReference Include="Amazon.Lambda.Serialization.Json" Version="2.2.4" />
 	<PackageReference Include="Handlebars.Net" Version="2.1.6" />
 	<PackageReference Include="HeadlessChromium.Puppeteer.Lambda.Dotnet" Version="1.1.0.97" />
-	<PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="8.0.0" />
+	<PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="9.0.9" />
 	<PackageReference Include="Net.Cache.DynamoDb.ERC20" Version="2.0.2" />
 	<PackageReference Include="Net.Utils.GraphQL" Version="1.0.0" />
 	<PackageReference Include="Pinata.Client" Version="1.0.0" />
 	<PackageReference Include="Poolz.Finance.CSharp.Strapi" Version="1.3.5" />
-	<PackageReference Include="PuppeteerSharp" Version="20.1.3" />
-    <PackageReference Include="Utils.EnvironmentManager" Version="4.1.0" />
+	<PackageReference Include="PuppeteerSharp" Version="20.2.4" />
+    <PackageReference Include="Utils.EnvironmentManager" Version="4.2.0" />
     <PackageReference Include="poolz.finance.csharp.contracts" Version="1.0.4" />
   </ItemGroup>
 	<ItemGroup>
