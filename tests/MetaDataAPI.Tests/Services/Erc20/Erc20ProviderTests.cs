@@ -5,7 +5,8 @@ using Net.Web3.EthereumWallet;
 using Net.Cache.DynamoDb.ERC20;
 using MetaDataAPI.Services.Erc20;
 using MetaDataAPI.Services.ChainsInfo;
-using Net.Cache.DynamoDb.ERC20.Models;
+using Net.Cache.DynamoDb.ERC20.Rpc.Models;
+using Net.Cache.DynamoDb.ERC20.DynamoDb.Models;
 
 namespace MetaDataAPI.Tests.Services.Erc20;
 
@@ -25,7 +26,7 @@ public class Erc20ProviderTests
         [Fact]
         internal void WithParameters()
         {
-            var cacheProvider = new ERC20CacheProvider();
+            var cacheProvider = new Erc20CacheService();
 
             var provider = new Erc20Provider(cacheProvider);
 
@@ -38,15 +39,17 @@ public class Erc20ProviderTests
         [Fact]
         internal void ShouldReceiveExpectedErc20FromDynamoDb()
         {
-            Environment.SetEnvironmentVariable("AWS_REGION", "us-east-1");
             Environment.SetEnvironmentVariable(nameof(Environments.BASE_URL_OF_RPC), "https://www.google.com");
             const int chainId = 97;
             const string address = EthereumAddress.ZeroAddress;
 
-            var cacheProvider = new Mock<ERC20CacheProvider>();
-            var cacheItem = new ERC20DynamoDbTable(chainId, address, "NAME", "SYMBOL", 8, 100m);
-            cacheProvider.Setup(x => x.GetOrAdd(It.IsAny<GetCacheRequest>()))
-                .Returns(cacheItem);
+            var cacheProvider = new Mock<IErc20CacheService>();
+            var cacheItem = new Erc20TokenDynamoDbEntry(
+                new HashKey(chainId, address),
+                new Erc20TokenData(address, "NAME", "SYMBOL", 8, 100)
+            );
+            cacheProvider.Setup(x => x.GetOrAddAsync(It.IsAny<HashKey>(), It.IsAny<Func<Task<string>>>(), It.IsAny<Func<Task<EthereumAddress>>>()))
+                .ReturnsAsync(cacheItem);
 
             var provider = new Erc20Provider(cacheProvider.Object);
 

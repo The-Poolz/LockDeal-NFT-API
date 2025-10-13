@@ -1,14 +1,15 @@
 using MetaDataAPI.Extensions;
 using Net.Web3.EthereumWallet;
 using Net.Cache.DynamoDb.ERC20;
-using Net.Cache.DynamoDb.ERC20.Models;
+using EnvironmentManager.Extensions;
 using MetaDataAPI.Services.ChainsInfo;
+using Net.Cache.DynamoDb.ERC20.DynamoDb.Models;
 
 namespace MetaDataAPI.Services.Erc20;
 
-public class Erc20Provider(ERC20CacheProvider provider) : IErc20Provider
+public class Erc20Provider(IErc20CacheService erc20Cache) : IErc20Provider
 {
-    public Erc20Provider() : this(new ERC20CacheProvider())
+    public Erc20Provider() : this(new Erc20CacheService())
     {
     }
 
@@ -19,14 +20,11 @@ public class Erc20Provider(ERC20CacheProvider provider) : IErc20Provider
 
     public Erc20Token GetErc20Token(string rpcUrl, long chainId, EthereumAddress address)
     {
-        var cache = provider.GetOrAdd(
-            new GetCacheRequest(
-                chainId: chainId,
-                address,
-                rpcUrl,
-                false
-            )
-        );
+        var cache = erc20Cache.GetOrAddAsync(
+            new HashKey(chainId, address),
+            () => Task.FromResult(rpcUrl),
+            () => Task.FromResult(new EthereumAddress(Environments.MULTI_CALL_V3_ADDRESS.GetRequired()))
+        ).GetAwaiter().GetResult();
         return new Erc20Token(cache);
     }
 }
