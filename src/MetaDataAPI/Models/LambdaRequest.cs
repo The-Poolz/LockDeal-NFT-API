@@ -17,8 +17,8 @@ public class LambdaRequest : APIGatewayHttpApiV2ProxyRequest
         PoolId = ValidationResult.IsValid ? long.Parse(PathParameters["poolId"]) : 0;
     }
 
-    public ValidationResult ValidationResult { get; set; }
-    public string HttpMethod { get; private set; }
-    public long PoolId { get; private set; }
-    public long ChainId { get; private set; }
+    public ValidationResult ValidationResult { get; }
+    public string HttpMethod { get; }
+    public long PoolId { get; }
+    public long ChainId { get; }
 }
