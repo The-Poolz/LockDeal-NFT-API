@@ -16,6 +16,8 @@ public enum Environments
     BASE_URL_OF_RPC,
     [EnvironmentVariable(isRequired: true)]
     MULTI_CALL_V3_ADDRESS,
+    [EnvironmentVariable(isRequired: true)]
+    OVERRIDE_AWS_REGION,
     [EnvironmentVariable(isRequired: false)]
     OVERRIDE_IMAGE_TEMPLATE_PATH
 }
