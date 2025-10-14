@@ -14,6 +14,8 @@ public enum Environments
     GRAPHQL_STRAPI_URL,
     [EnvironmentVariable(isRequired: true)]
     BASE_URL_OF_RPC,
+    [EnvironmentVariable(isRequired: true)]
+    MULTI_CALL_V3_ADDRESS
     [EnvironmentVariable(isRequired: false)]
     OVERRIDE_IMAGE_TEMPLATE_PATH
 }
