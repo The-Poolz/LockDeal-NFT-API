@@ -1,9 +1,9 @@
 using Nethereum.Web3;
 using Amazon.Lambda.Core;
-using MetaDataAPI.Request;
-using MetaDataAPI.Response;
+using MetaDataAPI.Models;
 using MetaDataAPI.Providers;
 using MetaDataAPI.Extensions;
+using MetaDataAPI.Models.Errors;
 using MetaDataAPI.Services.ChainsInfo;
 using Microsoft.Extensions.DependencyInjection;
 using poolz.finance.csharp.contracts.LockDealNFT;

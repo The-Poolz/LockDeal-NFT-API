@@ -1,6 +1,6 @@
 ﻿using System.Net;
 
-namespace MetaDataAPI.Response;
+namespace MetaDataAPI.Models.Errors;
 
 public class ChainNotSupportedResponse(long chainId) : LambdaResponse(
     body: $"Chain ID {chainId} is not supported.",
