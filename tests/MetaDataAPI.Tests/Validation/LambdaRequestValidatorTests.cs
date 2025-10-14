@@ -1,6 +1,7 @@
-﻿using Xunit;
+﻿using Amazon.Lambda.APIGatewayEvents;
+using Xunit;
 using FluentAssertions;
-using MetaDataAPI.Request;
+using MetaDataAPI.Models;
 using MetaDataAPI.Validation;
 using FluentValidation.TestHelper;
 
@@ -10,7 +11,7 @@ public class LambdaRequestValidatorTests
 {
     public class Validate
     {
-        private readonly LambdaRequest _request = new();
+        private readonly LambdaRequest _request = new(new APIGatewayHttpApiV2ProxyRequest.ProxyRequestContext(), new Dictionary<string, string>());
         private readonly LambdaRequestValidator _validator = new();
 
         [Fact]

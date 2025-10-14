@@ -1,25 +1,32 @@
 ﻿using FluentValidation;
-using MetaDataAPI.Request;
+using MetaDataAPI.Models;
 
 namespace MetaDataAPI.Validation;
 
 public class LambdaRequestValidator : AbstractValidator<LambdaRequest>
 {
+    public static readonly string[] AllowedMethods = ["GET", "OPTIONS"];
+
     public LambdaRequestValidator()
     {
-        RuleFor(request => request.QueryStringParameters)
+        RuleFor(request => request.PathParameters)
             .Cascade(CascadeMode.Stop)
             .NotNull()
-            .WithMessage("Query string parameters are required.")
+            .NotEmpty()
+            .WithMessage("Path parameters are required.")
 
             .Must(qsp => qsp.ContainsKey("chainId"))
-            .WithMessage("Query string parameter 'chainId' is required.")
+            .WithMessage("Path parameter 'chainId' is required.")
             .Must(qsp => long.TryParse(qsp["chainId"], out _))
-            .WithMessage("Query string parameter 'chainId' must be a valid Int64.")
+            .WithMessage("Path parameter 'chainId' must be a valid Int64.")
 
             .Must(qsp => qsp.ContainsKey("poolId"))
-            .WithMessage("Query string parameter 'poolId' is required.")
+            .WithMessage("Path parameter 'poolId' is required.")
             .Must(qsp => long.TryParse(qsp["poolId"], out _))
-            .WithMessage("Query string parameter 'poolId' must be a valid Int64.");
+            .WithMessage("Path parameter 'poolId' must be a valid Int64.");
+
+        RuleFor(request => request.HttpMethod)
+            .Must(httpMethod => AllowedMethods.Contains(httpMethod))
+            .WithMessage(x => $"Allowed HTTP methods: ({string.Join(", ", AllowedMethods)}). Received HTTP method: {x.HttpMethod}");
     }
 }

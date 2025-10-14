@@ -1,7 +1,8 @@
 ﻿using Xunit;
 using System.Numerics;
+using Amazon.Lambda.APIGatewayEvents;
 using FluentAssertions;
-using MetaDataAPI.Request;
+using MetaDataAPI.Models;
 
 namespace MetaDataAPI.Tests.Request;
 
@@ -10,14 +11,14 @@ public class LambdaRequestTests
     [Theory]
     [MemberData(nameof(TestData))]
     internal void ShouldSetPropertiesAndReturnValidationResult(
-        Dictionary<string, string> queryStringParameters,
+        Dictionary<string, string> pathParameters,
         long expectedChainId,
         long expectedPoolId,
         bool isValid,
         string errorMessage
     )
     {
-        var request = new LambdaRequest
+        var request = new LambdaRequest(new APIGatewayHttpApiV2ProxyRequest.ProxyRequestContext(), new Dictionary<string, string>())
         {
             QueryStringParameters = queryStringParameters
         };
