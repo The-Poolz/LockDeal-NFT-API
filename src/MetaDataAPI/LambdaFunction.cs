@@ -24,7 +24,7 @@ public class LambdaFunction(IServiceProvider serviceProvider)
     {
         try
         {
-            if (request.ValidationResult != null)
+            if (!request.ValidationResult.IsValid)
             {
                 return new ValidationErrorResponse(request.ValidationResult);
             }

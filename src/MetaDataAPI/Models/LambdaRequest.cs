@@ -8,13 +8,24 @@ namespace MetaDataAPI.Models;
 public class LambdaRequest : APIGatewayHttpApiV2ProxyRequest
 {
     [JsonConstructor]
-    public LambdaRequest(ProxyRequestContext context, IDictionary<string, string> pathParameters)
+    public LambdaRequest(ProxyRequestContext requestContext, string rawPath)
     {
-        PathParameters = pathParameters;
-        HttpMethod = context.Http.Method;
+        RawPath = rawPath;
+        HttpMethod = requestContext.Http?.Method?.ToUpperInvariant() ?? string.Empty;
+
         ValidationResult = new LambdaRequestValidator().Validate(this);
-        ChainId = ValidationResult.IsValid ? long.Parse(PathParameters["chainId"]) : 0;
-        PoolId = ValidationResult.IsValid ? long.Parse(PathParameters["poolId"]) : 0;
+
+        if (ValidationResult.IsValid)
+        {
+            var parts = rawPath.Split('/', StringSplitOptions.RemoveEmptyEntries);
+            ChainId = long.Parse(parts[0]);
+            PoolId = long.Parse(parts[1]);
+        }
+        else
+        {
+            ChainId = 0;
+            PoolId = 0;
+        }
     }
 
     public ValidationResult ValidationResult { get; }
