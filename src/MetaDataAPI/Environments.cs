@@ -15,5 +15,7 @@ public enum Environments
     [EnvironmentVariable(isRequired: true)]
     BASE_URL_OF_RPC,
     [EnvironmentVariable(isRequired: false)]
-    OVERRIDE_IMAGE_TEMPLATE_PATH
+    OVERRIDE_IMAGE_TEMPLATE_PATH,
+    [EnvironmentVariable(isRequired: true)]
+    OVERRIDE_AWS_REGION
 }
