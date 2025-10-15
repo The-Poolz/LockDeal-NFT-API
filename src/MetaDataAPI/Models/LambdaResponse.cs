@@ -1,9 +1,9 @@
 ﻿using System.Net;
 using Amazon.Lambda.APIGatewayEvents;
 
-namespace MetaDataAPI.Response;
+namespace MetaDataAPI.Models;
 
-public abstract class LambdaResponse : APIGatewayProxyResponse
+public abstract class LambdaResponse : APIGatewayHttpApiV2ProxyResponse
 {
     protected LambdaResponse(string body, HttpStatusCode statusCode)
     {
