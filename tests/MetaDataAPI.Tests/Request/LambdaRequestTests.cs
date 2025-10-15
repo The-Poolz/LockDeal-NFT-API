@@ -1,9 +1,8 @@
 ﻿using Xunit;
-using System.Numerics;
-using Amazon.Lambda.APIGatewayEvents;
 using FluentAssertions;
 using MetaDataAPI.Models;
 using MetaDataAPI.Validation;
+using Amazon.Lambda.APIGatewayEvents;
 
 namespace MetaDataAPI.Tests.Request;
 
@@ -82,7 +81,7 @@ public class LambdaRequestTests
             0,
             0,
             false,
-            LambdaRequestValidatorErrors.ChainIdInvalid("invalid")
+            LambdaRequestValidatorErrors.ChainIdInvalid("/invalid/2")
         ];
         yield return
         [
@@ -91,7 +90,7 @@ public class LambdaRequestTests
             0,
             0,
             false,
-            LambdaRequestValidatorErrors.PoolIdInvalid("invalid")
+            LambdaRequestValidatorErrors.PoolIdInvalid("/1/invalid")
         ];
         yield return
         [

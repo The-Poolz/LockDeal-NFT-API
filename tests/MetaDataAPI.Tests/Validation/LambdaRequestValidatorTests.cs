@@ -31,7 +31,7 @@ public class LambdaRequestValidatorTests
             var result = _validator.TestValidate(_request);
 
             result.ShouldHaveValidationErrorFor(r => r.RawPath)
-                .WithErrorMessage(LambdaRequestValidatorErrors.RawPathWrongFormat("/"));
+                .WithErrorMessage(LambdaRequestValidatorErrors.RawPathWrongFormat(_request.RawPath));
         }
 
         [Fact]
@@ -42,7 +42,7 @@ public class LambdaRequestValidatorTests
             var result = _validator.TestValidate(_request);
 
             result.ShouldHaveValidationErrorFor(r => r.RawPath)
-                .WithErrorMessage(LambdaRequestValidatorErrors.ChainIdInvalid("invalid"));
+                .WithErrorMessage(LambdaRequestValidatorErrors.ChainIdInvalid(_request.RawPath));
         }
 
         [Fact]
@@ -53,7 +53,7 @@ public class LambdaRequestValidatorTests
             var result = _validator.TestValidate(_request);
 
             result.ShouldHaveValidationErrorFor(r => r.RawPath)
-                .WithErrorMessage(LambdaRequestValidatorErrors.PoolIdInvalid("invalid"));
+                .WithErrorMessage(LambdaRequestValidatorErrors.PoolIdInvalid(_request.RawPath));
         }
 
         [Fact]
