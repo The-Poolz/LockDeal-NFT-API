@@ -20,7 +20,7 @@ public class LambdaRequestValidatorTests
             var result = _validator.TestValidate(_request);
 
             result.ShouldHaveValidationErrorFor(r => r.RawPath)
-                .WithErrorMessage("RawPath is required (expected format: '/{chainId}/{poolId}').");
+                .WithErrorMessage(LambdaRequestValidatorErrors.RawPathRequired());
         }
 
         [Fact]
@@ -31,7 +31,7 @@ public class LambdaRequestValidatorTests
             var result = _validator.TestValidate(_request);
 
             result.ShouldHaveValidationErrorFor(r => r.RawPath)
-                .WithErrorMessage("RawPath must be '/{chainId}/{poolId}'. The first path parameter is 'chainId', the second is 'poolId'. Received: '/'.");
+                .WithErrorMessage(LambdaRequestValidatorErrors.RawPathWrongFormat("/"));
         }
 
         [Fact]
@@ -42,7 +42,7 @@ public class LambdaRequestValidatorTests
             var result = _validator.TestValidate(_request);
 
             result.ShouldHaveValidationErrorFor(r => r.RawPath)
-                .WithErrorMessage("The first path parameter (chainId) must be a valid Int64. Received: 'invalid'.");
+                .WithErrorMessage(LambdaRequestValidatorErrors.ChainIdInvalid("invalid"));
         }
 
         [Fact]
@@ -53,7 +53,7 @@ public class LambdaRequestValidatorTests
             var result = _validator.TestValidate(_request);
 
             result.ShouldHaveValidationErrorFor(r => r.RawPath)
-                .WithErrorMessage("The second path parameter (poolId) must be a valid Int64. Received: 'invalid'.");
+                .WithErrorMessage(LambdaRequestValidatorErrors.PoolIdInvalid("invalid"));
         }
 
         [Fact]
@@ -70,7 +70,7 @@ public class LambdaRequestValidatorTests
             var result = _validator.TestValidate(request);
 
             result.ShouldHaveValidationErrorFor(r => r.HttpMethod)
-                .WithErrorMessage("HTTP method is required.");
+                .WithErrorMessage(LambdaRequestValidatorErrors.HttpMethodRequired());
         }
 
         [Fact]
@@ -90,7 +90,7 @@ public class LambdaRequestValidatorTests
             var result = _validator.TestValidate(request);
 
             result.ShouldHaveValidationErrorFor(r => r.HttpMethod)
-                .WithErrorMessage($"Allowed HTTP methods: ({string.Join(", ", LambdaRequestValidator.AllowedMethods)}). Received HTTP method: POST");
+                .WithErrorMessage(LambdaRequestValidatorErrors.HttpMethodNotAllowed("POST", LambdaRequestValidator.AllowedMethods));
         }
 
         [Fact]
