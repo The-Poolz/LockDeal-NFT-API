@@ -1,9 +1,8 @@
 ﻿using Xunit;
-using System.Numerics;
-using Amazon.Lambda.APIGatewayEvents;
 using FluentAssertions;
 using MetaDataAPI.Models;
 using MetaDataAPI.Validation;
+using Amazon.Lambda.APIGatewayEvents;
 
 namespace MetaDataAPI.Tests.Request;
 
@@ -64,7 +63,7 @@ public class LambdaRequestTests
             0,
             0,
             false,
-            "RawPath is required (expected format: '/{chainId}/{poolId}')."
+            LambdaRequestValidatorErrors.RawPathRequired()
         ];
         yield return
         [
@@ -73,7 +72,7 @@ public class LambdaRequestTests
             0,
             0,
             false,
-            "RawPath must be '/{chainId}/{poolId}'. The first path parameter is 'chainId', the second is 'poolId'. Received: '/1/'."
+            LambdaRequestValidatorErrors.RawPathWrongFormat("/1/")
         ];
         yield return
         [
@@ -82,7 +81,7 @@ public class LambdaRequestTests
             0,
             0,
             false,
-            "The first path parameter (chainId) must be a valid Int64. Received: 'invalid'."
+            LambdaRequestValidatorErrors.ChainIdInvalid("/invalid/2")
         ];
         yield return
         [
@@ -91,7 +90,7 @@ public class LambdaRequestTests
             0,
             0,
             false,
-            "The second path parameter (poolId) must be a valid Int64. Received: 'invalid'."
+            LambdaRequestValidatorErrors.PoolIdInvalid("/1/invalid")
         ];
         yield return
         [
@@ -100,7 +99,7 @@ public class LambdaRequestTests
             0,
             0,
             false,
-            "HTTP method is required."
+            LambdaRequestValidatorErrors.HttpMethodRequired()
         ];
         yield return
         [
@@ -109,7 +108,7 @@ public class LambdaRequestTests
             0,
             0,
             false,
-            $"Allowed HTTP methods: ({string.Join(", ", LambdaRequestValidator.AllowedMethods)}). Received HTTP method: POST"
+            LambdaRequestValidatorErrors.HttpMethodNotAllowed("POST", LambdaRequestValidator.AllowedMethods)
         ];
     }
 }
