@@ -1,16 +1,22 @@
 ﻿using PuppeteerSharp;
 using HandlebarsDotNet;
 using MetaDataAPI.Providers;
+using EnvironmentManager.Extensions;
+#if !DEBUG
 using Microsoft.Extensions.Logging;
 using HeadlessChromium.Puppeteer.Lambda.Dotnet;
+#endif
 
 namespace MetaDataAPI.Services.Image;
 
 public static class ImageGenerator
 {
+    private const string ImageFileName = "Image.html";
+
     public static async Task<Stream> GenerateImageAsync(AbstractProvider provider)
     {
-        var source = await File.ReadAllTextAsync("./Services/Image/Image.html");
+        var templatePath = ResolveTemplatePath();
+        var source = await File.ReadAllTextAsync(templatePath);
         var temple = Handlebars.Compile(source);
         var html = temple(provider);
 
@@ -44,5 +50,21 @@ public static class ImageGenerator
         });
         await browser.CloseAsync();
         return stream;
+    }
+
+    public static string ResolveTemplatePath()
+    {
+        var overridePath = Environments.OVERRIDE_IMAGE_TEMPLATE_PATH.Get();
+        if (!string.IsNullOrWhiteSpace(overridePath) && File.Exists(overridePath)) return overridePath;
+
+#if DEBUG
+        var localPath = Path.Combine(Directory.GetCurrentDirectory(), ImageFileName);
+        if (File.Exists(localPath)) return localPath;
+#else
+        var layerPath = Path.Combine("/opt", ImageFileName);
+        if (File.Exists(layerPath)) return layerPath;
+#endif
+
+        throw new FileNotFoundException($"Unable to locate {ImageFileName} template in Lambda layer or local project.");
     }
 }

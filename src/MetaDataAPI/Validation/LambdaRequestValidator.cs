@@ -1,25 +1,34 @@
 ﻿using FluentValidation;
-using MetaDataAPI.Request;
+using MetaDataAPI.Models;
 
 namespace MetaDataAPI.Validation;
 
 public class LambdaRequestValidator : AbstractValidator<LambdaRequest>
 {
+    public static readonly string[] AllowedMethods = ["GET", "OPTIONS"];
+
     public LambdaRequestValidator()
     {
-        RuleFor(request => request.QueryStringParameters)
+        RuleFor(r => r.RawPath)
             .Cascade(CascadeMode.Stop)
-            .NotNull()
-            .WithMessage("Query string parameters are required.")
+            .NotEmpty()
+            .WithMessage(LambdaRequestValidatorErrors.RawPathRequired())
+            .Must(HaveExactlyTwoSegments)
+            .WithMessage(x => LambdaRequestValidatorErrors.RawPathWrongFormat(x.RawPath))
+            .Must(BeValidChainId)
+            .WithMessage(x => LambdaRequestValidatorErrors.ChainIdInvalid(x.RawPath))
+            .Must(BeValidPoolId)
+            .WithMessage(x => LambdaRequestValidatorErrors.PoolIdInvalid(x.RawPath));
 
-            .Must(qsp => qsp.ContainsKey("chainId"))
-            .WithMessage("Query string parameter 'chainId' is required.")
-            .Must(qsp => long.TryParse(qsp["chainId"], out _))
-            .WithMessage("Query string parameter 'chainId' must be a valid Int64.")
-
-            .Must(qsp => qsp.ContainsKey("poolId"))
-            .WithMessage("Query string parameter 'poolId' is required.")
-            .Must(qsp => long.TryParse(qsp["poolId"], out _))
-            .WithMessage("Query string parameter 'poolId' must be a valid Int64.");
+        RuleFor(x => x.HttpMethod)
+            .Cascade(CascadeMode.Stop)
+            .NotEmpty()
+            .WithMessage(LambdaRequestValidatorErrors.HttpMethodRequired())
+            .Must(m => AllowedMethods.Contains(m, StringComparer.OrdinalIgnoreCase))
+            .WithMessage(x => LambdaRequestValidatorErrors.HttpMethodNotAllowed(x.HttpMethod, AllowedMethods));
     }
+
+    private static bool HaveExactlyTwoSegments(string? rawPath) => LambdaRequestValidatorErrors.Split(rawPath).Length == 2;
+    private static bool BeValidChainId(string? rawPath) => long.TryParse(LambdaRequestValidatorErrors.GetSegment(rawPath, 0), out _);
+    private static bool BeValidPoolId(string? rawPath) => long.TryParse(LambdaRequestValidatorErrors.GetSegment(rawPath, 1), out _);
 }

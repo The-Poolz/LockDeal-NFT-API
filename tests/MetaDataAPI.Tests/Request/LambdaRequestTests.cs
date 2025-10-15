@@ -1,7 +1,8 @@
 ﻿using Xunit;
-using System.Numerics;
 using FluentAssertions;
-using MetaDataAPI.Request;
+using MetaDataAPI.Models;
+using MetaDataAPI.Validation;
+using Amazon.Lambda.APIGatewayEvents;
 
 namespace MetaDataAPI.Tests.Request;
 
@@ -10,17 +11,24 @@ public class LambdaRequestTests
     [Theory]
     [MemberData(nameof(TestData))]
     internal void ShouldSetPropertiesAndReturnValidationResult(
-        Dictionary<string, string> queryStringParameters,
+        string rawPath,
+        string httpMethod,
         long expectedChainId,
         long expectedPoolId,
         bool isValid,
         string errorMessage
     )
     {
-        var request = new LambdaRequest
-        {
-            QueryStringParameters = queryStringParameters
-        };
+        var request = new LambdaRequest(
+            new APIGatewayHttpApiV2ProxyRequest.ProxyRequestContext
+            {
+                Http = new APIGatewayHttpApiV2ProxyRequest.HttpDescription
+                {
+                    Method = httpMethod
+                }
+            },
+            rawPath
+        );
 
         var validationResult = request.ValidationResult;
 
@@ -28,64 +36,79 @@ public class LambdaRequestTests
         request.PoolId.Should().Be(expectedPoolId);
         if (isValid)
         {
-            validationResult.Should().BeNull();
+            validationResult.IsValid.Should().BeTrue();
         }
         else
         {
-            validationResult.Should().NotBeNull();
-            validationResult!.Errors.Should().ContainSingle().Which.ErrorMessage.Should().Be(errorMessage);
+            validationResult.IsValid.Should().BeFalse();
+            validationResult.Errors.Should().ContainSingle().Which.ErrorMessage.Should().Be(errorMessage);
         }
     }
 
     public static IEnumerable<object[]> TestData()
     {
-        yield return new object[]
-        {
-            new Dictionary<string, string> { { "chainId", "1" }, { "poolId", "2" } },
-            new BigInteger(1),
-            new BigInteger(2),
+        yield return
+        [
+            "/1/2",
+            "GET",
+            1,
+            2,
             true,
             string.Empty
-        };
-        yield return new object[]
-        {
-            new Dictionary<string, string> { { "chainId", "invalid" }, { "poolId", "2" } },
+        ];
+        yield return
+        [
+            "",
+            "GET",
             0,
             0,
             false,
-            "Query string parameter 'chainId' must be a valid Int64."
-        };
-        yield return new object[]
-        {
-            new Dictionary<string, string> { { "chainId", "1" }, { "poolId", "invalid" } },
+            LambdaRequestValidatorErrors.RawPathRequired()
+        ];
+        yield return
+        [
+            "/1/",
+            "GET",
             0,
             0,
             false,
-            "Query string parameter 'poolId' must be a valid Int64."
-        };
-        yield return new object[]
-        {
-            new Dictionary<string, string> { { "chainId", "1" } },
+            LambdaRequestValidatorErrors.RawPathWrongFormat("/1/")
+        ];
+        yield return
+        [
+            "/invalid/2",
+            "GET",
             0,
             0,
             false,
-            "Query string parameter 'poolId' is required."
-        };
-        yield return new object[]
-        {
-            new Dictionary<string, string>(),
+            LambdaRequestValidatorErrors.ChainIdInvalid("/invalid/2")
+        ];
+        yield return
+        [
+            "/1/invalid",
+            "GET",
             0,
             0,
             false,
-            "Query string parameter 'chainId' is required."
-        };
-        yield return new object[]
-        {
-            null!,
+            LambdaRequestValidatorErrors.PoolIdInvalid("/1/invalid")
+        ];
+        yield return
+        [
+            "/1/2",
+            "",
             0,
             0,
             false,
-            "Query string parameters are required."
-        };
+            LambdaRequestValidatorErrors.HttpMethodRequired()
+        ];
+        yield return
+        [
+            "/1/2",
+            "POST",
+            0,
+            0,
+            false,
+            LambdaRequestValidatorErrors.HttpMethodNotAllowed("POST", LambdaRequestValidator.AllowedMethods)
+        ];
     }
 }
