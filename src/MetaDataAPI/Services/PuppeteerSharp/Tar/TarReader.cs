@@ -1,8 +1,4 @@
-﻿using Microsoft.Extensions.Logging;
-using System.Diagnostics;
-using System.Formats.Tar;
-
-namespace MetaDataAPI.Services.PuppeteerSharp.Tar;
+﻿namespace MetaDataAPI.Services.PuppeteerSharp.Tar;
 
 /// <summary>
 /// Extract contents of a tar file represented by a stream for the TarReader constructor
