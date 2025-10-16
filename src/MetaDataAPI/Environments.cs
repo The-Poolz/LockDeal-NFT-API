@@ -17,5 +17,7 @@ public enum Environments
     [EnvironmentVariable(isRequired: true)]
     MULTI_CALL_V3_ADDRESS,
     [EnvironmentVariable(isRequired: true)]
-    OVERRIDE_AWS_REGION
+    OVERRIDE_AWS_REGION,
+    [EnvironmentVariable(isRequired: false)]
+    OVERRIDE_IMAGE_TEMPLATE_PATH
 }

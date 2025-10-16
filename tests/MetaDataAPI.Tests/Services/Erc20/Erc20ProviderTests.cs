@@ -27,7 +27,6 @@ public class Erc20ProviderTests
         internal void WithParameters()
         {
             Environment.SetEnvironmentVariable("AWS_REGION", "us-east-1");
-
             var cacheProvider = new Erc20CacheService();
 
             var provider = new Erc20Provider(cacheProvider);

@@ -11,6 +11,7 @@
 *.sln.docstates
 *aws-lambda-tools-defaults.json
 *appsettings.json
+*Image.html
 
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs
