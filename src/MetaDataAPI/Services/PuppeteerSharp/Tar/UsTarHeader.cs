@@ -86,7 +86,7 @@ internal class UsTarHeader : TarHeader
 
     internal static bool IsPathSeparator(char ch)
     {
-        return (ch == '\\' || ch == '/' || ch == '|'); // All the path separators I ever met.
+        return ch == '\\' || ch == '/' || ch == '|'; // All the path separators I ever met.
     }
 
     public override byte[] GetHeaderValue()

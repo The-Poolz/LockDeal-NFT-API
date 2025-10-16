@@ -4,7 +4,7 @@ namespace MetaDataAPI.Services.PuppeteerSharp;
 
 public class HeadlessChromiumPuppeteerLauncher
 {
-    public static string[] DefaultChromeArgs =
+    public static readonly string[] DefaultChromeArgs =
     [
         "--disable-background-timer-throttling",
         "--disable-breakpad",
@@ -51,22 +51,17 @@ public class HeadlessChromiumPuppeteerLauncher
         "--single-process"
     ];
 
-    public static Task<IBrowser> LaunchAsync()
-    {
-        return LaunchAsync(DefaultChromeArgs);
-    }
+    public static Task<IBrowser> LaunchAsync() => LaunchAsync(DefaultChromeArgs);
 
-    public static async Task<IBrowser> LaunchAsync(string[] chromeArgs)
+    public static Task<IBrowser> LaunchAsync(string[] chromeArgs)
     {
-        var chromeLocation = new ChromiumExtractor().ExtractChromium();
-
         var launchOptions = new LaunchOptions
         {
-            ExecutablePath = chromeLocation,
+            ExecutablePath = new ChromiumExtractor().ExtractChromium(),
             Args = chromeArgs,
             Headless = true,
         };
 
-        return await new Launcher().LaunchAsync(launchOptions);
+        return new Launcher().LaunchAsync(launchOptions);
     }
 }

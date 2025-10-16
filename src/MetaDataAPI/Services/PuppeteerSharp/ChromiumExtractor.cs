@@ -6,44 +6,19 @@ namespace MetaDataAPI.Services.PuppeteerSharp;
 
 public class ChromiumExtractor
 {
-    private static readonly string FontConfigEnvVariable = "FONTCONFIG_PATH";
-    private static readonly string FontConfigValue = "/tmp";
-    private static readonly string LdLibEnvVariable = "LD_LIBRARY_PATH";
-    private static readonly string LdLibValue = "/tmp/lib";
-    private static readonly string LambdaLayerDirectory = "/opt/chromium-layer";
-    public static string ChromiumPath = "/tmp/chromium";
+    private const string FontConfigEnvVariable = "FONTCONFIG_PATH";
+    private const string FontConfigValue = "/tmp";
+    private const string LdLibEnvVariable = "LD_LIBRARY_PATH";
+    private const string LdLibValue = "/tmp/lib";
+    private const string LambdaLayerDirectory = "/opt/chromium-layer";
+    private const string ChromiumPath = "/tmp/chromium";
 
     private static readonly object SyncObject = new();
 
-    private string awsOperatingSystem;
-    public string AwsOperatingSystem
+    private string? awsOperatingSystem;
+    public string? AwsOperatingSystem
     {
-        get
-        {
-            if (awsOperatingSystem != null)
-            {
-                return awsOperatingSystem;
-            }
-
-            if (File.Exists("/etc/system-release-cpe"))
-            {
-                var osDetails = File
-                    .ReadLines("/etc/system-release-cpe")
-                    .FirstOrDefault() ?? string.Empty;
-
-                if (osDetails.EndsWith("amazon:amazon_linux:2"))
-                {
-                    awsOperatingSystem = "al2";
-                }
-                else if (osDetails.EndsWith("amazon:amazon_linux:2023"))
-                {
-                    awsOperatingSystem = "al2023";
-                }
-            }
-
-            return awsOperatingSystem;
-        }
-
+        get => awsOperatingSystem ??= DetectAwsOperatingSystem();
         set => awsOperatingSystem = value;
     }
 
@@ -70,16 +45,14 @@ public class ChromiumExtractor
 
                 var compressedFile = Path.Combine(LambdaLayerDirectory, "chromium.br");
 
-                using var writeFile = File.OpenWrite(ChromiumPath);
                 using var readFile = File.OpenRead(compressedFile);
-                using (var bs = new BrotliStream(readFile, CompressionMode.Decompress))
-                {
-                    bs.CopyTo(writeFile);
-                }
+                using var writeFile = File.Create(ChromiumPath);
+                using var brotliStream = new BrotliStream(readFile, CompressionMode.Decompress);
+                brotliStream.CopyTo(writeFile);
 
                 _ = new UnixFileInfo(ChromiumPath)
                 {
-                    FileAccessPermissions = FileAccessPermissions.UserReadWriteExecute | FileAccessPermissions.GroupReadWriteExecute
+                    FileAccessPermissions = FileAccessPermissions.UserReadWriteExecute | FileAccessPermissions.GroupReadWriteExecute,
                 };
             }
         }
@@ -87,40 +60,63 @@ public class ChromiumExtractor
         return ChromiumPath;
     }
 
+    private static string? DetectAwsOperatingSystem()
+    {
+        const string systemReleaseFile = "/etc/system-release-cpe";
+
+        if (!File.Exists(systemReleaseFile))
+        {
+            return null;
+        }
+
+        var osDetails = File.ReadLines(systemReleaseFile).FirstOrDefault();
+        if (string.IsNullOrEmpty(osDetails))
+        {
+            return null;
+        }
+
+        if (osDetails.EndsWith("amazon:amazon_linux:2"))
+        {
+            return "al2";
+        }
+
+        return osDetails.EndsWith("amazon:amazon_linux:2023") ? "al2023" : null;
+    }
+
     private static void SetEnvironmentVariables()
     {
         Environment.SetEnvironmentVariable("HOME", "/tmp");
+        EnsureEnvironmentContains(FontConfigEnvVariable, FontConfigValue);
+        EnsureEnvironmentContains(LdLibEnvVariable, LdLibValue);
+    }
 
-        var fontConfig = Environment.GetEnvironmentVariable(FontConfigEnvVariable);
-        if (string.IsNullOrEmpty(fontConfig) || !fontConfig.Contains(FontConfigValue))
+    private static void EnsureEnvironmentContains(string variableName, string requiredValue)
+    {
+        var currentValue = Environment.GetEnvironmentVariable(variableName);
+        if (string.IsNullOrEmpty(currentValue))
         {
-            var newValue = string.IsNullOrEmpty(fontConfig) ? FontConfigValue : $"{fontConfig}:{FontConfigValue}";
-            Environment.SetEnvironmentVariable(FontConfigEnvVariable, newValue);
+            Environment.SetEnvironmentVariable(variableName, requiredValue);
+            return;
         }
 
-        var ldLibPath = Environment.GetEnvironmentVariable(LdLibEnvVariable);
-        if (string.IsNullOrEmpty(ldLibPath) || !ldLibPath.Contains(LdLibValue))
+        if (!currentValue.Split(':', StringSplitOptions.RemoveEmptyEntries).Contains(requiredValue, StringComparer.Ordinal))
         {
-            var newValue = string.IsNullOrEmpty(ldLibPath) ? LdLibValue : $"{ldLibPath}:{LdLibValue}";
-            Environment.SetEnvironmentVariable(LdLibEnvVariable, newValue);
+            Environment.SetEnvironmentVariable(variableName, $"{currentValue}:{requiredValue}");
         }
     }
 
-    private static void ExtractDependencies(string fileName, string path)
+    private static void ExtractDependencies(string fileName, string destinationPath)
     {
         var compressedFile = Path.Combine(LambdaLayerDirectory, fileName);
 
-        using var stream = new MemoryStream();
         using var readFile = File.OpenRead(compressedFile);
-        using (var bs = new BrotliStream(readFile, CompressionMode.Decompress))
+        using var decompressedStream = new MemoryStream();
+        using (var brotliStream = new BrotliStream(readFile, CompressionMode.Decompress))
         {
-            bs.CopyTo(stream);
-            bs.Dispose();
+            brotliStream.CopyTo(decompressedStream);
         }
 
-        stream.Seek(0, SeekOrigin.Begin);
-
-        var tarReader = new TarReader(stream);
-        tarReader.ReadToEnd(path);
+        decompressedStream.Position = 0;
+        new TarReader(decompressedStream).ReadToEnd(destinationPath);
     }
 }

@@ -136,7 +136,7 @@ internal class TarHeader : ITarHeader
         Encoding.ASCII.GetBytes(SizeString).CopyTo(buffer, 124);
         Encoding.ASCII.GetBytes(LastModificationString).CopyTo(buffer, 136);
 
-        buffer[156] = ((byte)EntryType);
+        buffer[156] = (byte)EntryType;
 
 
         RecalculateChecksum(buffer);
