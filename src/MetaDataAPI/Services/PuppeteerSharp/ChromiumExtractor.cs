@@ -1,7 +1,6 @@
 ﻿using Microsoft.Extensions.Logging;
-using System.Formats.Tar;
 using System.IO.Compression;
-using Mono.Unix;
+using MetaDataAPI.Services.PuppeteerSharp.Tar;
 
 namespace MetaDataAPI.Services.PuppeteerSharp;
 
@@ -11,6 +10,7 @@ public class ChromiumExtractor
     private static string FontConfigValue = "/tmp";
     private static string LdLibEnvVariable = "LD_LIBRARY_PATH";
     private static string LdLibValue = "/tmp/lib";
+    private static readonly string LambdaLayerDirectory = "/opt/chromium-layer";
 
     public static string ChromiumPath = "/tmp/chromium";
 
@@ -93,7 +93,7 @@ public class ChromiumExtractor
                 ExtractDependencies("fonts.tar.br", "/tmp");
                 ExtractDependencies("swiftshader.tar.br", "/tmp");
 
-                var compressedFile = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "chromium.br");
+                var compressedFile = Path.Combine(LambdaLayerDirectory, "chromium.br");
 
                 logger.LogDebug($"Found compressed file {compressedFile}");
 
@@ -139,22 +139,20 @@ public class ChromiumExtractor
 
     private void ExtractDependencies(string fileName, string path)
     {
-        var compressedFile = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, fileName);
+        var compressedFile = Path.Combine(LambdaLayerDirectory, fileName);
 
         logger.LogDebug($"Found compressed file {compressedFile}");
-        using (var stream = new MemoryStream())
-        using (var readFile = File.OpenRead(compressedFile))
+        using var stream = new MemoryStream();
+        using var readFile = File.OpenRead(compressedFile);
+        using (var bs = new BrotliStream(readFile, CompressionMode.Decompress))
         {
-            using (var bs = new BrotliStream(readFile, CompressionMode.Decompress))
-            {
-                bs.CopyTo(stream);
-                bs.Dispose();
-            }
-
-            stream.Seek(0, SeekOrigin.Begin);
-
-            var tarReader = new TarReader(stream, loggerFactory);
-            tarReader.ReadToEnd(path);
+            bs.CopyTo(stream);
+            bs.Dispose();
         }
+
+        stream.Seek(0, SeekOrigin.Begin);
+
+        var tarReader = new TarReader(stream, loggerFactory);
+        tarReader.ReadToEnd(path);
     }
 }
