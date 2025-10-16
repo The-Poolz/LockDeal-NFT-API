@@ -13,15 +13,13 @@ public class TarReader
     private readonly UsTarHeader header;
     private readonly Stream inStream;
     private long remainingBytesInFile;
-    private readonly ILogger<TarReader> logger;
 
     /// <summary>
     /// Constructs TarReader object to read data from `tarredData` stream
     /// </summary>
     /// <param name="tarredData">A stream to read tar archive from</param>
-    public TarReader(Stream tarredData, ILoggerFactory loggerFactory)
+    public TarReader(Stream tarredData)
     {
-        logger = loggerFactory.CreateLogger<TarReader>();
         inStream = tarredData;
         header = new UsTarHeader();
     }
@@ -45,25 +43,18 @@ public class TarReader
         {
             var fileNameFromArchive = FileInfo.FileName;
             var totalPath = Path.Join(destDirectory, fileNameFromArchive);
-            if (UsTarHeader.IsPathSeparator(fileNameFromArchive[fileNameFromArchive.Length - 1]) ||
+            if (UsTarHeader.IsPathSeparator(fileNameFromArchive[^1]) ||
                 FileInfo.EntryType == EntryType.Directory)
             {
                 // Record is a directory
                 Directory.CreateDirectory(totalPath);
-                logger.LogDebug("Created {directory}", totalPath);
                 continue;
             }
 
-            // If record is a file
-            var fileName = Path.GetFileName(totalPath);
             var directory = Path.GetDirectoryName(totalPath);
             Directory.CreateDirectory(directory);
-            using (var file = File.Create(totalPath))
-            {
-                Read(file);
-            }
-
-            logger.LogDebug("Extracted {fileName} to {directory}", fileName, directory);
+            using var file = File.Create(totalPath);
+            Read(file);
         }
     }
 
@@ -75,16 +66,11 @@ public class TarReader
     /// <seealso cref="MoveNext"/>
     public void Read(Stream dataDestination)
     {
-        Debug.WriteLine("tar stream position Read in: " + inStream.Position);
         int readBytes;
-        byte[] read;
-        while ((readBytes = Read(out read)) != -1)
+        while ((readBytes = Read(out var read)) != -1)
         {
-            Debug.WriteLine("tar stream position Read while(...) : " + inStream.Position);
             dataDestination.Write(read, 0, readBytes);
         }
-
-        Debug.WriteLine("tar stream position Read out: " + inStream.Position);
     }
 
     protected int Read(out byte[] buffer)
@@ -106,7 +92,7 @@ public class TarReader
             toRead = remainingBytesInFile;
         }
 
-        var bytesRead = 0;
+        int bytesRead;
         var bytesRemainingToRead = toRead;
         do
         {
@@ -137,15 +123,7 @@ public class TarReader
     /// </summary>
     /// <param name="buffer">buffer to check</param>
     /// <returns>true if all bytes are zeroes, otherwise false</returns>
-    private static bool IsEmpty(IEnumerable<byte> buffer)
-    {
-        foreach (var b in buffer)
-        {
-            if (b != 0) return false;
-        }
-
-        return true;
-    }
+    private static bool IsEmpty(IEnumerable<byte> buffer) => buffer.All(b => b == 0);
 
     /// <summary>
     /// Move internal pointer to a next file in archive.
@@ -161,16 +139,13 @@ public class TarReader
     /// <seealso cref="Read(Stream)"/>
     public bool MoveNext(bool skipData)
     {
-        Debug.WriteLine("tar stream position MoveNext in: " + inStream.Position);
         if (remainingBytesInFile > 0)
         {
             if (!skipData)
             {
-                throw new TarException(
-                    "You are trying to change file while not all the data from the previous one was read. If you do want to skip files use skipData parameter set to true.");
+                throw new TarException("You are trying to change file while not all the data from the previous one was read. If you do want to skip files use skipData parameter set to true.");
             }
 
-            // Skip to the end of file.
             if (inStream.CanSeek)
             {
                 var remainer = (remainingBytesInFile % 512);
@@ -214,7 +189,6 @@ public class TarReader
 
             if (bytesRemaining == 0 && IsEmpty(bytes))
             {
-                Debug.WriteLine("tar stream position MoveNext  out(false): " + inStream.Position);
                 return false;
             }
 
@@ -228,7 +202,6 @@ public class TarReader
 
         remainingBytesInFile = header.SizeInBytes;
 
-        Debug.WriteLine("tar stream position MoveNext  out(true): " + inStream.Position);
         return true;
     }
 }

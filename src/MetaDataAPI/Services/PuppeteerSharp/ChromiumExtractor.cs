@@ -1,23 +1,19 @@
 ﻿using Mono.Unix;
 using System.IO.Compression;
-using Microsoft.Extensions.Logging;
 using MetaDataAPI.Services.PuppeteerSharp.Tar;
 
 namespace MetaDataAPI.Services.PuppeteerSharp;
 
 public class ChromiumExtractor
 {
-    private static string FontConfigEnvVariable = "FONTCONFIG_PATH";
-    private static string FontConfigValue = "/tmp";
-    private static string LdLibEnvVariable = "LD_LIBRARY_PATH";
-    private static string LdLibValue = "/tmp/lib";
+    private static readonly string FontConfigEnvVariable = "FONTCONFIG_PATH";
+    private static readonly string FontConfigValue = "/tmp";
+    private static readonly string LdLibEnvVariable = "LD_LIBRARY_PATH";
+    private static readonly string LdLibValue = "/tmp/lib";
     private static readonly string LambdaLayerDirectory = "/opt/chromium-layer";
-
     public static string ChromiumPath = "/tmp/chromium";
 
-    private static readonly object SyncObject = new object();
-    private readonly ILogger<ChromiumExtractor> logger;
-    private readonly ILoggerFactory loggerFactory;
+    private static readonly object SyncObject = new();
 
     private string awsOperatingSystem;
     public string AwsOperatingSystem
@@ -51,27 +47,14 @@ public class ChromiumExtractor
         set => awsOperatingSystem = value;
     }
 
-    public ChromiumExtractor(ILoggerFactory loggerFactory)
-    {
-        this.loggerFactory = loggerFactory;
-        logger = loggerFactory.CreateLogger<ChromiumExtractor>();
-    }
-
     public string ExtractChromium()
     {
         SetEnvironmentVariables();
-
-        if (!Directory.Exists("/tmp"))
-        {
-            logger.LogDebug("/tmp doesn't exist.  Is this running on lambda?");
-        }
 
         if (File.Exists(ChromiumPath))
         {
             return ChromiumPath;
         }
-
-        logger.LogDebug("Chromium doesn't exist, extracting");
 
         lock (SyncObject)
         {
@@ -81,43 +64,30 @@ public class ChromiumExtractor
                 {
                     ExtractDependencies($"{AwsOperatingSystem}.tar.br", "/tmp");
                 }
-                else
-                {
-                    logger.LogWarning("Operating environment unexpected. Unable to extract correct dependencies.");
-                }
 
                 ExtractDependencies("fonts.tar.br", "/tmp");
                 ExtractDependencies("swiftshader.tar.br", "/tmp");
 
                 var compressedFile = Path.Combine(LambdaLayerDirectory, "chromium.br");
 
-                logger.LogDebug($"Found compressed file {compressedFile}");
-
-                using (var writeFile = File.OpenWrite(ChromiumPath))
-                using (var readFile = File.OpenRead(compressedFile))
+                using var writeFile = File.OpenWrite(ChromiumPath);
+                using var readFile = File.OpenRead(compressedFile);
+                using (var bs = new BrotliStream(readFile, CompressionMode.Decompress))
                 {
-                    logger.LogDebug($"Extracting chromium to {ChromiumPath}");
-
-                    using (var bs = new BrotliStream(readFile, CompressionMode.Decompress))
-                    {
-                        bs.CopyTo(writeFile);
-                        bs.Dispose();
-                    }
-
-                    _ = new UnixFileInfo(ChromiumPath)
-                    {
-                        FileAccessPermissions = FileAccessPermissions.UserReadWriteExecute | FileAccessPermissions.GroupReadWriteExecute
-                    };
+                    bs.CopyTo(writeFile);
                 }
 
-                logger.LogInformation("Extracted chromium to {ChromiumPath}", ChromiumPath);
+                _ = new UnixFileInfo(ChromiumPath)
+                {
+                    FileAccessPermissions = FileAccessPermissions.UserReadWriteExecute | FileAccessPermissions.GroupReadWriteExecute
+                };
             }
         }
 
         return ChromiumPath;
     }
 
-    private void SetEnvironmentVariables()
+    private static void SetEnvironmentVariables()
     {
         Environment.SetEnvironmentVariable("HOME", "/tmp");
 
@@ -125,7 +95,6 @@ public class ChromiumExtractor
         if (string.IsNullOrEmpty(fontConfig) || !fontConfig.Contains(FontConfigValue))
         {
             var newValue = string.IsNullOrEmpty(fontConfig) ? FontConfigValue : $"{fontConfig}:{FontConfigValue}";
-            logger.LogDebug("Setting {FontConfigEnvVariable} to {FontConfigValue}", FontConfigEnvVariable, newValue);
             Environment.SetEnvironmentVariable(FontConfigEnvVariable, newValue);
         }
 
@@ -133,16 +102,14 @@ public class ChromiumExtractor
         if (string.IsNullOrEmpty(ldLibPath) || !ldLibPath.Contains(LdLibValue))
         {
             var newValue = string.IsNullOrEmpty(ldLibPath) ? LdLibValue : $"{ldLibPath}:{LdLibValue}";
-            logger.LogDebug("Setting {LdLibEnvVariable} to {LdLibValue} ", LdLibEnvVariable, newValue);
             Environment.SetEnvironmentVariable(LdLibEnvVariable, newValue);
         }
     }
 
-    private void ExtractDependencies(string fileName, string path)
+    private static void ExtractDependencies(string fileName, string path)
     {
         var compressedFile = Path.Combine(LambdaLayerDirectory, fileName);
 
-        logger.LogDebug($"Found compressed file {compressedFile}");
         using var stream = new MemoryStream();
         using var readFile = File.OpenRead(compressedFile);
         using (var bs = new BrotliStream(readFile, CompressionMode.Decompress))
@@ -153,7 +120,7 @@ public class ChromiumExtractor
 
         stream.Seek(0, SeekOrigin.Begin);
 
-        var tarReader = new TarReader(stream, loggerFactory);
+        var tarReader = new TarReader(stream);
         tarReader.ReadToEnd(path);
     }
 }

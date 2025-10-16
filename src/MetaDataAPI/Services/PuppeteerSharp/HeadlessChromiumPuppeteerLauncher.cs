@@ -1,12 +1,9 @@
 ﻿using PuppeteerSharp;
-using Microsoft.Extensions.Logging;
 
 namespace MetaDataAPI.Services.PuppeteerSharp;
 
-public class HeadlessChromiumPuppeteerLauncher(ILoggerFactory loggerFactory)
+public class HeadlessChromiumPuppeteerLauncher
 {
-    public HeadlessChromiumPuppeteerLauncher() : this(new LoggerFactory()) { }
-
     public static string[] DefaultChromeArgs =
     [
         "--disable-background-timer-throttling",
@@ -54,14 +51,14 @@ public class HeadlessChromiumPuppeteerLauncher(ILoggerFactory loggerFactory)
         "--single-process"
     ];
 
-    public Task<IBrowser> LaunchAsync()
+    public static Task<IBrowser> LaunchAsync()
     {
         return LaunchAsync(DefaultChromeArgs);
     }
 
-    public async Task<IBrowser> LaunchAsync(string[] chromeArgs)
+    public static async Task<IBrowser> LaunchAsync(string[] chromeArgs)
     {
-        var chromeLocation = new ChromiumExtractor(loggerFactory).ExtractChromium();
+        var chromeLocation = new ChromiumExtractor().ExtractChromium();
 
         var launchOptions = new LaunchOptions
         {
@@ -70,6 +67,6 @@ public class HeadlessChromiumPuppeteerLauncher(ILoggerFactory loggerFactory)
             Headless = true,
         };
 
-        return await new Launcher(loggerFactory).LaunchAsync(launchOptions);
+        return await new Launcher().LaunchAsync(launchOptions);
     }
 }

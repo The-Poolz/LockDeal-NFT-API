@@ -26,8 +26,7 @@ public static class ImageGenerator
             Headless = true
         });
 #else
-        var browserLauncher = new HeadlessChromiumPuppeteerLauncher();
-        await using var browser = await browserLauncher.LaunchAsync();
+        await using var browser = await HeadlessChromiumPuppeteerLauncher.LaunchAsync();
 #endif
         await using var page = await browser.NewPageAsync();
         await page.SetContentAsync(html);
