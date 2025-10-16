@@ -1,5 +1,6 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using Mono.Unix;
 using System.IO.Compression;
+using Microsoft.Extensions.Logging;
 using MetaDataAPI.Services.PuppeteerSharp.Tar;
 
 namespace MetaDataAPI.Services.PuppeteerSharp;
@@ -56,10 +57,6 @@ public class ChromiumExtractor
         logger = loggerFactory.CreateLogger<ChromiumExtractor>();
     }
 
-    /// <summary>
-    /// Extracts chromium to temp path, if not already completed
-    /// </summary>
-    /// <returns>Path to chromium bin</returns>
     public string ExtractChromium()
     {
         SetEnvironmentVariables();
@@ -69,7 +66,6 @@ public class ChromiumExtractor
             logger.LogDebug("/tmp doesn't exist.  Is this running on lambda?");
         }
 
-        // Quick bale if exec exists
         if (File.Exists(ChromiumPath))
         {
             return ChromiumPath;
@@ -107,6 +103,11 @@ public class ChromiumExtractor
                         bs.CopyTo(writeFile);
                         bs.Dispose();
                     }
+
+                    _ = new UnixFileInfo(ChromiumPath)
+                    {
+                        FileAccessPermissions = FileAccessPermissions.UserReadWriteExecute | FileAccessPermissions.GroupReadWriteExecute
+                    };
                 }
 
                 logger.LogInformation("Extracted chromium to {ChromiumPath}", ChromiumPath);
