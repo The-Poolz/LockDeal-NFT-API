@@ -17,7 +17,7 @@ public class Erc20ProviderTests
         [Fact]
         internal void Default()
         {
-            Environment.SetEnvironmentVariable("AWS_REGION", "us-east-1");
+            Environment.SetEnvironmentVariable("OVERRIDE_AWS_REGION", "us-east-1");
             var provider = new Erc20Provider();
 
             provider.Should().NotBeNull();
@@ -26,6 +26,7 @@ public class Erc20ProviderTests
         [Fact]
         internal void WithParameters()
         {
+            Environment.SetEnvironmentVariable("AWS_REGION", "us-east-1");
             var cacheProvider = new Erc20CacheService();
 
             var provider = new Erc20Provider(cacheProvider);
