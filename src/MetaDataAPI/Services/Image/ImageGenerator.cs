@@ -3,8 +3,7 @@ using HandlebarsDotNet;
 using MetaDataAPI.Providers;
 using EnvironmentManager.Extensions;
 #if !DEBUG
-using Microsoft.Extensions.Logging;
-using HeadlessChromium.Puppeteer.Lambda.Dotnet;
+using MetaDataAPI.Services.PuppeteerSharp;
 #endif
 
 namespace MetaDataAPI.Services.Image;
@@ -27,7 +26,7 @@ public static class ImageGenerator
             Headless = true
         });
 #else
-        var browserLauncher = new HeadlessChromiumPuppeteerLauncher(new LoggerFactory());
+        var browserLauncher = new HeadlessChromiumPuppeteerLauncher();
         await using var browser = await browserLauncher.LaunchAsync();
 #endif
         await using var page = await browser.NewPageAsync();

@@ -1,0 +1,75 @@
+﻿using PuppeteerSharp;
+using Microsoft.Extensions.Logging;
+
+namespace MetaDataAPI.Services.PuppeteerSharp;
+
+public class HeadlessChromiumPuppeteerLauncher(ILoggerFactory loggerFactory)
+{
+    public HeadlessChromiumPuppeteerLauncher() : this(new LoggerFactory()) { }
+
+    public static string[] DefaultChromeArgs =
+    [
+        "--disable-background-timer-throttling",
+        "--disable-breakpad",
+        "--disable-client-side-phishing-detection",
+        "--disable-cloud-import",
+        "--disable-default-apps",
+        "--disable-dev-shm-usage",
+        "--disable-extensions",
+        "--disable-gesture-typing",
+        "--disable-hang-monitor",
+        "--disable-infobars",
+        "--disable-notifications",
+        "--disable-offer-store-unmasked-wallet-cards",
+        "--disable-offer-upload-credit-cards",
+        "--disable-popup-blocking",
+        "--disable-print-preview",
+        "--disable-prompt-on-repost",
+        "--disable-setuid-sandbox",
+        "--disable-speech-api",
+        "--disable-sync",
+        "--disable-tab-for-desktop-share",
+        "--disable-translate",
+        "--disable-voice-input",
+        "--disable-wake-on-wifi",
+        "--disk-cache-size=33554432",
+        "--enable-async-dns",
+        "--enable-simple-cache-backend",
+        "--enable-tcp-fast-open",
+        "--hide-scrollbars",
+        "--ignore-gpu-blacklist",
+        "--media-cache-size=33554432",
+        "--metrics-recording-only",
+        "--mute-audio",
+        "--no-default-browser-check",
+        "--no-first-run",
+        "--no-pings",
+        "--no-sandbox",
+        "--no-zygote",
+        "--password-store=basic",
+        "--prerender-from-omnibox=disabled",
+        "--use-gl=angle",
+        "--use-angle=swiftshader",
+        "--use-mock-keychain",
+        "--single-process"
+    ];
+
+    public Task<IBrowser> LaunchAsync()
+    {
+        return LaunchAsync(DefaultChromeArgs);
+    }
+
+    public async Task<IBrowser> LaunchAsync(string[] chromeArgs)
+    {
+        var chromeLocation = new ChromiumExtractor(loggerFactory).ExtractChromium();
+
+        var launchOptions = new LaunchOptions
+        {
+            ExecutablePath = chromeLocation,
+            Args = chromeArgs,
+            Headless = true,
+        };
+
+        return await new Launcher(loggerFactory).LaunchAsync(launchOptions);
+    }
+}
