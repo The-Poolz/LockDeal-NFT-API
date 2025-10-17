@@ -57,7 +57,7 @@ public class HeadlessChromiumPuppeteerLauncher
     {
         var launchOptions = new LaunchOptions
         {
-            ExecutablePath = new ChromiumExtractor().ExtractChromium(),
+            ExecutablePath = ChromiumExtractor.ExtractChromium(),
             Args = chromeArgs,
             Headless = true,
         };

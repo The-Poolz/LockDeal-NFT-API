@@ -1,76 +1,66 @@
-﻿using Mono.Unix;
-using System.Formats.Tar;
+﻿using System.Formats.Tar;
 using System.IO.Compression;
+using System.Runtime.InteropServices;
 
 namespace MetaDataAPI.Services.PuppeteerSharp;
 
-public sealed class ChromiumExtractor
+public static class ChromiumExtractor
 {
     private const string LayerDir = "/opt/chromium-layer";
     private const string TmpDir = "/tmp";
     private const string ChromiumPath = $"{TmpDir}/chromium";
 
-    private static readonly object Gate = new();
+    private static readonly Lazy<string> LazyPath = new(Init, LazyThreadSafetyMode.ExecutionAndPublication);
 
-    public static string ExtractChromium()
+    public static string ExtractChromium() => LazyPath.Value;
+
+    private static string Init()
     {
         SetEnv();
 
-        if (File.Exists(ChromiumPath)) return ChromiumPath;
-
-        lock (Gate)
+        if (!File.Exists(ChromiumPath))
         {
-            if (File.Exists(ChromiumPath)) return ChromiumPath;
-
             foreach (var pack in GetPacks())
-            {
-                ExtractTarBr(Path.Combine(LayerDir, pack), TmpDir);
-            }
+                ExtractTarBr($"{LayerDir}/{pack}", TmpDir);
 
-            using var src = File.OpenRead(Path.Combine(LayerDir, "chromium.br"));
+            using var src = File.OpenRead($"{LayerDir}/chromium.br");
             using var br = new BrotliStream(src, CompressionMode.Decompress);
             using var dst = File.Create(ChromiumPath);
             br.CopyTo(dst);
 
-            _ = new UnixFileInfo(ChromiumPath)
+            if (OperatingSystem.IsLinux() && RuntimeInformation.OSArchitecture == Architecture.X64)
             {
-                FileAccessPermissions = FileAccessPermissions.UserReadWriteExecute | FileAccessPermissions.GroupReadWriteExecute
-            };
-
-            return ChromiumPath;
+                File.SetUnixFileMode(
+                    ChromiumPath,
+                    UnixFileMode.UserRead | UnixFileMode.UserWrite | UnixFileMode.UserExecute |
+                    UnixFileMode.GroupRead | UnixFileMode.GroupWrite | UnixFileMode.GroupExecute
+                );
+            }
         }
+
+        return ChromiumPath;
     }
 
     private static IEnumerable<string> GetPacks()
     {
-        var os = DetectAwsOs();
-        if (!string.IsNullOrEmpty(os)) yield return $"{os}.tar.br";
+        const string cpe = "/etc/system-release-cpe";
+        var line = File.Exists(cpe) ? File.ReadLines(cpe).FirstOrDefault() : null;
+        if (line?.EndsWith("amazon:amazon_linux:2") == true) yield return "al2.tar.br";
+        else if (line?.EndsWith("amazon:amazon_linux:2023") == true) yield return "al2023.tar.br";
         yield return "fonts.tar.br";
         yield return "swiftshader.tar.br";
     }
 
     private static void ExtractTarBr(string src, string dest)
     {
-        using var fs = File.OpenRead(src);
-        using var br = new BrotliStream(fs, CompressionMode.Decompress);
+        using var br = new BrotliStream(File.OpenRead(src), CompressionMode.Decompress);
         TarFile.ExtractToDirectory(br, dest, overwriteFiles: true);
-    }
-
-    private static string? DetectAwsOs()
-    {
-        const string cpe = "/etc/system-release-cpe";
-        if (!File.Exists(cpe)) return null;
-
-        var line = File.ReadLines(cpe).FirstOrDefault() ?? string.Empty;
-        if (line.EndsWith("amazon:amazon_linux:2")) return "al2";
-        if (line.EndsWith("amazon:amazon_linux:2023")) return "al2023";
-        return null;
     }
 
     private static void SetEnv()
     {
         Environment.SetEnvironmentVariable("HOME", TmpDir);
-        AppendEnv("FONTCONFIG_PATH", $"{TmpDir}");
+        AppendEnv("FONTCONFIG_PATH", TmpDir);
         AppendEnv("LD_LIBRARY_PATH", $"{TmpDir}/lib");
     }
 
@@ -78,14 +68,8 @@ public sealed class ChromiumExtractor
     {
         var cur = Environment.GetEnvironmentVariable(key);
         if (string.IsNullOrEmpty(cur))
-        {
             Environment.SetEnvironmentVariable(key, value);
-            return;
-        }
-
-        if (!cur.Split(':', StringSplitOptions.RemoveEmptyEntries).Contains(value, StringComparer.Ordinal))
-        {
+        else if (!cur.Split(':', StringSplitOptions.RemoveEmptyEntries).Contains(value, StringComparer.Ordinal))
             Environment.SetEnvironmentVariable(key, $"{cur}:{value}");
-        }
     }
 }
