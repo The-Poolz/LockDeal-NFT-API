@@ -31,7 +31,6 @@ public class ImageService
         if (!response.IsSuccess) LambdaLogger.Log($"Error occured while trying to receive image: {response.Error}");
 
         var ipfsPinHash = response.Count > 0 ? response.Rows[0].IpfsPinHash : await UploadImageAsync(provider);
-
         return $"ipfs://{ipfsPinHash}";
     }
 
