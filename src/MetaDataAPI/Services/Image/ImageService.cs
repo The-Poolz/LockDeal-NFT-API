@@ -30,18 +30,7 @@ public class ImageService
 
         if (!response.IsSuccess) LambdaLogger.Log($"Error occured while trying to receive image: {response.Error}");
 
-        string ipfsPinHash;
-        if (response.Count > 0)
-        {
-            ipfsPinHash = response.Rows[0].IpfsPinHash;
-            LambdaLogger.Log("Image received from Pinata.");
-        }
-        else
-        {
-            ipfsPinHash = await UploadImageAsync(provider);
-            LambdaLogger.Log("Image has been generated and uploaded.");
-        }
-
+        var ipfsPinHash = response.Count > 0 ? response.Rows[0].IpfsPinHash : await UploadImageAsync(provider);
         return $"ipfs://{ipfsPinHash}";
     }
 
