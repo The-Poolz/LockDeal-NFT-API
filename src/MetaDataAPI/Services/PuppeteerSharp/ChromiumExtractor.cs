@@ -1,6 +1,6 @@
 ﻿using Mono.Unix;
+using System.Formats.Tar;
 using System.IO.Compression;
-using MetaDataAPI.Services.PuppeteerSharp.Tar;
 
 namespace MetaDataAPI.Services.PuppeteerSharp;
 
@@ -117,6 +117,6 @@ public class ChromiumExtractor
         }
 
         decompressedStream.Position = 0;
-        new TarReader(decompressedStream).ReadToEnd(destinationPath);
+        TarFile.ExtractToDirectory(decompressedStream, destinationPath, overwriteFiles: true);
     }
 }
