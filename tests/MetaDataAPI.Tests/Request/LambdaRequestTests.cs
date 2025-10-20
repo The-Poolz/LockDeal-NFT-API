@@ -42,7 +42,7 @@ public class LambdaRequestTests
     {
         yield return
         [
-            "/1/2",
+            "/metadata/1/2",
             "GET",
             1,
             2,
@@ -51,7 +51,7 @@ public class LambdaRequestTests
         ];
         yield return
         [
-            "/1/2",
+            "/metadata/1/2",
             "OPTIONS",
             1,
             2,
@@ -69,34 +69,34 @@ public class LambdaRequestTests
         ];
         yield return
         [
-            "/1/",
+            "/metadata/1/",
             "GET",
             0,
             0,
             false,
-            LambdaRequestValidatorErrors.PathWrongFormat("/1/")
+            LambdaRequestValidatorErrors.PathWrongFormat("/metadata/1/")
         ];
         yield return
         [
-            "/invalid/2",
+            "/metadata/invalid/2",
             "GET",
             0,
             0,
             false,
-            LambdaRequestValidatorErrors.ChainIdInvalid("/invalid/2")
+            LambdaRequestValidatorErrors.ChainIdInvalid("/metadata/invalid/2")
         ];
         yield return
         [
-            "/1/invalid",
+            "/metadata/1/invalid",
             "GET",
             0,
             0,
             false,
-            LambdaRequestValidatorErrors.PoolIdInvalid("/1/invalid")
+            LambdaRequestValidatorErrors.PoolIdInvalid("/metadata/1/invalid")
         ];
         yield return
         [
-            "/1/2",
+            "/metadata/1/2",
             "",
             0,
             0,
@@ -105,7 +105,7 @@ public class LambdaRequestTests
         ];
         yield return
         [
-            "/1/2",
+            "/metadata/1/2",
             "POST",
             0,
             0,

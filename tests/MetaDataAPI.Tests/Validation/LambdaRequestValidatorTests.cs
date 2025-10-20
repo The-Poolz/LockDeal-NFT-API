@@ -36,7 +36,7 @@ public class LambdaRequestValidatorTests
         [Fact]
         internal void ShouldHaveError_WhenChainIdIsInvalid()
         {
-            _request.Path = "/invalid/1/";
+            _request.Path = "/metadata/invalid/1/";
 
             var result = _validator.TestValidate(_request);
 
@@ -47,7 +47,7 @@ public class LambdaRequestValidatorTests
         [Fact]
         internal void ShouldHaveError_WhenPoolIdIsInvalid()
         {
-            _request.Path = "/1/invalid/";
+            _request.Path = "/metadata/1/invalid/";
 
             var result = _validator.TestValidate(_request);
 
@@ -60,7 +60,7 @@ public class LambdaRequestValidatorTests
         {
             var request = new LambdaRequest(
                 httpMethod: string.Empty,
-                path: "/1/2/"
+                path: "/metadata/1/2/"
             );
 
             var result = _validator.TestValidate(request);
@@ -74,7 +74,7 @@ public class LambdaRequestValidatorTests
         {
             var request = new LambdaRequest(
                 httpMethod: "POST",
-                path: "/1/2/"
+                path: "/metadata/1/2/"
             );
 
             var result = _validator.TestValidate(request);
@@ -88,7 +88,7 @@ public class LambdaRequestValidatorTests
         {
             var request = new LambdaRequest(
                 httpMethod: "GET", 
-                path: "/1/2/"
+                path: "/metadata/1/2/"
             );
 
             var result = _validator.TestValidate(request);

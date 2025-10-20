@@ -22,8 +22,8 @@ public class LambdaRequest : ApplicationLoadBalancerRequest
         if (ValidationResult.IsValid)
         {
             var parts = path.Split('/', StringSplitOptions.RemoveEmptyEntries);
-            ChainId = long.Parse(parts[0]);
-            PoolId = long.Parse(parts[1]);
+            ChainId = long.Parse(parts[1]);
+            PoolId = long.Parse(parts[2]);
         }
         else
         {
