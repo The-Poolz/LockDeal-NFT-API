@@ -12,7 +12,10 @@ public abstract class LambdaResponse : ApplicationLoadBalancerResponse
         Body = body;
         Headers = new Dictionary<string, string>
         {
-            { "Content-Type", statusCode == HttpStatusCode.OK ? "application/json" : "text/plain" }
+            { "Content-Type", statusCode == HttpStatusCode.OK ? "application/json" : "text/plain" },
+            { "Access-Control-Allow-Origin", "*" },
+            { "Access-Control-Allow-Headers", "Content-Type" },
+            { "Access-Control-Allow-Methods", string.Join(',', LambdaRequest.AllowedMethods) }
         };
     }
 }
