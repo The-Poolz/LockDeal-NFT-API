@@ -51,6 +51,15 @@ public class LambdaRequestTests
         ];
         yield return
         [
+            "/1/2",
+            "OPTIONS",
+            1,
+            2,
+            true,
+            string.Empty
+        ];
+        yield return
+        [
             "",
             "GET",
             0,
