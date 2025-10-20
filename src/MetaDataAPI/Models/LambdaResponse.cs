@@ -11,7 +11,10 @@ public abstract class LambdaResponse : APIGatewayHttpApiV2ProxyResponse
         Body = body;
         Headers = new Dictionary<string, string>
         {
-            { "Content-Type", statusCode == HttpStatusCode.OK ? "application/json" : "text/plain" }
+            { "Content-Type", statusCode == HttpStatusCode.OK ? "application/json" : "text/plain" },
+            { "Access-Control-Allow-Origin", "*" },
+            { "Access-Control-Allow-Methods", "GET, OPTIONS" },
+            { "Access-Control-Allow-Headers", "Content-Type" }
         };
     }
 }

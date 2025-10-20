@@ -111,5 +111,24 @@ public class LambdaRequestValidatorTests
 
             result.IsValid.Should().BeTrue();
         }
+
+        [Fact]
+        internal void ShouldNotHaveAnyErrors_WhenRequestIsOptionsMethod()
+        {
+            var request = new LambdaRequest(
+                requestContext: new APIGatewayHttpApiV2ProxyRequest.ProxyRequestContext
+                {
+                    Http = new APIGatewayHttpApiV2ProxyRequest.HttpDescription
+                    {
+                        Method = "OPTIONS"
+                    }
+                }, 
+                rawPath: "/1/2/"
+            );
+
+            var result = _validator.TestValidate(request);
+
+            result.IsValid.Should().BeTrue();
+        }
     }
 }

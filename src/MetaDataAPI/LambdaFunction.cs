@@ -24,6 +24,11 @@ public class LambdaFunction(IServiceProvider serviceProvider)
     {
         try
         {
+            if (request.HttpMethod == "OPTIONS")
+            {
+                return new OptionsResponse();
+            }
+
             if (!request.ValidationResult.IsValid)
             {
                 return new ValidationErrorResponse(request.ValidationResult);
