@@ -2,7 +2,6 @@
 using FluentAssertions;
 using MetaDataAPI.Models;
 using MetaDataAPI.Validation;
-using Amazon.Lambda.APIGatewayEvents;
 
 namespace MetaDataAPI.Tests.Request;
 
@@ -11,7 +10,7 @@ public class LambdaRequestTests
     [Theory]
     [MemberData(nameof(TestData))]
     internal void ShouldSetPropertiesAndReturnValidationResult(
-        string rawPath,
+        string path,
         string httpMethod,
         long expectedChainId,
         long expectedPoolId,
@@ -20,14 +19,8 @@ public class LambdaRequestTests
     )
     {
         var request = new LambdaRequest(
-            new APIGatewayHttpApiV2ProxyRequest.ProxyRequestContext
-            {
-                Http = new APIGatewayHttpApiV2ProxyRequest.HttpDescription
-                {
-                    Method = httpMethod
-                }
-            },
-            rawPath
+            httpMethod,
+            path
         );
 
         var validationResult = request.ValidationResult;
@@ -63,7 +56,7 @@ public class LambdaRequestTests
             0,
             0,
             false,
-            LambdaRequestValidatorErrors.RawPathRequired()
+            LambdaRequestValidatorErrors.PathRequired()
         ];
         yield return
         [
@@ -72,7 +65,7 @@ public class LambdaRequestTests
             0,
             0,
             false,
-            LambdaRequestValidatorErrors.RawPathWrongFormat("/1/")
+            LambdaRequestValidatorErrors.PathWrongFormat("/1/")
         ];
         yield return
         [
@@ -108,7 +101,7 @@ public class LambdaRequestTests
             0,
             0,
             false,
-            LambdaRequestValidatorErrors.HttpMethodNotAllowed("POST", LambdaRequestValidator.AllowedMethods)
+            LambdaRequestValidatorErrors.HttpMethodNotAllowed("POST", LambdaRequest.AllowedMethods)
         ];
     }
 }

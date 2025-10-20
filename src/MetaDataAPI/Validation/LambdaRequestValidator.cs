@@ -5,30 +5,28 @@ namespace MetaDataAPI.Validation;
 
 public class LambdaRequestValidator : AbstractValidator<LambdaRequest>
 {
-    public static readonly string[] AllowedMethods = ["GET", "OPTIONS"];
-
     public LambdaRequestValidator()
     {
-        RuleFor(r => r.RawPath)
+        RuleFor(r => r.Path)
             .Cascade(CascadeMode.Stop)
             .NotEmpty()
-            .WithMessage(LambdaRequestValidatorErrors.RawPathRequired())
+            .WithMessage(LambdaRequestValidatorErrors.PathRequired())
             .Must(HaveExactlyTwoSegments)
-            .WithMessage(x => LambdaRequestValidatorErrors.RawPathWrongFormat(x.RawPath))
+            .WithMessage(x => LambdaRequestValidatorErrors.PathWrongFormat(x.Path))
             .Must(BeValidChainId)
-            .WithMessage(x => LambdaRequestValidatorErrors.ChainIdInvalid(x.RawPath))
+            .WithMessage(x => LambdaRequestValidatorErrors.ChainIdInvalid(x.Path))
             .Must(BeValidPoolId)
-            .WithMessage(x => LambdaRequestValidatorErrors.PoolIdInvalid(x.RawPath));
+            .WithMessage(x => LambdaRequestValidatorErrors.PoolIdInvalid(x.Path));
 
         RuleFor(x => x.HttpMethod)
             .Cascade(CascadeMode.Stop)
             .NotEmpty()
             .WithMessage(LambdaRequestValidatorErrors.HttpMethodRequired())
-            .Must(m => AllowedMethods.Contains(m, StringComparer.OrdinalIgnoreCase))
-            .WithMessage(x => LambdaRequestValidatorErrors.HttpMethodNotAllowed(x.HttpMethod, AllowedMethods));
+            .Must(m => LambdaRequest.AllowedMethods.Contains(m, StringComparer.OrdinalIgnoreCase))
+            .WithMessage(x => LambdaRequestValidatorErrors.HttpMethodNotAllowed(x.HttpMethod, LambdaRequest.AllowedMethods));
     }
 
-    private static bool HaveExactlyTwoSegments(string? rawPath) => LambdaRequestValidatorErrors.Split(rawPath).Length == 2;
-    private static bool BeValidChainId(string? rawPath) => long.TryParse(LambdaRequestValidatorErrors.GetSegment(rawPath, 0), out _);
-    private static bool BeValidPoolId(string? rawPath) => long.TryParse(LambdaRequestValidatorErrors.GetSegment(rawPath, 1), out _);
+    private static bool HaveExactlyTwoSegments(string? path) => LambdaRequestValidatorErrors.Split(path).Length == 2;
+    private static bool BeValidChainId(string? path) => long.TryParse(LambdaRequestValidatorErrors.GetSegment(path, 0), out _);
+    private static bool BeValidPoolId(string? path) => long.TryParse(LambdaRequestValidatorErrors.GetSegment(path, 1), out _);
 }
