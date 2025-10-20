@@ -3,7 +3,6 @@ using FluentAssertions;
 using MetaDataAPI.Models;
 using MetaDataAPI.Validation;
 using FluentValidation.TestHelper;
-using Amazon.Lambda.APIGatewayEvents;
 
 namespace MetaDataAPI.Tests.Validation;
 
@@ -11,7 +10,7 @@ public class LambdaRequestValidatorTests
 {
     public class Validate
     {
-        private readonly LambdaRequest _request = new(new APIGatewayHttpApiV2ProxyRequest.ProxyRequestContext(), string.Empty);
+        private readonly LambdaRequest _request = new(string.Empty, string.Empty);
         private readonly LambdaRequestValidator _validator = new();
 
         [Fact]
@@ -19,52 +18,49 @@ public class LambdaRequestValidatorTests
         {
             var result = _validator.TestValidate(_request);
 
-            result.ShouldHaveValidationErrorFor(r => r.RawPath)
-                .WithErrorMessage(LambdaRequestValidatorErrors.RawPathRequired());
+            result.ShouldHaveValidationErrorFor(r => r.Path)
+                .WithErrorMessage(LambdaRequestValidatorErrors.PathRequired());
         }
 
         [Fact]
         public void ShouldHaveError_WhenChainIdIsMissing()
         {
-            _request.RawPath = "/";
+            _request.Path = "/";
 
             var result = _validator.TestValidate(_request);
 
-            result.ShouldHaveValidationErrorFor(r => r.RawPath)
-                .WithErrorMessage(LambdaRequestValidatorErrors.RawPathWrongFormat(_request.RawPath));
+            result.ShouldHaveValidationErrorFor(r => r.Path)
+                .WithErrorMessage(LambdaRequestValidatorErrors.PathWrongFormat(_request.Path));
         }
 
         [Fact]
         internal void ShouldHaveError_WhenChainIdIsInvalid()
         {
-            _request.RawPath = "/invalid/1/";
+            _request.Path = "/invalid/1/";
 
             var result = _validator.TestValidate(_request);
 
-            result.ShouldHaveValidationErrorFor(r => r.RawPath)
-                .WithErrorMessage(LambdaRequestValidatorErrors.ChainIdInvalid(_request.RawPath));
+            result.ShouldHaveValidationErrorFor(r => r.Path)
+                .WithErrorMessage(LambdaRequestValidatorErrors.ChainIdInvalid(_request.Path));
         }
 
         [Fact]
         internal void ShouldHaveError_WhenPoolIdIsInvalid()
         {
-            _request.RawPath = "/1/invalid/";
+            _request.Path = "/1/invalid/";
 
             var result = _validator.TestValidate(_request);
 
-            result.ShouldHaveValidationErrorFor(r => r.RawPath)
-                .WithErrorMessage(LambdaRequestValidatorErrors.PoolIdInvalid(_request.RawPath));
+            result.ShouldHaveValidationErrorFor(r => r.Path)
+                .WithErrorMessage(LambdaRequestValidatorErrors.PoolIdInvalid(_request.Path));
         }
 
         [Fact]
         internal void ShouldHaveError_WhenHttpMethodIsEmpty()
         {
             var request = new LambdaRequest(
-                requestContext: new APIGatewayHttpApiV2ProxyRequest.ProxyRequestContext
-                {
-                    Http = new APIGatewayHttpApiV2ProxyRequest.HttpDescription()
-                },
-                rawPath: "/1/2/"
+                httpMethod: string.Empty,
+                path: "/1/2/"
             );
 
             var result = _validator.TestValidate(request);
@@ -77,34 +73,22 @@ public class LambdaRequestValidatorTests
         internal void ShouldHaveError_WhenHttpMethodIsInvalid()
         {
             var request = new LambdaRequest(
-                requestContext: new APIGatewayHttpApiV2ProxyRequest.ProxyRequestContext
-                {
-                    Http = new APIGatewayHttpApiV2ProxyRequest.HttpDescription
-                    {
-                        Method = "POST"
-                    }
-                },
-                rawPath: "/1/2/"
+                httpMethod: "POST",
+                path: "/1/2/"
             );
 
             var result = _validator.TestValidate(request);
 
             result.ShouldHaveValidationErrorFor(r => r.HttpMethod)
-                .WithErrorMessage(LambdaRequestValidatorErrors.HttpMethodNotAllowed("POST", LambdaRequestValidator.AllowedMethods));
+                .WithErrorMessage(LambdaRequestValidatorErrors.HttpMethodNotAllowed("POST", LambdaRequest.AllowedMethods));
         }
 
         [Fact]
         internal void ShouldNotHaveAnyErrors_WhenRequestIsValid()
         {
             var request = new LambdaRequest(
-                requestContext: new APIGatewayHttpApiV2ProxyRequest.ProxyRequestContext
-                {
-                    Http = new APIGatewayHttpApiV2ProxyRequest.HttpDescription
-                    {
-                        Method = "GET"
-                    }
-                }, 
-                rawPath: "/1/2/"
+                httpMethod: "GET", 
+                path: "/1/2/"
             );
 
             var result = _validator.TestValidate(request);

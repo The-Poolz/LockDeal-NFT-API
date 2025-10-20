@@ -1,23 +1,27 @@
 ﻿using Newtonsoft.Json;
 using MetaDataAPI.Validation;
 using FluentValidation.Results;
-using Amazon.Lambda.APIGatewayEvents;
+using Amazon.Lambda.ApplicationLoadBalancerEvents;
 
 namespace MetaDataAPI.Models;
 
-public class LambdaRequest : APIGatewayHttpApiV2ProxyRequest
+public class LambdaRequest : ApplicationLoadBalancerRequest
 {
+    public const string GET_METHOD = "GET";
+    public const string OPTIONS_METHOD = "OPTIONS";
+    public static readonly string[] AllowedMethods = [GET_METHOD, OPTIONS_METHOD];
+
     [JsonConstructor]
-    public LambdaRequest(ProxyRequestContext requestContext, string rawPath)
+    public LambdaRequest(string httpMethod, string path)
     {
-        RawPath = rawPath;
-        HttpMethod = requestContext.Http?.Method?.ToUpperInvariant() ?? string.Empty;
+        Path = path;
+        HttpMethod = httpMethod;
 
         ValidationResult = new LambdaRequestValidator().Validate(this);
 
         if (ValidationResult.IsValid)
         {
-            var parts = rawPath.Split('/', StringSplitOptions.RemoveEmptyEntries);
+            var parts = path.Split('/', StringSplitOptions.RemoveEmptyEntries);
             ChainId = long.Parse(parts[0]);
             PoolId = long.Parse(parts[1]);
         }
@@ -29,7 +33,6 @@ public class LambdaRequest : APIGatewayHttpApiV2ProxyRequest
     }
 
     public ValidationResult ValidationResult { get; }
-    public string HttpMethod { get; }
     public long PoolId { get; }
     public long ChainId { get; }
 }
