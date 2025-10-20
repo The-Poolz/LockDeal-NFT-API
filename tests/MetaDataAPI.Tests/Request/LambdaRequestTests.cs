@@ -78,6 +78,15 @@ public class LambdaRequestTests
         ];
         yield return
         [
+            "/wrong/1/2",
+            "GET",
+            0,
+            0,
+            false,
+            LambdaRequestValidatorErrors.PathWrongFormat("/wrong/1/2")
+        ];
+        yield return
+        [
             "/metadata/invalid/2",
             "GET",
             0,
