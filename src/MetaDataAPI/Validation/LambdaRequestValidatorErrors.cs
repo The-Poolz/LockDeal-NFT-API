@@ -2,19 +2,19 @@
 
 public static class LambdaRequestValidatorErrors
 {
-    public const string ExpectedPathPattern = "/{chainId}/{poolId}";
+    public const string ExpectedPathPattern = "/metadata/{chainId}/{poolId}";
 
     public static string PathRequired() =>
         $"Path is required (expected format: '{ExpectedPathPattern}').";
 
     public static string PathWrongFormat(string? rawPath) =>
-        $"Path must be '{ExpectedPathPattern}'. The first path parameter is 'chainId', the second is 'poolId'. Received: '{rawPath ?? string.Empty}'.";
+        $"Path must be '{ExpectedPathPattern}'. The first path parameter is 'metadata', the second is 'chainId', the third is 'poolId'. Received: '{rawPath ?? string.Empty}'.";
 
     public static string ChainIdInvalid(string? rawPath) =>
-        $"The first path parameter (chainId) must be a valid Int64. Received: '{GetSegment(rawPath, 0)}'.";
+        $"The second path parameter (chainId) must be a valid Int64. Received: '{GetSegment(rawPath, 1)}'.";
 
     public static string PoolIdInvalid(string? rawPath) =>
-        $"The second path parameter (poolId) must be a valid Int64. Received: '{GetSegment(rawPath, 1)}'.";
+        $"The third path parameter (poolId) must be a valid Int64. Received: '{GetSegment(rawPath, 2)}'.";
 
     public static string HttpMethodRequired() => "HTTP method is required.";
 

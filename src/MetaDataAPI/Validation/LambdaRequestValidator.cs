@@ -11,7 +11,9 @@ public class LambdaRequestValidator : AbstractValidator<LambdaRequest>
             .Cascade(CascadeMode.Stop)
             .NotEmpty()
             .WithMessage(LambdaRequestValidatorErrors.PathRequired())
-            .Must(HaveExactlyTwoSegments)
+            .Must(HaveExactlyThreeSegments)
+            .WithMessage(x => LambdaRequestValidatorErrors.PathWrongFormat(x.Path))
+            .Must(StartsWithMetadata)
             .WithMessage(x => LambdaRequestValidatorErrors.PathWrongFormat(x.Path))
             .Must(BeValidChainId)
             .WithMessage(x => LambdaRequestValidatorErrors.ChainIdInvalid(x.Path))
@@ -26,7 +28,8 @@ public class LambdaRequestValidator : AbstractValidator<LambdaRequest>
             .WithMessage(x => LambdaRequestValidatorErrors.HttpMethodNotAllowed(x.HttpMethod, LambdaRequest.AllowedMethods));
     }
 
-    private static bool HaveExactlyTwoSegments(string? path) => LambdaRequestValidatorErrors.Split(path).Length == 2;
-    private static bool BeValidChainId(string? path) => long.TryParse(LambdaRequestValidatorErrors.GetSegment(path, 0), out _);
-    private static bool BeValidPoolId(string? path) => long.TryParse(LambdaRequestValidatorErrors.GetSegment(path, 1), out _);
+    private static bool HaveExactlyThreeSegments(string? path) => LambdaRequestValidatorErrors.Split(path).Length == 3;
+    private static bool StartsWithMetadata(string? path) => string.Equals(LambdaRequestValidatorErrors.GetSegment(path, 0), "metadata", StringComparison.OrdinalIgnoreCase);
+    private static bool BeValidChainId(string? path) => long.TryParse(LambdaRequestValidatorErrors.GetSegment(path, 1), out _);
+    private static bool BeValidPoolId(string? path) => long.TryParse(LambdaRequestValidatorErrors.GetSegment(path, 2), out _);
 }
