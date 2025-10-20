@@ -14,6 +14,5 @@ public abstract class LambdaResponse : ApplicationLoadBalancerResponse
         {
             { "Content-Type", statusCode == HttpStatusCode.OK ? "application/json" : "text/plain" }
         };
-        
     }
 }
