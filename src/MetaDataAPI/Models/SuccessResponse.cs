@@ -2,9 +2,10 @@
 using Newtonsoft.Json;
 using MetaDataAPI.Providers.Attributes;
 
-namespace MetaDataAPI.Models.Errors;
+namespace MetaDataAPI.Models;
 
 public class SuccessResponse(Erc721Metadata metadata) : LambdaResponse(
     body: JsonConvert.SerializeObject(metadata),
-    statusCode: HttpStatusCode.OK
+    statusCode: HttpStatusCode.OK,
+    contentType: ContentType.Json
 );

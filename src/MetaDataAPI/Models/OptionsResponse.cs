@@ -3,6 +3,7 @@
 namespace MetaDataAPI.Models;
 
 public class OptionsResponse() : LambdaResponse(
-    body: string.Empty,
-    statusCode: HttpStatusCode.OK
+    body: string.Empty, 
+    statusCode: HttpStatusCode.NoContent,
+    contentType: ContentType.TextPlain
 );
