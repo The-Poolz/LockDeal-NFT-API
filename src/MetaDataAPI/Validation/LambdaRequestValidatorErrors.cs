@@ -8,7 +8,7 @@ public static class LambdaRequestValidatorErrors
         $"Path is required (expected format: '{ExpectedPathPattern}').";
 
     public static string PathWrongFormat(string? rawPath) =>
-        $"Path must be '{ExpectedPathPattern}'. The first path parameter is 'chainId', the second is 'poolId'. Received: '{rawPath ?? string.Empty}'.";
+        $"Path must be '{ExpectedPathPattern}'. The first path parameter is 'metadata', the second is 'chainId', the third is 'poolId'. Received: '{rawPath ?? string.Empty}'.";
 
     public static string ChainIdInvalid(string? rawPath) =>
         $"The second path parameter (chainId) must be a valid Int64. Received: '{GetSegment(rawPath, 1)}'.";
