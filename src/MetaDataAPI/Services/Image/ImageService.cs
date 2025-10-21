@@ -30,18 +30,10 @@ public class ImageService
 
         if (!response.IsSuccess) LambdaLogger.Log($"Error occured while trying to receive image: {response.Error}");
 
-        string ipfsPinHash;
         var logsEnabled = Env.LOG_IMAGE_ACTIONS.GetRequired<bool>();
-        if (response.Count > 0)
-        {
-            ipfsPinHash = response.Rows[0].IpfsPinHash;
-            if (logsEnabled) LambdaLogger.Log("Image has been loaded from IPFS.");
-        }
-        else
-        {
-            ipfsPinHash = await UploadImageAsync(provider);
-            if (logsEnabled) LambdaLogger.Log("Image has been generated.");
-        }
+        var fromIpfs = response.Count > 0;
+        var ipfsPinHash = fromIpfs ? response.Rows[0].IpfsPinHash : await UploadImageAsync(provider);
+        if (logsEnabled) LambdaLogger.Log(fromIpfs ? "Image has been loaded from IPFS." : "Image has been generated.");
         return $"ipfs://{ipfsPinHash}";
     }
 
