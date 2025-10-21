@@ -40,7 +40,7 @@ public class Erc20ProviderTests
         [Fact]
         internal void ShouldReceiveExpectedErc20FromDynamoDb()
         {
-            Environment.SetEnvironmentVariable(nameof(Environments.BASE_URL_OF_RPC), "https://www.google.com");
+            Environment.SetEnvironmentVariable(nameof(Env.BASE_URL_OF_RPC), "https://www.google.com");
             const int chainId = 97;
             const string address = EthereumAddress.ZeroAddress;
 

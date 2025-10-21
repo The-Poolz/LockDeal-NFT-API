@@ -13,8 +13,8 @@ public class ImageService
 {
     private static readonly Config Config = new()
     {
-        ApiKey = Environments.PINATA_API_KEY.Get(),
-        ApiSecret = Environments.PINATA_API_SECRET.Get()
+        ApiKey = Env.PINATA_API_KEY.Get(),
+        ApiSecret = Env.PINATA_API_SECRET.Get()
     };
 
     private readonly PinataClient _client = new(Config);
@@ -30,7 +30,18 @@ public class ImageService
 
         if (!response.IsSuccess) LambdaLogger.Log($"Error occured while trying to receive image: {response.Error}");
 
-        var ipfsPinHash = response.Count > 0 ? response.Rows[0].IpfsPinHash : await UploadImageAsync(provider);
+        string ipfsPinHash;
+        var logsEnabled = Env.LOG_IMAGE_ACTIONS.GetRequired<bool>();
+        if (response.Count > 0)
+        {
+            ipfsPinHash = response.Rows[0].IpfsPinHash;
+            if (logsEnabled) LambdaLogger.Log("Image has been loaded from IPFS.");
+        }
+        else
+        {
+            ipfsPinHash = await UploadImageAsync(provider);
+            if (logsEnabled) LambdaLogger.Log("Image has been generated.");
+        }
         return $"ipfs://{ipfsPinHash}";
     }
 
