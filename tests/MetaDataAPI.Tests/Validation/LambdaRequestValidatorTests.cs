@@ -25,12 +25,23 @@ public class LambdaRequestValidatorTests
         [Fact]
         public void ShouldHaveError_WhenChainIdIsMissing()
         {
-            _request.Path = "/";
+            _request.Path = "/metadata/";
 
             var result = _validator.TestValidate(_request);
 
             result.ShouldHaveValidationErrorFor(r => r.Path)
                 .WithErrorMessage(LambdaRequestValidatorErrors.PathWrongFormat(_request.Path));
+        }
+
+        [Fact]
+        public void ShouldHaveError_WhenPathIsNotAllowed()
+        {
+            _request.Path = "/wrong/1/2";
+
+            var result = _validator.TestValidate(_request);
+
+            result.ShouldHaveValidationErrorFor(r => r.Path)
+                .WithErrorMessage(LambdaRequestValidatorErrors.PathNotAllowed(_request.Path));
         }
 
         [Fact]
@@ -84,10 +95,23 @@ public class LambdaRequestValidatorTests
         }
 
         [Fact]
+        internal void ShouldNotHaveAnyErrors_WhenRequestIsForFavicon()
+        {
+            var request = new LambdaRequest(
+                httpMethod: "GET",
+                path: "/favicon.ico"
+            );
+
+            var result = _validator.TestValidate(request);
+
+            result.IsValid.Should().BeTrue();
+        }
+
+        [Fact]
         internal void ShouldNotHaveAnyErrors_WhenRequestIsValid()
         {
             var request = new LambdaRequest(
-                httpMethod: "GET", 
+                httpMethod: "GET",
                 path: "/metadata/1/2/"
             );
 

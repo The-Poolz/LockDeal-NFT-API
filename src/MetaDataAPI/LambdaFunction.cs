@@ -34,6 +34,11 @@ public class LambdaFunction(IServiceProvider serviceProvider)
                 return new ValidationErrorResponse(request.ValidationResult);
             }
 
+            if (request.IsFaviconRequest)
+            {
+                return new FaviconLambdaResponse();
+            }
+
             if (!_chainManager.TryFetchChainInfo(request.ChainId, out var chainInfo))
             {
                 return new ChainNotSupportedResponse(request.ChainId);

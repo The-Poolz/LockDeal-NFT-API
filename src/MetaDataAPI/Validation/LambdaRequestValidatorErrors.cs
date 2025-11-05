@@ -1,14 +1,20 @@
-﻿namespace MetaDataAPI.Validation;
+﻿using MetaDataAPI.Models;
+
+namespace MetaDataAPI.Validation;
 
 public static class LambdaRequestValidatorErrors
 {
     public const string ExpectedPathPattern = "/metadata/{chainId}/{poolId}";
+    private static readonly string[] AllowedPathsForMessage = [ExpectedPathPattern, LambdaRequest.FaviconPath];
 
     public static string PathRequired() =>
         $"Path is required (expected format: '{ExpectedPathPattern}').";
 
     public static string PathWrongFormat(string? rawPath) =>
         $"Path must be '{ExpectedPathPattern}'. The first path parameter is 'metadata', the second is 'chainId', the third is 'poolId'. Received: '{rawPath ?? string.Empty}'.";
+
+    public static string PathNotAllowed(string? rawPath) =>
+        $"Path is not allowed. Allowed paths: {string.Join(", ", AllowedPathsForMessage.Select(p => $"'{p}'"))}. Received: '{rawPath ?? string.Empty}'.";
 
     public static string ChainIdInvalid(string? rawPath) =>
         $"The second path parameter (chainId) must be a valid Int64. Received: '{GetSegment(rawPath, 1)}'.";
