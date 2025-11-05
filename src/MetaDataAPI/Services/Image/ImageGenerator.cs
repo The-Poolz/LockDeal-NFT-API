@@ -52,7 +52,7 @@ public static class ImageGenerator
 
     public static string ResolveTemplatePath()
     {
-        var overridePath = Environments.OVERRIDE_IMAGE_TEMPLATE_PATH.Get();
+        var overridePath = Env.OVERRIDE_IMAGE_TEMPLATE_PATH.Get();
         if (!string.IsNullOrWhiteSpace(overridePath) && File.Exists(overridePath)) return overridePath;
 
 #if DEBUG

@@ -17,7 +17,7 @@ public class Erc20ProviderTests
         [Fact]
         internal void Default()
         {
-            Environment.SetEnvironmentVariable("OVERRIDE_AWS_REGION", "us-east-1");
+            Environment.SetEnvironmentVariable("AWS_REGION", "us-east-1");
             var provider = new Erc20Provider();
 
             provider.Should().NotBeNull();
@@ -40,7 +40,7 @@ public class Erc20ProviderTests
         [Fact]
         internal void ShouldReceiveExpectedErc20FromDynamoDb()
         {
-            Environment.SetEnvironmentVariable(nameof(Environments.BASE_URL_OF_RPC), "https://www.google.com");
+            Environment.SetEnvironmentVariable(nameof(Env.BASE_URL_OF_RPC), "https://www.google.com");
             const int chainId = 97;
             const string address = EthereumAddress.ZeroAddress;
 
