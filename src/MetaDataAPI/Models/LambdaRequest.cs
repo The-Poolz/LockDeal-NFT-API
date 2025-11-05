@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json;
 using MetaDataAPI.Validation;
+using MetaDataAPI.Extensions;
 using FluentValidation.Results;
 using Amazon.Lambda.ApplicationLoadBalancerEvents;
 
@@ -26,7 +27,7 @@ public class LambdaRequest : ApplicationLoadBalancerRequest
 
         if (ValidationResult.IsValid && IsMetadataRequest)
         {
-            var parts = SplitPath(path);
+            var parts = path.SplitPath();
             ChainId = long.Parse(parts[1]);
             PoolId = long.Parse(parts[2]);
         }
@@ -44,17 +45,8 @@ public class LambdaRequest : ApplicationLoadBalancerRequest
     public bool IsFaviconRequest { get; }
 
     internal static bool IsMetadataPath(string? path) =>
-        string.Equals(GetSegment(path, 0), MetadataSegmentName, StringComparison.OrdinalIgnoreCase);
+        string.Equals(path.GetSegment(0), MetadataSegmentName, StringComparison.OrdinalIgnoreCase);
 
     internal static bool IsFaviconPath(string? path) =>
         string.Equals(path, FaviconPath, StringComparison.OrdinalIgnoreCase);
-
-    private static string[] SplitPath(string? rawPath) =>
-        (rawPath ?? string.Empty).Split('/', StringSplitOptions.RemoveEmptyEntries);
-
-    private static string GetSegment(string? rawPath, int index)
-    {
-        var parts = SplitPath(rawPath);
-        return parts.Length > index ? parts[index] : string.Empty;
-    }
 }
