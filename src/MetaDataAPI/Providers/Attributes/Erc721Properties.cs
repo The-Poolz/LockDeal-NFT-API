@@ -6,5 +6,5 @@ namespace MetaDataAPI.Providers.Attributes;
 public class Erc721Properties
 {
     [JsonProperty("external_url")]
-    public string ExternalUrl { get; set; } = Environments.EXTERNAL_URL.Get();
+    public string ExternalUrl { get; set; } = Env.EXTERNAL_URL.Get();
 }

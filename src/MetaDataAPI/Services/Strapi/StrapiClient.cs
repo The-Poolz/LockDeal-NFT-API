@@ -18,7 +18,7 @@ public class StrapiClient(IGraphQLClient graphQlClient) : IStrapiClient
     public StrapiClient()
         : this(
             graphQlClient: new GraphQLHttpClient(
-                endPoint: Environments.GRAPHQL_STRAPI_URL.GetRequired(),
+                endPoint: Env.GRAPHQL_STRAPI_URL.GetRequired(),
                 serializer: new NewtonsoftJsonSerializer(),
                 httpClient: new HttpClient
                 {
