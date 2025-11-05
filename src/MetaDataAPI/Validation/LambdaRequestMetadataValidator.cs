@@ -1,5 +1,6 @@
 ﻿using FluentValidation;
 using MetaDataAPI.Models;
+using MetaDataAPI.Extensions;
 
 namespace MetaDataAPI.Validation;
 
@@ -18,11 +19,11 @@ public sealed class LambdaRequestMetadataValidator : AbstractValidator<LambdaReq
     }
 
     private static bool HaveExactlyThreeSegments(string? path) =>
-        LambdaRequestValidatorErrors.Split(path).Length == 3;
+        path.SplitPath().Length == 3;
 
     private static bool BeValidChainId(string? path) =>
-        long.TryParse(LambdaRequestValidatorErrors.GetSegment(path, 1), out _);
+        long.TryParse(path.GetSegment(1), out _);
 
     private static bool BeValidPoolId(string? path) =>
-        long.TryParse(LambdaRequestValidatorErrors.GetSegment(path, 2), out _);
+        long.TryParse(path.GetSegment(2), out _);
 }
