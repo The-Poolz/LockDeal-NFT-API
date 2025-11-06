@@ -11,12 +11,12 @@ namespace MetaDataAPI.Tests.Validation;
 public class RouteApplicationLoadBalancerRequestValidatorTests
 {
     private readonly RouteApplicationLoadBalancerRequestValidator _validator = new();
-    private readonly ApplicationLoadBalancerRequest _albRequest = new();
 
     [Fact]
     public void ShouldHaveError_WhenHttpMethodIsMissing()
     {
-        var request = new RouteApplicationLoadBalancerRequest(_albRequest);
+        var albRequest = new ApplicationLoadBalancerRequest();
+        var request = new RouteApplicationLoadBalancerRequest(albRequest);
 
         var result = _validator.TestValidate(request);
 
@@ -27,20 +27,26 @@ public class RouteApplicationLoadBalancerRequestValidatorTests
     [Fact]
     public void ShouldHaveError_WhenHttpMethodIsNotAllowed()
     {
-        _albRequest.HttpMethod = "POST";
-        var request = new RouteApplicationLoadBalancerRequest(_albRequest);
+        var albRequest = new ApplicationLoadBalancerRequest
+        {
+            HttpMethod = "POST"
+        };
+        var request = new RouteApplicationLoadBalancerRequest(albRequest);
 
         var result = _validator.TestValidate(request);
 
         result.ShouldHaveValidationErrorFor(r => r.Request.HttpMethod)
-            .WithErrorMessage(ValidatorErrorsMessages.HttpMethodNotAllowed(_albRequest.HttpMethod, LambdaRoutes.AllowedMethods));
+            .WithErrorMessage(ValidatorErrorsMessages.HttpMethodNotAllowed(albRequest.HttpMethod, LambdaRoutes.AllowedMethods));
     }
 
     [Fact]
     public void ShouldValidateSuccessfully_WhenHttpMethodIsOptions()
     {
-        _albRequest.HttpMethod = LambdaRoutes.OptionsMethod;
-        var request = new RouteApplicationLoadBalancerRequest(_albRequest);
+        var albRequest = new ApplicationLoadBalancerRequest
+        {
+            HttpMethod = LambdaRoutes.OptionsMethod
+        };
+        var request = new RouteApplicationLoadBalancerRequest(albRequest);
 
         var result = _validator.TestValidate(request);
 
@@ -50,9 +56,12 @@ public class RouteApplicationLoadBalancerRequestValidatorTests
     [Fact]
     public void ShouldHaveError_WhenPathIsMissing()
     {
-        _albRequest.HttpMethod = LambdaRoutes.GetMethod;
-        _albRequest.Path = string.Empty;
-        var request = new RouteApplicationLoadBalancerRequest(_albRequest);
+        var albRequest = new ApplicationLoadBalancerRequest
+        {
+            HttpMethod = LambdaRoutes.GetMethod,
+            Path = string.Empty
+        };
+        var request = new RouteApplicationLoadBalancerRequest(albRequest);
 
         var result = _validator.TestValidate(request);
 
@@ -63,14 +72,17 @@ public class RouteApplicationLoadBalancerRequestValidatorTests
     [Fact]
     public void ShouldHaveError_WhenPathIsNotAllowed()
     {
-        _albRequest.HttpMethod = LambdaRoutes.GetMethod;
-        _albRequest.Path = "/not-allowed";
-        var request = new RouteApplicationLoadBalancerRequest(_albRequest);
+        var albRequest = new ApplicationLoadBalancerRequest
+        {
+            HttpMethod = LambdaRoutes.GetMethod,
+            Path = "/not-allowed"
+        };
+        var request = new RouteApplicationLoadBalancerRequest(albRequest);
 
         var result = _validator.TestValidate(request);
 
         result.ShouldHaveValidationErrorFor(r => r.Request.Path)
-            .WithErrorMessage(ValidatorErrorsMessages.PathNotAllowed(_albRequest.Path));
+            .WithErrorMessage(ValidatorErrorsMessages.PathNotAllowed(albRequest.Path));
     }
 
     [Theory]
@@ -78,9 +90,12 @@ public class RouteApplicationLoadBalancerRequestValidatorTests
     [InlineData("/favicon.ico")]
     public void ShouldValidateSuccessfully_ForAllowedPaths(string path)
     {
-        _albRequest.HttpMethod = LambdaRoutes.GetMethod;
-        _albRequest.Path = path;
-        var request = new RouteApplicationLoadBalancerRequest(_albRequest);
+        var albRequest = new ApplicationLoadBalancerRequest
+        {
+            HttpMethod = LambdaRoutes.GetMethod,
+            Path = path
+        };
+        var request = new RouteApplicationLoadBalancerRequest(albRequest);
 
         var result = _validator.TestValidate(request);
 
