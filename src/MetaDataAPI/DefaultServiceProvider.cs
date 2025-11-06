@@ -1,8 +1,10 @@
-﻿using MetaDataAPI.Services.Erc20;
+﻿using System.Reflection;
+using MetaDataAPI.Services.Erc20;
 using MetaDataAPI.Services.Strapi;
 using MetaDataAPI.Services.ChainsInfo;
 using Microsoft.Extensions.DependencyInjection;
 using poolz.finance.csharp.contracts.LockDealNFT;
+using MediatR.Extensions.FluentValidation.AspNetCore;
 
 namespace MetaDataAPI;
 
@@ -11,6 +13,9 @@ public static class DefaultServiceProvider
     private static readonly Lazy<IServiceProvider> LazyInstance = new(() =>
     {
         var serviceCollection = new ServiceCollection();
+
+        serviceCollection.AddMediatR(x => x.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly()));
+        serviceCollection.AddFluentValidation([Assembly.GetExecutingAssembly()]);
 
         serviceCollection.AddSingleton<IStrapiClient, StrapiClient>(_ => new StrapiClient());
         serviceCollection.AddSingleton<IChainManager, StrapiChainManager>(x => new StrapiChainManager(x.GetRequiredService<IStrapiClient>()));

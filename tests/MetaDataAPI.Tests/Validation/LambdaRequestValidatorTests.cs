@@ -19,7 +19,7 @@ public class LambdaRequestValidatorTests
             var result = _validator.TestValidate(_request);
 
             result.ShouldHaveValidationErrorFor(r => r.Path)
-                .WithErrorMessage(LambdaRequestValidatorErrors.PathRequired());
+                .WithErrorMessage(ValidatorErrorsMessages.PathRequired());
         }
 
         [Fact]
@@ -30,7 +30,7 @@ public class LambdaRequestValidatorTests
             var result = _validator.TestValidate(_request);
 
             result.ShouldHaveValidationErrorFor(r => r.Path)
-                .WithErrorMessage(LambdaRequestValidatorErrors.PathWrongFormat(_request.Path));
+                .WithErrorMessage(ValidatorErrorsMessages.PathWrongFormat(_request.Path));
         }
 
         [Fact]
@@ -41,7 +41,7 @@ public class LambdaRequestValidatorTests
             var result = _validator.TestValidate(_request);
 
             result.ShouldHaveValidationErrorFor(r => r.Path)
-                .WithErrorMessage(LambdaRequestValidatorErrors.PathNotAllowed(_request.Path));
+                .WithErrorMessage(ValidatorErrorsMessages.PathNotAllowed(_request.Path));
         }
 
         [Fact]
@@ -52,7 +52,7 @@ public class LambdaRequestValidatorTests
             var result = _validator.TestValidate(_request);
 
             result.ShouldHaveValidationErrorFor(r => r.Path)
-                .WithErrorMessage(LambdaRequestValidatorErrors.ChainIdInvalid(_request.Path));
+                .WithErrorMessage(ValidatorErrorsMessages.ChainIdInvalid(_request.Path));
         }
 
         [Fact]
@@ -63,7 +63,7 @@ public class LambdaRequestValidatorTests
             var result = _validator.TestValidate(_request);
 
             result.ShouldHaveValidationErrorFor(r => r.Path)
-                .WithErrorMessage(LambdaRequestValidatorErrors.PoolIdInvalid(_request.Path));
+                .WithErrorMessage(ValidatorErrorsMessages.PoolIdInvalid(_request.Path));
         }
 
         [Fact]
@@ -77,7 +77,7 @@ public class LambdaRequestValidatorTests
             var result = _validator.TestValidate(request);
 
             result.ShouldHaveValidationErrorFor(r => r.HttpMethod)
-                .WithErrorMessage(LambdaRequestValidatorErrors.HttpMethodRequired());
+                .WithErrorMessage(ValidatorErrorsMessages.HttpMethodRequired());
         }
 
         [Fact]
@@ -91,7 +91,7 @@ public class LambdaRequestValidatorTests
             var result = _validator.TestValidate(request);
 
             result.ShouldHaveValidationErrorFor(r => r.HttpMethod)
-                .WithErrorMessage(LambdaRequestValidatorErrors.HttpMethodNotAllowed("POST", LambdaRequest.AllowedMethods));
+                .WithErrorMessage(ValidatorErrorsMessages.HttpMethodNotAllowed("POST", LambdaRequest.AllowedMethods));
         }
 
         [Fact]

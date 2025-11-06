@@ -1,4 +1,5 @@
 ﻿using System.Net;
+using MetaDataAPI.Routing;
 using Amazon.Lambda.ApplicationLoadBalancerEvents;
 
 namespace MetaDataAPI.Models;
@@ -9,7 +10,7 @@ public abstract class LambdaResponse : ApplicationLoadBalancerResponse
     [
         new("Access-Control-Allow-Origin", "*"),
         new("Access-Control-Allow-Headers", "Content-Type"),
-        new("Access-Control-Allow-Methods", string.Join(',', LambdaRequest.AllowedMethods))
+        new("Access-Control-Allow-Methods", string.Join(',', LambdaRoutes.AllowedMethods))
     ];
 
     protected LambdaResponse(

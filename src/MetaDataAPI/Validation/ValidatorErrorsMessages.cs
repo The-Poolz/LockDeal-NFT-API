@@ -1,12 +1,12 @@
-﻿using MetaDataAPI.Models;
+﻿using MetaDataAPI.Routing;
 using MetaDataAPI.Extensions;
 
 namespace MetaDataAPI.Validation;
 
-public static class LambdaRequestValidatorErrors
+public static class ValidatorErrorsMessages
 {
     public const string ExpectedPathPattern = "/metadata/{chainId}/{poolId}";
-    private static readonly string[] AllowedPathsForMessage = [ExpectedPathPattern, LambdaRequest.FaviconPath];
+    private static readonly string[] AllowedPathsForMessage = [ExpectedPathPattern, LambdaRoutes.FaviconPath];
 
     public static string PathRequired() =>
         $"Path is required (expected format: '{ExpectedPathPattern}').";

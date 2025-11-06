@@ -74,7 +74,7 @@ public class LambdaRequestTests
             0,
             0,
             false,
-            LambdaRequestValidatorErrors.PathRequired()
+            ValidatorErrorsMessages.PathRequired()
         ];
         yield return
         [
@@ -83,7 +83,7 @@ public class LambdaRequestTests
             0,
             0,
             false,
-            LambdaRequestValidatorErrors.PathWrongFormat("/metadata/1/")
+            ValidatorErrorsMessages.PathWrongFormat("/metadata/1/")
         ];
         yield return
         [
@@ -92,7 +92,7 @@ public class LambdaRequestTests
             0,
             0,
             false,
-            LambdaRequestValidatorErrors.PathNotAllowed("/wrong/1/2")
+            ValidatorErrorsMessages.PathNotAllowed("/wrong/1/2")
         ];
         yield return
         [
@@ -101,7 +101,7 @@ public class LambdaRequestTests
             0,
             0,
             false,
-            LambdaRequestValidatorErrors.ChainIdInvalid("/metadata/invalid/2")
+            ValidatorErrorsMessages.ChainIdInvalid("/metadata/invalid/2")
         ];
         yield return
         [
@@ -110,7 +110,7 @@ public class LambdaRequestTests
             0,
             0,
             false,
-            LambdaRequestValidatorErrors.PoolIdInvalid("/metadata/1/invalid")
+            ValidatorErrorsMessages.PoolIdInvalid("/metadata/1/invalid")
         ];
         yield return
         [
@@ -119,7 +119,7 @@ public class LambdaRequestTests
             0,
             0,
             false,
-            LambdaRequestValidatorErrors.HttpMethodRequired()
+            ValidatorErrorsMessages.HttpMethodRequired()
         ];
         yield return
         [
@@ -128,7 +128,7 @@ public class LambdaRequestTests
             0,
             0,
             false,
-            LambdaRequestValidatorErrors.HttpMethodNotAllowed("POST", LambdaRequest.AllowedMethods)
+            ValidatorErrorsMessages.HttpMethodNotAllowed("POST", LambdaRequest.AllowedMethods)
         ];
     }
 }
