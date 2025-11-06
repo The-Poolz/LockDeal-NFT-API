@@ -11,5 +11,7 @@ public class FaviconLambdaResponse(byte[] bytes) : LambdaResponse(
 {
     private const string FaviconPath = "/opt/favicon.ico";
 
-    public FaviconLambdaResponse() : this(File.ReadAllBytes(FaviconPath)) { }
+    internal static Func<byte[]> BytesProvider { get; set; } = () => File.ReadAllBytes(FaviconPath);
+
+    public FaviconLambdaResponse() : this(BytesProvider()) { }
 }
