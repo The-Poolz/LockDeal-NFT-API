@@ -25,9 +25,9 @@ public class LambdaFunction(IMediator mediator)
         {
             return await mediator.Send(new RouteApplicationLoadBalancerRequest(request));
         }
-        catch (ValidationException exception)
+        catch (ValidationException ex)
         {
-            return new ValidationErrorResponse(exception);
+            return new ValidationErrorResponse(ex);
         }
         catch (Exception ex)
         {
