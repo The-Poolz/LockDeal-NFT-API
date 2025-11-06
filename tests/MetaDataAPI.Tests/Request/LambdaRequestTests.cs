@@ -60,6 +60,15 @@ public class LambdaRequestTests
         ];
         yield return
         [
+            "/favicon.ico",
+            "GET",
+            0,
+            0,
+            true,
+            string.Empty
+        ];
+        yield return
+        [
             "",
             "GET",
             0,
@@ -83,7 +92,7 @@ public class LambdaRequestTests
             0,
             0,
             false,
-            LambdaRequestValidatorErrors.PathWrongFormat("/wrong/1/2")
+            LambdaRequestValidatorErrors.PathNotAllowed("/wrong/1/2")
         ];
         yield return
         [
