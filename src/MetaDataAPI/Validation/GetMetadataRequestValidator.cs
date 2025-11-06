@@ -1,21 +1,21 @@
 ﻿using FluentValidation;
-using MetaDataAPI.Models;
 using MetaDataAPI.Extensions;
+using MetaDataAPI.Routing.Requests;
 
 namespace MetaDataAPI.Validation;
 
-public sealed class LambdaRequestMetadataValidator : AbstractValidator<LambdaRequest>
+public sealed class GetMetadataRequestValidator : AbstractValidator<GetMetadataRequest>
 {
-    public LambdaRequestMetadataValidator()
+    public GetMetadataRequestValidator()
     {
         RuleFor(r => r.Path)
             .Cascade(CascadeMode.Stop)
             .Must(HaveExactlyThreeSegments)
-            .WithMessage(x => LambdaRequestValidatorErrors.PathWrongFormat(x.Path))
+            .WithMessage(x => ValidatorErrorsMessages.PathWrongFormat(x.Path))
             .Must(BeValidChainId)
-            .WithMessage(x => LambdaRequestValidatorErrors.ChainIdInvalid(x.Path))
+            .WithMessage(x => ValidatorErrorsMessages.ChainIdInvalid(x.Path))
             .Must(BeValidPoolId)
-            .WithMessage(x => LambdaRequestValidatorErrors.PoolIdInvalid(x.Path));
+            .WithMessage(x => ValidatorErrorsMessages.PoolIdInvalid(x.Path));
     }
 
     private static bool HaveExactlyThreeSegments(string? path) =>

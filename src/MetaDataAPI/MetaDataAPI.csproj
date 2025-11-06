@@ -15,6 +15,8 @@
     <PackageReference Include="Amazon.Lambda.Core" Version="2.7.1" />
     <PackageReference Include="Amazon.Lambda.Serialization.Json" Version="2.2.4" />
     <PackageReference Include="Handlebars.Net" Version="2.1.6" />
+    <PackageReference Include="MediatR" Version="12.5.0" />
+    <PackageReference Include="MediatR.Extensions.FluentValidation.AspNetCore" Version="6.0.0" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="9.0.9" />
     <PackageReference Include="Net.Cache.DynamoDb.ERC20" Version="2.0.2" />
     <PackageReference Include="Net.Utils.GraphQL" Version="1.0.0" />

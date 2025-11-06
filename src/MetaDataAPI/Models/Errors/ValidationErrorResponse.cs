@@ -1,10 +1,10 @@
 ﻿using System.Net;
-using FluentValidation.Results;
+using FluentValidation;
 
 namespace MetaDataAPI.Models.Errors;
 
-public class ValidationErrorResponse(ValidationResult validationResult) : LambdaResponse(
-    body: validationResult.ToString($"{Environment.NewLine}"),
+public class ValidationErrorResponse(ValidationException validationException) : LambdaResponse(
+    body: validationException.ToString(),
     statusCode: HttpStatusCode.BadRequest,
     contentType: ContentType.TextPlain
 );
