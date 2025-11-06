@@ -9,7 +9,7 @@ using MetaDataAPI.Validation;
 using MetaDataAPI.Routing.Requests;
 using Amazon.Lambda.ApplicationLoadBalancerEvents;
 
-namespace MetaDataAPI.Tests.Request;
+namespace MetaDataAPI.Tests.Routing.Request;
 
 public class RouteApplicationLoadBalancerRequestHandlerTests
 {
@@ -41,24 +41,17 @@ public class RouteApplicationLoadBalancerRequestHandlerTests
     {
         FaviconLambdaResponse.BytesProvider = () => [0x00, 0x01, 0x02];
 
-        try
+        var albRequest = new ApplicationLoadBalancerRequest
         {
-            var albRequest = new ApplicationLoadBalancerRequest
-            {
-                HttpMethod = LambdaRoutes.GetMethod,
-                Path = LambdaRoutes.FaviconPath
-            };
-            var request = new RouteApplicationLoadBalancerRequest(albRequest);
+            HttpMethod = LambdaRoutes.GetMethod,
+            Path = LambdaRoutes.FaviconPath
+        };
+        var request = new RouteApplicationLoadBalancerRequest(albRequest);
 
-            var result = await _handler.Handle(request, CancellationToken.None);
+        var result = await _handler.Handle(request, CancellationToken.None);
 
-            result.Should().BeOfType<FaviconLambdaResponse>();
-            _mediator.Verify(x => x.Send(It.IsAny<GetMetadataRequest>(), It.IsAny<CancellationToken>()), Times.Never);
-        }
-        finally
-        {
-            FaviconLambdaResponse.BytesProvider = FaviconLambdaResponse.BytesProvider;
-        }
+        result.Should().BeOfType<FaviconLambdaResponse>();
+        _mediator.Verify(x => x.Send(It.IsAny<GetMetadataRequest>(), It.IsAny<CancellationToken>()), Times.Never);
     }
 
     [Fact]
