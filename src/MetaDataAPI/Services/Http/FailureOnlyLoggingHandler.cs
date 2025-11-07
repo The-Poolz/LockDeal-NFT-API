@@ -3,7 +3,7 @@ using Amazon.Lambda.Core;
 
 namespace MetaDataAPI.Services.Http;
 
-public class FailureOnlyRpcLoggingHandler(HttpMessageHandler inner, ILambdaLogger log) : DelegatingHandler(inner)
+public class FailureOnlyLoggingHandler(HttpMessageHandler inner, ILambdaLogger log) : DelegatingHandler(inner)
 {
     protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage req, CancellationToken ct)
     {
@@ -14,7 +14,7 @@ public class FailureOnlyRpcLoggingHandler(HttpMessageHandler inner, ILambdaLogge
         catch (HttpRequestException ex)
         {
             var logMessage = new StringBuilder()
-                .AppendLine($"RPC HTTP EXCEPTION {req.Method} {req.RequestUri}")
+                .AppendLine($"HTTP EXCEPTION OCCURED. METHOD: {req.Method}. URL: {req.RequestUri}")
                 .AppendLine($"EXCEPTION: {ex}")
                 .ToString();
             log.LogCritical(logMessage);
