@@ -10,7 +10,7 @@ public class HttpClientFactory : IHttpClientFactory
         return new HttpClient(new FailureOnlyLoggingHandler(new HttpClientHandler(), log))
         {
             BaseAddress = new Uri(url),
-            Timeout = TimeSpan.FromSeconds(Env.HTTP_CALL_TIMEOUT_IN_SECONDS.Get<int>())
+            Timeout = TimeSpan.FromSeconds(Env.HTTP_CALL_TIMEOUT_IN_SECONDS.GetRequired<int>())
         };
     }
 }

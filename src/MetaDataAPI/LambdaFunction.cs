@@ -4,6 +4,7 @@ using Amazon.Lambda.Core;
 using MetaDataAPI.Models;
 using MetaDataAPI.Models.Errors;
 using MetaDataAPI.Routing.Requests;
+using MetaDataAPI.Services.Logging;
 using Microsoft.Extensions.DependencyInjection;
 using Amazon.Lambda.ApplicationLoadBalancerEvents;
 
@@ -11,16 +12,18 @@ using Amazon.Lambda.ApplicationLoadBalancerEvents;
 
 namespace MetaDataAPI;
 
-public class LambdaFunction(IMediator mediator)
+public class LambdaFunction(IServiceProvider root)
 {
     public LambdaFunction() : this(DefaultServiceProvider.Instance) { }
 
-    public LambdaFunction(IServiceProvider serviceProvider)
-        : this(serviceProvider.GetRequiredService<IMediator>())
-    { }
-
     public async Task<LambdaResponse> FunctionHandler(ApplicationLoadBalancerRequest request, ILambdaContext lambdaContext)
     {
+        using var scope = root.CreateScope();
+
+        scope.ServiceProvider.GetRequiredService<ILambdaContextAccessor>().Context = lambdaContext;
+
+        var mediator = scope.ServiceProvider.GetRequiredService<IMediator>();
+
         try
         {
             return await mediator.Send(new RouteApplicationLoadBalancerRequest(request));
