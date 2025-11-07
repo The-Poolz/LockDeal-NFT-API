@@ -3,9 +3,9 @@ using EnvironmentManager.Extensions;
 
 namespace MetaDataAPI.Services.Http;
 
-public class HttpClientFactory : IHttpClientFactory
+public class HttpClientFactory(ILambdaLogger log) : IHttpClientFactory
 {
-    public HttpClient Create(string url, ILambdaLogger log)
+    public HttpClient Create(string url)
     {
         return new HttpClient(new FailureOnlyLoggingHandler(new HttpClientHandler(), log))
         {
