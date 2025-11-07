@@ -19,5 +19,7 @@ public enum Env
     [EnvironmentVariable(isRequired: false)]
     OVERRIDE_IMAGE_TEMPLATE_PATH,
     [EnvironmentVariable(isRequired: true, type: typeof(bool))]
-    LOG_IMAGE_ACTIONS
+    LOG_IMAGE_ACTIONS,
+    [EnvironmentVariable(isRequired: true, type: typeof(int))]
+    HTTP_CALL_TIMEOUT_IN_SECONDS
 }

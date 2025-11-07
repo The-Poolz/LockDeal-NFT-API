@@ -1,4 +1,5 @@
 ﻿using Amazon.Lambda.Core;
+using EnvironmentManager.Extensions;
 
 namespace MetaDataAPI.Services.Http;
 
@@ -9,7 +10,7 @@ public class HttpClientFactory : IHttpClientFactory
         return new HttpClient(new FailureOnlyLoggingHandler(new HttpClientHandler(), log))
         {
             BaseAddress = new Uri(url),
-            Timeout = TimeSpan.FromSeconds(30)
+            Timeout = TimeSpan.FromSeconds(Env.HTTP_CALL_TIMEOUT_IN_SECONDS.Get<int>())
         };
     }
 }
