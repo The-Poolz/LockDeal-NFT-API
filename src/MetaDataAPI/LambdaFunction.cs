@@ -20,7 +20,8 @@ public class LambdaFunction(IServiceProvider root)
     {
         using var scope = root.CreateScope();
 
-        scope.ServiceProvider.GetRequiredService<ILambdaContextAccessor>().Context = lambdaContext;
+        var accessor = scope.ServiceProvider.GetRequiredService<ILambdaContextAccessor>();
+        accessor.Context = lambdaContext;
 
         var mediator = scope.ServiceProvider.GetRequiredService<IMediator>();
 
@@ -36,6 +37,10 @@ public class LambdaFunction(IServiceProvider root)
         {
             lambdaContext.Logger.LogError(ex.ToString());
             return new GeneralErrorResponse();
+        }
+        finally
+        {
+            accessor.Context = null;
         }
     }
 }
