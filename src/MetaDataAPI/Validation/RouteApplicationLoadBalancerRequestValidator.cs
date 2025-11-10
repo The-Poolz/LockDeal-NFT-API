@@ -29,7 +29,10 @@ public class RouteApplicationLoadBalancerRequestValidator : AbstractValidator<Ro
     private static bool IsNotOptionsRequest(RouteApplicationLoadBalancerRequest request) =>
         !string.Equals(request.Request.HttpMethod, LambdaRoutes.OptionsMethod, StringComparison.OrdinalIgnoreCase);
 
-    private static bool BeAllowedPath(string? path) => LambdaRoutes.IsMetadataPath(path) || LambdaRoutes.IsFaviconPath(path);
+    private static bool BeAllowedPath(string? path) =>
+        LambdaRoutes.IsMetadataPath(path) ||
+        LambdaRoutes.IsFaviconPath(path) ||
+        LambdaRoutes.IsHealthPath(path);
 
     private static bool BeAllowedMethod(string? method) =>
         LambdaRoutes.AllowedMethods.Contains(method ?? string.Empty, StringComparer.OrdinalIgnoreCase);
