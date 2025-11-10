@@ -27,8 +27,8 @@ public static class DefaultServiceProvider
         serviceCollection.AddSingleton<IWeb3Factory, Web3Factory>();
         serviceCollection.AddSingleton<IStrapiClient, StrapiClient>(_ => new StrapiClient());
         serviceCollection.AddSingleton<IChainManager, StrapiChainManager>(x => new StrapiChainManager(x.GetRequiredService<IStrapiClient>()));
-        serviceCollection.AddSingleton<IErc20Provider, Erc20Provider>(_ => new Erc20Provider());
-        serviceCollection.AddSingleton<ILockDealNFTService, LockDealNFTService>(_ => new LockDealNFTService());
+        serviceCollection.AddSingleton<IErc20Provider, Erc20Provider>();
+        serviceCollection.AddSingleton<ILockDealNFTService, LockDealNFTService>();
 
         return serviceCollection.BuildServiceProvider();
     });
