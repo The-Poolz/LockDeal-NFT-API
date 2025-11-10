@@ -3,6 +3,7 @@ using Amazon.Lambda.Core;
 using MetaDataAPI.Services.Http;
 using MetaDataAPI.Services.Erc20;
 using MetaDataAPI.Services.Strapi;
+using GraphQL.Client.Abstractions;
 using MetaDataAPI.Services.Logging;
 using MetaDataAPI.Services.ChainsInfo;
 using Microsoft.Extensions.DependencyInjection;
@@ -25,8 +26,9 @@ public static class DefaultServiceProvider
 
         serviceCollection.AddSingleton<IHttpClientFactory, HttpClientFactory>();
         serviceCollection.AddSingleton<IWeb3Factory, Web3Factory>();
-        serviceCollection.AddSingleton<IStrapiClient, StrapiClient>(_ => new StrapiClient());
-        serviceCollection.AddSingleton<IChainManager, StrapiChainManager>(x => new StrapiChainManager(x.GetRequiredService<IStrapiClient>()));
+        serviceCollection.AddSingleton<IGraphQLClient, StrapiGraphQLClient>();
+        serviceCollection.AddSingleton<IStrapiClient, StrapiClient>();
+        serviceCollection.AddSingleton<IChainManager, StrapiChainManager>();
         serviceCollection.AddSingleton<IErc20Provider, Erc20Provider>();
         serviceCollection.AddSingleton<ILockDealNFTService, LockDealNFTService>();
 
