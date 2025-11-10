@@ -18,6 +18,11 @@ public class RouteApplicationLoadBalancerRequestHandler(IMediator mediator) : IR
             return new OptionsResponse();
         }
 
+        if (LambdaRoutes.IsHealthPath(path))
+        {
+            return new HealthCheckResponse();
+        }
+
         if (LambdaRoutes.IsFaviconPath(path))
         {
             return new FaviconLambdaResponse();
