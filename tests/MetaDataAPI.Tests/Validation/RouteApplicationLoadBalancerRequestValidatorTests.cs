@@ -88,6 +88,7 @@ public class RouteApplicationLoadBalancerRequestValidatorTests
     [Theory]
     [InlineData("/metadata/1/2")]
     [InlineData("/favicon.ico")]
+    [InlineData("/health")]
     public void ShouldValidateSuccessfully_ForAllowedPaths(string path)
     {
         var albRequest = new ApplicationLoadBalancerRequest

@@ -55,6 +55,22 @@ public class RouteApplicationLoadBalancerRequestHandlerTests
     }
 
     [Fact]
+    public async Task ShouldReturnHealthCheckResponse_WhenPathIsForHealth()
+    {
+        var albRequest = new ApplicationLoadBalancerRequest
+        {
+            HttpMethod = LambdaRoutes.GetMethod,
+            Path = LambdaRoutes.HealthPath
+        };
+        var request = new RouteApplicationLoadBalancerRequest(albRequest);
+
+        var result = await _handler.Handle(request, CancellationToken.None);
+
+        result.Should().BeOfType<HealthCheckResponse>();
+        _mediator.Verify(x => x.Send(It.IsAny<GetMetadataRequest>(), It.IsAny<CancellationToken>()), Times.Never);
+    }
+
+    [Fact]
     public async Task ShouldSendGetMetadataRequest_WhenPathIsForMetadata()
     {
         var expectedResponse = new OptionsResponse();
