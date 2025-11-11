@@ -37,7 +37,8 @@ public class StrapiGraphQLClientTests
         requestedUrl.Should().Be(endpoint);
         configureHeaders.Should().NotBeNull();
 
-        var headers = new HttpRequestMessage().Headers;
+        using var requestMessage = new HttpRequestMessage();
+        var headers = requestMessage.Headers;
         configureHeaders!(headers);
 
         headers.CacheControl.Should().NotBeNull();
