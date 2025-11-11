@@ -1,24 +1,22 @@
-﻿using System.Text;
-using Amazon.Lambda.Core;
+﻿namespace MetaDataAPI.Services.Http;
 
-namespace MetaDataAPI.Services.Http;
-
-public class FailureOnlyLoggingHandler(HttpMessageHandler inner, ILambdaLogger log) : DelegatingHandler(inner)
+public class FailureOnlyLoggingHandler(HttpMessageHandler inner) : DelegatingHandler(inner)
 {
     protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage req, CancellationToken ct)
     {
         try
         {
-            return await base.SendAsync(req, ct);
+            var response = await base.SendAsync(req, ct);
+            response.EnsureSuccessStatusCode();
+            return response;
         }
-        catch (HttpRequestException ex)
+        catch (HttpRequestException exception)
         {
-            var logMessage = new StringBuilder()
-                .AppendLine($"HTTP EXCEPTION OCCURED. METHOD: {req.Method}. URL: {req.RequestUri}")
-                .AppendLine($"EXCEPTION: {ex}")
-                .ToString();
-            log.LogCritical(logMessage);
-            throw;
+            throw new HttpRequestException(
+                $"HTTP EXCEPTION OCCURED. METHOD: {req.Method}. URL: {req.RequestUri}",
+                exception,
+                exception.StatusCode
+            );
         }
     }
 }

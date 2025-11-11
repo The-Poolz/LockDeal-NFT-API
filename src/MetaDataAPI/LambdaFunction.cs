@@ -4,7 +4,6 @@ using Amazon.Lambda.Core;
 using MetaDataAPI.Models;
 using MetaDataAPI.Models.Errors;
 using MetaDataAPI.Routing.Requests;
-using MetaDataAPI.Services.Logging;
 using Microsoft.Extensions.DependencyInjection;
 using Amazon.Lambda.ApplicationLoadBalancerEvents;
 
@@ -20,9 +19,6 @@ public class LambdaFunction(IServiceProvider root)
     {
         using var scope = root.CreateScope();
 
-        var accessor = scope.ServiceProvider.GetRequiredService<ILambdaContextAccessor>();
-        accessor.Context = lambdaContext;
-
         var mediator = scope.ServiceProvider.GetRequiredService<IMediator>();
 
         try
@@ -37,10 +33,6 @@ public class LambdaFunction(IServiceProvider root)
         {
             lambdaContext.Logger.LogError(ex.ToString());
             return new GeneralErrorResponse();
-        }
-        finally
-        {
-            accessor.Context = null;
         }
     }
 }

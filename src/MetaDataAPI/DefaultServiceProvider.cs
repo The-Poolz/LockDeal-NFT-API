@@ -1,11 +1,9 @@
 ﻿using System.Reflection;
-using Amazon.Lambda.Core;
 using Net.Cache.DynamoDb.ERC20;
 using MetaDataAPI.Services.Http;
 using MetaDataAPI.Services.Erc20;
 using MetaDataAPI.Services.Strapi;
 using GraphQL.Client.Abstractions;
-using MetaDataAPI.Services.Logging;
 using MetaDataAPI.Services.ChainsInfo;
 using Microsoft.Extensions.DependencyInjection;
 using poolz.finance.csharp.contracts.LockDealNFT;
@@ -21,9 +19,6 @@ public static class DefaultServiceProvider
 
         serviceCollection.AddMediatR(x => x.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly()));
         serviceCollection.AddFluentValidation([Assembly.GetExecutingAssembly()]);
-
-        serviceCollection.AddSingleton<ILambdaContextAccessor, LambdaContextAccessor>();
-        serviceCollection.AddSingleton<ILambdaLogger, StrictLambdaLogger>();
 
         serviceCollection.AddSingleton<IHttpClientFactory, HttpClientFactory>();
         serviceCollection.AddSingleton<IWeb3Factory, Web3Factory>();
