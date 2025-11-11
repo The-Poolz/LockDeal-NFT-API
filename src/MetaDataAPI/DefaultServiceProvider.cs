@@ -1,5 +1,6 @@
 ﻿using System.Reflection;
 using Amazon.Lambda.Core;
+using Net.Cache.DynamoDb.ERC20;
 using MetaDataAPI.Services.Http;
 using MetaDataAPI.Services.Erc20;
 using MetaDataAPI.Services.Strapi;
@@ -30,6 +31,7 @@ public static class DefaultServiceProvider
         serviceCollection.AddSingleton<IStrapiClient, StrapiClient>();
         serviceCollection.AddSingleton<IChainManager, StrapiChainManager>();
         serviceCollection.AddSingleton<IErc20Provider, Erc20Provider>();
+        serviceCollection.AddSingleton<IErc20CacheService, Erc20CacheService>();
         serviceCollection.AddSingleton<ILockDealNFTService, LockDealNFTService>();
 
         return serviceCollection.BuildServiceProvider();
