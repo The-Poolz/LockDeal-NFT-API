@@ -13,7 +13,7 @@ public class FailureOnlyLoggingHandler(HttpMessageHandler inner) : DelegatingHan
         catch (HttpRequestException exception)
         {
             throw new HttpRequestException(
-                $"HTTP EXCEPTION OCCURED. METHOD: {req.Method}. URL: {req.RequestUri}",
+                $"HTTP request failed. METHOD: {req.Method}. URL: {req.RequestUri}",
                 exception,
                 exception.StatusCode
             );

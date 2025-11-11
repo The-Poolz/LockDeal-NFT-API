@@ -19,7 +19,7 @@ public class Erc20Provider(IErc20CacheService erc20Cache, IWeb3Factory web3Facto
     {
         var cache = erc20Cache.GetOrAddAsync(
             new HashKey(chainId, address),
-            () => Task.FromResult(web3Factory.Create(chainId.ToRpcUrl())),
+            () => Task.FromResult(web3Factory.Create(rpcUrl)),
             () => Task.FromResult(new EthereumAddress(Env.MULTI_CALL_V3_ADDRESS.GetRequired()))
         ).GetAwaiter().GetResult();
         return new Erc20Token(cache);
