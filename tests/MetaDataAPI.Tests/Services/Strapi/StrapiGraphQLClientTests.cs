@@ -26,7 +26,11 @@ public class StrapiGraphQLClientTests
                 requestedUrl = url;
                 configureHeaders = configure;
             })
-            .Returns(new HttpClient(new HttpClientHandler()));
+            .Returns(() =>
+            {
+                var handler = new HttpClientHandler();
+                return new HttpClient(handler, disposeHandler: true);
+            });
 
         using var client = new StrapiGraphQLClient(httpClientFactory.Object);
 
