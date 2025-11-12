@@ -1,40 +1,15 @@
 ﻿using GraphQL;
-using GraphQL.Client.Http;
-using System.Net.Http.Headers;
 using Poolz.Finance.CSharp.Strapi;
 using GraphQL.Client.Abstractions;
 using Net.Utils.GraphQL.Extensions;
-using EnvironmentManager.Extensions;
 using MetaDataAPI.Services.ChainsInfo;
 using MetaDataAPI.Services.Strapi.Models;
-using GraphQL.Client.Serializer.Newtonsoft;
 
 namespace MetaDataAPI.Services.Strapi;
 
 public class StrapiClient(IGraphQLClient graphQlClient) : IStrapiClient
 {
     private const string NameOfLockDealNFT = "LockDealNFT";
-
-    public StrapiClient()
-        : this(
-            graphQlClient: new GraphQLHttpClient(
-                endPoint: Env.GRAPHQL_STRAPI_URL.GetRequired(),
-                serializer: new NewtonsoftJsonSerializer(),
-                httpClient: new HttpClient
-                {
-                    DefaultRequestHeaders =
-                    {
-                        CacheControl = new CacheControlHeaderValue
-                        {
-                            NoCache = true,
-                            NoStore = true,
-                            MustRevalidate = true
-                        }
-                    }
-                }
-            )
-        )
-    { }
 
     public async Task<ChainInfo?> GetChainInfoAsync(long chainId)
     {
