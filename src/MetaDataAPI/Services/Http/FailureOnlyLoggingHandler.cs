@@ -1,13 +1,22 @@
-﻿namespace MetaDataAPI.Services.Http;
+﻿using Amazon.Lambda.Core;
+using Poolz.Finance.CSharp.Polly.Extensions;
 
-public class FailureOnlyLoggingHandler(HttpMessageHandler inner) : DelegatingHandler(inner)
+namespace MetaDataAPI.Services.Http;
+
+public class FailureOnlyLoggingHandler(HttpMessageHandler inner, IRetryExecutor retry) : DelegatingHandler(inner)
 {
     protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage req, CancellationToken ct)
     {
         try
         {
-            var response = await base.SendAsync(req, ct);
+            var response = await retry.ExecuteAsync(
+                async token => await base.SendAsync(req, token),
+                new DefaultRetryStrategyOptions<HttpResponseMessage>(LambdaLogger.Log),
+                ct
+            );
+
             response.EnsureSuccessStatusCode();
+
             return response;
         }
         catch (HttpRequestException exception)
