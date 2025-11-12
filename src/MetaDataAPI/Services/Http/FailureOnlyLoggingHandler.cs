@@ -10,12 +10,15 @@ public class FailureOnlyLoggingHandler(HttpMessageHandler inner, IRetryExecutor 
         try
         {
             var response = await retry.ExecuteAsync(
-                async token => await base.SendAsync(req, token),
+                async token =>
+                {
+                    var response = await base.SendAsync(req, token);
+                    response.EnsureSuccessStatusCode();
+                    return response;
+                },
                 new DefaultRetryStrategyOptions<HttpResponseMessage>(LambdaLogger.Log),
                 ct
             );
-
-            response.EnsureSuccessStatusCode();
 
             return response;
         }
