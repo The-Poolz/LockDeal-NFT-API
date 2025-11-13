@@ -37,7 +37,7 @@ public class GetMetadataRequestHandler(
             return Task.FromResult<LambdaResponse>(new PoolIdNotInSupplyRangeResponse(chainId));
         }
 
-        var poolsInfo = lockDealNft.FetchPoolInfo(poolId);
+        var poolsInfo = retry.Execute(_ => lockDealNft.FetchPoolInfo(poolId), ct: cancellationToken);
         var provider = AbstractProvider.CreateFromPoolInfo(poolsInfo, chainInfo, serviceProvider);
         var metadata = provider.GetErc721Metadata();
 
