@@ -1,8 +1,8 @@
 ﻿using GraphQL.Client.Http;
 using System.Net.Http.Headers;
+using MetaDataAPI.Services.Http;
 using EnvironmentManager.Extensions;
 using GraphQL.Client.Serializer.Newtonsoft;
-using IHttpClientFactory = MetaDataAPI.Services.Http.IHttpClientFactory;
 
 namespace MetaDataAPI.Services.Strapi;
 

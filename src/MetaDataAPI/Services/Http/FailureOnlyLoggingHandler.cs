@@ -1,13 +1,7 @@
-﻿using Amazon.Lambda.Core;
+﻿namespace MetaDataAPI.Services.Http;
 
-namespace MetaDataAPI.Services.Http;
-
-public class FailureOnlyLoggingHandler : DelegatingHandler
+public class FailureOnlyLoggingHandler(HttpMessageHandler innerHandler) : DelegatingHandler(innerHandler)
 {
-    public FailureOnlyLoggingHandler() { }
-
-    public FailureOnlyLoggingHandler(HttpMessageHandler innerHandler) : base(innerHandler) { }
-
     protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage req, CancellationToken ct)
     {
         try
@@ -18,10 +12,6 @@ public class FailureOnlyLoggingHandler : DelegatingHandler
         }
         catch (HttpRequestException exception)
         {
-            LambdaLogger.Log(
-                $"HTTP request failed. METHOD: {req.Method}. URL: {req.RequestUri}. STATUS: {exception.StatusCode}"
-            );
-
             throw new HttpRequestException(
                 $"HTTP request failed. METHOD: {req.Method}. URL: {req.RequestUri}",
                 exception,
