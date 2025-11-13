@@ -34,7 +34,7 @@ public class GetMetadataRequestHandler(
 
         if (!isPoolIdInSupplyRange)
         {
-            return Task.FromResult<LambdaResponse>(new PoolIdNotInSupplyRangeResponse(chainId));
+            return Task.FromResult<LambdaResponse>(new PoolIdNotInSupplyRangeResponse(poolId));
         }
 
         var poolsInfo = retry.Execute(_ => lockDealNft.FetchPoolInfo(poolId), ct: cancellationToken);
