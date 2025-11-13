@@ -55,7 +55,7 @@ public class Erc20ProviderTests
                     It.IsAny<DefaultRetryStrategyOptions<Erc20TokenDynamoDbEntry>>(),
                     It.IsAny<CancellationToken>()
                 ))
-                .Returns((Func<CancellationToken, Erc20TokenDynamoDbEntry> action, CancellationToken token) => action(token));
+                .Returns((Func<CancellationToken, Erc20TokenDynamoDbEntry> action, DefaultRetryStrategyOptions<Erc20TokenDynamoDbEntry> _, CancellationToken token) => action(token));
 
             var provider = new Erc20Provider(cacheProvider.Object, web3Factory.Object, retryExecutor.Object);
 
