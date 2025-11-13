@@ -12,7 +12,6 @@ public class HttpClientFactory : IHttpClientFactory
         };
 
         configureHeaders?.Invoke(client.DefaultRequestHeaders);
-
         return client;
     }
 }
