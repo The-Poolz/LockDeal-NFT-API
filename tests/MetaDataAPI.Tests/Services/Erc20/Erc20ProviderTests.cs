@@ -10,6 +10,7 @@ using MetaDataAPI.Services.Erc20;
 using MetaDataAPI.Services.ChainsInfo;
 using Net.Cache.DynamoDb.ERC20.Rpc.Models;
 using Net.Cache.DynamoDb.ERC20.DynamoDb.Models;
+using Poolz.Finance.CSharp.Polly.Extensions;
 
 namespace MetaDataAPI.Tests.Services.Erc20;
 
@@ -26,6 +27,7 @@ public class Erc20ProviderTests
             Environment.SetEnvironmentVariable(nameof(Env.BASE_URL_OF_RPC), baseRpcUrl);
             Environment.SetEnvironmentVariable(nameof(Env.MULTI_CALL_V3_ADDRESS), EthereumAddress.ZeroAddress);
 
+            var retryExecutor = new Mock<IRetryExecutor>();
             var cacheProvider = new Mock<IErc20CacheService>();
             var web3Factory = new Mock<IWeb3Factory>();
             var web3 = new Mock<IWeb3>();
@@ -47,7 +49,15 @@ public class Erc20ProviderTests
                 ))
                 .ReturnsAsync(cacheItem);
 
-            var provider = new Erc20Provider(cacheProvider.Object, web3Factory.Object);
+            retryExecutor
+                .Setup(x => x.Execute(
+                    It.IsAny<Func<CancellationToken, Erc20TokenDynamoDbEntry>>(),
+                    It.IsAny<DefaultRetryStrategyOptions<Erc20TokenDynamoDbEntry>>(),
+                    It.IsAny<CancellationToken>()
+                ))
+                .Returns((Func<CancellationToken, Erc20TokenDynamoDbEntry> action, CancellationToken token) => action(token));
+
+            var provider = new Erc20Provider(cacheProvider.Object, web3Factory.Object, retryExecutor.Object);
 
             var result = provider.GetErc20Token(
                 new ChainInfo(chainId, EthereumAddress.ZeroAddress),
