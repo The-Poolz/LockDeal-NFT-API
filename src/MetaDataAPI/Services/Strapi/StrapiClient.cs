@@ -4,10 +4,11 @@ using GraphQL.Client.Abstractions;
 using Net.Utils.GraphQL.Extensions;
 using MetaDataAPI.Services.ChainsInfo;
 using MetaDataAPI.Services.Strapi.Models;
+using Poolz.Finance.CSharp.Polly.Extensions;
 
 namespace MetaDataAPI.Services.Strapi;
 
-public class StrapiClient(IGraphQLClient graphQlClient) : IStrapiClient
+public class StrapiClient(IGraphQLClient graphQlClient, IRetryExecutor retry) : IStrapiClient
 {
     private const string NameOfLockDealNFT = "LockDealNFT";
 
@@ -55,7 +56,9 @@ public class StrapiClient(IGraphQLClient graphQlClient) : IStrapiClient
             .WithParameter(chainFilter)
             .Build();
 
-        var response = await graphQlClient.SendQueryAsync<StrapiDataResponse>(new GraphQLQuery(query));
+        var response = await retry.ExecuteAsync(async token =>
+            await graphQlClient.SendQueryAsync<StrapiDataResponse>(new GraphQLQuery(query), cancellationToken: token)
+        );
 
         var data = response.EnsureNoErrors();
 

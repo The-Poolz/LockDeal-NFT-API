@@ -1,6 +1,6 @@
 ﻿namespace MetaDataAPI.Services.Http;
 
-public class FailureOnlyLoggingHandler(HttpMessageHandler inner) : DelegatingHandler(inner)
+public class FailureOnlyLoggingHandler(HttpMessageHandler innerHandler) : DelegatingHandler(innerHandler)
 {
     protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage req, CancellationToken ct)
     {

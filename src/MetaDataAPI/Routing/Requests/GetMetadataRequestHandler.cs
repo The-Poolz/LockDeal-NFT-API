@@ -5,6 +5,7 @@ using MetaDataAPI.Extensions;
 using MetaDataAPI.Models.Errors;
 using MetaDataAPI.Services.Http;
 using MetaDataAPI.Services.ChainsInfo;
+using Poolz.Finance.CSharp.Polly.Extensions;
 using poolz.finance.csharp.contracts.LockDealNFT;
 
 namespace MetaDataAPI.Routing.Requests;
@@ -13,7 +14,8 @@ public class GetMetadataRequestHandler(
     IServiceProvider serviceProvider,
     IChainManager chainManager,
     ILockDealNFTService lockDealNft,
-    IWeb3Factory web3Factory
+    IWeb3Factory web3Factory,
+    IRetryExecutor retry
 ) : IRequestHandler<GetMetadataRequest, LambdaResponse>
 {
     public Task<LambdaResponse> Handle(GetMetadataRequest request, CancellationToken cancellationToken)
@@ -28,12 +30,14 @@ public class GetMetadataRequestHandler(
         }
 
         lockDealNft.Initialize(web3Factory.Create(chainId.ToRpcUrl()), chainInfo.LockDealNFT);
-        if (!lockDealNft.IsPoolIdInSupplyRange(poolId))
+        var isPoolIdInSupplyRange = retry.Execute(_ => lockDealNft.IsPoolIdInSupplyRange(poolId), ct: cancellationToken);
+
+        if (!isPoolIdInSupplyRange)
         {
             return Task.FromResult<LambdaResponse>(new PoolIdNotInSupplyRangeResponse(poolId));
         }
 
-        var poolsInfo = lockDealNft.FetchPoolInfo(poolId);
+        var poolsInfo = retry.Execute(_ => lockDealNft.FetchPoolInfo(poolId), ct: cancellationToken);
         var provider = AbstractProvider.CreateFromPoolInfo(poolsInfo, chainInfo, serviceProvider);
         var metadata = provider.GetErc721Metadata();
 
