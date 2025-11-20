@@ -2,7 +2,7 @@
 using Xunit;
 using FluentAssertions;
 using System.Net.Http.Headers;
-using MetaDataAPI.Services.Http;
+using Poolz.Finance.CSharp.Http;
 using MetaDataAPI.Services.Strapi;
 
 namespace MetaDataAPI.Tests.Services.Strapi;
