@@ -1,5 +1,6 @@
 ﻿using Nethereum.Web3;
 using Nethereum.JsonRpc.Client;
+using Poolz.Finance.CSharp.Http;
 
 namespace MetaDataAPI.Services.Http;
 

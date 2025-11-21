@@ -1,6 +1,6 @@
 ﻿using GraphQL.Client.Http;
 using System.Net.Http.Headers;
-using MetaDataAPI.Services.Http;
+using Poolz.Finance.CSharp.Http;
 using EnvironmentManager.Extensions;
 using GraphQL.Client.Serializer.Newtonsoft;
 

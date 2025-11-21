@@ -5,6 +5,7 @@ using FluentAssertions;
 using System.Reflection;
 using Nethereum.JsonRpc.Client;
 using MetaDataAPI.Services.Http;
+using Poolz.Finance.CSharp.Http;
 
 namespace MetaDataAPI.Tests.Services.Http;
 

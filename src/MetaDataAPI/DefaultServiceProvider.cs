@@ -1,5 +1,6 @@
 ﻿using System.Reflection;
 using Net.Cache.DynamoDb.ERC20;
+using Poolz.Finance.CSharp.Http;
 using MetaDataAPI.Services.Http;
 using MetaDataAPI.Services.Erc20;
 using MetaDataAPI.Services.Strapi;
