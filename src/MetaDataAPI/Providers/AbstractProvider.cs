@@ -15,6 +15,7 @@ namespace MetaDataAPI.Providers;
 
 public abstract class AbstractProvider
 {
+    private readonly IImageService _imageService;
     protected readonly ILockDealNFTService LockDealNft;
     protected readonly IErc20Provider Erc20Provider;
 
@@ -44,6 +45,7 @@ public abstract class AbstractProvider
 
     protected AbstractProvider(BasePoolInfo[] poolsInfo, ChainInfo chainInfo, IServiceProvider serviceProvider)
     {
+        _imageService = serviceProvider.GetRequiredService<IImageService>();
         Erc20Provider = serviceProvider.GetRequiredService<IErc20Provider>();
         LockDealNft = serviceProvider.GetRequiredService<ILockDealNFTService>();
 
@@ -76,7 +78,7 @@ public abstract class AbstractProvider
 
     private string GetImage()
     {
-        return new ImageService().GetImageAsync(this).GetAwaiter().GetResult();
+        return _imageService.GetImageAsync(this).GetAwaiter().GetResult();
     }
 
     public IEnumerable<Erc721MetadataItem> GetAttributes()

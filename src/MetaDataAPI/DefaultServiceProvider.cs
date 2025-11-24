@@ -3,6 +3,7 @@ using Net.Cache.DynamoDb.ERC20;
 using Poolz.Finance.CSharp.Http;
 using MetaDataAPI.Services.Http;
 using MetaDataAPI.Services.Erc20;
+using MetaDataAPI.Services.Image;
 using MetaDataAPI.Services.Strapi;
 using GraphQL.Client.Abstractions;
 using MetaDataAPI.Services.ChainsInfo;
@@ -23,6 +24,7 @@ public static class DefaultServiceProvider
         serviceCollection.AddFluentValidation([Assembly.GetExecutingAssembly()]);
 
         serviceCollection.AddSingleton<IHttpClientFactory, HttpClientFactory>();
+        serviceCollection.AddSingleton<IImageService, ImageService>();
         serviceCollection.AddSingleton<IRetryExecutor, RetryExecutor>();
         serviceCollection.AddSingleton<IWeb3Factory, Web3Factory>();
         serviceCollection.AddSingleton<IGraphQLClient, StrapiGraphQLClient>();

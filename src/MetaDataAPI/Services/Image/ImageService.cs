@@ -6,10 +6,11 @@ using Net.Cryptography.SHA256;
 using System.Net.Http.Headers;
 using EnvironmentManager.Extensions;
 using MetaDataAPI.Services.Image.Models;
+using Poolz.Finance.CSharp.Polly.Extensions;
 
 namespace MetaDataAPI.Services.Image;
 
-public class ImageService
+public class ImageService(IRetryExecutor retry) : IImageService
 {
     private static readonly Config Config = new()
     {
@@ -23,10 +24,10 @@ public class ImageService
     {
         var hash = CalculateImageHash(provider);
 
-        var response = await _client.Data.PinList(queryParamFilters: new Dictionary<string, object>
+        var response = await retry.ExecuteAsync(ct => _client.Data.PinList(new Dictionary<string, object>
         {
             { "metadata[name]", $"{hash}.jpg" }
-        });
+        }, ct));
 
         if (!response.IsSuccess) LambdaLogger.Log($"Error occured while trying to receive image: {response.Error}");
 
@@ -48,10 +49,11 @@ public class ImageService
         };
 
         var imageMetadata = new ImageWithMetadata(provider);
-        var response = await _client.PinFileToIpfsAsync(content =>
+
+        var response = await retry.ExecuteAsync(ct => _client.PinFileToIpfsAsync(content =>
         {
             content.AddPinataFile(fileContent, $"{hash}.jpg");
-        }, imageMetadata);
+        }, imageMetadata, cancellationToken: ct));
 
         if (!response.IsSuccess) LambdaLogger.Log($"Error occured while trying upload image: {response.Error}");
 
